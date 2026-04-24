@@ -90,3 +90,9 @@ Upstream authority:
   - pattern snippets for progress bars, toggles, sliders, scroll panels, and layout offsets
 - `Refaltor77/EasyUIBuilder`
   - builder-oriented examples and generated JSON UI samples
+- `Herobrine643928/Chest-UI`
+  - chest and furnace server-form pack with Script API support
+- `Blockception/Minecraft-bedrock-json-schemas`
+  - Bedrock-wide schema project with UI schema coverage
+- `DJStompZone/MCBE-JSON-UI-Schemas`
+  - focused JSON UI schema files

@@ -11,6 +11,8 @@
 - `../../../docs/06-json-ui-rules.md`
 - `../../../docs/07-external-example-sources.md`
 - `../../../docs/08-reference-hierarchy.md`
+- `../../../docs/09-schema-and-tooling.md`
+- `../../../docs/10-bedrock-wiki-mirror.md`
 
 ## Route by request type
 
@@ -85,3 +87,19 @@ Then load:
 
 - `topics/research/index.md`
 - and only the exact needed subtopic under `topics/research/`
+
+### schema validation or VSCode schema setup
+
+Use `mcbe-json-ui-schemas`.
+Then load:
+
+- `topics/schemas/index.md`
+- and only the exact needed subtopic under `topics/schemas/`
+
+### visual editor, builder, or tool-generated UI workflow
+
+Use `mcbe-json-ui-tooling`.
+Then load:
+
+- `topics/tooling/index.md`
+- and only the exact needed subtopic under `topics/tooling/`

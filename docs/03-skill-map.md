@@ -100,3 +100,21 @@ Use for:
 - selecting the right external source
 - deciding whether a question needs local samples, Mojang samples, Bedrock Wiki, or Ztech
 - documenting whether a result is confirmed or only inferred
+
+## `mcbe-json-ui-schemas`
+
+Use for:
+
+- schema validation
+- VSCode JSON schema setup
+- deciding between Blockception and DJStompZone schema sources
+- checking `ui`, `_ui_defs`, and `_global_variables` schema coverage
+
+## `mcbe-json-ui-tooling`
+
+Use for:
+
+- visual editor workflows
+- builder-generated JSON UI examples
+- Chest-UI style authoring or chest-form systems
+- understanding how tools shape JSON UI authoring

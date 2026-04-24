@@ -42,6 +42,8 @@ See:
 - [JSON UI Rules](docs/06-json-ui-rules.md)
 - [External Example Sources](docs/07-external-example-sources.md)
 - [Reference Hierarchy](docs/08-reference-hierarchy.md)
+- [Schema And Tooling](docs/09-schema-and-tooling.md)
+- [Wiki Mirror Guide](docs/10-bedrock-wiki-mirror.md)
 
 ## Repository layout
 

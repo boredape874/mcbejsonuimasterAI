@@ -10,6 +10,9 @@
 - `../../references/source-packs/bunnyfarm/GfE8ULhgL4I/ui/server_form.json`
 - `../../references/source-packs/bunnyfarm/GfE8ULhgL4I/ui/chest_screen.json`
 - `../../references/external/EasyUIBuilder/ui/server_form.json`
+- `../../references/external/Chest-UI/RP/ui/server_form.json`
+- `../../references/external/Chest-UI/RP/ui/chest_server_form.json`
+- `../../references/external/Chest-UI/RP/ui/furnace_server_form.json`
 
 ## Strong patterns
 

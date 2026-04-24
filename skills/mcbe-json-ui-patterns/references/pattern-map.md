@@ -20,6 +20,8 @@
 - `../../references/source-packs/bunnyfarm/Y5dOnRAM7js/ui/custom_scroll_screen.json`
 - `../../references/external/json-ui-examples/scroll_panel_template.json`
 - `../../references/external/json-ui-examples/custom_npc_screen_layout_reference_file.json`
+- `../../references/external/Chest-UI/RP/ui/chest_server_form.json`
+- `../../references/external/Chest-UI/RP/ui/chest_inventory_system.json`
 
 ## server form shell
 

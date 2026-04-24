@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "ui_defs": {
+      "type": "array",
+      "description": "Reference to all the UI files used. If you create a custom UI file you must add it here. Otherwise, it will not be used.",
+      "items": {
+        "type": "string",
+        "description": "UI file path begining from pack root."
+      }
+    }
+  }
+}

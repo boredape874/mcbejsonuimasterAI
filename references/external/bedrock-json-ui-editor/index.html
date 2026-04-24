@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="color-scheme" content="dark">
+
+    <title>Bedrock JSON UI Editor — Visual Editor for Minecraft Bedrock UI</title>
+    <meta name="description" content="Free visual editor for Minecraft Bedrock Edition JSON UI files. Edit scoreboard, HUD, shimmer positions with drag controls. No coding needed. Works on mobile.">
+    <meta name="keywords" content="Bedrock JSON UI, Minecraft Bedrock UI editor, JSON UI editor, PocketMine, PMMP, Bedrock Edition, Pocket Edition, scoreboard editor, HUD editor, shimmer editor, resource pack, texture pack, UI modding, Bedrock modding, MCPE, Minecraft PE">
+    <meta name="author" content="w1zardz">
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical" href="https://w1zardz.github.io/bedrock-json-ui-editor/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Bedrock JSON UI Editor — Visual Editor for Minecraft Bedrock">
+    <meta property="og:description" content="Free visual editor for Minecraft Bedrock JSON UI. Edit scoreboard, shimmer, HUD positions visually. Mobile-friendly.">
+    <meta property="og:url" content="https://w1zardz.github.io/bedrock-json-ui-editor/">
+    <meta property="og:image" content="https://w1zardz.github.io/bedrock-json-ui-editor/og-image.png">
+    <meta property="og:site_name" content="Bedrock JSON UI Editor">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bedrock JSON UI Editor">
+    <meta name="twitter:description" content="Visual editor for Minecraft Bedrock JSON UI files. Edit positions, offsets, anchors visually.">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Bedrock JSON UI Editor",
+        "description": "Free visual editor for Minecraft Bedrock Edition JSON UI files. Edit scoreboard, HUD, shimmer positions with intuitive controls.",
+        "url": "https://w1zardz.github.io/bedrock-json-ui-editor/",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "w1zardz", "url": "https://github.com/w1zardz" }
+    }
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1f3ae;</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">&#x1f3ae;</span>
+                <div>
+                    <h1>Bedrock JSON UI Editor</h1>
+                    <p class="tagline">Visual editor for Minecraft Bedrock Edition</p>
+                </div>
+            </div>
+            <a href="https://github.com/w1zardz/bedrock-json-ui-editor" class="gh-link" target="_blank" rel="noopener" aria-label="GitHub Repository">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <!-- Input Section -->
+        <section class="section input-section" id="input-section">
+            <div class="section-header">
+                <h2>1. Paste Your JSON UI</h2>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" id="btn-load-example">Load Example</button>
+                    <button class="btn btn-primary" id="btn-parse">Parse &amp; Edit</button>
+                </div>
+            </div>
+            <div class="editor-wrap">
+                <textarea id="json-input" class="json-textarea" placeholder='Paste your Bedrock JSON UI here...&#10;&#10;Example: scoreboard.json, hud_screen.json, etc.' spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+            </div>
+            <div id="parse-error" class="error-msg" hidden></div>
+        </section>
+
+        <!-- Element Tree + Properties -->
+        <section class="section editor-section" id="editor-section" hidden>
+            <div class="section-header">
+                <h2>2. Edit Elements</h2>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" id="btn-back">Back to JSON</button>
+                    <button class="btn btn-primary" id="btn-export">Export JSON</button>
+                </div>
+            </div>
+
+            <!-- Tabs for mobile -->
+            <div class="editor-tabs">
+                <button class="tab active" data-tab="tree">Elements</button>
+                <button class="tab" data-tab="props">Properties</button>
+                <button class="tab" data-tab="preview">Preview</button>
+            </div>
+
+            <div class="editor-grid">
+                <!-- Element Tree -->
+                <div class="panel tree-panel" data-panel="tree">
+                    <div class="panel-header">
+                        <h3>Element Tree</h3>
+                        <input type="search" id="tree-search" class="search-input" placeholder="Search elements...">
+                    </div>
+                    <div class="tree-container" id="element-tree"></div>
+                </div>
+
+                <!-- Properties Panel -->
+                <div class="panel props-panel" data-panel="props">
+                    <div class="panel-header">
+                        <h3 id="props-title">Select an element</h3>
+                    </div>
+                    <div class="props-container" id="props-container">
+                        <div class="empty-state">
+                            <p>Select an element from the tree to edit its properties</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Preview -->
+                <div class="panel preview-panel" data-panel="preview">
+                    <div class="panel-header">
+                        <h3>Visual Preview</h3>
+                        <div class="preview-controls">
+                            <button class="btn-icon" id="btn-zoom-out" title="Zoom out">-</button>
+                            <span id="zoom-level">100%</span>
+                            <button class="btn-icon" id="btn-zoom-in" title="Zoom in">+</button>
+                        </div>
+                    </div>
+                    <div class="preview-viewport" id="preview-viewport">
+                        <div class="preview-screen" id="preview-screen"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Export Modal -->
+        <div class="modal-overlay" id="export-modal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>Export JSON</h3>
+                    <button class="btn-close" id="btn-close-modal">&times;</button>
+                </div>
+                <textarea id="json-output" class="json-textarea" readonly></textarea>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="btn-copy">Copy to Clipboard</button>
+                    <button class="btn btn-secondary" id="btn-download">Download .json</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- SEO Content -->
+    <footer class="app-footer">
+        <section class="seo-content">
+            <h2>About Bedrock JSON UI Editor</h2>
+            <p>A free, open-source visual editor for <strong>Minecraft Bedrock Edition JSON UI</strong> files. Perfect for editing <strong>scoreboard</strong>, <strong>HUD</strong>, <strong>shimmer effects</strong>, and any UI element positions without manually tweaking JSON values.</p>
+
+            <h3>Features</h3>
+            <ul>
+                <li>Visual editing of <strong>offset</strong>, <strong>size</strong>, <strong>anchor</strong>, <strong>alpha</strong>, and <strong>layer</strong> properties</li>
+                <li>Element tree navigation with search</li>
+                <li>Live preview of UI element positions</li>
+                <li>Mobile-friendly interface for editing on any device</li>
+                <li>Works with <strong>PocketMine-MP (PMMP)</strong> resource packs</li>
+                <li>Supports all Bedrock JSON UI files: scoreboard, hud_screen, inventory, and more</li>
+            </ul>
+
+            <h3>How to Use</h3>
+            <ol>
+                <li>Copy your JSON UI file content (e.g., <code>scoreboard.json</code> from your resource pack)</li>
+                <li>Paste it into the editor</li>
+                <li>Click "Parse &amp; Edit" to load the element tree</li>
+                <li>Select any element to adjust its properties visually</li>
+                <li>Export the modified JSON back to your resource pack</li>
+            </ol>
+
+            <h3>Compatible With</h3>
+            <p>Works with all <strong>Minecraft Bedrock Edition</strong> platforms: <strong>Windows 10/11</strong>, <strong>Android</strong>, <strong>iOS</strong>, <strong>Xbox</strong>, <strong>PlayStation</strong>, <strong>Nintendo Switch</strong>. Also compatible with <strong>PocketMine-MP</strong>, <strong>Nukkit</strong>, and other Bedrock servers.</p>
+        </section>
+        <div class="footer-bottom">
+            <p>Made with care for the Bedrock community by <a href="https://github.com/w1zardz" target="_blank" rel="noopener">w1zardz</a></p>
+            <p class="footer-links">
+                <a href="https://wiki.bedrock.dev/json-ui/json-ui-intro" target="_blank" rel="noopener">JSON UI Docs</a>
+                <a href="https://github.com/w1zardz/bedrock-json-ui-editor/issues" target="_blank" rel="noopener">Report Bug</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

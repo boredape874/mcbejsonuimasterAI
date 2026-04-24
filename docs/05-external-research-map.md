@@ -35,6 +35,15 @@ These are the external sources that should be checked when the local pack sample
   - <https://github.com/LeGend077/json-ui-examples>
 - `Refaltor77/EasyUIBuilder`
   - <https://github.com/Refaltor77/EasyUIBuilder>
+- `Herobrine643928/Chest-UI`
+  - <https://github.com/Herobrine643928/Chest-UI>
+
+## Schema repositories
+
+- `Blockception/Minecraft-bedrock-json-schemas`
+  - <https://github.com/Blockception/Minecraft-bedrock-json-schemas>
+- `DJStompZone/MCBE-JSON-UI-Schemas`
+  - <https://github.com/DJStompZone/MCBE-JSON-UI-Schemas>
 
 ## How to use them
 
@@ -70,3 +79,19 @@ Check:
 2. `json-ui-examples`
 3. `EasyUIBuilder`
 4. Bedrock Wiki documentation for property confirmation
+
+### When validating JSON UI structure in an editor
+
+Check:
+
+1. `references/schemas/DJStompZone/`
+2. `references/schemas/Blockception/`
+3. Bedrock Wiki JSON UI documentation
+
+### When building chest-like or furnace-like custom forms
+
+Check:
+
+1. local sample packs
+2. `references/external/Chest-UI/`
+3. Bedrock Wiki modifying server forms

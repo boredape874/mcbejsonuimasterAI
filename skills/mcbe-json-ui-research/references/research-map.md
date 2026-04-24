@@ -57,3 +57,6 @@ Primary sources:
 
 - `../../references/external/json-ui-examples/`
 - `../../references/external/EasyUIBuilder/`
+- `../../references/external/Chest-UI/`
+- `../../references/external/bedrock-json-ui-editor/`
+- `../../references/external/bedrock-wiki-json-ui/`
