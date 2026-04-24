@@ -2,36 +2,75 @@
 
 Portable Codex skills and research notes for Minecraft Bedrock JSON UI.
 
-This repository is built for three use cases:
+This repository is designed to be usable as a standalone GitHub project, not just as a local note dump.  
+The goal is simple:
 
-1. Install the skills into `~/.codex/skills`
-2. Study real Bedrock JSON UI patterns from included pack samples
-3. Validate vanilla UI texture paths and screen structure against current upstream sources
+- install the skills once
+- keep all important JSON UI references inside this repository
+- let Codex route itself to the right subtopic instead of loading everything every time
 
-## Scope
+## What this repository is for
 
-The repository is tuned for:
+Use this repository when you want Codex to work well on:
 
 - Bedrock JSON UI
 - HUD and chat driven UI
-- server form replacement
 - title and actionbar text protocols
-- addon resource-pack integration
-- debugging broken UI
-- vanilla asset lookup
+- `server_form.json` customization
+- chest or furnace based custom UIs
+- addon RP/BP integration
+- vanilla texture path lookup
+- schema validation and VSCode setup
+- JSON UI editing workflows and builder examples
 
-It is intentionally written in Bedrock addon and PMMP workflow terms, not generic web UI terms.
+It is written in Bedrock addon and PMMP terms, not generic web UI terms.
+
+## What is included
+
+### Skills
+
+- `mcbe-json-ui-master`
+- `mcbe-json-ui-foundations`
+- `mcbe-json-ui-logic`
+- `mcbe-json-ui-hud-and-chat`
+- `mcbe-json-ui-server-forms`
+- `mcbe-json-ui-patterns`
+- `mcbe-json-ui-debugging`
+- `mcbe-json-ui-addon-integration`
+- `mcbe-json-ui-vanilla-assets`
+- `mcbe-json-ui-research`
+- `mcbe-json-ui-schemas`
+- `mcbe-json-ui-tooling`
+
+### Local pack references
+
+- `references/source-packs/1seulbi/`
+- `references/source-packs/bunnyfarm/`
+- `references/source-packs/custom-crops-reference/`
+
+### External mirrored references
+
+- `references/external/bedrock-wiki-json-ui/`
+- `references/external/json-ui-examples/`
+- `references/external/EasyUIBuilder/`
+- `references/external/Chest-UI/`
+- `references/external/bedrock-json-ui-editor/`
+
+### Schema references
+
+- `references/schemas/Blockception/`
+- `references/schemas/DJStompZone/`
 
 ## Source policy
 
 This repository uses a strict source priority model:
 
-1. Included local sample packs in `references/source-packs/`
-2. Official Mojang `bedrock-samples`
-3. Bedrock Wiki JSON UI documentation and guides
-4. `ZtechNetwork/MCBVanillaResourcePack` for vanilla texture and screen asset verification
+1. included local working packs in `references/source-packs/`
+2. official Mojang `bedrock-samples`
+3. Bedrock Wiki JSON UI pages
+4. `ZtechNetwork/MCBVanillaResourcePack` for vanilla asset truth
 
-For vanilla texture validation, the old local icon note is no longer the authority. The canonical upstream basis is:
+For vanilla texture validation, the canonical upstream authority is:
 
 - <https://github.com/ZtechNetwork/MCBVanillaResourcePack>
 
@@ -45,87 +84,175 @@ See:
 - [Schema And Tooling](docs/09-schema-and-tooling.md)
 - [Wiki Mirror Guide](docs/10-bedrock-wiki-mirror.md)
 
-## Repository layout
+## Quick start
 
-- `skills/`
-  - portable Codex skills
-- `docs/`
-  - source catalog, mastery map, research map, rules
-- `references/`
-  - included sample packs and local reference notes
-- `scripts/`
-  - installation and upstream sync helpers
+### 1. Clone
 
-## Included local sample packs
+```powershell
+git clone https://github.com/boredape874/mcbejsonuimasterAI.git
+cd mcbejsonuimasterAI
+```
 
-### `references/source-packs/1seulbi/`
-
-Used for:
-
-- HUD injection
-- chat protocol parsing
-- scoreboard replacement
-- server form routing
-
-### `references/source-packs/bunnyfarm/`
-
-Used for:
-
-- animated bars
-- chest and pocket container patterns
-- alternative HUD and chat layouts
-- reusable server form patterns
-
-### `references/source-packs/custom-crops-reference/`
-
-Used for:
-
-- addon-linked UI
-- multi-screen server form systems
-- HUD progress bars
-- custom textures tied to gameplay systems
-
-## Main skills
-
-- `mcbe-json-ui-master`
-- `mcbe-json-ui-foundations`
-- `mcbe-json-ui-logic`
-- `mcbe-json-ui-hud-and-chat`
-- `mcbe-json-ui-server-forms`
-- `mcbe-json-ui-patterns`
-- `mcbe-json-ui-debugging`
-- `mcbe-json-ui-addon-integration`
-- `mcbe-json-ui-vanilla-assets`
-- `mcbe-json-ui-research`
-
-## Install
-
-PowerShell:
+### 2. Install the skills into Codex
 
 ```powershell
 .\scripts\install-skills.ps1
 ```
 
-This copies every directory under `skills/` into `~/.codex/skills/`.
+This copies every directory under `skills/` into:
 
-## Optional upstream sync
+```text
+%USERPROFILE%\.codex\skills\
+```
 
-To keep a local mirror of the upstream vanilla pack authority:
+### 3. Optional: sync the upstream vanilla pack mirror
 
 ```powershell
 .\scripts\sync-ztech-vanilla.ps1
 ```
 
-That script creates or updates:
+That creates:
 
-- `references/upstreams/MCBVanillaResourcePack/`
+```text
+references/upstreams/MCBVanillaResourcePack/
+```
 
-## Read first
+This mirror is intentionally not committed to Git because it is large and reproducible.
 
-- [Overview](docs/00-overview.md)
-- [Source Catalog](docs/01-source-catalog.md)
-- [Mastery Map](docs/02-mastery-map.md)
-- [Skill Map](docs/03-skill-map.md)
+## How to use it with Codex
+
+### Recommended default
+
+If the request is broad, use:
+
+```text
+Use mcbe-json-ui-master.
+```
+
+That skill routes into smaller topic files such as:
+
+- foundations
+- logic
+- hud-chat
+- server-forms
+- patterns
+- debugging
+- addon
+- vanilla
+- research
+- schemas
+- tooling
+
+### Typical prompts
+
+#### General JSON UI work
+
+```text
+Use mcbe-json-ui-master and fix this hud_screen.json layout.
+```
+
+#### `_ui_defs.json` or namespace problems
+
+```text
+Use mcbe-json-ui-foundations and explain why this screen is not loading.
+```
+
+#### Title/actionbar/chat parsing
+
+```text
+Use mcbe-json-ui-logic and mcbe-json-ui-hud-and-chat for this title-based HP bar.
+```
+
+#### Server forms
+
+```text
+Use mcbe-json-ui-server-forms and convert this PMMP form protocol into server_form.json routing.
+```
+
+#### Reusable UI patterns
+
+```text
+Use mcbe-json-ui-patterns and build a chest-like menu with a progress bar.
+```
+
+#### Vanilla path lookup
+
+```text
+Use mcbe-json-ui-vanilla-assets and verify the correct vanilla texture path for this icon.
+```
+
+#### Schema setup
+
+```text
+Use mcbe-json-ui-schemas and set up VSCode json.schemas for ui, _ui_defs, and _global_variables.
+```
+
+#### Tooling workflows
+
+```text
+Use mcbe-json-ui-tooling and explain whether bedrock-json-ui-editor or EasyUIBuilder fits this task better.
+```
+
+## Repository layout
+
+- `skills/`
+  - portable Codex skills
+- `docs/`
+  - concept maps, source priority, usage and research guides
+- `references/`
+  - sample packs, mirrored external references, schema files
+- `scripts/`
+  - installation and sync helpers
+
+## Recommended reading order
+
+Read these first:
+
+1. [Overview](docs/00-overview.md)
+2. [Source Catalog](docs/01-source-catalog.md)
+3. [Mastery Map](docs/02-mastery-map.md)
+4. [Skill Map](docs/03-skill-map.md)
+5. [Reference Hierarchy](docs/08-reference-hierarchy.md)
+
+Then read as needed:
+
 - [Source Priority](docs/04-source-priority.md)
 - [External Research Map](docs/05-external-research-map.md)
 - [JSON UI Rules](docs/06-json-ui-rules.md)
+- [External Example Sources](docs/07-external-example-sources.md)
+- [Schema And Tooling](docs/09-schema-and-tooling.md)
+- [Wiki Mirror Guide](docs/10-bedrock-wiki-mirror.md)
+
+## Is this enough to become a "JSON UI Master AI" in one shot?
+
+Pragmatically: almost, yes.
+
+What this repository now gives you:
+
+- portable skills
+- layered topic routing
+- local working pack references
+- mirrored Bedrock Wiki JSON UI docs
+- mirrored external example repositories
+- schema references
+- vanilla asset authority flow
+
+What it does not magically guarantee:
+
+- perfect answers for every future Bedrock version without updates
+- runtime truth from schema files alone
+- correct behavior when a pack has hidden dependencies outside the copied files
+
+So the right claim is:
+
+> this repository is now a strong portable base for an MCBE JSON UI specialist Codex, and it is structured so it can keep improving without collapsing into one giant unreadable skill
+
+## Current state
+
+If you clone this repository and run:
+
+```powershell
+.\scripts\install-skills.ps1
+```
+
+you get a working, installable MCBE JSON UI skill suite immediately.
