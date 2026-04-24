@@ -4,6 +4,7 @@ Read these first:
 
 - `../../../docs/11-basics-and-mental-model.md`
 - `../../../docs/15-json-ui-file-role-catalog.md`
+- `../../../docs/16-screen-by-screen-reference.md`
 - `../../../docs/01-source-catalog.md`
 
 Then use only the exact source needed:

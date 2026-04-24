@@ -15,6 +15,7 @@ Read these first:
 - `docs/13-vanilla-asset-workflow.md`
 - `docs/14-json-ui-best-practices.md`
 - `docs/15-json-ui-file-role-catalog.md`
+- `docs/16-screen-by-screen-reference.md`
 
 ## Level 2: topic indexes
 
@@ -39,6 +40,7 @@ Use subtopic notes only for the exact problem:
 - entry points
 - resource-pack basics
 - JSON UI file responsibilities
+- vanilla screen-by-screen responsibilities
 - screen-size and layout assumptions
 - namespaces
 - title parsing
