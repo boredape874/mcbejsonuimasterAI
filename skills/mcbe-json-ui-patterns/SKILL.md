@@ -11,8 +11,9 @@ Prefer adapting proven included patterns over inventing a new one.
 
 1. Read `references/pattern-map.md`.
 2. Match the request to the closest pattern.
-3. Copy the minimum viable structure.
-4. Adjust namespace, texture paths, bindings, and protocol strings to the target pack.
+3. If the local sample packs do not provide a clean minimal example, use the mirrored external examples.
+4. Copy the minimum viable structure.
+5. Adjust namespace, texture paths, bindings, and protocol strings to the target pack.
 
 ## Pattern priority
 

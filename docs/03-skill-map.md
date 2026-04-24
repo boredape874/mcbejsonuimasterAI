@@ -1,38 +1,102 @@
-# 스킬 맵
+# Skill Map
 
 ## `mcbe-json-ui-master`
 
-전체 요청 진입점.  
-구조, 로직, HUD, 서버폼, 디버깅, 바닐라 경로 검증까지 종합 라우팅.
+Top-level router for end-to-end Bedrock JSON UI work.
+
+Use this when the task spans multiple areas:
+
+- pack structure
+- HUD or chat
+- title or actionbar protocols
+- server forms
+- debugging
+- addon integration
+- vanilla asset lookup
 
 ## `mcbe-json-ui-foundations`
 
-`_ui_defs.json`, namespace, modifications, factory, pack 구조.
+Use for:
+
+- `_ui_defs.json`
+- namespaces
+- modifications
+- factories
+- pack structure
 
 ## `mcbe-json-ui-logic`
 
-bindings, variables, 문자열 파싱, 조건식, UI 프로토콜 해석.
+Use for:
+
+- bindings
+- variables
+- string parsing
+- delimiters
+- visibility logic
+- preserved text logic
 
 ## `mcbe-json-ui-hud-and-chat`
 
-HUD, chat_screen, title/actionbar 기반 UI, scoreboard 주입.
+Use for:
+
+- `hud_screen.json`
+- `chat_screen.json`
+- scoreboard overlays
+- title and actionbar driven UI
+- chat protocol rendering
 
 ## `mcbe-json-ui-server-forms`
 
-server_form 커스터마이징, chest/furnace/form 라우팅.
+Use for:
+
+- `server_form.json`
+- long form routing
+- chest and furnace substitutions
+- title prefix or suffix routing
 
 ## `mcbe-json-ui-patterns`
 
-animated bar, scoreboard, chest/custom pocket, 재사용 패턴.
+Use for:
+
+- animated bars
+- reusable templates
+- chest UI patterns
+- pocket container patterns
+- scoreboard patterns
 
 ## `mcbe-json-ui-debugging`
 
-안 뜨는 UI, 잘못 분기되는 UI, 경로/텍스처/데이터 흐름 문제 추적.
+Use for:
+
+- invisible controls
+- broken bindings
+- missing textures
+- wrong namespace injection
+- failed server form replacement
 
 ## `mcbe-json-ui-addon-integration`
 
-UI와 addon 리소스팩 전체 구조 연결. 텍스처/블록/폰트/애니메이션/attachable와 함께 볼 때 사용.
+Use for:
+
+- UI linked to textures, fonts, blocks, items, entities, or addon data
+- BP and RP cross-reference work
+- addon-wide asset tracing
 
 ## `mcbe-json-ui-vanilla-assets`
 
-바닐라 아이콘/텍스처 경로를 정확히 찾아야 할 때 사용.
+Use for:
+
+- vanilla `textures/ui/*`
+- vanilla item icon verification
+- vanilla block icon verification
+- current vanilla screen file lookup
+
+This skill uses `ZtechNetwork/MCBVanillaResourcePack` as the upstream authority.
+
+## `mcbe-json-ui-research`
+
+Use for:
+
+- selecting the right external source
+- deciding whether a question needs local samples, Mojang samples, Bedrock Wiki, or Ztech
+- documenting whether a result is confirmed or only inferred

@@ -1,0 +1,374 @@
+{
+    "long_form@long_form": {
+        "controls": {
+            "long_form@common_dialogs.main_panel_no_buttons": {
+                "$title_panel": "common_dialogs.standard_title_label",
+                "$title_size": [
+                    "100% - 14px",
+                    10
+                ],
+                "$size": [
+                    "fill",
+                    "fill"
+                ],
+                "$text_name": "#title_text",
+                "$title_text_binding_type": "none",
+                "child_control": "server_form.long_form_panel",
+                "layer": 2,
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(not(#title_text = 'MONTURE')not(#title_text = 'LABEL_TEST')not(#title_text = 'LABEL_TEST_2')not(#title_text = 'LABEL_TEST')not(#title_text = 'LABEL_TEST_2')not(#title_text = 'LABEL_TEST')not(#title_text = 'LABEL_TEST_2')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'MODIFICATION_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'MODIFICATION_EXAMPLE'))",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "LABEL_TEST@ui_test.ui_test": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'LABEL_TEST')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "LABEL_TEST_2@ui_test_2.ui_test_2": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'LABEL_TEST_2')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "LABEL_EXAMPLE@label_example.label_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'LABEL_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "PANEL_EXAMPLE@panel_example.panel_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'PANEL_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "BUTTON_EXAMPLE@button_example.button_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'BUTTON_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "IMAGE_EXAMPLE@image_example.image_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'IMAGE_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "GRID_EXAMPLE@grid_example.grid_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'GRID_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "STACKPANEL_EXAMPLE@stackpanel_example.stackpanel_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'STACKPANEL_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "FULL_MENU_EXAMPLE@full_menu_example.full_menu_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'FULL_MENU_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "COLOR_EXAMPLE@color_example.color_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'COLOR_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "TOGGLE_EXAMPLE@toggle_example.toggle_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'TOGGLE_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "SLIDER_EXAMPLE@slider_example.slider_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'SLIDER_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "EDITBOX_EXAMPLE@editbox_example.editbox_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'EDITBOX_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "SCROLLVIEW_EXAMPLE@scrollview_example.scrollview_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'SCROLLVIEW_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "DROPDOWN_EXAMPLE@dropdown_example.dropdown_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'DROPDOWN_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "INPUTPANEL_EXAMPLE@inputpanel_example.inputpanel_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'INPUTPANEL_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "SCREEN_EXAMPLE@screen_example.screen_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'SCREEN_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "CUSTOMRENDER_EXAMPLE@customrender_example.customrender_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'CUSTOMRENDER_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "BINDING_EXAMPLE@binding_example.binding_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'BINDING_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "ANIMATION_EXAMPLE@animation_example.animation_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'ANIMATION_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "VARIABLE_EXAMPLE@variable_example.variable_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'VARIABLE_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            },
+            "MODIFICATION_EXAMPLE@modification_example.modification_example": {
+                "bindings": [
+                    {
+                        "binding_type": "global",
+                        "binding_condition": "none",
+                        "binding_name": "#title_text",
+                        "binding_name_override": "#title_text"
+                    },
+                    {
+                        "source_property_name": "(#title_text = 'MODIFICATION_EXAMPLE')",
+                        "binding_type": "view",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            }
+        },
+        "bindings": {
+            "1": {
+                "source_property_name": "(not(#title_text = 'MONTURE')not(#title_text = 'LABEL_TEST_2'))"
+            }
+        },
+        "con": {
+            "1": {
+                "source_property_name": "(not(#title_text = 'MONTURE')not(#title_text = 'LABEL_TEST')not(#title_text = 'LABEL_TEST_2')not(#title_text = 'LABEL_TEST')not(#title_text = 'LABEL_TEST_2')not(#title_text = 'LABEL_TEST')not(#title_text = 'LABEL_TEST_2')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'MODIFICATION_EXAMPLE')not(#title_text = 'LABEL_EXAMPLE')not(#title_text = 'PANEL_EXAMPLE')not(#title_text = 'BUTTON_EXAMPLE')not(#title_text = 'IMAGE_EXAMPLE')not(#title_text = 'GRID_EXAMPLE')not(#title_text = 'STACKPANEL_EXAMPLE')not(#title_text = 'FULL_MENU_EXAMPLE')not(#title_text = 'COLOR_EXAMPLE')not(#title_text = 'TOGGLE_EXAMPLE')not(#title_text = 'SLIDER_EXAMPLE')not(#title_text = 'EDITBOX_EXAMPLE')not(#title_text = 'SCROLLVIEW_EXAMPLE')not(#title_text = 'DROPDOWN_EXAMPLE')not(#title_text = 'INPUTPANEL_EXAMPLE')not(#title_text = 'SCREEN_EXAMPLE')not(#title_text = 'CUSTOMRENDER_EXAMPLE')not(#title_text = 'BINDING_EXAMPLE')not(#title_text = 'ANIMATION_EXAMPLE')not(#title_text = 'VARIABLE_EXAMPLE')not(#title_text = 'MODIFICATION_EXAMPLE'))"
+            }
+        }
+    }
+}

@@ -9,6 +9,7 @@
 - `../../references/source-packs/custom-crops-reference/ui/chest_inventory_system.json`
 - `../../references/source-packs/bunnyfarm/GfE8ULhgL4I/ui/server_form.json`
 - `../../references/source-packs/bunnyfarm/GfE8ULhgL4I/ui/chest_screen.json`
+- `../../references/external/EasyUIBuilder/ui/server_form.json`
 
 ## Strong patterns
 

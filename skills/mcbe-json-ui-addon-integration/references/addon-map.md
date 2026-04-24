@@ -2,7 +2,7 @@
 
 ## Main integrated source
 
-- `../../docs/pack-analyses/custom-crops-reference.md`
+- `../../../docs/pack-analyses/custom-crops-reference.md`
 
 ## Key files
 

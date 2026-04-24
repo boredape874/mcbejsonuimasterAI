@@ -1,0 +1,270 @@
+<?php
+
+namespace refaltor\ui\elements;
+
+use refaltor\ui\builders\Root;
+use refaltor\ui\components\Animation;
+use refaltor\ui\components\Binding;
+use refaltor\ui\components\Modification;
+use refaltor\ui\components\Variable;
+
+class Element implements \JsonSerializable
+{
+    public array $properties = [];
+    public array $controls = [];
+    protected array $bindings = [];
+    protected array $variables = [];
+    protected array $anims = [];
+    protected array $modifications = [];
+
+    const ANCHOR_TOP_LEFT = 'top_left';
+    const ANCHOR_TOP_MIDDLE = 'top_middle';
+    const ANCHOR_TOP_RIGHT = 'top_right';
+    const ANCHOR_LEFT_MIDDLE = 'left_middle';
+    const ANCHOR_CENTER = 'center';
+    const ANCHOR_RIGHT_MIDDLE = 'right_middle';
+    const ANCHOR_BOTTOM_LEFT = 'bottom_left';
+    const ANCHOR_BOTTOM_MIDDLE = 'bottom_middle';
+    const ANCHOR_BOTTOM_RIGHT = 'bottom_right';
+
+
+    public function __construct(
+        public string $name,
+        public ?string $extend = null)
+    {}
+
+    public function setOffset(float $x, float $y): self {
+        $this->properties['offset'] = [$x, $y];
+        return $this;
+    }
+
+    public function setLayer(int $layer): self {
+        $this->properties['layer'] = $layer;
+        return $this;
+    }
+
+    public function setAlpha(float $alpha): self {
+        $this->properties['alpha'] = $alpha;
+        return $this;
+    }
+
+    public function setSize(int $x, int $z): self {
+        $this->properties['size'] = [$x, $z];
+        return $this;
+    }
+
+    public function setSizePercentage(int $percentageX, int $percentageZ): self {
+        $this->properties['size'] = ["$percentageX%", "$percentageZ%"];
+        return $this;
+    }
+
+    public function enableFactoryButton(Root $root): self {
+        $root->elements["template_button_easy_ui_builder@common_buttons.light_text_button"] = [
+            "pressed_button_name" => "button.form_button_click",
+            '$size|default' => ['100%', '100%'],
+            "size" => '$size',
+            '$condition|default' => true,
+            '$button_text' => '',
+            "button_text" => '$button_text',
+            "button_text_binding_type" => "collection",
+            "button_text_grid_collection_name" => "form_buttons",
+            "button_text_max_size" => [ "100%", 20 ],
+            '$border_visible' => false,
+            "bindings" => [
+                [
+                    "binding_type" => "collection_details",
+                    "binding_collection_name" => "form_buttons"
+                ],
+                [
+                    "binding_name" => "#form_button_text",
+                    "binding_type" => "collection",
+                    "binding_collection_name" => "form_buttons"
+                ],
+                [
+                    "binding_type" => "view",
+                    "source_property_name" => '$condition',
+                    "target_property_name" => "#visible"
+                ]
+            ]
+        ];
+
+        $root->elements['template_button_easy_ui_builder_stack_panel'] = [
+            "type" => "stack_panel",
+            "orientation" => "horizontal",
+            "factory" => [
+                'name' => "buttons",
+                'control_name' => $root->namespace . ".template_button_easy_ui_builder"
+            ],
+            "collection_name" => "form_buttons",
+            "bindings" => [
+                [
+                    "binding_name" => "#form_button_length",
+                    "binding_name_override" => "#collection_length"
+                ]
+            ]
+        ];
+
+
+        return $this;
+    }
+
+    public function setSizePixel(int $pixelX, int $pixelZ): self {
+        $this->properties['size'] = ["$pixelX" . "px", "$pixelX" . "px"];
+        return $this;
+    }
+
+
+    public function setCustomSize(array $size): self {
+        $this->properties['size'] = $size;
+        return $this;
+    }
+
+    public function setAnchorFrom(string $anchorFrom): self {
+        $this->properties["anchor_from"] = $anchorFrom;
+        return $this;
+    }
+
+    public function setAnchorTo(string $anchorTo): self {
+        $this->properties["anchor_to"] = $anchorTo;
+        return $this;
+    }
+
+    public function addChild(Element $element): self {
+        $this->controls[] = $element;
+        return $this;
+    }
+
+    public function addChilds(array $elements): self {
+        foreach ($elements as $element) {
+            $this->controls[] = $element;
+        }
+        return $this;
+    }
+
+    public function addBinding(Binding $binding): self {
+        $this->bindings[] = $binding;
+        return $this;
+    }
+
+    public function addBindings(array $bindings): self {
+        foreach ($bindings as $binding) {
+            $this->bindings[] = $binding;
+        }
+        return $this;
+    }
+
+    public function setVisible(string $condition): self {
+        $this->bindings[] = Binding::visibility($condition);
+        return $this;
+    }
+
+    public function addVariable(Variable $variable): self {
+        $this->variables[] = $variable;
+        return $this;
+    }
+
+    public function addVariables(array $variables): self {
+        foreach ($variables as $variable) {
+            $this->variables[] = $variable;
+        }
+        return $this;
+    }
+
+    public function addAnim(string $animReference): self {
+        $this->anims[] = $animReference;
+        return $this;
+    }
+
+    public function addAnims(array $animReferences): self {
+        foreach ($animReferences as $anim) {
+            $this->anims[] = $anim;
+        }
+        return $this;
+    }
+
+    public function addModification(Modification $modification): self {
+        $this->modifications[] = $modification;
+        return $this;
+    }
+
+    public function addModifications(array $modifications): self {
+        foreach ($modifications as $modification) {
+            $this->modifications[] = $modification;
+        }
+        return $this;
+    }
+
+    public function setPropertyBag(array $propertyBag): self {
+        $this->properties['property_bag'] = $propertyBag;
+        return $this;
+    }
+
+    public function setIgnored(bool $ignored): self {
+        $this->properties['ignored'] = $ignored;
+        return $this;
+    }
+
+    public function setClipsChildren(bool $clips): self {
+        $this->properties['clips_children'] = $clips;
+        return $this;
+    }
+
+    public function setMaxSize(array $size): self {
+        $this->properties['max_size'] = $size;
+        return $this;
+    }
+
+    public function setMinSize(array $size): self {
+        $this->properties['min_size'] = $size;
+        return $this;
+    }
+
+    public function setEnabled(bool $enabled): self {
+        $this->properties['enabled'] = $enabled;
+        return $this;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'properties_extra' => $this->properties,
+            'controls' => $this->controls,
+            'bindings' => $this->bindings,
+            'variables' => $this->variables,
+            'anims' => $this->anims,
+            'modifications' => $this->modifications,
+        ];
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getExtend(): ?string
+    {
+        return $this->extend;
+    }
+
+    /**
+     * @param string|null $extend
+     */
+    public function setExtend(?string $extend): void
+    {
+        $this->extend = $extend;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+}

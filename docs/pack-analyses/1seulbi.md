@@ -1,51 +1,43 @@
-# 1슬비 분석
+# 1seulbi Analysis
 
-## 성격
+## Why this pack matters
 
-`1슬비`는 JSON UI 구조 학습용으로 매우 좋은 샘플이다.
+`1seulbi` is one of the strongest packs in this repository for learning practical JSON UI structure.
 
-이유:
+It is useful because:
 
-- `_ui_defs.json`가 역할별로 나뉘어 있음
-- `pause_utils`, `utils`, `neroluna/form`으로 서브모듈화돼 있음
-- HUD, chat, scoreboard, inventory, server_form이 한 묶음 안에 있음
+- `_ui_defs.json` is organized cleanly
+- reusable modules are split into `pause_utils`, `utils`, and `neroluna/form`
+- HUD, chat, scoreboard, inventory, and server form work are present in one pack
 
-## 핵심 포인트
+## Key patterns
 
-### 1. server form 라우팅
+### Server form routing
 
-`ui/server_form.json`은 `customUI_` 접두사와 form type suffix를 이용해 특정 폼 디자인으로 라우팅한다.
+`ui/server_form.json` routes forms by using a `customUI_` prefix and form type suffixes.
 
-이 구조는 다음 용도에 좋다.
+That makes it useful for:
 
-- 서버별 커스텀 액션폼
-- modal form 분기
-- UI 스킨별 폼 전환
+- plugin driven custom server forms
+- modal form branching
+- title driven UI protocol design
 
-### 2. HUD 확장
+### HUD extension
 
-`ui/hud_screen.json`은 다음을 보여준다.
+`ui/hud_screen.json` shows:
 
-- 커스텀 scoreboard 교체
-- title 문자열 기반 HP 바
-- 우측 title display
-- 커스텀 chat panel
+- custom scoreboard replacement
+- title driven HP bar rendering
+- right-side title display
+- custom chat panel injection
 
-즉 “서버 메시지 포맷”과 “HUD 시각화”를 연결하는 실전 구조다.
+### Reusable presets
 
-### 3. preset 기반 설계
+`pause_utils/*` and `utils/*` show how to package buttons and shared UI pieces into reusable presets instead of rebuilding controls from scratch.
 
-`pause_utils/*`, `utils/*`는 반복되는 버튼/콘텐츠 UI를 preset처럼 구성한다.
+## Best use cases
 
-이건 스킬 관점에서 중요하다.
-
-- 새 UI를 매번 처음부터 짜지 않고
-- 공용 패널과 버튼 프리셋을 재사용하게 만들 수 있다
-
-## 이 소스가 강한 분야
-
-- server_form
-- scoreboard
-- custom chat panel
-- HUD title parsing
-- reusable button preset
+- server forms
+- scoreboards
+- title and chat based HUD protocols
+- reusable button presets

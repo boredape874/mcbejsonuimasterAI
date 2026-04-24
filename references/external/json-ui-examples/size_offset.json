@@ -1,0 +1,230 @@
+{
+  "start_screen_content": {
+    "modifications": [
+      {
+        "array_name": "controls",
+        "operation": "insert_back",
+        "value": [
+          {
+            "background": {
+              "type": "image",
+              "texture": "textures/ui/Black",
+              "size": [
+                "100%",
+                "100%"
+              ],
+              "layer": 98,
+              "alpha": 0.8
+            }
+          },
+          {
+            "container": {
+              "type": "panel",
+              "size": [
+                "100%",
+                "100%"
+              ],
+              "anchor_from": "top_left",
+              "layer": 99,
+              "clips_children": true,
+              "use_anchored_offset": true, // required to use anchored offset properties
+              "controls": [
+                {
+                  "content": {
+                    "type": "stack_panel",
+                    "size": [
+                      "100%",
+                      "100%"
+                    ],
+                    "orientation": "vertical",
+                    "controls": [
+                      {
+                        "1@common_buttons.light_text_button": {
+                          "$button_text": "Test 1",
+                          "$pressed_button_name": "any",
+                          "size": [
+                            "100%",
+                            "20%"
+                          ] // percentages are necessary to keep size accoring to parent's changing size
+                        }
+                      },
+                      {
+                        "2@common_buttons.light_text_button": {
+                          "$button_text": "Test 2",
+                          "$pressed_button_name": "any",
+                          "size": [
+                            "100%",
+                            "20%"
+                          ]
+                        }
+                      },
+                      {
+                        "3@common_buttons.light_text_button": {
+                          "$button_text": "Test 3",
+                          "$pressed_button_name": "any",
+                          "size": [
+                            "100%",
+                            "20%"
+                          ]
+                        }
+                      },
+                      {
+                        "4@common_buttons.light_text_button": {
+                          "$button_text": "Test 4",
+                          "$pressed_button_name": "any",
+                          "size": [
+                            "100%",
+                            "20%"
+                          ]
+                        }
+                      },
+                      {
+                        "5@common_buttons.light_text_button": {
+                          "$button_text": "Test 5",
+                          "$pressed_button_name": "any",
+                          "size": [
+                            "100%",
+                            "20%"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "property_bag": {
+                // max value is 1.0 - meaning 100% of size of element.
+                "#size_binding_x": 0.0,
+                "#size_binding_y": 0.0,
+                // these are offsets related to anchoring and parent's size. max value is 1.0
+                "#anchored_offset_value_x": 0.0,
+                "#anchored_offset_value_y": 0.0
+              },
+              // set the properties according to sliders
+              "bindings": [
+                {
+                  "binding_type": "view",
+                  "source_control_name": "size_x",
+                  "source_property_name": "( (#slider_value + 1) / 10 )",
+                  "target_property_name": "#size_binding_x"
+                },
+                {
+                  "binding_type": "view",
+                  "source_control_name": "size_y",
+                  "source_property_name": "( (#slider_value + 1) / 10 )",
+                  "target_property_name": "#size_binding_y"
+                },
+                {
+                  "binding_type": "view",
+                  "source_control_name": "offset_x",
+                  "source_property_name": "( ( #slider_value ) / 10 )",
+                  "target_property_name": "#anchored_offset_value_x"
+                },
+                {
+                  "binding_type": "view",
+                  "source_control_name": "offset_y",
+                  "source_property_name": "( ( #slider_value ) / 10 )",
+                  "target_property_name": "#anchored_offset_value_y"
+                }
+              ]
+            }
+          },
+          {
+            "toggles": {
+              "type": "stack_panel",
+              "orientation": "vertical",
+              "size": [
+                60,
+                "default"
+              ],
+              "anchor_from": "top_left",
+              "anchor_to": "top_left",
+              "controls": [
+                {
+                  "size_x@common.slider": {
+                    "size": [
+                      60,
+                      20
+                    ],
+                    "$slider_name": "size_x",
+                    "$slider_steps": 10,
+                    "property_bag": {
+                      "#slider_steps": 10,
+                      "#slider_value": 5
+                    },
+                    "layer": 99,
+                    "bindings": [
+                      {
+                        "binding_name": "#slider_value"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "size_y@common.slider": {
+                    "size": [
+                      60,
+                      20
+                    ],
+                    "$slider_name": "size_y",
+                    "$slider_steps": 10,
+                    "property_bag": {
+                      "#slider_steps": 10,
+                      "#slider_value": 5
+                    },
+                    "layer": 99,
+                    "bindings": [
+                      {
+                        "binding_name": "#slider_value"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "offset_x@common.slider": {
+                    "size": [
+                      60,
+                      20
+                    ],
+                    "$slider_name": "offset_x",
+                    "$slider_steps": 10,
+                    "property_bag": {
+                      "#slider_steps": 10,
+                      "#slider_value": 5
+                    },
+                    "layer": 99,
+                    "bindings": [
+                      {
+                        "binding_name": "#slider_value"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "offset_y@common.slider": {
+                    "size": [
+                      60,
+                      20
+                    ],
+                    "$slider_name": "offset_y",
+                    "$slider_steps": 10,
+                    "property_bag": {
+                      "#slider_steps": 10,
+                      "#slider_value": 5
+                    },
+                    "layer": 99,
+                    "bindings": [
+                      {
+                        "binding_name": "#slider_value"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

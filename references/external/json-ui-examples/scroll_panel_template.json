@@ -1,0 +1,166 @@
+{
+    "namespace": "scroll_panel",
+
+    "new_scroll_bar_and_track@common.empty_panel": {
+        "size": "$scroll_stack_size",
+        "anchor_from": "right_middle",
+        "anchor_to": "right_middle",
+        "layer": 8,
+        "controls": [
+            {
+                "centered_panel@common.empty_panel": {
+                    "size": "$scroll_stack_size",
+                    "anchor_from": "center",
+                    "anchor_to": "center",
+                    "offset": "$bar_and_track_offset",
+                    "layer": 10,
+                    "controls": [
+                        {
+                            "track@scroll_panel.new_scrollbar_track": {
+                                "layer": 2,
+                                "anchor_from": "center",
+                                "anchor_to": "center"
+                            }
+                        },
+                        {
+                            "scroll_box@common.empty_panel": {
+                                "controls": [
+                                    {
+                                        "box": {
+                                            "type": "scrollbar_box",
+                                            "layer": 5,
+                                            "anchor_from": "top_middle",
+                                            "anchor_to": "top_middle",
+                                            "contained": true,
+                                            "draggable": "vertical",
+                                            "button_mappings": [
+                                                {
+                                                    "from_button_id": "button.menu_select",
+                                                    "to_button_id": "button.menu_select",
+                                                    "mapping_type": "pressed",
+                                                    "button_up_right_of_first_refusal": true
+                                                }
+                                            ],
+                                            "controls": [
+                                                {
+                                                    "mouse_box@$scroll_box_mouse_image_control": {
+                                                        "visible": "$scroll_box_visible"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+
+    "new_scrolling_panel": {
+        "type": "scroll_view",
+        "size": ["100%", "100%"],
+        "scroll_speed": 6,
+        "scrollbar_track_button": "button.scrollbar_skip_track",
+        "scrollbar_touch_button": "button.scrollbar_touch",
+        "always_listen_to_input": true,
+        "always_handle_pointer": true,
+        "always_handle_scrolling": false,
+        "scrollbar_always_visible": false,
+        "scrollbar_track": "track",
+        "scrollbar_box": "box",
+        "scroll_content": "scrolling_content",
+        "scroll_view_port": "scrolling_view_port",
+        "scroll_box_and_track_panel": "centered_panel",
+        "jump_to_bottom_on_update": false,
+
+        "$scroll_stack_size|default": [10, 140], // bar + track size
+        "$scroll_view_port_size|default": [88, 140.2], // viewport size
+        "$view_port_size|default": ["fill", "100%"], // viewport holder size
+        "$scroll_size|default": [4, "100%"], // scroll track size
+        "$scroll_box_size|default": ["100%", "100%"], // scroll handle size
+        "$scroll_view_stack_panel_size|default": ["100%", "100%"], // container size
+        "$scroll_bar_left_padding|default": [2, "fill"], // padding before scroll bar
+        "$bar_and_track_offset|default": [0, 0], // bar + track offset
+        "$scroll_viewport_offset|default": [0, 0], // viewport offset
+        "$scroll_box_visible|default": true, // toggle scroll box visibility
+        "$scroll_box_mouse_image_control|default": "common.scrollbar_box_image", // scroll box texture
+
+        "controls": [
+            {
+                "stack_panel": {
+                    "type": "stack_panel",
+                    "orientation": "horizontal",
+                    "anchor_to": "top_left",
+                    "anchor_from": "top_left",
+                    "size": "$scroll_view_stack_panel_size",
+                    "controls": [
+                        {
+                            "scroll_viewport_holder@common.empty_panel": {
+                                "size": "$view_port_size",
+                                "anchor_to": "left_middle",
+                                "anchor_from": "left_middle",
+                                "clips_children": true,
+                                "controls": [
+                                    {
+                                        "scrolling_view_port@common.empty_panel": {
+                                            "size": "$scroll_view_port_size",
+                                            "offset": "$scroll_viewport_offset",
+                                            "clips_children": true,
+                                            "controls": [
+                                                {
+                                                    "scrolling_content@$scrolling_content": {
+                                                        "anchor_to": "top_middle",
+                                                        "anchor_from": "top_middle"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "filler@common.empty_panel": {
+                                "size": "$scroll_bar_left_padding"
+                            }
+                        },
+                        {
+                            "bar_and_track@scroll_panel.new_scroll_bar_and_track": {}
+                        }
+                    ]
+                }
+            }
+        ],
+
+        "button_mappings": [
+            {
+                "from_button_id": "button.menu_select",
+                "to_button_id": "button.scrollbar_touch",
+                "mapping_type": "pressed",
+                "button_up_right_of_first_refusal": true
+            }
+        ]
+    },
+
+    "new_scrollbar_track": {
+        "type": "scroll_track",
+        "button_mappings": [
+            {
+                "from_button_id": "button.menu_select",
+                "to_button_id": "button.scrollbar_skip_track",
+                "mapping_type": "pressed"
+            }
+        ]
+    },
+
+    "scroll_panel@scroll_panel.new_scrolling_panel": {
+        "size": [120, 142],
+        "$scroll_viewport_offset": [0, 0.2], // view area offset
+        "$bar_and_track_offset|default": [-13, -40.4], // bar/track position
+        "$scroll_box_mouse_image_control": "common.empty_image", // custom handle texture
+        "$scrolling_content": "common.empty_panel" // the scroll panels content
+    }
+}

@@ -1,0 +1,72 @@
+# External Research Map
+
+These are the external sources that should be checked when the local pack samples are not enough.
+
+## Official vanilla UI source
+
+- Mojang `bedrock-samples`
+  - <https://github.com/Mojang/bedrock-samples/tree/main/resource_pack/ui>
+  - Use for screen names, `_ui_defs.json`, and official sample screen structure
+
+## Vanilla asset authority
+
+- ZtechNetwork `MCBVanillaResourcePack`
+  - <https://github.com/ZtechNetwork/MCBVanillaResourcePack>
+  - Use for `textures/ui`, `textures/item_texture.json`, `textures/terrain_texture.json`, and current vanilla `ui/*.json`
+
+## Behavior and rule references
+
+- Bedrock Wiki JSON UI Documentation
+  - <https://wiki.bedrock.dev/json-ui/json-ui-documentation>
+- Bedrock Wiki Intro to JSON UI
+  - <https://wiki.bedrock.dev/json-ui/json-ui-intro.html>
+- Bedrock Wiki Best Practices
+  - <https://wiki.bedrock.dev/json-ui/best-practices>
+- Bedrock Wiki Preserve Title Texts
+  - <https://wiki.bedrock.dev/json-ui/preserve-title-texts>
+- Bedrock Wiki Modifying Server Forms
+  - <https://wiki.bedrock.dev/json-ui/modifying-server-forms>
+- Bedrock Wiki Buttons and Toggles
+  - <https://wiki.bedrock.dev/json-ui/buttons-and-toggles>
+
+## Example repositories
+
+- `LeGend077/json-ui-examples`
+  - <https://github.com/LeGend077/json-ui-examples>
+- `Refaltor77/EasyUIBuilder`
+  - <https://github.com/Refaltor77/EasyUIBuilder>
+
+## How to use them
+
+### When verifying a texture path
+
+Check:
+
+1. Ztech repo file tree
+2. `textures/item_texture.json` or `textures/terrain_texture.json` if relevant
+3. local sample packs only for usage examples, not as the final authority
+
+### When verifying a control property or binding name
+
+Check:
+
+1. Bedrock Wiki JSON UI documentation
+2. Mojang `bedrock-samples`
+3. local sample packs
+
+### When building a new HUD or chat protocol
+
+Check:
+
+1. local sample packs
+2. Bedrock Wiki best practices and title preservation guides
+3. Mojang vanilla screen layout if screen injection is involved
+
+### When building a new reusable control quickly
+
+Check:
+
+1. local sample packs
+2. `json-ui-examples`
+3. `EasyUIBuilder`
+4. Bedrock Wiki documentation for property confirmation

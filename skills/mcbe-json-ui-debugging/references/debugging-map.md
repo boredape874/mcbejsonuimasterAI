@@ -2,9 +2,9 @@
 
 ## Compare against these sources
 
-- `../../docs/pack-analyses/1seulbi.md`
-- `../../docs/pack-analyses/bunnyfarm.md`
-- `../../docs/pack-analyses/custom-crops-reference.md`
+- `../../../docs/pack-analyses/1seulbi.md`
+- `../../../docs/pack-analyses/bunnyfarm.md`
+- `../../../docs/pack-analyses/custom-crops-reference.md`
 
 ## Common failure sources
 

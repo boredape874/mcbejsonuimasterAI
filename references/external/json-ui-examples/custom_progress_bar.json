@@ -1,0 +1,91 @@
+{
+    "namespace": "hud",
+
+    "hud_title_text/title_frame/title": {
+        "modifications": [
+            {
+                "array_name": "bindings",
+                "operation":"insert_back",
+                "value": [
+                    {
+                        "binding_type": "view",
+                        "source_property_name": "((#text - 'hp:') = #text)",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            }
+        ]
+    },
+
+    "custom_progress_bar": {
+        "$update_string": "hp:",
+        "type": "image",
+        "texture": "textures/ui/experiencebarempty", // image background that will show when bar is not filled
+        "size": [70, 6],
+        "offset": [0, 20],
+        "controls": [
+            {
+                "progress": { // the image that'll fill the empty bar
+                    "type": "image",
+                    "size": ["100%", "100%"],
+                    "layer": 1,
+                    "$one": 1,
+                    "$max_health": 20.0,
+                    "clip_direction": "left",
+                    "clip_pixelperfect": false,
+                    "texture": "textures/ui/experiencebarfull",
+                    "bindings": [
+                        {
+                            "binding_type": "view",
+                            "source_control_name": "data_control",
+                            "source_property_name": "((#preserved_text - $update_string) * $one)",
+                            "target_property_name": "#health"
+                        },
+                        {
+                            "binding_type": "view",
+                            "source_property_name": "(($max_health - #health) / $max_health)",
+                            "target_property_name": "#clip_ratio"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "data_control": {
+                                "type": "panel",
+                                "size": [0, 0],
+                                "bindings": [
+                                    {
+                                        "binding_name": "#hud_title_text_string"
+                                    },
+                                    {
+                                        "binding_name": "#hud_title_text_string",
+                                        "binding_name_override": "#preserved_text",
+                                        "binding_condition": "visibility_changed"
+                                    },
+                                    {
+                                        "binding_type": "view",
+                                        "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $update_string) = #hud_title_text_string))",
+                                        "target_property_name": "#visible"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+
+    "root_panel": {
+        "modifications": [
+            {
+                "array_name": "controls",
+                "operation": "insert_back",
+                "value": [
+                    {
+                        "custom_progress_bar@hud.custom_progress_bar": {}
+                    }
+                ]
+            }
+        ]
+    }
+}

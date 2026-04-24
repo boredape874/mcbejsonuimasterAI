@@ -8,6 +8,8 @@
 - `../../references/source-packs/custom-crops-reference/ui/hud_screen.json`
 - `../../references/source-packs/custom-crops-reference/ui/server_form.json`
 - `../../references/source-packs/bunnyfarm/tDAp1yJMUYo/ui/animated_bar.json`
+- `../../references/external/EasyUIBuilder/ui/custom_ui/binding_example.json`
+- `../../references/external/EasyUIBuilder/ui/custom_ui/variable_example.json`
 
 ## What these prove
 

@@ -2,9 +2,11 @@
 
 ## Primary docs
 
-- `../../docs/00-overview.md`
-- `../../docs/02-mastery-map.md`
-- `../../docs/pack-analyses/1seulbi.md`
+- `../../../docs/00-overview.md`
+- `../../../docs/02-mastery-map.md`
+- `../../../docs/04-source-priority.md`
+- `../../../docs/06-json-ui-rules.md`
+- `../../../docs/pack-analyses/1seulbi.md`
 
 ## Primary source files
 

@@ -1,0 +1,185 @@
+{
+    "namespace": "hud",
+    "root_panel": {
+        "modifications": [
+            {
+                "array_name": "controls",
+                "operation": "insert_back",
+                "value": [
+                    {
+                        "heart_bar_icons@hud.heart_bar_icons": {
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "heart_icon_template": {
+        "type": "panel",
+        "size": [
+            9,
+            9
+        ],
+        "controls": [
+            {
+                "heart_icon_empty": {
+                    "type": "image",
+                    "$update_string": "hp:",
+                    "texture": "textures/ui/heart_background",
+                    "layer": 0,
+                    "$condition|default": 20,
+                    "$condition_half": "($condition - 1)",
+                    "controls": [
+                        {
+                            "data_control": {
+                                "type": "panel",
+                                "size": [
+                                    0,
+                                    0
+                                ],
+                                "bindings": [
+                                    {
+                                        "binding_name": "#hud_title_text_string"
+                                    },
+                                    {
+                                        "binding_name": "#hud_title_text_string",
+                                        "binding_name_override": "#preserved_text",
+                                        "binding_condition": "visibility_changed"
+                                    },
+                                    {
+                                        "binding_type": "view",
+                                        "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $update_string) = #hud_title_text_string))",
+                                        "target_property_name": "#visible"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "heart_icon_full": {
+                                "type": "image",
+                                "texture": "textures/ui/heart",
+                                "layer": 2,
+                                "bindings": [
+                                    {
+                                        "binding_type": "view",
+                                        "source_control_name": "data_control",
+                                        "resolve_sibling_scope": true,
+                                        "source_property_name": "((#preserved_text - $update_string) * 1)",
+                                        "target_property_name": "#health_value"
+                                    },
+                                    {
+                                        "binding_type": "view",
+                                        "source_property_name": "((#health_value = $condition) or (#health_value > $condition))",
+                                        "target_property_name": "#visible"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "heart_icon_half": {
+                                "type": "image",
+                                "texture": "textures/ui/heart_half",
+                                "layer": 1,
+                                "bindings": [
+                                    {
+                                        "binding_type": "view",
+                                        "source_control_name": "data_control",
+                                        "resolve_sibling_scope": true,
+                                        "source_property_name": "((#preserved_text - $update_string) * 1)",
+                                        "target_property_name": "#health_value"
+                                    },
+                                    {
+                                        "binding_type": "view",
+                                        "source_property_name": "(#health_value = $condition_half)",
+                                        "target_property_name": "#visible"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "heart_bar_icons": {
+        "type": "stack_panel",
+        "orientation": "horizontal",
+        "size": [
+            "default",
+            9
+        ],
+        "bindings": [
+            {
+                "binding_name": "#show_survival_ui",
+                "binding_name_override": "#visible"
+            }
+        ],
+        "controls": [
+            {
+                "icon_1@hud.heart_icon_template": {
+                    "$condition": 2
+                }
+            },
+            {
+                "icon_2@hud.heart_icon_template": {
+                    "$condition": 4
+                }
+            },
+            {
+                "icon_3@hud.heart_icon_template": {
+                    "$condition": 6
+                }
+            },
+            {
+                "icon_4@hud.heart_icon_template": {
+                    "$condition": 8
+                }
+            },
+            {
+                "icon_5@hud.heart_icon_template": {
+                    "$condition": 10
+                }
+            },
+            {
+                "icon_6@hud.heart_icon_template": {
+                    "$condition": 12
+                }
+            },
+            {
+                "icon_7@hud.heart_icon_template": {
+                    "$condition": 14
+                }
+            },
+            {
+                "icon_8@hud.heart_icon_template": {
+                    "$condition": 16
+                }
+            },
+            {
+                "icon_9@hud.heart_icon_template": {
+                    "$condition": 18
+                }
+            },
+            {
+                "icon_10@hud.heart_icon_template": {
+                    "$condition": 20
+                }
+            }
+        ]
+    },
+    "hud_title_text/title_frame/title": {
+        "modifications": [
+            {
+                "array_name": "bindings",
+                "operation": "insert_back",
+                "value": [
+                    {
+                        "binding_type": "view",
+                        "source_property_name": "((#text - 'hp:') = #text)",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            }
+        ]
+    }
+}

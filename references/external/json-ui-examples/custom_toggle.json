@@ -1,0 +1,28 @@
+{
+  "custom_toggle_template@common.toggle": {
+      "$toggle_name|default": "toggle",
+      "size": [32, 32],
+      "$toggle_collection_detail_name": "$toggle_view_binding_name",
+      // Important! Make sure to add your textures here! example: `hud.my_image`
+      "$unchecked_locked_control": "",
+      "$unchecked_locked_hover_control": "",
+      "$checked_locked_control": "",
+      "$checked_locked_hover_control": "",
+      "$unchecked_control": "",
+      "$checked_control": "",
+      "$unchecked_hover_control": "",
+      "$checked_hover_control": ""
+    },
+  
+    "custom_toggle": { // you have to use this for making toggles (requires knowledge of basic toggle vars and view bindings)
+      "type": "panel",
+      "layer": 3,
+      "$toggle_view_binding_name|default": "this_toggle",
+      "$template_toggle|default": "buttons.custom_toggle_template",
+      "controls": [
+        {
+          "$toggle_view_binding_name@$template_toggle": {}
+        }
+      ]
+    }
+}
