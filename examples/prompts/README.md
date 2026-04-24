@@ -16,3 +16,4 @@ Prompt groups:
 - `04-vanilla-assets.md`
 - `05-debugging.md`
 - `06-pack-analysis.md`
+- `07-community-patterns-and-tools.md`

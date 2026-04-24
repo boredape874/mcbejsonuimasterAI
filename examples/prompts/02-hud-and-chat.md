@@ -23,3 +23,19 @@ Use mcbe-json-ui-patterns and mcbe-json-ui-hud-and-chat.
 Adapt the local topbar chat notification utility into this pack.
 Preserve any existing additional_screen_content entry point and show the exact merge strategy.
 ```
+
+## 4. Individual score on HUD
+
+```text
+Use mcbe-json-ui-hud-and-chat and mcbe-json-ui-patterns.
+Add or explain a personal scoreboard value on the HUD using the community individual-score pattern.
+Warn about collection cost and offline player cleanup.
+```
+
+## 5. Interactable HUD menu
+
+```text
+Use mcbe-json-ui-hud-and-chat and mcbe-json-ui-patterns.
+Explain whether a dummy-screen based interactable HUD menu is suitable for this pack.
+If suitable, show the files and input mappings that need to be patched.
+```

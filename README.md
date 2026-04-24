@@ -95,6 +95,8 @@ See:
 - [JSON UI Best Practices](docs/14-json-ui-best-practices.md)
 - [JSON UI File Role Catalog](docs/15-json-ui-file-role-catalog.md)
 - [Screen-By-Screen Reference](docs/16-screen-by-screen-reference.md)
+- [Community Patterns: String, Score, And HUD Input](docs/17-community-patterns-string-score-hud.md)
+- [Tooling: AUX, Dumper, And StarLib](docs/18-tooling-auxgen-dumper-starlib.md)
 
 ## Quick start
 
@@ -280,6 +282,8 @@ Then read as needed:
 - [JSON UI Best Practices](docs/14-json-ui-best-practices.md)
 - [JSON UI File Role Catalog](docs/15-json-ui-file-role-catalog.md)
 - [Screen-By-Screen Reference](docs/16-screen-by-screen-reference.md)
+- [Community Patterns: String, Score, And HUD Input](docs/17-community-patterns-string-score-hud.md)
+- [Tooling: AUX, Dumper, And StarLib](docs/18-tooling-auxgen-dumper-starlib.md)
 
 ## Is this enough to become a "JSON UI Master AI" in one shot?
 

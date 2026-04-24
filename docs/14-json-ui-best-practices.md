@@ -70,6 +70,8 @@ Over:
 
 - excessive nested math and string operators inside the UI
 
+Separator-based string splitting is especially expensive and fragile. Use it only for small controlled payloads; prefer fixed-width slicing or server-side preprocessing for larger structured data.
+
 ## Minimize bindings
 
 Only keep bindings that contribute to the actual behavior.
@@ -109,6 +111,8 @@ Examples:
 - `dialog:<bg>\t<avatar>\t<line1>\t<line2>\t<line3>`
 
 This usually reduces UI complexity and makes debugging easier.
+
+For many fields, prefer fixed-width server-prepared slices over recursive JSON UI separator search.
 
 ## Keep screen responsibilities clear
 

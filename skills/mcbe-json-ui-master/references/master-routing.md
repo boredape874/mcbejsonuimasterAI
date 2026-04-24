@@ -44,6 +44,8 @@ Then load:
 - `topics/logic/index.md`
 - and only the exact needed subtopic under `topics/logic/`
 
+For community string splitting, fixed-width slicing, or Unicode byte-width payloads, prefer `topics/logic/string-splitting-and-slicing.md`.
+
 ### HUD, chat, title, actionbar, scoreboard
 
 Use `mcbe-json-ui-hud-and-chat`.
@@ -51,6 +53,8 @@ Then load:
 
 - `topics/hud-chat/index.md`
 - and only the exact needed subtopic under `topics/hud-chat/`
+
+For individual scoreboard HUD or interactable HUD menus, prefer `topics/hud-chat/personal-score-and-interactable-hud.md`.
 
 ### server form or chest form routing
 
@@ -123,3 +127,5 @@ Then load:
 
 - `topics/tooling/index.md`
 - and only the exact needed subtopic under `topics/tooling/`
+
+For bedrock-auxgen, JSON-UI-Dumper, or StarLibV2, prefer `topics/tooling/aux-dumper-starlib.md`.

@@ -16,6 +16,8 @@ Read these first:
 - `docs/14-json-ui-best-practices.md`
 - `docs/15-json-ui-file-role-catalog.md`
 - `docs/16-screen-by-screen-reference.md`
+- `docs/17-community-patterns-string-score-hud.md`
+- `docs/18-tooling-auxgen-dumper-starlib.md`
 
 ## Level 2: topic indexes
 
@@ -54,6 +56,8 @@ Use subtopic notes only for the exact problem:
 - vanilla UI texture lookup
 - vanilla asset usage workflow
 - performance and compatibility patterns
+- community string, score, and interactive HUD patterns
+- dumper, AUX, and library tooling
 
 ## Rule
 

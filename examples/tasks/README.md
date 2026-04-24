@@ -19,3 +19,5 @@ Task groups:
 - `04-verify-vanilla-assets.md`
 - `05-debug-merged-pack.md`
 - `06-analyze-pack-architecture.md`
+- `07-string-payload-design.md`
+- `08-tooling-workflow.md`

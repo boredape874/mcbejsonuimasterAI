@@ -22,3 +22,11 @@ Use mcbe-json-ui-master.
 Solve this JSON UI task with the smallest viable patch.
 Prefer modifications, utility reuse, and verified vanilla paths over large replacements.
 ```
+
+## 4. Community snippet hardening
+
+```text
+Use mcbe-json-ui-master and mcbe-json-ui-patterns.
+Take this community JSON UI snippet and turn it into a safer reusable pattern.
+Preserve attribution if known, list limitations, and prefer server-side preprocessing when the snippet is fragile.
+```

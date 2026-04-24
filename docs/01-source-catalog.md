@@ -143,6 +143,12 @@ Upstream authority:
   - builder-oriented examples and generated JSON UI samples
 - `Herobrine643928/Chest-UI`
   - chest and furnace server-form pack with Script API support
+- `DreamlandMC/bedrock-auxgen`
+  - Bedrock item AUX ID generation for plugin/UI item rendering workflows
+- `TheoristMC/JSON-UI-Dumper`
+  - discovery aid for vanilla JSON UI elements across stable and preview versions
+- `pipangry/StarLibV2`
+  - GPLv3 JSON UI form-library architecture reference
 - Bedrock Wiki `json-ui-intro`
   - high-level mental model and terminology
 - Bedrock Wiki `add-hud-elements`
