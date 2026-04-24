@@ -237,8 +237,22 @@ Use mcbe-json-ui-tooling and explain whether bedrock-json-ui-editor or EasyUIBui
   - concept maps, source priority, usage and research guides
 - `references/`
   - sample packs, mirrored external references, schema files
+- `examples/prompts/`
+  - copy-paste prompt examples for Codex
+- `examples/tasks/`
+  - task templates that pair a real objective with the right skill flow
 - `scripts/`
   - installation and sync helpers
+
+## Ready-made examples
+
+If you want something other people can use immediately after cloning, start here:
+
+- [examples/prompts/README.md](examples/prompts/README.md)
+- [examples/tasks/README.md](examples/tasks/README.md)
+
+Prompt examples are for direct copy-paste.
+Task examples are for slightly longer guided work where the AI should inspect files, trace dependencies, and then patch the pack.
 
 ## Recommended reading order
 
