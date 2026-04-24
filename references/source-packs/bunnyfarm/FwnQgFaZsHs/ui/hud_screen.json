@@ -1,0 +1,154 @@
+{
+	"test_panel": {
+		"type": "panel",
+		"anchor_from": "bottom_right",
+		"anchor_to": "bottom_right",
+		"size": [
+			"100%",
+			"100%cm + 0.5px"
+		],
+		"controls": [
+			{
+				"test@hud.test": {}
+			}
+		]
+	},
+	"test": {
+		"anchor_to": "bottom_right",
+		"anchor_from": "bottom_right",
+		"type": "image",
+		"texture": "textures/ui/Black",
+		"alpha": 0.7,
+		"size": [
+			"100%c + 7px",
+			"100%c + 3px"
+		],
+		"offset": "@hud.test_anim",
+		"layer": 990,
+		"bindings": [
+			{
+				"binding_name": "#text"
+			},
+			{
+				"binding_type": "view",
+				"source_property_name": "(('%.19s' * #text) = 'pickupnotification.')",
+				"target_property_name": "#visible"
+			},
+			{
+				"binding_type": "view",
+				"source_property_name": "(#text - 'pickupnotification.')",
+				"target_property_name": "#text_remainder"
+			}
+		],
+		"controls": [
+			{
+				"text": {
+					"type": "label",
+					"layer": 991,
+					"text": "#text",
+					"anchor_from": "left",
+					"anchor_to": "left",
+					"font_scale_factor": 0.9,
+					"offset": ["1px", "0px"],
+					"localize": false,
+					"shadow": true,
+					"bindings": [
+						{
+							"binding_type": "view",
+							"source_control_name": "test",
+							"source_property_name": "#text_remainder",
+							"target_property_name": "#text",
+							"resolve_sibling_scope": true
+						},
+						{
+							"binding_type": "view",
+							"source_property_name": "(not (#text = ''))",
+							"target_property_name": "#visible"
+						}
+					]
+				}
+			}
+		]
+	},
+	"test_anim": {
+		"anim_type": "offset",
+		"easing": "out_sine",
+		"next": "@hud.test_anim2",
+		"from": [
+			"100%c + 40px",
+			"0px"
+		],
+		"to": [
+			"0px",
+			"0px"
+		],
+		"duration": 1
+	},
+	"test_anim2": {
+		"anim_type": "wait",
+		"next": "@hud.test_anim3",
+		"duration": 4
+	},
+	"test_anim3": {
+		"anim_type": "offset",
+		"easing": "in_sine",
+		"from": [
+			"0px",
+			"0px"
+		],
+		"to": [
+			"100%c + 40px",
+			"0px"
+		],
+		"duration": 1,
+		"destroy_at_end": "chat_grid_item"
+	},
+	"test_factory": {
+		"type": "stack_panel",
+		"size": [
+			"100%",
+			"100%"
+		],
+		"offset": [
+			"0%",
+			"100% - 100%c"
+		],
+		"anchor_from": "bottom_right",
+		"anchor_to": "bottom_right",
+		"factory": {
+			"name": "chat_item_factory",
+			"control_ids": {
+				"chat_item": "test_panel@hud.test_panel"
+			}
+		}
+	},
+	"root_panel": {
+		"modifications": [
+			{
+				"array_name": "controls",
+				"operation": "insert_front",
+				"value": [
+					{
+						"test_factory@hud.test_factory": {}
+					}
+				]
+			}
+		]
+	},
+	//Vanilla Overrides
+	"chat_grid_item/chat_background": {
+		"modifications": [
+			{
+				"array_name": "bindings",
+				"operation": "insert_back",
+				"value": [
+					{
+						"binding_type": "view",
+						"source_property_name": "(('§␛' + #text + '§r') - ('§␛' + 'pickupnotification.') = ('§␛' + #text + '§r'))",
+						"target_property_name": "#visible"
+					}
+				]
+			}
+		]
+	}
+}

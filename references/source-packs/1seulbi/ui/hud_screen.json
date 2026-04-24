@@ -1,0 +1,965 @@
+{
+  "namespace": "hud",
+
+  "root_panel/sidebar": {
+    "ignored": true
+  },
+
+  "root_panel": {
+    "modifications": [
+      {
+        "array_name": "controls",
+        "operation": "insert_back",
+        "value": [
+          {
+            "upgrade_scoreboard": {
+              "type": "panel",
+              "controls": [
+                { "vanilla_scoreboard@scoreboard.vanilla_scoreboard_sidebar": {} },
+                { "luna_luna_scoreboard@scoreboard.luna_luna_scoreboard_sidebar": {} },
+                { "rank_scoreboard@scoreboard.rank_scoreboard_sidebar": {} }
+              ],
+              "bindings": [
+                {
+                  "binding_name": "#scoreboard_sidebar_visible",
+                  "binding_name_override": "#visible"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+
+
+  "hud_content": {
+    "$hud_bindings|default": [
+      {
+        "binding_name": "#hud_visible",
+        "binding_name_override": "#visible"
+      }
+    ],
+    "modifications": [
+      {
+        "array_name": "controls",
+        "operation": "insert_front",
+        "value": [
+          {
+            "cloud_bottom_chat_panel": {
+              "layer": 30,
+              "type": "panel",
+              "size": [ "100%", "100%" ],
+              "$anchor": "bottom_left",
+              "$offset": [ 0, -50 ],
+              "$max_children_size": 16,
+              "controls": [
+                { "chat_panel@hud.bottom_chat_panel": { "$max_size": [ "40%", "100%c" ] } }
+              ],
+              "bindings": "$hud_bindings"
+            }
+          },
+
+          {
+            "custom_title_hp_panel": {
+              "layer": 30,
+              "ignored": true,
+              "type": "panel",
+              "size": [ "100%", "100%" ],
+              "controls": [
+                { "custom@hud.hud_custom_title_hp_text": {} }
+              ],
+              "bindings": "$hud_bindings"
+            }
+          },
+
+          {
+            "custom_title_right_display": {
+              "layer": 50,
+              "type": "panel",
+              "size": [ "100%", "100%" ],
+              "controls": [
+                { "title_right@hud.title_right_display": {} }
+              ],
+              "bindings": "$hud_bindings"
+            }
+          },
+
+          {
+            "animation_custom_title_hp_bar_panel": {
+              "layer": 30,
+              "type": "panel",
+              "size": [ "100%", "100%" ],
+              "controls": [
+                {
+                  "title_hp_bar@hud.animated_progress_bar": {
+                    "$background_size": [ 81, 10 ],
+                    "$bar_size": [ "100% - 11px", "100% - 6px" ],
+                    "$bar_offset": [ 10, 3 ],
+                    "offset": [ -50.5, -32 ],
+                    "anchor_from": "bottom_middle",
+                    "anchor_to": "bottom_middle",
+
+                    "$multiplier": 0.01,
+                    "$data_source": "preserved_title",
+                    "$progress_binding": "#progress",
+
+                    "$text_format": "('§z' + $progress_binding + '/100')"
+                  }
+                },
+                { "title_hp_bar_text@hud.hud_custom_title_hp_bar_text": {} },
+
+                { "preserved_title@hud.preserved_title": {} }
+              ],
+              "bindings": [
+                {
+                  "binding_name": "#hotbar_with_xp_bar",
+                  "binding_name_override": "#visible"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+
+
+  // Hud Player Render
+  "centered_gui_elements/hud_player_rend_desktop": {
+    "ignored": true
+  },
+
+  "not_centered_gui_elements/hud_player_rend_pocket": {
+    "ignored": true
+  },
+
+
+  // Title - Animation Hp Bar
+  "increase_anim": {
+    "anim_type": "size",
+    "from": [ 0, "100%" ],
+    "to": [ "100%", "100%" ],
+    "duration": "$duration",
+    "easing": "$increase_easing"
+  },
+
+  "decrease_anim": {
+    "anim_type": "size",
+    "from": [ "100%", "100%" ],
+    "to": [ 0, "100%" ],
+    "duration": "$duration",
+    "easing": "$decrease_easing"
+  },
+
+  "trail_anim": {
+    "anim_type": "wait",
+    "duration": "$trail_delay",
+    "next": "@hud.decrease_anim"
+  },
+
+  "animated_bar_image": {
+    "type": "panel",
+    "size": [ "100%", "100%" ],
+    "controls": [
+      {
+        "bar_image": {
+          "type": "image",
+          "size": "$size_anim",
+          "layer": 1,
+          "alpha": "$bar_alpha",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "texture": "$bar_texture"
+        }
+      },
+      {
+        "trail_image": {
+          "ignored": "$ignore_trail",
+          "type": "image",
+          "layer": 0,
+          "size": "@hud.trail_anim",
+          "alpha": "$trail_alpha",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "texture": "$trail_texture"
+        }
+      }
+    ]
+  },
+
+  "animated_progress_bar": {
+    "$duration": 0.25,
+    "$trail_delay|default": 0.25,
+    "$increase_easing|default": "in_out_sine",
+    "$decrease_easing|default": "in_out_circ",
+
+    "$background_size|default": [ 80, 6 ],
+    "$background_texture|default": "textures/ui/bar_bg",
+
+    "$background_alpha|default": 1,
+    "$bar_texture|default": "textures/ui/bar",
+    "$bar_size|default":  [ "100% - 2px", "100% - 2px" ],
+    "$bar_offset|default": [ 1, 1 ],
+    "$bar_alpha|default": 1,
+
+    "$ignore_trail|default": false,
+    "$trail_texture|default": "textures/ui/White",
+    "$trail_alpha|default": 0.6,
+
+    "$multiplier|default": 0.05,
+    "$data_source|default": "<preserved title or subtitle panel>",
+    "$progress_binding|default": "#value",
+
+    "$ignore_text|default": true,
+    "$text_color|default": [ 1, 1, 1 ],
+    "$text_font_type|default": "smooth",
+    "$text_font_scale_factor|default": 1,
+    "$text_shadow|default": true,
+    "$text_offset|default": [ 0, 0 ],
+    "$text_size|default": [ "default", "default" ],
+    "$text_format|default": "('§z' + $progress_binding + '/20')",
+
+    "type": "panel",
+    "size": "$background_size",
+    "controls": [
+      {
+        "progress_bar_text": {
+          "ignored": "$ignore_text",
+          "type": "label",
+          "text": "#text",
+          "layer": 5,
+          "color": "$text_color",
+          "font_type": "$text_font_type",
+          "font_scale_factor": "$text_font_scale_factor",
+          "shadow": "$text_shadow",
+          "offset": "$text_offset",
+          "size": "$text_size",
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_control_name": "$data_source",
+              "source_property_name": "$text_format",
+              "target_property_name": "#text"
+            }
+          ]
+        }
+      },
+      {
+        "bar_parent_panel": {
+          "type": "panel",
+          "layer": 1,
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": "$bar_offset",
+          "size": "$bar_size",
+          "controls": [
+            {
+              "animated_bar_panel": {
+                "type": "panel",
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "size": [ "100%", "100%" ],
+                "use_anchored_offset": true,
+                "property_bag": {
+                  "#prev_value": 0
+                },
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "$data_source",
+                    "source_property_name": "#visible",
+                    "target_property_name": "#key"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "$data_source",
+                    "source_property_name": "$progress_binding",
+                    "target_property_name": "#changed_value"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#prev_value * (1 - #key) + #changed_value * #key)",
+                    "target_property_name": "#prev_value"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#changed_value + (#prev_value - #changed_value) * ((#prev_value - #changed_value) < 0))",
+                    "target_property_name": "#min"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#min * $multiplier)",
+                    "target_property_name": "#anchored_offset_value_x"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "((#changed_value + #prev_value - 2 * #min) * $multiplier)",
+                    "target_property_name": "#size_binding_x"
+                  }
+                ],
+                "controls": [
+                  {
+                    "anim_increase": {
+                      "type": "collection_panel",
+                      "size": [ "100%", "100%" ],
+                      "$size_anim": "@hud.increase_anim",
+                      "$ignore_trail": true,
+                      "factory": {
+                        "name": "anim_increase",
+                        "control_name": "hud.animated_bar_image"
+                      },
+                      "bindings": [
+                        {
+                          "binding_type": "view",
+                          "source_control_name": "animated_bar_panel",
+                          "resolve_sibling_scope": true,
+                          "source_property_name": "((#changed_value > #prev_value) * 1)",
+                          "target_property_name": "#collection_length"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "anim_decrease": {
+                      "type": "collection_panel",
+                      "size": [ "100%", "100%" ],
+                      "$size_anim": "@hud.decrease_anim",
+                      "factory": {
+                        "name": "anim_decrease",
+                        "control_name": "hud.animated_bar_image"
+                      },
+                      "bindings": [
+                        {
+                          "binding_type": "view",
+                          "source_control_name": "animated_bar_panel",
+                          "resolve_sibling_scope": true,
+                          "source_property_name": "((#prev_value > #changed_value) * 1)",
+                          "target_property_name": "#collection_length"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "bar_panel": {
+                "type": "image",
+                "alpha": "$bar_alpha",
+                "texture": "$bar_texture",
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "size": [ "100%", "100%" ],
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "animated_bar_panel",
+                    "resolve_sibling_scope": true,
+                    "source_property_name": "(#min * $multiplier)",
+                    "target_property_name": "#size_binding_x"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "bar_bg": {
+          "type": "image",
+          "size": "$background_size",
+          "alpha": "$background_alpha",
+          "layer": 0,
+          "texture": "$background_texture"
+        }
+      }
+    ]
+  },
+
+  "preserved_title": {
+    "type": "panel",
+    "size": [ 0, 0 ],
+    "$update_string": "customTitle_AniHPBar_",
+    "bindings": [
+      {
+        "binding_name": "#hud_title_text_string"
+      },
+      {
+        "binding_name": "#hud_title_text_string",
+        "binding_name_override": "#preserved_text",
+        "binding_condition": "visibility_changed"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $update_string) = #hud_title_text_string))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((#preserved_text - $update_string) + 0)",
+        "target_property_name": "#progress"
+      }
+    ]
+  },
+
+  "hud_custom_title_hp_bar_text": {
+    "type": "panel",
+    "size": [ "100%", "100%" ],
+    "controls": [
+      {
+        "hp_bar_text_panel": {
+          "layer": 40,
+          "type": "panel",
+          "size": [ "100%c", "100%c" ],
+          "offset": [ -48.5, -34.5 ],
+          "anchor_from": "bottom_middle",
+          "anchor_to": "bottom_middle",
+          "controls": [
+            {
+              "hp_info@hud.hud_custom_title_hp_bar_text_base": {
+                "$custom_title_filter_name": "customTitle_AniHPBarText_",
+                "$custom_title_control_name": "custom_title_control_hp_bar_text",
+                "$custom_title_text_alignment": "center",
+                "$custom_title_font_type": "MinecraftTen",
+                "$custom_title_font_scale_factor": 0.6
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_name": "#hud_visible_centered",
+        "binding_name_override": "#visible",
+        "binding_type": "global"
+      }
+    ]
+  },
+
+  "hud_custom_title_hp_bar_text_base": {
+    "$custom_title_filter_name|default": "customTitle_",
+    "$custom_title_control_name|default": "custom_title_control",
+    "$custom_title_size|default": [ "default", "default" ],
+    "$custom_title_max_size|default": [ "default", "default" ],
+    "$custom_title_offset|default": [ 0, 0 ],
+    "$custom_title_anchor|default": "center",
+    "$custom_title_text_alignment|default": "center",
+    "$custom_title_font_type|default": "smooth",
+    "$custom_title_font_scale_factor|default": 2.2,
+
+    "type": "label",
+    "size": "$custom_title_size",
+    "max_size": "$custom_title_max_size",
+    "offset": "$custom_title_offset",
+    "anchor_from": "$custom_title_anchor",
+    "anchor_to": "$custom_title_anchor",
+    "text": "#fix_title_text",
+    "text_alignment": "$custom_title_text_alignment",
+    "font_type": "$custom_title_font_type",
+    "font_scale_factor": "$custom_title_font_scale_factor",
+    "shadow": true,
+    "alpha": 0.5,
+    "controls": [
+      {
+        "$custom_title_control_name": {
+          "type": "panel",
+          "size": [ 0, 0 ],
+          "bindings": [
+            {
+              "binding_name": "#hud_title_text_string"
+            },
+            {
+              "binding_name": "#hud_title_text_string",
+              "binding_name_override": "#preserved_text",
+              "binding_condition": "visibility_changed"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $custom_title_filter_name) = #hud_title_text_string))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_control_name": "$custom_title_control_name",
+        "source_property_name": "(('§r' + (#preserved_text - $custom_title_filter_name)))",
+        "target_property_name": "#change_title_text"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(('§F' + #change_title_text))",
+        "target_property_name": "#fix_title_text"
+      }
+    ]
+  },
+
+  "hud_title_text": {
+    "bindings": [
+      {
+        "binding_type": "global",
+        "binding_name": "#hud_title_text_string"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((((#hud_title_text_string - 'customTitle_') = #hud_title_text_string) and ((#hud_title_text_string - '§A§C') = #hud_title_text_string)))",
+        "target_property_name": "#visible"
+      }
+    ]
+  },
+
+  "heart_renderer": {
+    "ignored": true
+  },
+
+
+  // Actionbar Text Area with Factory
+  "hud_actionbar_text_area": {
+    "type": "panel",
+    "factory": {
+      "name": "hud_actionbar_text_factory",
+      "control_ids": {
+        "hud_actionbar_text": "hud_actionbar_text@hud.hud_actionbar_text"
+      }
+    }
+  },
+
+
+  // Title display for §A§C messages - Right position with background
+  "title_right_display": {
+    "$update_string": "§A§C",
+    "type": "image",
+    "size": [ "100%cm + 8px", "100%cm + 4px" ],
+    "anchor_from": "top_right",
+    "anchor_to": "top_right",
+    "offset": [ -5, "30%" ],
+    "texture": "textures/ui/Black",
+    "alpha": 0.5,
+    "layer": 50,
+    "controls": [
+      {
+        "clear_detector": {
+          "type": "panel",
+          "size": [ 0, 0 ],
+          "property_bag": {
+            "#clear_detected": 0
+          },
+          "bindings": [
+            {
+              "binding_name": "#hud_title_text_string"
+            },
+            {
+              "binding_name": "#hud_title_text_string",
+              "binding_name_override": "#current_text",
+              "binding_condition": "visibility_changed"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (#hud_title_text_string = #current_text) and not ((#hud_title_text_string - '§A§D') = #hud_title_text_string))",
+              "target_property_name": "#visible"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(#visible * 1)",
+              "target_property_name": "#clear_detected"
+            }
+          ]
+        }
+      },
+      {
+        "title_label": {
+          "type": "label",
+          "size": [ "default", "default" ],
+          "offset": [ 4, 2 ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "text": "#text",
+          "layer": 51,
+          "color": [ 1.0, 1.0, 1.0 ],
+          "text_alignment": "left",
+          "localize": false,
+          "font_type": "smooth",
+          "font_scale_factor": 1.0,
+          "shadow": true,
+          "controls": [
+            {
+              "data_control": {
+                "type": "panel",
+                "size": [ 0, 0 ],
+                "property_bag": {
+                  "#preserved_text": ""
+                },
+                "bindings": [
+                  {
+                    "binding_name": "#hud_title_text_string"
+                  },
+                  {
+                    "binding_name": "#hud_title_text_string",
+                    "binding_name_override": "#preserved_text",
+                    "binding_condition": "visibility_changed"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $update_string) = #hud_title_text_string))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            }
+          ],
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_control_name": "data_control",
+              "source_property_name": "(#preserved_text - $update_string)",
+              "target_property_name": "#text"
+            }
+          ]
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_control_name": "clear_detector",
+        "source_property_name": "(#clear_detected = 0)",
+        "target_property_name": "#visible"
+      }
+    ]
+  },
+
+
+  // Hotbar (TEST: Red color to verify file is loading)
+  "hotbar_elipses_panel_right_art/slot": {
+    "texture": "textures/ui/elipses_hotbar",
+    "color": [ 1.0, 0.0, 0.0 ]
+  },
+
+  "hotbar_elipses_panel_left_art/slot": {
+    "texture": "textures/ui/elipses_hotbar"
+  },
+
+  "hotbar_elipses_panel_right_art": {
+    "type": "panel",
+    "$hotbar_elipses_panel_right_art_size|default": [ 20, 22 ],
+    "size": "$hotbar_elipses_panel_right_art_size",
+    "layer": 4,
+    "controls": [
+      {
+        "slot@hud.hotbar_slot_image": {
+          "$hotbar_slot_image_size": "$hotbar_elipses_panel_right_art_size",
+          "layer": 2,
+          "texture": "textures/ui/hotbar"
+        }
+      },
+      { "button@hud.hotbar_elipses_button": {} }
+    ]
+  },
+
+  "hotbar_elipses_panel_left_art": {
+    "type": "panel",
+    "$hotbar_elipses_panel_left_art_size|default": [ 20, 22 ],
+    "size": "$hotbar_elipses_panel_left_art_size",
+    "layer": 4,
+    "controls": [
+      {
+        "slot@hud.hotbar_slot_image": {
+          "layer": 2,
+          "$hotbar_slot_image_size": "$hotbar_elipses_panel_left_art_size",
+          "texture": "textures/ui/hotbar"
+        }
+      },
+      { "button@hud.hotbar_elipses_button": {} }
+    ]
+  },
+
+
+  // Chat
+  "anim_chat_item_dririn_start": {
+    "anim_type": "offset",
+    "easing": "in_out_cubic",
+    "duration": 1,
+    "from": [ "-100%", 0 ],
+    "to": [ 0, 0 ],
+    "next": "@hud.anim_chat_item_dririn_wait"
+  },
+
+  "anim_chat_item_dririn_wait": {
+    "anim_type": "wait",
+    "duration": "$chat_item_lifetime",
+    "next": "@hud.anim_chat_item_dririn_end"
+  },
+
+  "anim_chat_item_dririn_end": {
+    "anim_type": "offset",
+    "easing": "in_out_cubic",
+    "duration": 1,
+    "from": [ 0, 0 ],
+    "to": [ "-100%", 0 ],
+    "destroy_at_end": "chat_grid_item"
+  },
+
+
+  "anim_splits_chat_item_dririn_start": {
+    "anim_type": "offset",
+    "easing": "out_bounce",
+    "duration": 1,
+    "from": [ "-100%", 0 ],
+    "to": [ 0, 0 ],
+    "next": "@hud.anim_splits_chat_item_dririn_wait"
+  },
+
+  "anim_splits_chat_item_dririn_wait": {
+    "anim_type": "wait",
+    "duration": "$chat_item_lifetime",
+    "next": "@hud.anim_splits_chat_item_dririn_end"
+  },
+
+  "anim_splits_chat_item_dririn_end": {
+    "anim_type": "offset",
+    "easing": "in_bounce",
+    "duration": 1,
+    "from": [ 0, 0 ],
+    "to": [ "-100%", 0 ],
+    "destroy_at_end": "chat_grid_item"
+  },
+
+
+  "dririn_chat_label": {
+    "layer": 32,
+    "type": "label",
+    "text": "#text",
+    "size": [ "100%", "default" ],
+    "shadow": true,
+    "localize": false,
+    "color": "$chat_text_color",
+    "font_type": "$chat_font_type",
+    "font_scale_factor": "$chat_font_scale_factor",
+    "line_padding": "$chat_line_spacing",
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_property_name": "(((#text - '§C§H§I') = #text))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_name": "#chat_text",
+        "binding_name_override": "#text",
+        "binding_type": "collection",
+        "binding_collection_name": "chat_text_grid",
+        "binding_condition": "always"
+      }
+    ]
+  },
+
+  "dririn_splits_chat_label": {
+    "type": "label",
+    "size": [ "100%", "default" ],
+    "max_size": [ "100%", "default" ],
+    "anchor_from": "center",
+    "anchor_to": "center",
+    "shadow": true,
+    "localize": false,
+    "enable_profanity_filter": true,
+    "text": "#plus_text",
+    "bindings": [
+      {
+        "binding_name": "#chat_text",
+        "binding_name_override": "#text",
+        "binding_type": "collection",
+        "binding_collection_name": "chat_text_grid",
+        "binding_condition": "always"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(('§Z' + #text) - '§C§H§I')",
+        "target_property_name": "#filter_text"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(('%.7s' * #filter_text) - '§Z')",
+        "target_property_name": "#adverb_byte"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.30s' * #filter_text) - ('%.8s' * #filter_text)))",
+        "target_property_name": "#item_name_byte"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.30s' * #filter_text) - ('%.14s' * #filter_text)))",
+        "target_property_name": "#ending_byte"
+      },
+
+      {
+        "binding_type": "view",
+        "source_property_name": "(('%.' + #adverb_byte + 's') * (#filter_text - ('%.30s' * #filter_text)))",
+        "target_property_name": "#adverb_text"
+      },
+
+      {
+        "binding_type": "view",
+        "source_property_name": "((#filter_text - ('%.30s' * #filter_text)))",
+        "target_property_name": "#update_item_name_text"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.' + #item_name_byte + 's') * (#update_item_name_text - (('%.' + #adverb_byte + 's') * #update_item_name_text))))",
+        "target_property_name": "#item_name_text"
+      },
+
+      {
+        "binding_type": "view",
+        "source_property_name": "((#filter_text - ('%.30s' * #filter_text)))",
+        "target_property_name": "#update_ending_text"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#update_ending_text - (('%.' + (#adverb_byte + #item_name_byte) + 's') * #update_ending_text))",
+        "target_property_name": "#upgrade_ending_text"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.' + #ending_byte + 's') * #upgrade_ending_text))",
+        "target_property_name": "#ending_text"
+      },
+
+      {
+        "binding_type": "view",
+        "source_property_name": "(#adverb_text + #item_name_text + #ending_text)",
+        "target_property_name": "#plus_text"
+      }
+    ]
+  },
+
+
+  "dririn_chat_grid_item": {
+    "layer": 1,
+    "type": "panel",
+    "size": [ "100% - 2px", "100%c" ],
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "offset": "@hud.anim_chat_item_dririn_start",
+    "bindings": [
+      {
+        "binding_name": "(not #on_new_death_screen)",
+        "binding_name_override": "#visible"
+      }
+    ],
+    "controls": [
+	  {
+        "chat_background": {
+          "type": "image",
+          "size": [ "100%", "100%cm" ],
+          "texture": "textures/ui/Black",
+          "alpha": "$chat_background_opacity",
+          "anims": [
+            "@hud.anim_chat_item_dririn_start"
+          ],
+          "bindings": [
+            {
+              "binding_name": "#chat_text",
+              "binding_name_override": "#text",
+              "binding_type": "collection",
+              "binding_collection_name": "chat_text_grid",
+              "binding_condition": "always"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(((#text - '§C§H§I') = #text))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "vanilla_chat_text@hud.dririn_chat_label": {
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [ 2, 0 ]
+              }
+            }
+          ]
+        }
+      },
+	  {
+        "splits_chat_background": {
+          "type": "image",
+          "size": [ "100%", "100%cm" ],
+          "texture": "textures/ui/Black",
+          "alpha": "$chat_background_opacity",
+          "anims": [
+            "@hud.anim_splits_chat_item_dririn_start"
+          ],
+          "bindings": [
+            {
+              "binding_name": "#chat_text",
+              "binding_name_override": "#text",
+              "binding_type": "collection",
+              "binding_collection_name": "chat_text_grid",
+              "binding_condition": "always"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#text - '§C§H§I') = #text))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "splits_chat_text@hud.dririn_splits_chat_label": {
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [ 2, 0 ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "chat_panel_base": {
+    "type": "panel",
+    "$anchor|default": "top_left",
+    "anchor_from": "$anchor",
+    "anchor_to": "$anchor",
+    "size": [ "100%", "100%c" ],
+    "$max_size|default": [ "100%", "50%" ],
+    "max_size": "$max_size",
+    "$offset|default": [ 0, 0 ],
+    "offset": "$offset",
+
+    "$max_children_size|default": 30,
+    "clips_children": false,
+
+    "controls": [
+      {
+        "stack_panel": {
+          "type": "stack_panel",
+          "anchor_from": "bottom_left",
+          "anchor_to": "bottom_left",
+          "factory": {
+            "name": "chat_item_factory",
+            "max_children_size": "$max_children_size",
+            "control_ids": {
+              "chat_item": "chat_item@hud.dririn_chat_grid_item"
+            }
+          }
+        }
+      }
+    ]
+  },
+
+  "chat_panel@hud.chat_panel_base": {
+    "visible": "($touch)"
+  },
+
+  "bottom_chat_panel@hud.chat_panel_base": {
+    "visible": "(not $touch)"
+  }
+}

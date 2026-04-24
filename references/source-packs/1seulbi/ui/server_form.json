@@ -1,0 +1,186 @@
+{
+  "namespace": "server_form",
+
+  "third_party_server_screen": {
+    "$screen_animations": []
+  },
+
+  "main_screen_content": {
+    "type": "panel",
+    "size": [ "100%", "100%" ],
+    "$form_filter_text": "customUI_",
+    "$form_visible_bindings|default": [
+      { "binding_name": "#title_text" },
+      {
+        "binding_type": "view",
+        "source_property_name": "((not ((#title_text - $form_filter_text) = #title_text)))",
+        "target_property_name": "#form_filter_visible"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((not (((#title_text - $form_filter_text) - $form_type) = (#title_text - $form_filter_text))))",
+        "target_property_name": "#form_type_visible"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#form_filter_visible and #form_type_visible)",
+        "target_property_name": "#visible"
+      }
+    ],
+    "controls": [
+      {
+        "server_form_factory": {
+          "type": "factory",
+          "size": [ "100%", "100%" ],
+          "control_ids": {
+            "long_form": "@server_form.long_form",
+            "custom_form": "@server_form.custom_form"
+          }
+        }
+      },
+      {
+        "inbox_cloud@server_form.form_factory_base": { // customUI_InboxCloudForm_
+          "$form_type": "InboxCloudForm_",
+          "$factory_control_ids": {
+            "long_form": "@inbox_cloud_action_form.form_base"
+          }
+        }
+      },
+      {
+        "mail_info_cloud@server_form.form_factory_base": { // customUI_MailInfoCloudForm_
+          "$form_type": "MailInfoCloudForm_",
+          "$factory_control_ids": {
+            "long_form": "@mail_info_cloud_action_form.form_base"
+          }
+        }
+      },
+      {
+        "redesign_shop_cloud@server_form.form_factory_base": { // customUI_RedesignShopCloudForm_
+          "$form_type": "RedesignShopCloudForm_",
+          "$factory_control_ids": {
+            "long_form": "@redesign_shop_cloud_action_form.form_base"
+          }
+        }
+      },
+      {
+        "food_recipe_select_cloud@server_form.form_factory_base": { // customUI_FoodRecipeSelectCloudForm_
+          "$form_type": "FoodRecipeSelectCloudForm_",
+          "$factory_control_ids": {
+            "long_form": "@food_recipe_select_cloud_action_form.form_base"
+          }
+        }
+      },
+      {
+        "food_furnace_cloud@server_form.form_factory_base": { // customUI_FoodFurnaceCloudForm_
+          "$form_type": "FoodFurnaceCloudForm_",
+          "$factory_control_ids": {
+            "long_form": "@food_furnace_cloud_action_form.form_base"
+          }
+        }
+      },
+      {
+        "multi_a_cloud@server_form.form_factory_base": { // customUI_MultiACloudForm_
+          "$form_type": "MultiACloudForm_",
+          "$factory_control_ids": {
+            "long_form": "@multi_a_cloud_action_form.form_base"
+          }
+        }
+      },
+      {
+        "notification_list_cloud@server_form.form_factory_base": { // customUI_NotificationListCloudForm_
+          "$form_type": "NotificationListCloudForm_",
+          "$factory_control_ids": {
+            "long_form": "@notification_list_cloud_action_form.form_base"
+          }
+        }
+      },
+
+      {
+        "redesign_shop_buy_sell_cloud@server_form.form_factory_base": { // customUI_RedesignShopBuySellCloudForm_
+          "$form_type": "RedesignShopBuySellCloudForm_",
+          "$factory_control_ids": {
+            "custom_form": "@redesign_shop_buy_sell_cloud_modal_form.form_base"
+          }
+        }
+      }
+    ]
+  },
+
+
+  // Long Form
+  "long_form": {
+    "type": "panel",
+    "size": [ "100%", "100%" ],
+    "controls": [
+      {
+        "long_form_panel": {
+          "type": "panel",
+          "size": [ "100%", "100%" ],
+          "controls": [
+            {
+              "long_form@form_common.form_base": {
+                "$form_design": "facelift_cloud_action_form.form_design"
+              }
+            }
+          ],
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "((#title_text - 'customUI_') = #title_text)",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+
+  // Custom Form
+  "custom_form": {
+    "type": "panel",
+    "size": [ "100%", "100%" ],
+    "controls": [
+      {
+        "custom_form_panel": {
+          "type": "panel",
+          "size": [ "100%", "100%" ],
+          "controls": [
+            {
+              "custom_form@form_common.form_base": {
+                "$form_design": "facelift_cloud_modal_form.form_design"
+              }
+            }
+          ],
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "((#title_text - 'customUI_') = #title_text)",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+
+  // Form Factory Base
+  "form_factory_base": {
+    "$factory_control_ids|default": {
+      "long_form": "@server_form.long_form",
+      "custom_form": "@server_form.custom_form"
+    },
+    "$factory_variables|default": [
+      "$form_filter_text", "$form_type", "$form_visible_bindings"
+    ],
+
+    "type": "panel",
+    "size": [ "100%", "100%" ],
+    "factory": {
+      "name": "server_form_factory",
+      "control_ids": "$factory_control_ids",
+      "factory_variables": "$factory_variables"
+    }
+  }
+}

@@ -1,0 +1,515 @@
+{
+  "namespace": "chest",
+
+  // Function
+  "function_panel": {
+    "ignored": "($pocket_screen or not $touch)",
+    "type": "panel",
+    "size": [ "100%c", "100%c" ],
+    "offset": [ -6, -6 ],
+    "anchor_from": "bottom_right",
+    "anchor_to": "bottom_right",
+    "controls": [
+      {
+        "function_list": {
+          "type": "image",
+          "size": [ "100%c + 8px", "100%c + 8px" ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "texture": "textures/ui/dialog_background_opaque",
+          "controls": [
+            {
+              "function_list": {
+                "type": "stack_panel",
+                "size": [ "100%cm", "100%c" ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "controls": [
+                  {
+                    "function_title@chest.function_title_panel": { "anchor_from": "center", "anchor_to": "center" }
+                  },
+
+                  {
+                    "drop_one@chest.drop_one_content": { "anchor_from": "center", "anchor_to": "center" }
+                  },
+                  {
+                    "drop_all@chest.drop_all_content": { "anchor_from": "center", "anchor_to": "center" }
+                  },
+                  {
+                    "quick_loot_all@chest.quick_loot_all_content": { "anchor_from": "center", "anchor_to": "center" }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "function_title_panel": {
+    "type": "panel",
+    "size": [ "100%sm", "100%c + 6px" ],
+    "anchor_from": "center",
+    "anchor_to": "center",
+    "controls": [
+      {
+        "label": {
+          "type": "label",
+          "size": [ "default", "default" ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "text": "chest.function",
+          "color": "$title_text_color",
+          "font_scale_factor": 1.2
+        }
+      }
+    ]
+  },
+
+  "quick_loot_all_content@chest.function_content_base": {
+    "$toggle_group_forced_index": 0,
+    "$function_toggle_binding_name": "function_quick_loot_all_mode",
+    "$function_name": "chest.function.quick_loot"
+  },
+
+  "drop_one_content@chest.function_content_base": {
+    "$toggle_group_forced_index": 1,
+    "$function_toggle_binding_name": "function_drop_one_mode",
+    "$function_name": "chest.function.drop.one"
+  },
+
+  "drop_all_content@chest.function_content_base": {
+    "$toggle_group_forced_index": 2,
+    "$function_toggle_binding_name": "function_drop_all_mode",
+    "$function_name": "chest.function.drop.all"
+  },
+
+  "function_content_base": {
+    "type": "stack_panel",
+    "size": [ "100%c + 14px", "100%cm" ],
+    "orientation": "horizontal",
+    "anchor_from": "center",
+    "anchor_to": "center",
+    "$function_toggle_binding_name|default": "",
+    "$function_name|default": "",
+    "controls": [
+      {
+        "toggle_panel": {
+          "type": "panel",
+          "size": [ "125%y", "100%c + 4px" ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "controls": [
+            {
+              "off_toggle@common_toggles.switch_toggle": {
+                "$toggle_group_forced_index": 12,
+
+                "size": [ "90%", 20 ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+
+                "$radio_toggle_group": true,
+                "$toggle_name": "function_content",
+                "$toggle_group_default_selected": 10,
+                "$toggle_view_binding_name": "not_use",
+
+                "$default_texture": "textures/ui/ore/toggle_on",
+                "$hover_texture": "textures/ui/ore/toggle_on",
+                "$pressed_texture": "textures/ui/ore/toggle_on_hover",
+                "$pressed_no_hover_texture": "textures/ui/ore/toggle_on_hover",
+                "$unchecked_locked_texture": "textures/ui/ore/toggle_off",
+                "$checked_locked_texture": "textures/ui/ore/toggle_on",
+
+                "$border_visible": false,
+                "$default_border_visible": false,
+                "$hover_border_visible": false,
+
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "$function_toggle_binding_name",
+                    "source_property_name": "#toggle_state",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "toggle@common_toggles.switch_toggle": {
+                "size": [ "90%", 20 ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+
+                "$radio_toggle_group": true,
+                "$toggle_name": "function_content",
+                "$toggle_group_default_selected": 10,
+                "$toggle_view_binding_name": "$function_toggle_binding_name",
+
+                "$default_texture": "textures/ui/ore/toggle_off",
+                "$hover_texture": "textures/ui/ore/toggle_on",
+                "$pressed_texture": "textures/ui/ore/toggle_off_hover",
+                "$pressed_no_hover_texture": "textures/ui/ore/toggle_on_hover",
+                "$unchecked_locked_texture": "textures/ui/ore/toggle_off",
+                "$checked_locked_texture": "textures/ui/ore/toggle_on",
+
+                "$border_visible": false,
+                "$default_border_visible": false,
+                "$hover_border_visible": false,
+
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "$function_toggle_binding_name",
+                    "source_property_name": "(not #toggle_state)",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      { "void_panel@common.empty_panel": { "size": [ 4, 0 ] } },
+      {
+        "text_panel": {
+          "type": "panel",
+          "size": [ "100%c + 8px", "100%c + 8px" ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "controls": [
+            {
+              "label": {
+                "type": "label",
+                "size": [ "default", "default" ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "text": "$function_name",
+                "text_alignment": "center",
+                "color": "$title_text_color"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+
+  // Chest Screen
+  "chest_grid_item@crafting.container_item": {
+    "$function_mode": false,
+    "$item_collection_name": "container_items"
+  },
+
+  "chest_grid_transparent_item@crafting.container_item": {
+    "$function_mode": false,
+    "$item_collection_name": "container_items",
+    "$background_images": "common.empty_panel"
+  },
+
+  "small_chest_screen@common.inventory_screen_common": {
+    "$close_on_player_hurt|default": true,
+    "close_on_player_hurt": "$close_on_player_hurt",
+    "variables": [
+      {
+        "requires": "$desktop_screen",
+        "$screen_content": "chest.small_chest_panel",
+        "$screen_bg_content": "common.screen_background"
+      },
+      {
+        "requires": "$pocket_screen",
+        "$screen_content": "chest.small_chest_panel",
+        "$screen_bg_content": "common.screen_background"
+        //"$screen_content": "pocket_containers.small_chest_panel"
+      }
+    ]
+  },
+
+  "large_chest_screen@common.inventory_screen_common": {
+    "$close_on_player_hurt|default": true,
+    "close_on_player_hurt": "$close_on_player_hurt",
+    "variables": [
+      {
+        "requires": "$desktop_screen",
+        "$screen_content": "chest.large_chest_panel",
+        "$screen_bg_content": "common.screen_background"
+      },
+      {
+        "requires": "$pocket_screen",
+        "$screen_content": "chest.large_chest_panel",
+        "$screen_bg_content": "common.screen_background"
+        //"$screen_content": "pocket_containers.large_chest_panel"
+      }
+    ]
+  },
+
+
+  // Custom Chest Screen Backgrou
+  "chest_screen_bg_base": {
+    "$chest_layer|default": 1,
+    "$chest_alpha|default": 1.0,
+
+    "type": "image",
+    "layer": "$chest_layer",
+    "$screen_default_size|default": [ "100%", "100%" ],
+    "size": "$screen_default_size",
+    "alpha": "$chest_alpha"
+  },
+
+  "large_shop_b_screen_bg@chest_screen_bg_base": {
+    "texture": "textures/ui_images/large_shop_b"
+  },
+
+
+  // Large Chest Grid
+  "large_chest_transparent_grid": {
+    "$grid_size_data|default": [ 162, 108 ],
+    "$grid_dimensions_data|default": [ 9, 6 ],
+    "$grid_item_template_data|default": "chest.chest_grid_item",
+
+    "type": "grid",
+    "size": "$grid_size_data",
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "grid_dimensions": "$grid_dimensions_data",
+    "grid_item_template": "$grid_item_template_data",
+    "collection_name": "container_items"
+  },
+
+  "large_chest_panel_top_shop_half_base": {
+    "type": "panel",
+    "size": [ "100%", 132 ],
+    "offset": [ 0, 11 ],
+    "anchor_to": "top_left",
+    "anchor_from": "top_left",
+    "$title_visible|default": true,
+    "controls": [
+      { "chest_label@chest.chest_label": { "visible": "$title_visible" } },
+      {
+        "large_chest_grid@chest.large_chest_transparent_grid": {
+          "offset": [ 7, 10 ]
+        }
+      }
+    ]
+  },
+
+  "large_chest_panel_top_shop_half@chest.large_chest_panel_top_shop_half_base": {
+    "$title_visible": false
+    //"$grid_item_template_data": "chest.chest_grid_transparent_item"
+  },
+
+  "large_chest_panel_top_shop_half_9x2@chest.large_chest_panel_top_shop_half_base": {
+    "size": [ "100%", 60 ],
+    "$grid_size_data": [ 162, 36 ],
+    "$grid_dimensions_data": [ 9, 2 ]
+  },
+
+  "large_chest_panel_top_shop_half_9x5@chest.large_chest_panel_top_shop_half_base": {
+    "size": [ "100%", 114 ],
+    "$grid_size_data": [ 162, 90 ],
+    "$grid_dimensions_data": [ 9, 5 ]
+  },
+
+  "large_chest_panel_top_shop_half_9x8@chest.large_chest_panel_top_shop_half_base": {
+    "size": [ "100%", 132 ],
+    "$grid_size_data": [ 216, 108 ],
+    "$grid_dimensions_data": [ 12, 6 ]
+  },
+
+
+  // Custom GUI Background
+  "inventory_custom_background": {
+    "type": "image",
+    "texture": "textures/ui/dialog_background_opaque"
+  },
+
+
+  "small_chest_panel": {
+    "type": "panel",
+    "$chest_name": "$container_title",
+    "$function_mode": false,
+    "controls": [
+      { "function@chest.function_panel": {} }, // Function System
+
+
+      { "container_gamepad_helpers@common.container_gamepad_helpers": {} },
+      { "selected_item_details_factory@common.selected_item_details_factory": {} },
+      { "item_lock_notification_factory@common.item_lock_notification_factory": {} },
+      {
+        "root_panel@common.root_panel": {
+          "$root_panel_size|default": [ 176, 166 ],
+          "variables": [
+            {
+              "requires": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§2') = ($chest_name - '§C§T'))))",
+              "$root_panel_size": [ 176, 148 ]
+            },
+            {
+              "requires": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§5') = ($chest_name - '§C§T'))))",
+              "$root_panel_size": [ 176, 202 ]
+            },
+            {
+              "requires": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§6') = ($chest_name - '§C§T'))))",
+              "$root_panel_size": [ 176, 220 ]
+            },
+            {
+              "requires": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§8') = ($chest_name - '§C§T'))))",
+              "$root_panel_size": [ 230, 220 ]
+            }
+          ],
+          "size": "$root_panel_size",
+          "layer": 1,
+          "controls": [
+            {
+              "common_panel@common.common_panel": {}
+            },
+            {
+              "chest_panel": {
+                "type": "panel",
+                "layer": 5,
+                "controls": [
+                  {
+                    "small_chest_panel_top_half@chest.small_chest_panel_top_half": { // Normal Top Half
+                      "visible": "((($chest_name - '§C§T') = $chest_name))"
+                    }
+                  },
+                  {
+                    "large_chest_panel_top_shop_half_9x2@chest.large_chest_panel_top_shop_half_9x2": { // Transparent Top Half
+                      "visible": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§2') = ($chest_name - '§C§T'))))"
+                    }
+                  },
+                  {
+                    "large_chest_panel_top_shop_half_9x5@chest.large_chest_panel_top_shop_half_9x5": { // Transparent Top Half
+                      "visible": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§5') = ($chest_name - '§C§T'))))"
+                    }
+                  },
+                  {
+                    "large_chest_panel_top_shop_half_9x6@chest.large_chest_panel_top_shop_half_base": { // Transparent Top Half
+                      "visible": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§6') = ($chest_name - '§C§T'))))"
+                    }
+                  },
+                  {
+                    "large_chest_panel_top_shop_half_9x8@chest.large_chest_panel_top_shop_half_9x8": { // Transparent Top Half
+                      "visible": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§8') = ($chest_name - '§C§T'))))"
+                    }
+                  },
+
+                  { "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {} },
+                  { "hotbar_grid@common.hotbar_grid_template": {} },
+                  { "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {} },
+                  { "flying_item_renderer@common.flying_item_renderer": { "layer": 15 } },
+                  { "bundle_touch_tooltip@gameplay.bundle_touch_tooltip": {} }
+                ]
+              }
+            },
+            { "inventory_selected_icon_button@common.inventory_selected_icon_button": {} },
+            { "gamepad_cursor@common.gamepad_cursor_button": {} }
+          ]
+        }
+      }
+    ]
+  },
+
+  "large_chest_panel": {
+    "type": "panel",
+    "$chest_name": "$container_title",
+    "$function_mode": false,
+    "controls": [
+      { "function@chest.function_panel": {} }, // Function System
+
+
+      { "container_gamepad_helpers@common.container_gamepad_helpers": {} },
+      { "selected_item_details_factory@common.selected_item_details_factory": { "control_name": "@chest.selected_item_details" } },
+      { "item_lock_notification_factory@common.item_lock_notification_factory": { "control_name": "@common.item_lock_notification" } },
+      {
+        "root_panel@common.root_panel": {
+          "$root_panel_size|default": [ 176, 220 ],
+          "$close_button_offset_data|default": [ 0, 0 ],
+          "$close_button_layer_data|default": 2,
+          "variables": [
+            {
+              "requires": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§2') = ($chest_name - '§C§T'))))",
+              "$root_panel_size": [ 176, 148 ]
+            },
+            {
+              "requires": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§5') = ($chest_name - '§C§T'))))",
+              "$root_panel_size": [ 176, 202 ]
+            },
+            {
+              "requires": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§8') = ($chest_name - '§C§T'))))",
+              "$root_panel_size": [ 230, 220 ]
+            }/*,
+            {
+              "requires": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§B§1') = ($chest_name - '§C§T'))))",
+              "$root_panel_size": [ 176, 222.5 ],
+              "$close_button_offset_data": [ 0, 0 ],
+              "$close_button_layer_data": 20
+            }*/
+          ],
+          "size": "$root_panel_size",
+          "layer": 1,
+          "controls": [
+            {
+              "common_panel@common.common_panel": {
+                "$close_button_offset": "$close_button_offset_data",
+                "$close_button_layer": "$close_button_layer_data"
+              }
+            },
+            {
+              "chest_panel": {
+                "type": "panel",
+                "layer": 5,
+                "controls": [
+                  {
+                    "large_chest_panel_top_half@chest.large_chest_panel_top_half": { // Normal Top Half
+                      "visible": "(((($chest_name - '§C§T') = $chest_name)))"
+                    }
+                  },
+                  {
+                    "large_chest_panel_top_shop_half@chest.large_chest_panel_top_shop_half": { // Transparent Top Half
+                      "visible": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§B§1') = ($chest_name - '§C§T'))) and (((($chest_name - '§C§T') - '§L') = ($chest_name - '§C§T'))))"
+                    }
+                  },
+                  {
+                    "large_chest_panel_top_shop_half_9x2@chest.large_chest_panel_top_shop_half_9x2": { // Transparent Top Half
+                      "visible": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§2') = ($chest_name - '§C§T'))))"
+                    }
+                  },
+                  {
+                    "large_chest_panel_top_shop_half_9x5@chest.large_chest_panel_top_shop_half_9x5": { // Transparent Top Half
+                      "visible": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§5') = ($chest_name - '§C§T'))))"
+                    }
+                  },
+                  {
+                    "large_chest_panel_top_shop_half_9x8@chest.large_chest_panel_top_shop_half_9x8": { // Transparent Top Half
+                      "visible": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§L§8') = ($chest_name - '§C§T'))))"
+                    }
+                  },
+
+                  // Custom Chest Background Image
+                  /*
+                  {
+                    "large_chest_screen_bg_4@chest.large_shop_b_screen_bg": {
+                      "visible": "((not (($chest_name - '§C§T') = $chest_name)) and (not ((($chest_name - '§C§T') - '§B§1') = ($chest_name - '§C§T'))))",
+                      "offset": [ 0, 4 ]
+                    }
+                  },
+                  */
+
+                  // Origin Chest Content
+                  { "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {} },
+                  { "hotbar_grid@common.hotbar_grid_template": {} },
+                  { "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {} },
+                  { "flying_item_renderer@common.flying_item_renderer": { "layer": 15 } },
+                  { "bundle_touch_tooltip@gameplay.bundle_touch_tooltip": {} }
+                ]
+              }
+            },
+            { "inventory_selected_icon_button@common.inventory_selected_icon_button": {} },
+            { "gamepad_cursor@common.gamepad_cursor_button": {} }
+          ]
+        }
+      }
+    ]
+  }
+}

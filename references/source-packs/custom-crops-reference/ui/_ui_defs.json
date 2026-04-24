@@ -1,0 +1,21 @@
+{
+    "ui_defs": [
+        "ui/chest_server_form.json",
+		"ui/chest_inventory_system.json",
+		"ui/furnace_server_form.json",
+        
+        "ui/animated_bar.json",
+        "ui/form.json",
+        "ui/menu.json",
+        "ui/stat.json",
+        "ui/guild.json",
+        "ui/gmenu.json",
+        "ui/ginfo.json",
+        "ui/quest.json",
+        "ui/skill.json",
+        "ui/craft.json",
+        "ui/npc.json",
+        "ui/shop.json",
+        "ui/boss.json"
+    ]
+}

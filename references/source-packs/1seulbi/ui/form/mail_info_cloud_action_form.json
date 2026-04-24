@@ -1,0 +1,317 @@
+{
+  "namespace": "mail_info_cloud_action_form",
+
+  // Mail Info
+  // Version: v2.0
+  // Target: Cloud
+
+  "form_base@form_common.form_base": {
+    "$form_size": [ "85%", "80%" ],
+    "$form_content": "mail_info_cloud_action_form.form_content_panel",
+    "bindings": "$form_visible_bindings"
+  },
+
+  "form_content_panel": {
+    "type": "stack_panel",
+    "size": [ "100% - 8px", "100% - 8px" ],
+    "anchor_from": "center",
+    "anchor_to": "center",
+    "controls": [
+      {
+        "form_content_stack_panel": {
+          "type": "stack_panel",
+          "size": [ "100%", "fill" ],
+          "orientation": "horizontal",
+          "controls": [
+            {
+              "mail_text_content": {
+                "layer": 15,
+                "type": "image",
+                "size": [ "60%", "100%" ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "texture": "textures/ui/greyBorder",
+                "alpha": 0.5,
+                "controls": [
+                  {
+                    "scrolling_panel@common.scrolling_panel": {
+                      "size": [ "100% - 8px", "100% - 8px" ],
+                      "anchor_to": "center",
+                      "anchor_from": "center",
+                      "$show_background": false,
+                      "$scrolling_content": "mail_info_cloud_action_form.mail_text_stack_panel",
+                      "$scrolling_pane_size": [ "100% - 4px", "100% - 4px" ],
+                      "$scrolling_pane_offset": [ 2, 2 ],
+                      "$scroll_size": [ 5, "100%" ],
+                      "$scroll_bar_right_padding_size": [ 0, 0 ]
+                    }
+                  }
+                ]
+              }
+            },
+            { "void_panel@common.empty_panel": { "size": [ 6, 0 ] } },
+            {
+              "mail_gift_content": {
+                "layer": 15,
+                "type": "stack_panel",
+                "size": [ "fill", "100%" ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "controls": [
+                  {
+                    "form_info_text": {
+                      "layer": 20,
+                      "type": "panel",
+                      "size": [ "100%", "100%c + 8px" ],
+                      "anchor_from": "center",
+                      "anchor_to": "center",
+                      "controls": [
+                        {
+                          "content": {
+                            "type": "label",
+                            "size": [ "100%", "default" ],
+                            "max_size": [ "100%", "default" ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text": "받은 선물 목록:",
+                            "shadow": true
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  { "void_panel@common.empty_panel": { "size": [ 0, 2 ] } },
+                  {
+                    "form_content": {
+                      "layer": 20,
+                      "type": "image",
+                      "size": [ "100%", "fill" ],
+                      "anchor_from": "center",
+                      "anchor_to": "center",
+                      "texture": "textures/ui/cointier_backdrop",
+                      "controls": [
+                        {
+                          "mail_info_panel": {
+                            "type": "panel",
+                            "size": [ "100%", "100%" ],
+                            "controls": [
+                              {
+                                "scrolling_panel@common.scrolling_panel": {
+                                  "size": [ "100% - 2px", "100% - 2px" ],
+                                  "anchor_to": "center",
+                                  "anchor_from": "center",
+                                  "$show_background": false,
+                                  "$scrolling_content": "mail_info_cloud_action_form.reword_list_stack_panel",
+                                  "$scrolling_pane_size": [ "100% - 4px", "100% - 4px" ],
+                                  "$scrolling_pane_offset": [ 2, 2 ],
+                                  "$scroll_size": [ 4, "100%" ],
+                                  "$scroll_bar_left_padding_size": [ 0, 0 ],
+                                  "$scroll_bar_right_padding_size": [ 0, 0 ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      { "void_panel@common.empty_panel": { "size": [ 0, 2 ] } },
+      {
+        "mail_option@form_template.stack_dynamic_action_form_preset": {
+          "$panel_size": [ "100%", 25 ],
+          "$panel_orientation": "horizontal",
+          "$factory_control_ids": {
+            "button": "mail_info_cloud_action_form.mail_option_dynamic_form_button",
+            "label": "@form_common.empty_panel",
+            "header": "@form_common.empty_panel",
+            "divider": "@form_common.empty_panel"
+          }
+        }
+      }
+    ]
+  },
+
+
+  // Mail Text
+  "mail_text_stack_panel@form_template.stack_dynamic_action_form_preset": {
+    "layer": 15,
+    "$panel_size": [ "100%", "100%c" ],
+    "$factory_control_ids": {
+      "button": "form_common.empty_panel",
+      "label": "@mail_info_cloud_action_form.mail_text_dynamic_label",
+      "header": "@mail_info_cloud_action_form.mail_text_dynamic_header",
+      "divider": "@settings_common.option_group_section_divider"
+    }
+  },
+
+  "mail_text_dynamic_label": {
+    "type": "panel",
+    "size": [ "100%", "100%c + 2px" ],
+    "controls": [
+      {
+        "dynamic_label": {
+          "type": "label",
+          "size": [ "100%", "default" ],
+          "max_size": [ "100%", "default" ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "text": "#form_button_text",
+          "text_alignment": "left",
+          "color": [ 1.0, 1.0, 1.0 ],
+          "bindings": [
+            {
+              "binding_name": "#form_button_text",
+              "binding_type": "collection",
+              "binding_collection_name": "form_buttons"
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "mail_text_dynamic_header": {
+    "type": "panel",
+    "size": [ "100%", "100%c + 2px" ],
+    "controls": [
+      {
+        "dynamic_label": {
+          "type": "label",
+          "size": [ "100%", "default" ],
+          "max_size": [ "100%", "default" ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "text": "#form_button_text",
+          "text_alignment": "left",
+          "color": [ 1.0, 1.0, 1.0 ],
+          "font_scale_factor": 1.4,
+          "bindings": [
+            {
+              "binding_name": "#form_button_text",
+              "binding_type": "collection",
+              "binding_collection_name": "form_buttons"
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+
+  // Reword List
+  "reword_list_stack_panel@form_template.stack_dynamic_action_form_preset": {
+    "layer": 15,
+    "$panel_size": [ "100%", "100%c" ],
+    "$factory_control_ids": {
+      "button": "mail_info_cloud_action_form.reword_dynamic_form_button",
+      "label": "@form_common.empty_panel",
+      "header": "@form_common.empty_panel",
+      "divider": "@form_common.empty_panel"
+    }
+  },
+
+  "reword_dynamic_form_button": {
+    "type": "panel",
+    "size": [ "100%", 45 ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_property_name": "(((#form_button_text - '§F§T§O') = #form_button_text))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_name": "#form_button_text",
+        "binding_type": "collection",
+        "binding_collection_name": "form_buttons"
+      },
+      {
+        "binding_type": "collection_details",
+        "binding_collection_name": "form_buttons"
+      }
+    ],
+    "controls": [
+      {
+        "form_content": {
+          "type": "panel",
+          "size": [ "100% - 6px", "100% - 6px" ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "controls": [
+            {
+              "form_button@common_buttons.dark_text_button": {
+                "size": [ "100%", "100%" ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+
+                "$pressed_button_name": "button.not_form_button_click",
+                "$button_type_panel": "form_template.dynamic_form_button_content",
+
+
+                "sound_volume": 0.0,
+
+                "$border_visible": false,
+                "$default_button_texture": "textures/ui/form/border_line",
+                "$hover_button_texture": "textures/ui/form/border_line",
+                "$pressed_button_texture": "textures/ui/form/border_line",
+                "$locked_button_texture": "textures/ui/form/border_line",
+                "$button_pressed_offset": [ 0, 0 ],
+
+
+                "$text_alignment": "left",
+                "$button_text": "#form_button_text",
+                "$button_text_binding_type": "collection",
+                "$button_text_grid_collection_name": "form_buttons",
+                "bindings": [
+                  {
+                    "binding_type": "collection_details",
+                    "binding_collection_name": "form_buttons"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+
+  // Mail Option
+  "mail_option_dynamic_form_button@common_buttons.dark_text_button": {
+    "size": [ "33.33%", "100%" ],
+    "anchor_from": "center",
+    "anchor_to": "center",
+
+    "$pressed_button_name": "button.form_button_click",
+    "$button_type_panel": "form_template.dynamic_form_button_content",
+
+    "$button_pressed_offset": [ 0, 0 ],
+
+
+    "$button_text": "#form_button_text",
+    "$button_text_binding_type": "collection",
+    "$button_text_grid_collection_name": "form_buttons",
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_property_name": "((not ((#form_button_text - '§F§T§O') = #form_button_text)))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_name": "#form_button_text",
+        "binding_type": "collection",
+        "binding_collection_name": "form_buttons"
+      },
+      {
+        "binding_type": "collection_details",
+        "binding_collection_name": "form_buttons"
+      }
+    ]
+  }
+}

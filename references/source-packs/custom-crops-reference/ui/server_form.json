@@ -1,0 +1,109 @@
+{
+    "namespace": "server_form",
+    "main_screen_content": {
+        "size": [
+            "100%",
+            "100%"
+        ],
+        "modifications": [
+            {
+                "array_name": "controls",
+                "operation": "insert_front",
+                "value": [
+                    {
+                        "server_form_factory": {
+                            "type": "factory",
+                            "control_ids": {
+                                "long_form": "@form.long_form_replacement"
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "long_form": {
+        "type": "panel",
+		"controls": [
+			{
+				"long_form@common_dialogs.main_panel_no_buttons": {
+					"$title_panel": "common_dialogs.standard_title_label",
+					"$title_size": [
+						"100% - 14px",
+						10
+					],
+					"size": [
+						225,
+						200
+					],
+					"$text_name": "#title_text",
+					"$title_text_binding_type": "none",
+					"$child_control": "server_form.long_form_panel",
+					"layer": 2,
+					"bindings": [
+						{
+							"binding_name": "#title_text"
+						},
+						{
+							"binding_type": "view",
+							"source_property_name": "(((#title_text - '§c§h§e§s§t') = #title_text) and ((#title_text - '§f§u§r§n§a§c§e') = #title_text))",
+							"target_property_name": "#visible"
+						}
+					]
+				}
+			},
+			{
+				"chest_ui@chest_ui.chest_panel": {
+					"bindings": [
+						{
+							"binding_name": "#title_text"
+						},
+						{
+							"binding_type": "view",
+							"source_property_name": "(not ((#title_text - '§c§h§e§s§t') = #title_text))",
+							"target_property_name": "#visible"
+						}
+					]
+				}
+			},
+			{
+				"furnace_ui@furnace_ui.furnace_panel": {
+					"ignored": "$disable_furnace_ui",
+					"bindings": [
+						{
+							"binding_name": "#title_text"
+						},
+						{
+							"binding_type": "view",
+							"source_property_name": "(not ((#title_text - '§f§u§r§n§a§c§e') = #title_text))",
+							"target_property_name": "#visible"
+						}
+					]
+				}
+			}
+		],
+        "modifications": [
+            {
+                "array_name": "bindings",
+                "operation": "insert_front",
+                "value": [
+                    {
+                        "binding_type": "view",
+                        "source_control_name": "inside_header_panel",
+                        "source_property_name": "#stored_text",
+                        "target_property_name": "#visible"
+                    }
+                ]
+            }
+        ]
+    },
+    "long_form_panel": {
+        "bindings": [
+            {
+                "binding_type": "view",
+                "source_property_name": "((#form_text - 'menu.invisible') = #form_text)",
+                "target_property_name": "#stored_text"
+            }
+        ]
+    }
+}

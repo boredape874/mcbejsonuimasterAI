@@ -1,0 +1,69 @@
+{
+  "namespace": "host_options",
+
+  "facelift_host_image_panel": {
+    "type": "panel",
+    "size": [ 22, 22 ],
+    "controls": [
+      {
+        "host_image@host_options.button_label": {
+          "font_scale_factor": 1.4,
+          "$button_label_offset": [ 1, 1 ],
+          "$button_text_color": "$text_color",
+          "$button_text": "/"
+        }
+      }
+    ]
+  },
+
+  "host_main_facelift_button@button_preset.facelift_button_base": {
+    "size": [ 26, 26 ],
+    "anchor_from": "bottom_right",
+    "anchor_to": "bottom_right",
+    "$pressed_button_name": "button.host_toggle",
+    "$button_type_panel": "button_content_preset.facelift_button_content_panel",
+    "$content": "host_options.facelift_host_image_panel",
+    "$focus_id": "host_main_button_focus_id",
+
+    "$default_button_texture": "textures/ui/drirain/facelift/facelift_button_left",
+    "$hover_button_texture": "textures/ui/drirain/facelift/facelift_button_left",
+    "$pressed_button_texture": "textures/ui/drirain/facelift/facelift_button_left",
+    "$locked_button_texture": "textures/ui/drirain/facelift/facelift_button_left",
+
+    "bindings": [
+      {
+        "binding_name": "#cheats_on",
+        "binding_name_override": "#visible"
+      },
+      {
+        "binding_name": "#host_main_button_focus_override_up",
+        "binding_name_override": "#focus_change_up"
+      },
+      {
+        "binding_name": "#host_main_button_focus_override_down",
+        "binding_name_override": "#focus_change_down"
+      }
+    ]
+  },
+
+
+  //////////////////////////////////////////////////////////////////////////
+  // Host Panel
+  //////////////////////////////////////////////////////////////////////////
+  "host_panel": {
+    "type": "panel",
+    "size": [ 160, "100% - 20px" ],
+    "offset": [ 0, -34 ],
+    "anchor_from": "bottom_left",
+    "anchor_to": "bottom_left",
+    "$offset_sub_tabs": [ "10%", 0 ],
+    "$offset_second_sub_tabs": [ "110% + 2px", 0 ],
+    "controls": [
+      { "host_main_panel@host_main_buttons": {} },
+      { "host_teleport_panel@host_teleport_buttons": {} },
+      { "host_teleport_player_panel@host_teleport_player_buttons": {} },
+      { "host_time_panel@host_time_buttons": {} },
+      { "host_weather_panel@host_weather_buttons": {} }
+    ]
+  }
+}

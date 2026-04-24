@@ -1,0 +1,17 @@
+{
+  "messages_text/text": {
+    "modifications": [
+      {
+        "array_name": "bindings",
+        "operation": "insert_back",
+        "value": [
+          {
+            "binding_type": "view",
+            "source_property_name": "(('§␛' + #text + '§r') - ('§␛' + 'pickupnotification.') = ('§␛' + #text + '§r'))",
+            "target_property_name": "#visible"
+          }
+        ]
+      }
+    ]
+  }
+}

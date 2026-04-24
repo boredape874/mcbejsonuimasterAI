@@ -1,0 +1,402 @@
+{
+  "namespace": "quest",
+
+  "main_panel": {
+    "type": "panel",
+    "size": [220, 220],
+    "offset": [0, 10],
+    "controls": [
+      {
+        "title": {
+          "type": "label",
+          "text": "#title",
+          "font_type": "MinecraftTen",
+          "font_size": "large",
+          "layer": 1,
+          "color": "white",
+          "shadow": true,
+          "offset": [0, -20],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "(#title_text - 'menu.quest')",
+              "target_property_name": "#title"
+            }
+          ]
+        }
+      },
+
+      {
+        "body": {
+          "type": "label",
+          "text": "#form",
+          "font_type": "MinecraftTen",
+          "font_size": "medium",
+          "layer": 10,
+          "color": "white",
+          "shadow": true,
+          "offset": [15, 19],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "(#form_text - 'menu.invisible')",
+              "target_property_name": "#form"
+            }
+          ]
+        }
+      },
+
+      {
+        "background": {
+          "size": [220, 220],
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "alpha": 0.8,
+          "controls": [
+            {
+              "close@close_button": {
+                "anchor_from": "top_right",
+                "anchor_to": "top_right",
+                "$size": [15, 15],
+                "offset": [0, -20]
+              }
+            },
+            {
+              "bg@quest_bg": {
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "$size": [15, 15]
+              }
+            }
+          ]
+        }
+      },
+
+      {
+        "first_button@quest.quest_first_button": {
+          "anchor_from": "top_right",
+          "anchor_to": "top_right",
+          "offset": [-35, -20],
+          "$button_size": [15, 15]
+        }
+      },
+
+      {
+        "panel": {
+          "type": "panel",
+          "size": [260, 195],
+          "controls": [
+            {
+              "buttons_scroll@common.scrolling_panel": {
+                "layer": 10,
+                "anchor_from": "top_right",
+                "anchor_to": "top_right",
+                "offset": [-18, 20],
+                "size": [200, 171],
+
+                "$show_background": false,
+                "$scrolling_content": "quest.quest_buttons_scrolling_content",
+
+                "$scroll_size": [5, "100% - 4px"],
+                "$scrolling_pane_size": ["100% - 10px", "100% - 2px"],
+                "$scrolling_pane_offset": [0, 0],
+                "$scroll_bar_right_padding_size": [0, 0]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_property_name": "(not (#title_text - 'menu.quest' = #title_text))",
+        "target_property_name": "#visible"
+      }
+    ]
+  },
+
+  "quest_buttons_scrolling_content": {
+    "type": "stack_panel",
+    "orientation": "vertical",
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "size": ["100% - 4px", "100%c"],
+    "offset": [0, 0],
+    "collection_name": "form_buttons",
+    "bindings": [
+      {
+        "binding_name": "(#form_button_length)",
+        "binding_name_override": "#collection_length"
+      }
+    ],
+    "factory": {
+      "name": "buttons",
+      "control_name": "quest.quest_list_button"
+    }
+  },
+
+  "quest_list_button": {
+    "$button_size|default": [175, 40],
+    "$alpha|default": 1.0,
+
+    "type": "panel",
+    "size": [0, 50],
+    "bindings": [
+      {
+        "binding_type": "collection_details",
+        "binding_collection_name": "form_buttons"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not (#collection_index = 0))",
+        "target_property_name": "#visible"
+      }
+    ],
+    "controls": [
+      {
+        "form_button@common_buttons.underline_button": {
+          "$pressed_button_name": "button.form_button_click",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "size": "$button_size",
+          "$button_text": "#null",
+          "default_control": "default",
+          "pressed_control": "hover",
+          "hover_control": "hover",
+          "bindings": [
+            {
+              "binding_type": "collection_details",
+              "binding_collection_name": "form_buttons"
+            }
+          ],
+          "controls": [
+            {
+              "default@common.empty_panel": {
+                "controls": [
+                  {
+                    "image": {
+                      "type": "image",
+                      "texture": "textures/custom_ui/horizontal_box",
+                      "layer": 1,
+                      "size": "$button_size",
+                      "alpha": "$alpha",
+                      "keep_ratio": false
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "hover@common.empty_panel": {
+                "controls": [
+                  {
+                    "image": {
+                      "type": "image",
+                      "texture": "textures/custom_ui/horizontal_box",
+                      "layer": 1,
+                      "size": "$button_size",
+                      "alpha": "$alpha",
+                      "keep_ratio": false
+                    }
+                  },
+                  {
+                    "focus_border@common_buttons.focus_border": {
+                      "layer": 2,
+                      "size": ["100%", "100%"]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+
+      {
+        "text": {
+          "type": "label",
+          "text": "#form_button_text",
+          "layer": 10,
+          "color": "white",
+          "shadow": true,
+          "offset": [7.5, 5],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "bindings": [
+            {
+              "binding_name": "#form_button_text",
+              "binding_type": "collection",
+              "binding_collection_name": "form_buttons"
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "quest_first_button": {
+    "$button_size|default": [175, 40],
+    "$alpha|default": 0.7,
+
+    "type": "panel",
+    "size": [0, 50],
+    "bindings": [
+      {
+        "binding_type": "collection_details",
+        "binding_collection_name": "form_buttons"
+      }
+    ],
+    "controls": [
+      {
+        "form_button@common_buttons.underline_button": {
+          "$pressed_button_name": "button.form_button_click",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "size": "$button_size",
+          "$button_text": "#null",
+          "default_control": "default",
+          "pressed_control": "hover",
+          "hover_control": "hover",
+          "bindings": [
+            {
+              "binding_type": "collection_details",
+              "binding_collection_name": "form_buttons"
+            }
+          ],
+          "controls": [
+            {
+              "default@common.empty_panel": {
+                "controls": [
+                  {
+                    "image": {
+                      "type": "image",
+                      "texture": "textures/ui/Black",
+                      "layer": 1,
+                      "size": "$button_size",
+                      "alpha": "$alpha",
+                      "keep_ratio": false
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "hover@common.empty_panel": {
+                "controls": [
+                  {
+                    "image": {
+                      "type": "image",
+                      "texture": "textures/custom_ui/horizontal_box",
+                      "layer": 1,
+                      "size": "$button_size",
+                      "alpha": "$alpha",
+                      "keep_ratio": false
+                    }
+                  },
+                  {
+                    "focus_border@common_buttons.focus_border": {
+                      "layer": 2,
+                      "size": ["100%", "100%"]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "<": {
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "text": "❮",
+                "type": "label",
+                "offset": [0.5, -0.5]
+              }
+            }
+          ]
+        }
+      },
+
+      {
+        "text": {
+          "type": "label",
+          "text": "#form_button_text",
+          "layer": 10,
+          "color": "white",
+          "shadow": true,
+          "offset": [7.5, 5],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "bindings": [
+            {
+              "binding_name": "#form_button_text",
+              "binding_type": "collection",
+              "binding_collection_name": "form_buttons"
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "quest_bg": {
+    "type": "image",
+    "texture": "textures/custom_ui/quest_bg",
+    "keep_ratio": false,
+    "layer": 2,
+    "size": [215, 215]
+  },
+
+  "close_button@common.button": {
+    "type": "button",
+    "hover_control": "hover",
+    "$size|default": [15, 15],
+    "size": "$size",
+    "controls": [
+      {
+        "image": {
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "size": "$size",
+          "alpha": 0.7
+        }
+      },
+      {
+        "x": {
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "text": "x",
+          "type": "label",
+          "offset": [0.5, -0.5]
+        }
+      },
+      {
+        "hover@common.empty_panel": {
+          "controls": [
+            {
+              "focus_border@common_buttons.focus_border": {
+                "size": ["100%", "100%"]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "sound_name": "random.click",
+    "button_mappings": [
+      {
+        "from_button_id": "button.menu_select",
+        "to_button_id": "button.menu_exit",
+        "mapping_type": "pressed"
+      },
+      {
+        "from_button_id": "button.menu_ok",
+        "to_button_id": "button.menu_exit",
+        "mapping_type": "focused"
+      }
+    ]
+  }
+}

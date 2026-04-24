@@ -1,0 +1,290 @@
+{
+  "namespace": "craft",
+
+  "main_panel": {
+    "type": "panel",
+    "size": [260, 160],
+    "controls": [
+      {
+        "title": {
+          "type": "label",
+          "text": "#title",
+          "font_type": "MinecraftTen",
+          "font_size": "large",
+          "layer": 1,
+          "color": "white",
+          "shadow": true,
+          "offset": [0, -20],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "(#title_text - 'menu.craft')",
+              "target_property_name": "#title"
+            }
+          ]
+        }
+      },
+      {
+        "body": {
+          "type": "label",
+          "text": "#form",
+          "font_type": "MinecraftTen",
+          "font_size": "medium",
+          "layer": 10,
+          "color": "white",
+          "shadow": true,
+          "offset": [2, -50],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "(#form_text - 'menu.invisible')",
+              "target_property_name": "#form"
+            }
+          ]
+        }
+      },
+      {
+        "background": {
+          "size": [260, 160],
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "alpha": 0.8,
+          "controls": [
+            {
+              "bg@craft_bg": {
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "$size": [15, 15]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "panel": {
+          "type": "panel",
+          "size": [260, 195],
+          "controls": [
+            {
+              "stack_panel": {
+                "type": "stack_panel",
+                "orientation": "horizontal",
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "size": [0, 0],
+
+                "collection_name": "form_buttons",
+
+                "controls": [
+                  {
+                    "b0@craft.craft_button": {
+                      "collection_index": 0,
+
+                      "$slot_size": [15, 15],
+                      "$button_size": [15, 15],
+                      "$alpha": 0.7,
+                      "$offset": [115, -100],
+                      "$text_offset": [115.5, -100]
+                    }
+                  },
+                  {
+                    "b1@craft.craft_button": {
+                      "collection_index": 1,
+
+                      "$button_size": [116.6, 26.6],
+                      "$offset": [-64, 55],
+                      "$text_offset": [-64, 55]
+                    }
+                  },
+                  { "b2@craft.craft_button": { "collection_index": 2 } }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_property_name": "(not (#title_text - 'menu.craft' = #title_text))",
+        "target_property_name": "#visible"
+      }
+    ]
+  },
+
+  "craft_button": {
+    "$button_size|default": [50, 50],
+    "$slot_size|default": [100, 0],
+    "$offset|default": [-165, 7.5],
+    "$text_offset|default": [-165, 7.5],
+    "$alpha|default": 1.0,
+
+    "type": "panel",
+    "size": "$slot_size",
+    "offset": "$offset",
+
+    "controls": [
+      {
+        "main_ui": {
+          "type": "panel",
+          "size": "$button_size",
+          "controls": [
+            {
+              "panel_name": {
+                "type": "panel",
+                "size": "$button_size",
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "image",
+                    "resolve_sibling_scope": true,
+                    "source_property_name": "(not (#texture = ''))",
+                    "target_property_name": "#visible"
+                  }
+                ],
+                "controls": [
+                  {
+                    "text": {
+                      "type": "label",
+                      "text": "#form_button_text",
+                      "layer": 10,
+                      "$button_state_panel|default": "common_buttons.new_ui_button_panel",
+                      "color": [0, 0, 0],
+                      "offset": "$text_offset",
+                      "anchor_from": "center",
+                      "bindings": [
+                        {
+                          "binding_name": "#form_button_text",
+                          "binding_type": "collection",
+                          "binding_collection_name": "form_buttons"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "form_button@common_buttons.underline_button": {
+                "$pressed_button_name": "button.form_button_click",
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "size": "$button_size",
+                "$button_text": "#null",
+                "default_control": "default",
+                "pressed_control": "hover",
+                "hover_control": "hover",
+                "offset": "$offset",
+                "$button_text_binding_type": "collection",
+                "$button_text_grid_collection_name": "form_buttons",
+                "$button_text_max_size": ["100%", 20],
+                "bindings": [
+                  {
+                    "binding_type": "collection_details",
+                    "binding_collection_name": "form_buttons"
+                  }
+                ],
+                "controls": [
+                  {
+                    "default@common.empty_panel": {
+                      "controls": [
+                        {
+                          "image": {
+                            "type": "image",
+                            "layer": 1,
+                            "size": "$button_size",
+                            "alpha": "$alpha",
+                            "bindings": [
+                              {
+                                "binding_name": "#form_button_texture",
+                                "binding_name_override": "#texture",
+                                "binding_type": "collection",
+                                "binding_collection_name": "form_buttons"
+                              },
+                              {
+                                "binding_name": "#form_button_texture_file_system",
+                                "binding_name_override": "#texture_file_system",
+                                "binding_type": "collection",
+                                "binding_collection_name": "form_buttons"
+                              },
+                              {
+                                "binding_type": "view",
+                                "source_property_name": "(not ((#texture = '') or (#texture = 'loading')))",
+                                "target_property_name": "#visible"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "hover@common.empty_panel": {
+                      "controls": [
+                        {
+                          "image": {
+                            "type": "image",
+                            "layer": 1,
+                            "alpha": "$alpha",
+                            "size": "$button_size",
+                            "bindings": [
+                              {
+                                "binding_name": "#form_button_texture",
+                                "binding_name_override": "#texture",
+                                "binding_type": "collection",
+                                "binding_collection_name": "form_buttons"
+                              },
+                              {
+                                "binding_name": "#form_button_texture_file_system",
+                                "binding_name_override": "#texture_file_system",
+                                "binding_type": "collection",
+                                "binding_collection_name": "form_buttons"
+                              },
+                              {
+                                "binding_type": "view",
+                                "source_property_name": "(not ((#texture = '') or (#texture = 'loading')))",
+                                "target_property_name": "#visible"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                        "focus_border@common_buttons.focus_border": {
+                            "layer": 2,
+                            "size": ["100%", "100%"]
+                        }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "craft_bg": {
+    "type": "image",
+    "texture": "textures/custom_ui/stat",
+    "keep_ratio": false,
+    "layer": 2,
+    "size": [255, 155],
+    "controls": [
+      {
+        "box": {
+          "type": "image",
+          "texture": "textures/custom_ui/skill_box",
+          "size": [50, 50],
+          "offset": [0, 7.5]
+        }
+      }
+    ]
+  }
+}

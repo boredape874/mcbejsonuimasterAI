@@ -1,0 +1,161 @@
+{
+  "namespace": "facelift_cloud_modal_form",
+
+  // Facelift Modal Form
+  // Version: v1.2
+  // Target: Cloud
+
+  "form_design": {
+    "type": "panel",
+    "size": [ "100%", "100%" ],
+    "controls": [
+      {
+        "form_content": {
+          "type": "stack_panel",
+          "size": [ "100%y", "85%" ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "controls": [
+            {
+              "top_content_panel": {
+                "type": "panel",
+                "size": [ "100%", 26 ],
+                "anchor_to": "center",
+                "anchor_from": "center",
+                "controls": [
+                  {
+                    "form_title_cover": {
+                      "type": "image",
+                      "size": [ "100%", "100%" ],
+                      "anchor_to": "center",
+                      "anchor_from": "center",
+                      "texture": "textures/ui/hud_tip_text_background",
+                      "alpha": 0.6,
+                      "controls": [
+                        {
+                          "form_title_panel": {
+                            "type": "panel",
+                            "size": [ "100% - 8px", "100% - 8px" ],
+                            "anchor_to": "center",
+                            "anchor_from": "center",
+                            "controls": [
+                              {
+                                "form_title": {
+                                  "type": "label",
+                                  "size": [ "100% - 30px", "default" ],
+                                  "max_size": [ "100% - 30px", "100%" ],
+                                  "anchor_to": "center",
+                                  "anchor_from": "center",
+                                  "text": "#title_text",
+                                  "text_alignment": "center",
+                                  "font_scale_factor": 1.3,
+                                  "shadow": true
+                                }
+                              },
+                              {
+                                "form_close_button_cover": {
+                                  "type": "image",
+                                  "size": [ "100%y", "100%" ],
+                                  "anchor_to": "right_middle",
+                                  "anchor_from": "right_middle",
+                                  "controls": [
+                                    {
+                                      "form_close_button@form_common.light_close_button": {
+                                        "$close_button_panel_size": [ 20, 20 ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            { "form_content_void_panel@common.empty_panel": { "size": [ 0, 4 ] } },
+            {
+              "form_content_panel": {
+                "type": "image",
+                "size": [ "100%", "fill" ],
+                "anchor_to": "center",
+                "anchor_from": "center",
+                "texture": "textures/ui/hud_tip_text_background",
+                "alpha": 0.6,
+                "controls": [
+                  {
+                    "generated_form@common.scrolling_panel": {
+                      "size": [ "100% - 4px", "100% - 4px" ],
+                      "anchor_to": "center",
+                      "anchor_from": "center",
+                      "$show_background": false,
+                      "$scrolling_content": "server_form.generated_contents",
+                      "$scrolling_pane_size": [ "100% - 4px", "100% - 6px" ],
+                      "$scrolling_pane_offset": [ 2, 3 ],
+                      "$scroll_size": [ 5, "100% - 4px" ],
+                      "$scroll_bar_right_padding_size": [ 0, 0 ]
+                    }
+                  }
+                ]
+              }
+            },
+            { "submit_button_void_panel@common.empty_panel": { "size": [ 0, 4 ] } },
+            {
+              "submit_button_panel": {
+                "type": "panel",
+                "size": [ "100%", "100%c + 6px" ],
+                "controls": [
+                  {
+                    "submit_button@form_template.upgrade_button_base": {
+                      "size": [ "65%", 24 ],
+                      "anchor_from": "center",
+                      "anchor_to": "center",
+
+                      "$pressed_button_name": "button.submit_custom_form",
+                      "$button_type_panel": "common_buttons.new_ui_binding_button_label",
+
+                      "$button_pressed_offset": [ 0, 0 ],
+
+                      "$default_border_visible": false,
+                      "$hover_border_visible": false,
+                      "$pressed_border_visible": false,
+                      "$locked_border_visible": false,
+
+                      "$default_button_texture": "textures/ui/form/button/facelift_button",
+                      "$hover_button_texture": "textures/ui/form/button/facelift_button",
+                      "$pressed_button_texture": "textures/ui/form/button/facelift_button",
+                      "$locked_button_texture": "textures/ui/form/button/facelift_button",
+
+                      "$default_button_texture_color": [ 0.0, 0.0, 0.0 ],
+                      "$hover_button_texture_color": [ 0.4, 0.4, 0.4 ],
+                      "$pressed_button_texture_color": [ 0.3, 0.3, 0.3 ],
+                      "$locked_button_texture_color": [ 0.2, 0.2, 0.2 ],
+
+                      "$default_button_alpha": 0.6,
+                      "$hover_button_alpha": 0.6,
+                      "$pressed_button_alpha": 0.6,
+                      "$locked_button_alpha": 0.6,
+
+                      "$button_text": "#submit_text",
+                      "$button_text_binding_type": "global",
+                      "$button_binding_condition": "once",
+                      "bindings": [
+                        {
+                          "binding_name": "#submit_button_visible",
+                          "binding_name_override": "#visible"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

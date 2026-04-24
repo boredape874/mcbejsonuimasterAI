@@ -1,0 +1,7 @@
+{
+  "namespace": "mob_effects",
+  "mob_effects_renderer": {
+    "type": "panel",
+    "ignored": true
+  }
+}

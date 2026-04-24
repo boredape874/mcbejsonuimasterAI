@@ -1,0 +1,394 @@
+{
+  "namespace": "animated_bar",
+
+  // Notes: this is just generic template. Edit the code however you like to achieve what you want.
+  // Or, if you don't wanna go through all that trouble just use it as-is :)
+
+  "animated_progress_bar": {
+    // animations
+    "$duration|default": 0.2,
+    "$trail_delay|default": 0.2,
+    "$increase_easing|default": "out_expo", // recommended
+    "$decrease_easing|default": "in_expo", // recommended
+
+    // progress bar
+    /*
+      "" - a nineslice texture that can be stretched
+      "fixed" - a texture that cannot be stretched (idk what to call it lol. see the example textures)
+    */
+    "$texture_type|default": "",
+    "$fill_from|default": "left", // left, right, up, down
+    "$background_size|default": [100, 10], // it's better to use your texture size
+    "$background_texture|default": "textures/ui/bar_bg",
+    "$background_alpha|default": 1,
+
+    /*
+      size of your progress texture
+      100% is the width / height of background texture ($background_size)
+      USE fixed size instead of %, if your texture isn't a nineslice texture or if it looks weird
+    */
+    "$bar_size|default": ["100% - 2px", "100% - 2px"],
+    "$bar_texture|default": "textures/ui/bar",
+    "$bar_offset|default": [1, 1], // offset from the background texture (always from top_left)
+    "$bar_alpha|default": 1,
+
+    "$ignore_trail|default": false,
+    "$trail_texture|default": "textures/ui/White",
+    "$trail_alpha|default": 0.6,
+
+    // DO NOT FORGET to define these
+    "$multiplier|default": 0.05, // (1 / max_value) ; max_value is the maximum value of progress bar, here 20
+    "$data_source|default": "<preserved title or subtitle panel>", // see example
+    "$max_value_binding|default": "", // keep this empty if you don't want the max value to be dynamic
+    "$progress_binding|default": "#null", // name of the binding that will provide the value for this progress bar
+
+    // progress bar text. these are pretty self-explanatory
+    "$ignore_text|default": false,
+    "$text_color|default": [1, 1, 1],
+    "$text_font_type|default": "default",
+    "$text_font_scale_factor|default": 1,
+    "$text_shadow|default": true,
+    "$text_offset|default": [0, -12],
+    "$text_anchor|default": "center",
+    "$text_size|default": ["default", "default"],
+    "$text_format|default": "('§z' + $progress_binding + '/20')", // this goes in source_property_name
+
+    "type": "panel",
+    "size": "$background_size",
+    "$one": 1.0,
+
+    // do not change :)
+    "$_fixed|default": "",
+    "$_direction|default": "",
+    "$_anchor|default": "top_left",
+    "$_size_binding|default": "#size_binding_x",
+    "variables": [
+      {
+        "requires": "($texture_type = 'fixed')",
+        "$_fixed": "__fixed"
+      },
+      {
+        "requires": "($fill_from = 'right')",
+        "$_anchor": "top_right"
+      },
+      {
+        "requires": "($fill_from = 'up')",
+        "$_size_binding": "#size_binding_y",
+        "$_direction": "__vertical"
+      },
+      {
+        "requires": "($fill_from = 'down')",
+        "$_size_binding": "#size_binding_y",
+        "$_direction": "__vertical",
+        "$_anchor": "bottom_left"
+      }
+    ],
+    "controls": [
+      {"progress_bar_text_cx0": {
+        "ignored": "$ignore_text",
+        "type": "label",
+        "text": "#text",
+        "layer": 2,
+        "anchor_from": "$text_anchor",
+        "anchor_to": "$text_anchor",
+        "color": "$text_color",
+        "font_type": "$text_font_type",
+        "font_scale_factor": "$text_font_scale_factor",
+        "shadow": "$text_shadow",
+        "offset": "$text_offset",
+        "size": "$text_size",
+        "bindings": [
+          {
+            "binding_type": "view",
+            "source_control_name": "$data_source",
+            "source_property_name": "$text_format",
+            "target_property_name": "#text"
+          }
+        ]
+      }},
+      {
+        "bar_parent_panel_cx0": {
+          "type": "panel",
+          "layer": 1,
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": "$bar_offset",
+          "size": "$bar_size",
+          "controls": [
+            {
+              "animated_bar_panel_cx1": {
+                "type": "panel",
+                "anchor_from": "$_anchor",
+                "anchor_to": "$_anchor",
+                "size": ["100%", "100%"],
+                "$control_name": "('animated_bar.animated_bar_image' + $_fixed)",
+                "property_bag": {
+                  "#prev_value": 0,
+                  "#multiplier": "$multiplier"
+                },
+                "bindings": [
+                  {
+                    "ignored": "($max_value_binding = '')",
+                    "binding_type": "view",
+                    "source_control_name": "$data_source",
+                    "source_property_name": "$max_value_binding",
+                    "target_property_name": "#max_bind"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "$data_source",
+                    "source_property_name": "#visible",
+                    "target_property_name": "#key"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "$data_source",
+                    "source_property_name": "$progress_binding",
+                    "target_property_name": "#changed_value"
+                  },
+                  {
+                    "ignored": "($max_value_binding = '')",
+                    "binding_type": "view",
+                    "source_property_name": "($one / #max_bind)",
+                    "target_property_name": "#multiplier"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#prev_value * (1 - #key) + #changed_value * #key)",
+                    "target_property_name": "#prev_value"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#changed_value + (#prev_value - #changed_value) * ((#prev_value - #changed_value) < 0))",
+                    "target_property_name": "#min" // min(#prev_value, #changed_value)
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "((#changed_value + #prev_value - #min) * #multiplier)",
+                    "target_property_name": "$_size_binding"
+                  }
+                ],
+                "controls": [
+                  {
+                    "anim_increase_cx2": {
+                      "type": "collection_panel",
+                      "$size_anim": "('@animated_bar.increase_anim' + $_direction + $_fixed)",
+                      "$ignore_trail": true,
+                      "factory": {
+                        "name": "anim_increase",
+                        "control_name": "$control_name"
+                      },
+                      "bindings": [
+                        {
+                          "binding_type": "view",
+                          "source_control_name": "animated_bar_panel_cx1",
+                          "resolve_sibling_scope": true,
+                          "source_property_name": "((#changed_value > #prev_value) * 1)",
+                          "target_property_name": "#collection_length"
+                        },
+                        {
+                          "binding_type": "view",
+                          "source_property_name": "(#collection_length * 0 = 0)",
+                          "target_property_name": "#visible"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "anim_decrease_cx2": {
+                      "type": "collection_panel",
+                      "$size_anim": "('@animated_bar.decrease_anim' + $_direction + $_fixed)",
+                      "factory": {
+                        "name": "anim_decrease",
+                        "control_name": "$control_name"
+                      },
+                      "bindings": [
+                        {
+                          "binding_type": "view",
+                          "source_control_name": "animated_bar_panel_cx1",
+                          "resolve_sibling_scope": true,
+                          "source_property_name": "((#prev_value > #changed_value) * 1)",
+                          "target_property_name": "#collection_length"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "bar_panel_cx1": {
+                "type": "image",
+                "alpha": "$bar_alpha",
+                "texture": "$bar_texture",
+                "anchor_from": "$_anchor",
+                "anchor_to": "$_anchor",
+                "size": ["100%", "100%"],
+                "clip_direction": "$fill_from",
+                "clip_pixelperfect": false,
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "animated_bar_panel_cx1",
+                    "resolve_sibling_scope": true,
+                    "source_property_name": "($one - #min * #multiplier)",
+                    "target_property_name": "#clip_ratio"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "bar_bg_cx0": {
+          "type": "image",
+          "alpha": "$background_alpha",
+          "layer": 0,
+          "texture": "$background_texture"
+        }
+      }
+    ]
+  },
+
+  "increase_anim": {
+    "anim_type": "size",
+    "from": [0, "100%"],
+    "to": ["100%", "100%"],
+    "duration": "$duration",
+    "easing": "$increase_easing"
+  },
+
+  "increase_anim__fixed": { // for fixed texture
+    "anim_type": "size",
+    "from": [0, "200%"],
+    "to": ["100%", "200%"],
+    "duration": "$duration",
+    "easing": "$increase_easing"
+  },
+
+  "increase_anim__vertical": {
+    "anim_type": "size",
+    "from": ["100%", 0],
+    "to": ["100%", "100%"],
+    "duration": "$duration",
+    "easing": "$increase_easing"
+  },
+
+  "increase_anim__vertical__fixed": { // for fixed texture
+    "anim_type": "size",
+    "from": ["200%", 0],
+    "to": ["200%", "100%"],
+    "duration": "$duration",
+    "easing": "$increase_easing"
+  },
+
+  "decrease_anim": {
+    "anim_type": "size",
+    "from": ["100%", "100%"],
+    "to": [0, "100%"],
+    "duration": "$duration",
+    "easing": "$decrease_easing"
+  },
+
+  "decrease_anim__fixed": { // for fixed texture
+    "anim_type": "size",
+    "from": ["100%", "200%"],
+    "to": [0, "200%"],
+    "duration": "$duration",
+    "easing": "$decrease_easing"
+  },
+
+  "decrease_anim__vertical": {
+    "anim_type": "size",
+    "from": ["100%", "100%"],
+    "to": ["100%", 0],
+    "duration": "$duration",
+    "easing": "$decrease_easing"
+  },
+
+  "decrease_anim__vertical__fixed": { // for fixed texture
+    "anim_type": "size",
+    "from": ["200%", "100%"],
+    "to": ["200%", 0],
+    "duration": "$duration",
+    "easing": "$decrease_easing"
+  },
+
+  "trail_anim": {
+    "anim_type": "wait",
+    "duration": "$trail_delay",
+    "next": "('@animated_bar.decrease_anim' + $_direction)"
+  },
+
+  "animated_bar_image": {
+    "type": "panel",
+    "size": ["100%", "100%"],
+    "controls": [
+      {
+        "bar_image_cx0": {
+          "type": "image",
+          "alpha": "$bar_alpha",
+          "texture": "$bar_texture",
+          "size": "$size_anim",
+          "layer": 1,
+          "anchor_from": "$_anchor",
+          "anchor_to": "$_anchor"
+        }
+      },
+      {
+        "trail_image_cx0": {
+          "ignored": "$ignore_trail",
+          "type": "image",
+          "layer": 0,
+          "size": "@animated_bar.trail_anim",
+          "alpha": "$trail_alpha",
+          "anchor_from": "$_anchor",
+          "anchor_to": "$_anchor",
+          "texture": "$trail_texture"
+        }
+      }
+    ]
+  },
+
+  "animated_bar_image__fixed": { // for fixed texture
+    "type": "panel",
+    "size": ["100%", "100%"],
+    "controls": [
+      {
+        "bar_image_cx0": {
+          "type": "panel",
+          "size": "$size_anim",
+          "layer": 1,
+          "anchor_from": "$_anchor",
+          "anchor_to": "$_anchor",
+          "clips_children": true,
+          "controls": [
+            {
+              "image_cx1": {
+                "type": "image",
+                "size": "$bar_size",
+                "alpha": "$bar_alpha",
+                "anchor_from": "$_anchor",
+                "anchor_to": "$_anchor",
+                "texture": "$bar_texture"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "trail_image_cx0": {
+          "ignored": "$ignore_trail",
+          "type": "image",
+          "layer": 0,
+          "size": "@animated_bar.trail_anim",
+          "alpha": "$trail_alpha",
+          "anchor_from": "$_anchor",
+          "anchor_to": "$_anchor",
+          "texture": "$trail_texture"
+        }
+      }
+    ]
+  }
+}

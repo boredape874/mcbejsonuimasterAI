@@ -1,0 +1,18 @@
+{
+    "format_version": 2,
+    "header": {
+        "name": "Inventory UI Resource Pack",
+        "description": "Inventory UI Resource Pack",
+        "uuid": "21f0427f-572a-416d-a90e-c5d9becb0fa3",
+        "version": [1, 1, 0],
+        "min_engine_version": [1, 18, 0]
+    },
+    "modules": [
+        {
+            "type": "resources",
+            "description": "Inventory UI Resource Pack",
+            "uuid": "1f785f22-4eec-471d-ba1c-4b5fc2190e9e",
+            "version": [1, 1, 0]
+        }
+    ]
+}

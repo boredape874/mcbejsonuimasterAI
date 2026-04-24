@@ -1,0 +1,13 @@
+{
+  /// Facelift Theme(Drirain) ///
+  "$drirain_facelift_texture": "textures/ui/drirain/facelift/facelift_button",
+
+  "$drirain_facelift_texture_alpha": 0.75,
+  "$drirain_facelift_texture_default_color": [ 0.15, 0.15, 0.15 ],
+  "$drirain_facelift_texture_hover_color": [ 0.4, 0.4, 0.4 ],
+  "$drirain_facelift_texture_pressed_color": [ 0.05, 0.05, 0.05 ],
+  "$drirain_facelift_texture_locked_color": [ 0.15, 0.15, 0.15 ],
+
+  "$drirain_facelift_texture_default_checked_color": [ 0.15, 0.15, 0.15 ],
+  "$drirain_facelift_texture_hover_checked_color": [ 0.4, 0.4, 0.4 ]
+}

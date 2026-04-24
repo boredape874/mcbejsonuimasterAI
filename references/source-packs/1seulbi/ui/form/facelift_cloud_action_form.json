@@ -1,0 +1,151 @@
+{
+  "namespace": "facelift_cloud_action_form",
+
+  // Facelift Action Form
+  // Version: v1.2
+  // Target: Cloud
+
+  "form_design": {
+    "type": "panel",
+    "size": [ "100%", "100%" ],
+    "controls": [
+      {
+        "form_content": {
+          "type": "stack_panel",
+          "size": [ "100%y", "85%" ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "controls": [
+            {
+              "top_content_panel": {
+                "type": "panel",
+                "size": [ "100%", 26 ],
+                "anchor_to": "center",
+                "anchor_from": "center",
+                "controls": [
+                  {
+                    "form_title_cover": {
+                      "type": "image",
+                      "size": [ "100%", "100%" ],
+                      "anchor_to": "center",
+                      "anchor_from": "center",
+                      "texture": "textures/ui/hud_tip_text_background",
+                      "alpha": 0.6,
+                      "controls": [
+                        {
+                          "form_title_panel": {
+                            "type": "panel",
+                            "size": [ "100% - 8px", "100% - 8px" ],
+                            "anchor_to": "center",
+                            "anchor_from": "center",
+                            "controls": [
+                              {
+                                "form_title": {
+                                  "type": "label",
+                                  "size": [ "100% - 30px", "default" ],
+                                  "max_size": [ "100% - 30px", "100%" ],
+                                  "anchor_to": "center",
+                                  "anchor_from": "center",
+                                  "text": "#title_text",
+                                  "text_alignment": "center",
+                                  "font_scale_factor": 1.3,
+                                  "shadow": true
+                                }
+                              },
+                              {
+                                "form_close_button_cover": {
+                                  "type": "image",
+                                  "size": [ "100%y", "100%" ],
+                                  "anchor_to": "right_middle",
+                                  "anchor_from": "right_middle",
+                                  "controls": [
+                                    {
+                                      "form_close_button@form_common.light_close_button": {
+                                        "$close_button_panel_size": [ 20, 20 ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            { "form_content_void_panel@common.empty_panel": { "size": [ 0, 4 ] } },
+            {
+              "form_content_panel": {
+                "type": "image",
+                "size": [ "100%", "fill" ],
+                "anchor_to": "center",
+                "anchor_from": "center",
+                "texture": "textures/ui/hud_tip_text_background",
+                "alpha": 0.6,
+                "controls": [
+                  {
+                    "generated_form@common.scrolling_panel": {
+                      "size": [ "100% - 4px", "100% - 4px" ],
+                      "anchor_to": "center",
+                      "anchor_from": "center",
+                      "$show_background": false,
+                      "$scrolling_content": "facelift_cloud_action_form.form_content_panel",
+                      "$scrolling_pane_size": [ "100% - 4px", "100% - 4px" ],
+                      "$scrolling_pane_offset": [ 2, 2 ],
+                      "$scroll_size": [ 5, "100% - 4px" ],
+                      "$scroll_bar_right_padding_size": [ 0, 0 ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "form_content_panel": {
+    "type": "panel",
+    "size": [ "100%", "100%c" ],
+    "controls": [
+      {
+        "form_content": {
+          "type": "stack_panel",
+          "size": [ "100%", "100%c" ],
+          "anchor_to": "center",
+          "anchor_from": "center",
+          "controls": [
+            {
+              "form_text_panel": {
+                "type": "panel",
+                "size": [ "100%", "100%c + 4px" ],
+                "anchor_to": "center",
+                "anchor_from": "center",
+                "controls": [
+                  {
+                    "form_text": {
+                      "type": "label",
+                      "size": [ "100%", "default" ],
+                      "max_size": [ "100%", "default" ],
+                      "anchor_to": "center",
+                      "anchor_from": "center",
+                      "text": "#form_text",
+                      "text_alignment": "center",
+                      "shadow": true
+                    }
+                  }
+                ]
+              }
+            },
+            { "form_content_void_panel@common.empty_panel": { "size": [ 0, 4 ] } },
+            { "long_form_content@server_form.long_form_dynamic_buttons_panel": {} }
+          ]
+        }
+      }
+    ]
+  }
+}

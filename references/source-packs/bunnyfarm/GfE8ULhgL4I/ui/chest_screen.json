@@ -1,0 +1,314 @@
+{
+  "namespace": "chest",
+  "large_chest_panel_top_half": {
+    "type": "panel",
+    "size": [
+      "100%",
+      132
+    ],
+    "offset": [
+      0,
+      11
+    ],
+    "anchor_to": "top_left",
+    "anchor_from": "top_left",
+    "controls": [
+      {
+        "chest_label@chest.chest_label": {}
+      },
+      {
+        "large_chest_grid@chest.large_chest_grid": {
+          "offset": [
+            7,
+            10
+          ]
+        }
+      }
+    ]
+  },
+  "large_chest_grid_item@common.container_item": {
+    "$item_collection_name": "container_items",
+    "$background_images": ""
+  },
+  //// #endregion
+
+  ////---------------------------------------------------------------------------
+  //// #region screen
+  ////---------------------------------------------------------------------------
+
+  "large_chest_panel": {
+    "type": "panel",
+    "$titles": "%.2s * $container_title",
+    "$fart": "$container_title",
+    "controls": [
+      {
+        "container_gamepad_helpers@common.container_gamepad_helpers": {}
+      },
+      {
+        "selected_item_details_factory@common.selected_item_details_factory": {
+          "control_name": "@chest.selected_item_details"
+        }
+      },
+      {
+        "item_lock_notification_factory@common.item_lock_notification_factory": {
+          "control_name": "@common.item_lock_notification"
+        }
+      },
+      {
+        "root_panel@common.root_panel": {
+          "size": [
+            176,
+            220
+          ],
+          "layer": 1,
+          "controls": [
+            {
+              "common_panel@common.common_panel": {
+                "$dialog_background": ""
+              }
+            },
+            {
+              "chest_panel": {
+                "type": "panel",
+                "layer": 5,
+                "controls": [
+                  {
+                    "large_chest_panel_top_half@chest.large_chest_panel_top_half": {
+                      "offset": [
+                        0,
+                        5.5
+                      ],
+                      "$background_images": ""
+                    }
+                  },
+                  {
+                    "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {
+                      "offset": [
+                        0,
+                        -3
+                      ],
+                      "$background_images": ""
+                    }
+                  },
+                  {
+                    "hotbar_grid@common.hotbar_grid_template": {
+                      "offset": [
+                        0,
+                        -7
+                      ],
+                      "$background_images": ""
+                    }
+                  },
+                  {
+                    "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {}
+                  },
+                  {
+                    "large_chest_screen_bg@chest.large_chest_screen_bg": {
+                      "ignored": "($fart = 'Shop' or $fart = 'Menu' or $fart = '거래소' or $fart = '경매소' or $fart = '교환소' or $fart = '재료확인' or $fart = '대장간' or $fart = '대장장이' or $fart = '스킨적용' or $fart = '전승' or $fart = '아티팩트')"
+                    }
+                  },
+                  {
+                    "large_chest_screen_bg@chest.large_shop_screen_bg": {
+                      "ignored": "(not ($fart = 'Shop'))"
+                    }
+                  },
+                  {
+                    "large_chest_screen_bg@chest.large_menu_screen_bg": {
+                      "ignored": "(not ($fart = 'Menu'))"
+                    }
+                  },
+                  {
+                    "large_chest_screen_bg@chest.user_market_screen_bg": {
+                      "ignored": "(not ($fart = '거래소'))"
+                    }
+                  },
+                  {
+                    "large_chest_screen_bg@chest.auction_house_screen_bg": {
+                      "ignored": "(not ($fart = '경매소'))"
+                    }
+                  },
+                  {
+                    "large_chest_screen_bg@chest.exchange_shop_screen_bg": {
+                      "ignored": "(not ($fart = '교환소'))"
+                    }
+                  },
+                  {
+                    "large_chest_screen_bg@chest.recipe_detail_bg": {
+                      "ignored": "(not ($fart = '재료확인'))"
+                    }
+                  },
+                  {
+                    "large_chest_screen_bg@chest.recipe_list_none_bg": {
+                      "ignored": "(not ($fart = '대장간'))"
+                    }
+                  },
+                  {
+                    "large_chest_screen_bg@chest.recipe_list_exist_bg": {
+                      "ignored": "(not ($fart = '대장장이'))"
+                    }
+                  },
+                  {
+                    "large_chest_screen_bg@chest.skin_apply_bg": {
+                      "ignored": "(not ($fart = '스킨적용'))"
+                    }
+                  },
+                  {
+                    "large_chest_screen_bg@chest.inherit_menu_bg": {
+                      "ignored": "(not ($fart = '전승'))"
+                    }
+                  },
+                  {
+                    "large_chest_screen_bg@chest.artifact_menu_bg": {
+                      "ignored": "(not ($fart = '아티팩트'))"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "inventory_selected_icon_button@common.inventory_selected_icon_button": {}
+            },
+            {
+              "gamepad_cursor@common.gamepad_cursor_button": {}
+            }
+          ]
+        }
+      },
+      {
+        "flying_item_renderer@common.flying_item_renderer": {}
+      }
+    ]
+  },
+  "large_chest_screen@common.inventory_screen_common": {
+    "$close_on_player_hurt|default": true,
+    "$use_custom_pocket_toast|default": false,
+    "close_on_player_hurt": "$close_on_player_hurt",
+    "use_custom_pocket_toast": "$use_custom_pocket_toast",
+    "variables": [
+      {
+        "requires": "$desktop_screen",
+        "$screen_content": "chest.large_chest_panel",
+        "$screen_bg_content": "common.screen_background",
+        "$screen_background_alpha": 0.4
+      },
+      {
+        "requires": "$pocket_screen",
+        "$use_custom_pocket_toast": true,
+        "$screen_content": "pocket_containers.large_chest_panel"
+      }
+    ]
+  },
+  "large_chest_screen_bg": {
+    "type": "image",
+    "layer": "$large_chest_layer",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "alpha": "$large_chest_alpha",
+    "texture": "textures/ui_images/large_chest",
+    "$large_chest_layer": -1,
+    "$large_chest_alpha": 1
+  },
+  "large_shop_screen_bg": {
+    "type": "image",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "texture": "textures/ui_images/large_shop",
+    "alpha": 1
+  },
+  "large_menu_screen_bg": {
+    "type": "image",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "texture": "textures/ui_images/large_menu",
+    "alpha": 1
+  },
+  "user_market_screen_bg": {
+    "type": "image",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "texture": "textures/ui_images/user_market",
+    "alpha": 1
+  },
+  "auction_house_screen_bg": {
+    "type": "image",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "texture": "textures/ui_images/auction_house",
+    "alpha": 1
+  },
+  "exchange_shop_screen_bg": {
+    "type": "image",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "texture": "textures/ui_images/exchange_shop",
+    "alpha": 1
+  },
+  "recipe_detail_bg": {
+    "type": "image",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "texture": "textures/ui_images/recipe_detail",
+    "alpha": 1
+  },
+  "recipe_list_none_bg": {
+    "type": "image",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "texture": "textures/ui_images/recipe_list_none",
+    "alpha": 1
+  },
+  "recipe_list_exist_bg": {
+    "type": "image",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "texture": "textures/ui_images/recipe_list_exist",
+    "alpha": 1
+  },
+  "skin_apply_bg": {
+    "type": "image",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "texture": "textures/ui_images/skin_apply",
+    "alpha": 1
+  },
+  "inherit_menu_bg": {
+    "type": "image",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "texture": "textures/ui_images/inherit_menu",
+    "alpha": 1
+  },
+  "artifact_menu_bg": {
+    "type": "image",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "texture": "textures/ui_images/artifact_menu",
+    "alpha": 1
+  }
+}
+
+// #endregion

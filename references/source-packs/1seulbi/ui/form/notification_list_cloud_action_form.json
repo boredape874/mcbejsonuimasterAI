@@ -1,0 +1,182 @@
+{
+  "namespace": "notification_list_cloud_action_form",
+
+  // Notification List
+  // Version: v1.1
+  // Target: Cloud
+
+  "form_base@form_common.form_base": {
+    "$form_design": "notification_list_cloud_action_form.form_design",
+    "$form_anims": [
+      "@notification_list_cloud_action_form.form_exit_anim_push_offset_TB_custom",
+      "@notification_list_cloud_action_form.form_exit_anim_pop_offset_TB_custom",
+      "@notification_list_cloud_action_form.form_entrance_anim_push_offset_TB_custom",
+      "@notification_list_cloud_action_form.form_entrance_anim_pop_offset_TB_custom",
+      "@form_anims_template.form_exit_animation_push_fade",
+      "@form_anims_template.form_exit_animation_pop_fade",
+      "@form_anims_template.form_entrance_animation_push_fade",
+      "@form_anims_template.form_entrance_animation_pop_fade"
+    ],
+    "bindings": "$form_visible_bindings"
+  },
+
+  "form_design": {
+    "type": "panel",
+    "size": [ "100%", "100%" ],
+    "controls": [
+      {
+        "form_content": {
+          "type": "stack_panel",
+          "size": [ "100% - 20px", "100% - 20px" ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "controls": [
+            {
+              "form_top_content_panel": {
+                "type": "panel",
+                "size": [ "100%", "100%c + 8px" ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "controls": [
+                  {
+                    "form_top_content@form_common.form_top_content_design_base": {
+                      "$form_top_content_size": [ "100%", "100%c" ],
+                      "$form_close_button_size": [ 24, 24 ],
+
+                      "$form_title_design": "form_common.form_title_design_base_v2",
+                      "$form_title_design_size": [ "95%", "100%c" ],
+                      "$form_title_orientation": "vertical",
+                      "$form_title_text_void_size": [ 0, 4 ],
+                      "$form_text_panel_size": [ "100%", "100%c" ],
+
+
+                      "$form_title_size": [ "100%", "default" ],
+                      "$form_title_max_size": [ "100%", "default" ],
+                      "$form_title_font_scale": 1.8,
+                      "$form_title_alignment": "center",
+
+                      "$form_text_size": [ "100%", "default" ],
+                      "$form_text_max_size": [ "100%", "default" ],
+                      "$form_text_font_scale": 1.2,
+                      "$form_text_alignment": "center"
+                    }
+                  }
+                ]
+              }
+            },
+            { "void_panel@common.empty_panel": { "size": [ 0, 4 ] } },
+            {
+              "notification_list_panel": {
+                "layer": 1,
+                "type": "panel",
+                "size": [ "100%", "fill" ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "controls": [
+                  {
+                    "scrolling_panel@common.scrolling_panel": {
+                      "size": [ "75%", "100%" ],
+                      "anchor_to": "center",
+                      "anchor_from": "center",
+                      "$show_background": false,
+                      "$scrolling_content": "notification_list_cloud_action_form.long_form_dynamic_buttons_panel",
+                      "$scrolling_pane_size": [ "100%", "100%" ],
+                      "$scrolling_pane_offset": [ 0, 0 ],
+                      "$scroll_size": [ 5, "100% - 4px" ],
+                      "$scroll_bar_right_padding_size": [ 0, 0 ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "long_form_dynamic_buttons_panel@form_template.grid_dynamic_action_form_preset": {
+    "$panel_size": [ "100%", "100%c" ],
+    "$button_item_template": "notification_list_cloud_action_form.notification_dynamic_form_button"
+  },
+
+  "notification_dynamic_form_button": {
+    "type": "panel",
+    "size": [ "50%", 45 ],
+    "controls": [
+      {
+        "form_button@notification_list_cloud_action_form.notification_dynamic_form_button_base": {
+          "size": [ "100% - 4px", "100% - 4px" ]
+        }
+      }
+    ]
+  },
+
+  "notification_dynamic_form_button_base@form_template.light_upgrade_button": {
+    "size": [ "100%", "100%" ],
+    "anchor_from": "center",
+    "anchor_to": "center",
+
+    "$pressed_button_name": "button.form_button_click",
+    "$button_type_panel": "form_template.dynamic_form_button_content",
+
+    "$button_pressed_offset": [ 0, 0 ],
+
+
+    "$default_border_visible": false,
+    "$hover_border_visible": false,
+    "$pressed_border_visible": false,
+    "$locked_border_visible": false,
+
+    "$default_text_color": [ 1.0, 1.0, 1.0 ],
+    "$hover_text_color": [ 1.0, 1.0, 1.0 ],
+    "$pressed_text_color": [ 1.0, 1.0, 1.0 ],
+    "$locked_text_color": [ 1.0, 1.0, 1.0 ],
+
+    "$default_button_texture": "textures/ui/form/button/round_corner_button",
+    "$hover_button_texture": "textures/ui/form/button/round_corner_button",
+    "$pressed_button_texture": "textures/ui/form/button/round_corner_button",
+    "$locked_button_texture": "textures/ui/form/button/round_corner_button",
+
+    "$default_button_texture_color": [ 0.0, 0.0, 0.0 ],
+    "$hover_button_texture_color": [ 0.4, 0.4, 0.4 ],
+    "$pressed_button_texture_color": [ 0.2, 0.2, 0.2 ],
+    "$locked_button_texture_color": [ 0.1, 0.1, 0.1 ],
+
+    "$default_button_alpha": 0.7,
+    "$hover_button_alpha": 0.7,
+    "$pressed_button_alpha": 0.7,
+    "$locked_button_alpha": 0.7,
+
+
+    "$text_alignment": "left",
+
+    "$button_text": "#form_button_text",
+    "$button_text_binding_type": "collection",
+    "$button_text_grid_collection_name": "form_buttons",
+    "bindings": [
+      {
+        "binding_type": "collection_details",
+        "binding_collection_name": "form_buttons"
+      }
+    ]
+  },
+
+
+  // Form Anims
+  "form_exit_anim_push_offset_TB_custom@form_anims_template.exit_anim_push_offset_base": {
+    "$animation_easing": "out_cubic"
+  },
+
+  "form_exit_anim_pop_offset_TB_custom@form_anims_template.exit_anim_pop_offset_base": {
+    "$animation_easing": "out_cubic"
+  },
+
+  "form_entrance_anim_push_offset_TB_custom@form_anims_template.entrance_anim_push_offset_base": {
+    "$animation_easing": "in_cubic"
+  },
+
+  "form_entrance_anim_pop_offset_TB_custom@form_anims_template.entrance_anim_pop_offset_base": {
+    "$animation_easing": "in_cubic"
+  }
+}

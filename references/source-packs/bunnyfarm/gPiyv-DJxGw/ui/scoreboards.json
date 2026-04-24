@@ -1,0 +1,222 @@
+{
+  "namespace": "scoreboard",
+  "vanilla_scoreboard_sidebar": {
+    "type": "panel",
+    "size": [
+      "100%cm",
+      "100%c"
+    ],
+    "anchor_from": "right_middle",
+    "anchor_to": "right_middle",
+    "controls": [
+      {
+        "main": {
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "alpha": 0.3,
+          "size": [
+            "100%cm + 4px",
+            "100%c"
+          ],
+          "anchor_from": "top_middle",
+          "anchor_to": "top_middle",
+          "controls": [
+            {
+              "displayed_objective": {
+                "type": "label",
+                "size": [
+                  "default",
+                  10
+                ],
+                "max_size": [
+                  170,
+                  10
+                ],
+                "text": "#objective_sidebar_name",
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "text_alignment": "center",
+                "locked_alpha": 1.0,
+                "layer": 2,
+                "color": "$objective_title_color",
+                "localize": false,
+                "bindings": [
+                  {
+                    "binding_name": "#objective_sidebar_name",
+                    "binding_type": "global"
+                  }
+                ]
+              }
+            },
+            {
+              "lists": {
+                "type": "panel",
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "inherit_max_sibling_width": true,
+                "offset": [
+                  0,
+                  10
+                ],
+                "size": [
+                  "100%c",
+                  "100%cm"
+                ],
+                "controls": [
+                  {
+                    "players": {
+                      "type": "stack_panel",
+                      "anchor_from": "top_left",
+                      "anchor_to": "top_left",
+                      "size": [
+                        "100%cm",
+                        "100%c"
+                      ],
+                      "orientation": "vertical",
+                      "collection_name": "scoreboard_players",
+                      "factory": {
+                        "name": "player_list_factory",
+                        "control_name": "scoreboard.vanilla_scoreboard_sidebar_player_assets"
+                      },
+                      "bindings": [
+                        {
+                          "binding_name": "#scoreboard_sidebar_size",
+                          "binding_type": "global",
+                          "binding_name_override": "#collection_length"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "displayed_objective_background": {
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "alpha": 0.15,
+          "size": [
+            "100%sm",
+            9
+          ],
+          "anchor_from": "top_middle",
+          "anchor_to": "top_middle",
+          "layer": 1
+        }
+      }
+    ]
+  },
+  "vanilla_scoreboard_sidebar_player_assets": {
+    "type": "label",
+    "layer": 2,
+    "text": "#player_name_sidebar",
+    "size": [
+      "default",
+      10
+    ],
+    "max_size": [
+      200,
+      20
+    ],
+    "locked_alpha": 1.0,
+    "color": "$player_name_color",
+    "localize": false,
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_property_name": "(((#player_name_sidebar - '§C§S') = #player_name_sidebar) and (not ((#player_name_sidebar - '§C§S') = '')))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_name": "#player_name_sidebar",
+        "binding_type": "collection",
+        "binding_collection_name": "scoreboard_players"
+      }
+    ]
+  },
+  "custom_scoreboard_sidebar": {
+    "type": "panel",
+    "size": [ "100%c", "100%c" ],
+    // X: 오른쪽 끝에서 -6px (안쪽으로), Y: 위에서 6px 아래로
+    "$scoreboard_offset|default": [ -6, 6 ],
+    "$scoreboard_alignment": "top_right",
+    "anchor_from": "top_right",
+    "anchor_to": "top_right",
+    "offset": "$scoreboard_offset",
+    "controls": [
+      {
+        "players": {
+          "type": "stack_panel",
+          "size": [ "100%c", 14 ], // 가로형이므로 높이를 고정하고 너비는 가변(%c)
+          "anchor_from": "top_right",
+          "anchor_to": "top_right",
+          "orientation": "horizontal", // 핵심: 가로 방향으로 나열
+          "collection_name": "scoreboard_players",
+          "factory": {
+            "name": "player_list_factory",
+            "control_name": "scoreboard.custom_scoreboard_sidebar_player_assets"
+          },
+          "bindings": [
+            {
+              "binding_name": "#scoreboard_sidebar_size",
+              "binding_type": "global",
+              "binding_name_override": "#collection_length"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "custom_scoreboard_sidebar_player_assets": {
+    "type": "panel",
+    "size": [ "100%c + 4px", 14 ], // 가로로 나열될 때 칸 사이 간격을 위해 +4px 여백
+    "controls": [
+      {
+        "scoreboard_background": {
+          "type": "image",
+          "size": [ "100%c + 8px", "100%" ],
+          "anchor_from": "top_right",
+          "anchor_to": "top_right",
+          "texture": "textures/ui/hud_tip_text_background",
+          "alpha": 0.55,
+          "controls": [
+            {
+              "player_name_label": {
+                "layer": 2,
+                "type": "label",
+                "offset": [ -4, 0 ], // 오른쪽 정렬이므로 음수 오프셋
+                "text": "#player_name_sidebar",
+                "localize": false,
+                "anchor_from": "right_middle",
+                "anchor_to": "right_middle",
+                "text_alignment": "right",
+                "bindings": [
+                  {
+                    "binding_name": "#player_name_sidebar",
+                    "binding_type": "collection",
+                    "binding_collection_name": "scoreboard_players"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_property_name": "((not ((#player_name_sidebar - '§C§S') = #player_name_sidebar)) or ((#player_name_sidebar - '§C§S') = ''))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_name": "#player_name_sidebar",
+        "binding_type": "collection",
+        "binding_collection_name": "scoreboard_players"
+      }
+    ]
+  }
+}

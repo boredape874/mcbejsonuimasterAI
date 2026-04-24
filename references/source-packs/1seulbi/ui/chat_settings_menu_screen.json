@@ -1,0 +1,97 @@
+{
+  "namespace": "chat_settings",
+
+  //---------------------------------------------------------------------------
+  // Screen Background
+  //---------------------------------------------------------------------------
+  "chat_screen_background": {
+    "layer": -10,
+    "type": "image",
+    "size": [ "200%", "200%" ], // Full screen fit
+    "texture": "textures/ui/screen_background",
+    "$screen_background_alpha|default": 0.75,
+    "alpha": "$screen_background_alpha"
+  },
+
+  "chat_setting_scrolling_background_image": {
+    "layer": 3,
+    "type": "image",
+    "size": [ 3, "100%" ],
+    "texture": "textures/ui/ScrollRail",
+    "alpha": 0.5
+  },
+
+
+  //---------------------------------------------------------------------------
+  // Main Content
+  //---------------------------------------------------------------------------
+  "chat_settings_scrolling_content": {
+    "type": "panel",
+    "size": [ "100%", "100%c" ],
+    "controls": [
+      {
+        "chat_settings_content_area": {
+          "type": "stack_panel",
+          "size": [ "100%", "100%c" ],
+          "controls": [
+            {
+              "mute_settings": {
+                "type": "stack_panel",
+                "size": [ "100%", "100%cm" ],
+                "orientation": "horizontal",
+                "controls": [
+                  { "mute_all_toggle@chat_settings.mute_all_toggle": { "size": [ "fill", "100%c" ] } },
+                  { "void_panel@common.empty_panel": { "size": [ 2, 0 ] } },
+                  { "mute_emote_chat_toggle@chat_settings.mute_emote_chat_toggle": { "size": [ "fill", "100%c" ] } }
+                ]
+              }
+            },
+            { "chat_tts_toggle@chat_settings.chat_tts_toggle": {} },
+
+            { "chatColor_mentionsColor_line@chat_settings.line_break": {} },
+            {
+              "chat_colors_content_area": {
+                "type": "stack_panel",
+                "size": [ "100%", "100%cm" ],
+                "orientation": "horizontal",
+                "controls": [
+                  { "chat_color@chat_settings.chat_color_dropdown": { "size": [ "fill", "100%c" ] } },
+                  { "void_panel@common.empty_panel": { "size": [ 2, 0 ] } },
+                  { "mentions_color@chat_settings.mentions_color_dropdown": { "size": [ "fill", "100%c" ] } }
+                ]
+              }
+            },
+
+            { "toggles_to_font_shape@chat_settings.line_break": {} },
+            { "typeface_dropdown@chat_settings.typeface_dropdown": {} },
+            { "font_size@chat_settings.font_size_slider": {} },
+            { "line_spacing@chat_settings.line_spacing_slider": {} },
+
+            { "reset@chat_settings.line_break": {} },
+            { "reset_button@chat_settings.reset_button": {} }
+          ]
+        }
+      }
+    ]
+  },
+
+  "chat_setting_scrolling_panel@common.scrolling_panel": {
+    "size": [ 286, 179 ],
+    "clips_children": true,
+    "$scroll_bar_left_padding_size": [ 3.5, 0 ],
+    "$scroll_bar_right_padding_size": [ 2.5, 0 ],
+    "$scrolling_content": "chat_settings.chat_settings_scrolling_content",
+    "$scroll_background_image_control": "chat_settings.chat_setting_scrolling_background_image"
+  },
+
+  "chat_settings_popup@popup_dialog.form_fit_modal_dialog_popup": {
+    "$modal_title": "chat.settings",
+    "$modal_background": "chat_settings.chat_screen_background",
+    "$modal_contents": "chat_settings.chat_setting_scrolling_panel",
+    "$popup_dialog_escape_button_name": "button.close_chat_settings",
+    "$screen_background_alpha": 0.4,
+    "$dialog_background_texture": "textures/ui/control_gray",
+    "$fill_alpha": 0.4,
+    "$modal_contents_padding": [ 8, 6 ]
+  }
+}

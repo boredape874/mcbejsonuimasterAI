@@ -1,0 +1,136 @@
+{
+    "namespace": "chest",
+
+    "small_chest_screen@common.inventory_screen_common": {
+		"$close_on_player_hurt|default": true,
+		"close_on_player_hurt": "$close_on_player_hurt",
+
+		"$keyword1": "§1§0§r§r§r§r§r§r§r§r§r",
+		"$keyword2": "§2§0§r§r§r§r§r§r§r§r§r",
+		"$keyword3": "§3§0§r§r§r§r§r§r§r§r§r",
+		"$keyword4": "§4§0§r§r§r§r§r§r§r§r§r",
+		"$keyword5": "§5§0§r§r§r§r§r§r§r§r§r",
+		"$keyword6": "§6§0§r§r§r§r§r§r§r§r§r",
+
+		"$keyword_scroll1": "§1§1§r§r§r§r§r§r§r§r§r",
+		"$keyword_scroll2": "§2§1§r§r§r§r§r§r§r§r§r",
+		"$keyword_scroll3": "§3§1§r§r§r§r§r§r§r§r§r",
+		"$keyword_scroll4": "§4§1§r§r§r§r§r§r§r§r§r",
+		"$keyword_scroll5": "§5§1§r§r§r§r§r§r§r§r§r",
+		"$keyword_scroll6": "§6§1§r§r§r§r§r§r§r§r§r",
+
+		"$keyword_pocket": "§r§r§r§r§r§r§r§r§r",
+		
+		"$container_title_copy": "$container_title",
+
+		"variables": [
+			{
+				"requires": "$desktop_screen",
+				"$screen_content": "chest.small_chest_panel",
+				"$screen_bg_content": "common.screen_background"
+			},
+			{
+				"requires": "$pocket_screen",
+				"$screen_content": "pocket_containers.small_chest_panel"
+			},
+
+			// desktop not scroll
+
+			{ // 9 * 1
+				"requires": "(not (($container_title_copy - $keyword1) = $container_title_copy)) and $desktop_screen",
+				"$root_panel_size": [ 176, 130 ],
+				"$panel_top_half_size": [ "100%", 42 ],
+				"$scrolling_panel_size": [ 162, 18 ],
+				"$screen_content": "custom_scroll_screen.custom_scroll_panel"
+			},
+			{ // 9 * 2
+				"requires": "(not (($container_title_copy - $keyword2) = $container_title_copy)) and $desktop_screen",
+				"$root_panel_size": [ 176, 148 ],
+				"$panel_top_half_size": [ "100%", 60 ],
+				"$scrolling_panel_size": [ 162, 36 ],
+				"$screen_content": "custom_scroll_screen.custom_scroll_panel"
+			},
+			{ // 9 * 3
+				"requires": "(not (($container_title_copy - $keyword3) = $container_title_copy)) and $desktop_screen",
+				"$root_panel_size": [ 176, 166 ],
+				"$panel_top_half_size": [ "100%", 78 ],
+				"$scrolling_panel_size": [ 162, 54 ],
+				"$screen_content": "custom_scroll_screen.custom_scroll_panel"
+			},
+			{ // 9 * 4
+				"requires": "(not (($container_title_copy - $keyword4) = $container_title_copy)) and $desktop_screen",
+				"$root_panel_size": [ 176, 184 ],
+				"$panel_top_half_size": [ "100%", 96 ],
+				"$scrolling_panel_size": [ 162, 72 ],
+				"$screen_content": "custom_scroll_screen.custom_scroll_panel"
+			},
+			{ // 9 * 5
+				"requires": "(not (($container_title_copy - $keyword5) = $container_title_copy)) and $desktop_screen",
+				"$root_panel_size": [ 176, 202 ],
+				"$panel_top_half_size": [ "100%", 114 ],
+				"$scrolling_panel_size": [ 162, 90 ],
+				"$screen_content": "custom_scroll_screen.custom_scroll_panel"
+			},
+			{ // 9 * 6
+				"requires": "(not (($container_title_copy - $keyword6) = $container_title_copy)) and $desktop_screen",
+				"$root_panel_size": [ 176, 220 ],
+				"$panel_top_half_size": [ "100%", 132 ],
+				"$scrolling_panel_size": [ 162, 108 ],
+				"$screen_content": "custom_scroll_screen.custom_scroll_panel"
+			},
+			
+			// desktop scroll
+
+			{ // 9 * 1
+				"requires": "(not (($container_title_copy - $keyword_scroll1) = $container_title_copy)) and $desktop_screen",
+				"$root_panel_size": [ 184, 130 ],
+				"$panel_top_half_size": [ "100%", 42 ],
+				"$scrolling_panel_size": [ 168, 18 ],
+				"$screen_content": "custom_scroll_screen.custom_scroll_panel"
+			},
+			{ // 9 * 2
+				"requires": "(not (($container_title_copy - $keyword_scroll2) = $container_title_copy)) and $desktop_screen",
+				"$root_panel_size": [ 184, 148 ],
+				"$panel_top_half_size": [ "100%", 60 ],
+				"$scrolling_panel_size": [ 168, 36 ],
+				"$screen_content": "custom_scroll_screen.custom_scroll_panel"
+			},
+			{ // 9 * 3
+				"requires": "(not (($container_title_copy - $keyword_scroll3) = $container_title_copy)) and $desktop_screen",
+				"$root_panel_size": [ 184, 166 ],
+				"$panel_top_half_size": [ "100%", 78 ],
+				"$scrolling_panel_size": [ 168, 54 ],
+				"$screen_content": "custom_scroll_screen.custom_scroll_panel"
+			},
+			{ // 9 * 4
+				"requires": "(not (($container_title_copy - $keyword_scroll4) = $container_title_copy)) and $desktop_screen",
+				"$root_panel_size": [ 184, 184 ],
+				"$panel_top_half_size": [ "100%", 96 ],
+				"$scrolling_panel_size": [ 168, 72 ],
+				"$screen_content": "custom_scroll_screen.custom_scroll_panel"
+			},
+			{ // 9 * 5
+				"requires": "(not (($container_title_copy - $keyword_scroll5) = $container_title_copy)) and $desktop_screen",
+				"$root_panel_size": [ 184, 202 ],
+				"$panel_top_half_size": [ "100%", 114 ],
+				"$scrolling_panel_size": [ 168, 90 ],
+				"$screen_content": "custom_scroll_screen.custom_scroll_panel"
+			},
+			{ // 9 * 6
+				"requires": "(not (($container_title_copy - $keyword_scroll6) = $container_title_copy)) and $desktop_screen",
+				"$root_panel_size": [ 184, 220 ],
+				"$panel_top_half_size": [ "100%", 132 ],
+				"$scrolling_panel_size": [ 168, 108 ],
+				"$screen_content": "custom_scroll_screen.custom_scroll_panel"
+			},
+			
+			// pocket
+
+			{
+				"requires": "(not (($container_title_copy - $keyword_pocket) = $container_title_copy)) and $pocket_screen",
+				"$screen_content": "custom_pocket_containers.panel"
+			
+			}
+		]
+    }
+}

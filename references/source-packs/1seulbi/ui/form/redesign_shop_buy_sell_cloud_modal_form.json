@@ -1,0 +1,149 @@
+{
+  "namespace": "redesign_shop_buy_sell_cloud_modal_form",
+
+  // Redesign Shop Buy Sell
+  // Version: v1.0
+  // Target: Cloud
+
+  "form_base@form_common.form_base": {
+    "$form_type": "RedesignShopBuySellCloudForm_",
+    "$form_size": [ "95%y", "90%" ],
+    "$form_content": "redesign_shop_buy_sell_cloud_modal_form.form_content_panel",
+    "bindings": "$form_visible_bindings"
+  },
+
+  "form_content_panel": {
+    "type": "stack_panel",
+    "size": [ "100%", "100%" ],
+    "controls": [
+      {
+        "form_content": {
+          "type": "panel",
+          "size": [ "100%", "fill" ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "controls": [
+            {
+              "generated_form@common.scrolling_panel": {
+                "size": [ "100% - 4px", "100% - 4px" ],
+                "anchor_to": "center",
+                "anchor_from": "center",
+                "$show_background": false,
+                "$scrolling_content": "redesign_shop_buy_sell_cloud_modal_form.generated_contents",
+                "$scrolling_pane_size": [ "100%", "100%" ],
+                "$scrolling_pane_offset": [ 0, 0 ],
+                "$scroll_size": [ 5, "100% - 4px" ],
+                "$scroll_bar_right_padding_size": [ 0, 0 ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "divider@form_common.horizontal_divider_base": {
+          "$panel_size": [ "100%", "100%c + 4px" ],
+          "$divider_size": [ "80%", 1 ]
+        }
+      },
+      {
+        "toggle_panel": {
+          "type": "panel",
+          "size": [ "100%", "100%c" ],
+          "controls": [
+            {
+              "toggle@form_common.button_with_checkbox_toggle": {
+                "size": [ "85%", 20 ],
+                "$button_text": "확정 시 취소할 수 없습니다.",
+                "$toggle_name": "upgrade_shop",
+                "$toggle_view_binding_name": "buy_sell_enabled",
+
+                "$default_border_visible": false,
+                "$default_texture": "textures/ui/empty",
+                "$hover_texture": "textures/ui/empty",
+                "$pressed_texture": "textures/ui/empty",
+                "$pressed_no_hover_texture": "textures/ui/empty",
+                "$locked_texture": "textures/ui/empty",
+                "$unchecked_locked_texture": "textures/ui/empty",
+                "$checked_locked_texture": "textures/ui/empty"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "submit_button_panel": {
+          "type": "panel",
+          "size": [ "100%", "100%c + 6px" ],
+          "controls": [
+            {
+              "submit_button@common_buttons.light_text_button": {
+                "size": [ "55%", 24 ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+
+                "$pressed_button_name": "button.submit_custom_form",
+
+                "$button_text": "#submit_text",
+                "$button_text_binding_type": "global",
+                "$button_binding_condition": "once",
+                "bindings": [
+                  {
+                    "binding_name": "#submit_button_visible",
+                    "binding_name_override": "#visible"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "buy_sell_enabled",
+                    "source_property_name": "#toggle_state",
+                    "target_property_name": "#enabled"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "generated_contents@form_template.stack_dynamic_modal_form_preset": {
+    "$panel_size": [ "100%", "100%c" ],
+    "$factory_control_ids": {
+      "label": "@server_form.custom_label",
+      "toggle": "@server_form.custom_toggle",
+      "slider": "@server_form.custom_slider",
+      "step_slider": "@server_form.custom_step_slider",
+      "dropdown": "@server_form.custom_dropdown",
+      "input": "@redesign_shop_buy_sell_cloud_modal_form.custom_input",
+      "header": "@server_form.custom_header",
+      "divider": "@settings_common.option_group_section_divider"
+    }
+  },
+
+  "custom_input@settings_common.option_text_edit": {
+    "$option_label": "#custom_text",
+    "$option_place_holder_text": "#custom_placeholder_text",
+    "$text_edit_box_placeholder_content_binding_name": "$option_place_holder_text",
+    "$text_edit_box_placeholder_content_binding_type": "collection",
+    "$text_edit_box_grid_collection_name": "custom_form",
+
+    "$text_edit_box_text_type": "NumberChars",
+    "$text_edit_text_control": "custom_form_input",
+
+    "$max_text_edit_length": 15,
+
+    "$text_edit_box_content_binding_type": "collection",
+    "$text_edit_box_content_binding_name": "#custom_input_text",
+
+    "$option_binding_name": "#custom_input_text",
+    "$text_box_enabled_binding_name": "#custom_input_enabled",
+    "$text_box_name": "custom_input",
+    "$label_bindings": [
+      {
+        "binding_name": "#custom_text",
+        "binding_type": "collection",
+        "binding_collection_name": "custom_form"
+      }
+    ]
+  }
+}

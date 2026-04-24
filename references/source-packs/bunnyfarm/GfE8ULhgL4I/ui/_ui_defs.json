@@ -1,0 +1,9 @@
+{
+  "ui_defs": [
+    "ui/hive/server_form/left_button_panel.json",
+    "ui/hive/server_form/bottom_button_panel.json",
+    "ui/hive/server_form/button_grid_panel.json",
+    "ui/hive/server_form/button_image_grid_panel.json",
+    "ui/hive/server_form/square_image_panel.json"
+  ]
+}

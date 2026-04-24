@@ -1,0 +1,6 @@
+{
+    "ui_defs": [
+        "ui/custom_pocket_containers.json",
+        "ui/custom_scroll_screen.json"
+    ]
+}

@@ -1,0 +1,444 @@
+{
+  "messages_text": {
+    "type": "image",
+    "size": [
+      "100%",
+      "100%cm"
+    ],
+    "texture": "textures/ui/Black",
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "alpha": 0,
+    "bindings": [
+      {
+        "binding_name": "#chat_visible",
+        "binding_name_override": "#visible"
+      }
+    ],
+    "controls": [
+      {
+        "messages_text": {
+          "type": "stack_panel",
+          "orientation": "horizontal",
+          "size": [
+            "100%",
+            "100%c"
+          ],
+          "offset": [
+            2,
+            0
+          ],
+          "controls": [
+            {
+              "text": {
+                "type": "label",
+                "color": "$chat_text_color",
+                "localize": false,
+                "size": [
+                  "100%",
+                  "default"
+                ],
+                "layer": 2,
+                "text": "#text",
+                "text_tts": "#text_tts",
+                "font_type": "$chat_font_type",
+                "font_scale_factor": "$chat_font_scale_factor",
+                "line_padding": "$chat_line_spacing"
+              }
+            }
+          ],
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "('§z' + #text)",
+              "target_property_name": "#a_text"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not(('§␛' + #text + '§r') - ('§␛' + 'pickupnotification.') = ('§␛' + #text + '§r')))",
+              "target_property_name": "#is_pickup_noti"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not((#a_text - 'hover_chat') = #a_text))",
+              "target_property_name": "#is_hover_chat"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (#is_hover_chat or #is_pickup_noti))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "real_text_label": {
+          "type": "label",
+          "text": "#real_text",
+          "size": [
+            "default",
+            "default"
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            2,
+            0
+          ],
+          "layer": 2,
+          "property_bag": {
+            "#prefix": "hover_chat",
+            "#raw": "#text",
+            "#f_text": "",
+            "#len1_num": 0,
+            "#len2_num": 0,
+            "#len3_num": 0,
+            "#rest1": "",
+            "#rest2": "",
+            "#value1": "",
+            "#value2": "",
+            "#value3": ""
+          },
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "('a' + #text - 'hover_chat')",
+              "target_property_name": "#f_text"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "('§z' + #text)",
+              "target_property_name": "#a_text"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not((#a_text - 'hover_chat') = #a_text))",
+              "target_property_name": "#visible"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(#f_text - 'a')",
+              "target_property_name": "#len1_num"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(('%.' + #len1_num + 's') * (#f_text - ('%.4s' * #f_text)))",
+              "target_property_name": "#value1"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(('a' + #f_text - ('%.4s' * #f_text) - #value1))",
+              "target_property_name": "#rest1"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(#rest1 - 'a')",
+              "target_property_name": "#len2_num"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(('%.' + #len2_num + 's') * (#rest1 - ('%.4s' * #rest1)))",
+              "target_property_name": "#value2"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(('a' + #rest1 - ('%.4s' * #rest1) - #value2))",
+              "target_property_name": "#rest2"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(#rest2 - 'a')",
+              "target_property_name": "#len3_num"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(('%.' + #len3_num + 's') * (#rest2 - ('%.4s' * #rest2)))",
+              "target_property_name": "#value3"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "#value1",
+              "target_property_name": "#real_text"
+            }
+          ]
+        }
+      },
+      {
+        "text_edit_box": {
+          "type": "edit_box",
+          "text_box_name": "#message_text_box",
+          "max_length": 2147483647,
+          "can_be_deselected": true,
+          "text_control": "text_control",
+          "hover_control": "hover",
+          "always_listening": true,
+          "focus_enabled": true,
+          "size": [
+            "100%sm",
+            "100%sm"
+          ],
+          "offset": [
+            2,
+            0
+          ],
+          "layer": 3,
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "selected": "#selected",
+          "button_mappings": [
+            {
+              "from_button_id": "button.menu_select",
+              "to_button_id": "button.keyboard_toggle",
+              "handle_select": true,
+              "handle_deselect": false,
+              "mapping_type": "pressed"
+            },
+            {
+              "from_button_id": "button.menu_select",
+              "to_button_id": "button.keyboard_toggle",
+              "handle_select": false,
+              "handle_deselect": true,
+              "mapping_type": "global",
+              "consume_event": false
+            },
+            {
+              "from_button_id": "button.menu_cancel",
+              "to_button_id": "button.menu_select",
+              "handle_select": false,
+              "handle_deselect": true,
+              "mapping_type": "global"
+            }
+          ],
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "(#selected and not #selected)",
+              "target_property_name": "#selected"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "('§z' + #text)",
+              "target_property_name": "#a_text"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not((#a_text - 'hover_chat') = #a_text))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "text_control": {
+                "type": "label",
+                "layer": 9,
+                "text": "#item_name",
+                "visible": false,
+                "localize": false,
+                "property_bag": {
+                  "#prefix": "hover_chat",
+                  "#raw": "#text",
+                  "#f_text": "",
+                  "#len1_num": 0,
+                  "#len2_num": 0,
+                  "#len3_num": 0,
+                  "#rest1": "",
+                  "#rest2": "",
+                  "#value1": "",
+                  "#value2": "",
+                  "#value3": ""
+                },
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "('§z' + #text)",
+                    "target_property_name": "#a_text"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not((#a_text - 'hover_chat') = #a_text))",
+                    "target_property_name": "#visible"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "('a' + #text - 'hover_chat')",
+                    "target_property_name": "#f_text"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#f_text - 'a')",
+                    "target_property_name": "#len1_num"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(('%.' + #len1_num + 's') * (#f_text - ('%.4s' * #f_text)))",
+                    "target_property_name": "#value1"
+                  },
+
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(('a' + #f_text - ('%.4s' * #f_text) - #value1))",
+                    "target_property_name": "#rest1"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#rest1 - 'a')",
+                    "target_property_name": "#len2_num"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(('%.' + #len2_num + 's') * (#rest1 - ('%.4s' * #rest1)))",
+                    "target_property_name": "#value2"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(('a' + #rest1 - ('%.4s' * #rest1) - #value2))",
+                    "target_property_name": "#rest2"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#rest2 - 'a')",
+                    "target_property_name": "#len3_num"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(('%.' + #len3_num + 's') * (#rest2 - ('%.4s' * #rest2)))",
+                    "target_property_name": "#value3"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "#value3",
+                    "target_property_name": "#item_name"
+                  }
+                ]
+              }
+            },
+            {
+              "hover": {
+                "layer": 4,
+                "type": "panel",
+                "controls": [
+                  {
+                    "hover@common.hover_text": {
+                      "layer": 5,
+                      "property_bag": {
+                        "#prefix": "hover_chat",
+                        "#raw": "#text",
+                        "#f_text": "",
+                        "#len1_num": 0,
+                        "#len2_num": 0,
+                        "#rest1": "",
+                        "#rest2": "",
+                        "#value1": "",
+                        "#value2": ""
+                      },
+                      "bindings": [
+                        {
+                          "binding_type": "view",
+                          "source_property_name": "('a' + #text - 'hover_chat')",
+                          "target_property_name": "#f_text"
+                        },
+                        {
+                          "binding_type": "view",
+                          "source_property_name": "(#f_text - 'a')",
+                          "target_property_name": "#len1_num"
+                        },
+                        {
+                          "binding_type": "view",
+                          "source_property_name": "(('%.' + #len1_num + 's') * (#f_text - ('%.4s' * #f_text)))",
+                          "target_property_name": "#value1"
+                        },
+
+                        {
+                          "binding_type": "view",
+                          "source_property_name": "(('a' + #f_text - ('%.4s' * #f_text) - #value1))",
+                          "target_property_name": "#rest1"
+                        },
+                        {
+                          "binding_type": "view",
+                          "source_property_name": "(#rest1 - 'a')",
+                          "target_property_name": "#len2_num"
+                        },
+                        {
+                          "binding_type": "view",
+                          "source_property_name": "(('%.' + #len2_num + 's') * (#rest1 - ('%.4s' * #rest1)))",
+                          "target_property_name": "#value2"
+                        },
+                        {
+                          "binding_type": "view",
+                          "source_property_name": "#value2",
+                          "target_property_name": "#hover_text"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "underline@common.empty_image": {
+                      "layer": 4,
+                      "size": [
+                        "100%-4px",
+                        1
+                      ],
+                      "offset": [
+                        0,
+                        0
+                      ],
+                      "color": [
+                        0.5,
+                        0.5,
+                        0.5
+                      ],
+                      "texture": "textures/ui/white_background",
+                      "keep_ratio": false,
+                      "anchor_from": "bottom_middle",
+                      "anchor_to": "bottom_middle"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "sendbutton@common_buttons.light_text_button": {
+          "layer": 0,
+          "propagate_alpha": true,
+          "always_listen_to_input": true,
+          "alpha": 0,
+          "size": [
+            "100%sm",
+            "100%sm"
+          ],
+          "offset": [
+            2,
+            0
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "$button_text": "exit",
+          "button_mappings": [
+            {
+              "from_button_id": "button.menu_select",
+              "to_button_id": "button.send",
+              "consume_event": true,
+              "mapping_type": "pressed",
+              "scope": "global"
+            }
+          ],
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "('§z' + #text)",
+              "target_property_name": "#a_text"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not((#a_text - 'hover_chat') = #a_text))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "namespace": "crafting",
+
+  // Function
+  "container_item": {
+    "$function_mode|default": false,
+
+    "layer": 1,
+    "type": "input_panel",
+    "size": [ 18, 18 ],
+    "$cell_image_size|default": [ 18, 18 ],
+    "$cell_overlay_ref|default": "common.cell_overlay",
+    "$button_ref|default": "common.container_slot_button_prototype",
+    "$stack_count_required|default": true,
+    "$durability_bar_required|default": true,
+    "$storage_bar_required|default": true,
+    "$item_renderer|default": "common.item_renderer",
+    "$item_renderer_panel_size|default": [ 18, 18 ],
+    "$item_renderer_size|default": [ 16, 16 ],
+    "$item_renderer_offset|default": [ 0, 0 ],
+    "$background_images|default": "common.cell_image_panel",
+    "$background_image_control_name|default": "bg",
+
+    "$focus_id|default": "",
+    "$focus_override_down|default": "",
+    "$focus_override_up|default": "",
+    "$focus_override_left|default": "",
+    "$focus_override_right|default": "",
+    "focus_identifier": "$focus_id",
+    "focus_change_down": "$focus_override_down",
+    "focus_change_up": "$focus_override_up",
+    "focus_change_left": "$focus_override_left",
+    "focus_change_right": "$focus_override_right",
+    "focus_enabled": true,
+    "focus_wrap_enabled": false,
+    "focus_magnet_enabled": true,
+
+    "controls": [
+      {
+        "drop_one@crafting.drop_one_button_ref": {
+          "ignored": true,
+          //"ignored": "(not $function_mode or not $touch or $pocket_screen)",
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_control_name": "function_drop_one_mode",
+              "source_property_name": "#toggle_state",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "drop_all@crafting.drop_all_button_ref": {
+          "ignored": true,
+          //"ignored": "(not $function_mode or not $touch or $pocket_screen)",
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_control_name": "function_drop_all_mode",
+              "source_property_name": "#toggle_state",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "quick_loot_all@crafting.quick_loot_all_button_ref": {
+          "ignored": true,
+          //"ignored": "(not $function_mode or not $touch or $pocket_screen)",
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_control_name": "function_quick_loot_all_mode",
+              "source_property_name": "#toggle_state",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+
+
+      {
+        "item_cell": {
+          "type": "panel",
+          "size": "$cell_image_size",
+          "layer": 0,
+          "controls": [
+            {
+              "$background_image_control_name@$background_images": {
+                "layer": 1
+              }
+            },
+            {
+              "item": {
+                "type": "panel",
+                "size": "$item_renderer_panel_size",
+                "layer": 0,
+                "controls": [
+                  {
+                    "stack_count_label@common.stack_count_label": {
+                      "layer": 27
+                    }
+                  },
+                  {
+                    "$item_renderer@$item_renderer": {
+                      "size": "$item_renderer_size",
+                      "offset": "$item_renderer_offset",
+                      "anchor_to": "center",
+                      "anchor_from": "center",
+                      "layer": 7
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "durability_bar@common.durability_bar": {
+                "layer": 20
+              }
+            },
+            {
+              "storage_bar@common.storage_bar": {
+                "layer": 20
+              }
+            }
+          ]
+        }
+      },
+      {
+        "item_cell_overlay_ref@$cell_overlay_ref": {
+          "layer": 3
+        }
+      },
+      {
+        "item_selected_image@common.slot_selected": {
+          "layer": 4
+        }
+      },
+      {
+        "item_button_ref@$button_ref": {
+          "tts_ignore_count": true,
+          "tts_skip_message": true,
+          "tts_inherit_siblings": true,
+          "layer": 5
+        }
+      },
+      {
+        "container_item_lock_overlay@common.container_item_lock_overlay": {
+          "size": "$item_renderer_size",
+          "offset": [ 1, 1 ],
+          "anchor_to": "top_left",
+          "anchor_from": "top_left",
+          "layer": 6
+        }
+      },
+      {
+        "item_lock_cell_image@common.item_lock_cell_image": {
+          "layer": 2
+        }
+      },
+      {
+        "bundle_slot_panel@gameplay.bundle_slot_panel": {
+          "layer": 10
+        }
+      }
+    ]
+  },
+
+
+  // Function Button Ref
+  "drop_one_button_ref": {
+    "layer": 10,
+    "ignored": "($pocket_screen or not $touch)",
+    "type": "panel",
+    "controls": [
+      {
+        "container_slot_button_prototype@crafting.drop_one_container_slot_button_prototype": {
+          "tts_ignore_count": true,
+          "tts_skip_message": true,
+          "tts_inherit_siblings": true
+        }
+      }
+    ]
+  },
+
+  "drop_all_button_ref": {
+    "layer": 10,
+    "ignored": "($pocket_screen or not $touch)",
+    "type": "panel",
+    "controls": [
+      {
+        "container_slot_button_prototype@crafting.drop_all_container_slot_button_prototype": {
+          "tts_ignore_count": true,
+          "tts_skip_message": true,
+          "tts_inherit_siblings": true
+        }
+      }
+    ]
+  },
+
+  "quick_loot_all_button_ref": {
+    "layer": 10,
+    "ignored": "($pocket_screen or not $touch)",
+    "type": "panel",
+    "controls": [
+      {
+        "container_slot_button_prototype@crafting.quick_loot_all_container_slot_button_prototype": {
+          "tts_ignore_count": true,
+          "tts_skip_message": true,
+          "tts_inherit_siblings": true
+        }
+      }
+    ]
+  },
+
+  "drop_one_container_slot_button_prototype@common.container_slot_button_prototype": {
+    "button_mappings": [
+      {
+        "from_button_id": "button.menu_select",
+        "to_button_id": "button.drop_one",
+        "mapping_type": "pressed"
+      },
+      {
+        "from_button_id": "button.menu_inventory_drop",
+        "to_button_id": "button.drop_one",
+        "mapping_type": "pressed"
+      },
+      {
+        "from_button_id": "button.menu_inventory_drop_all",
+        "to_button_id": "button.drop_all",
+        "mapping_type": "pressed"
+      }
+    ]
+  },
+
+  "drop_all_container_slot_button_prototype@common.container_slot_button_prototype": {
+    "button_mappings": [
+      {
+        "from_button_id": "button.menu_select",
+        "to_button_id": "button.drop_all",
+        "mapping_type": "pressed"
+      },
+      {
+        "from_button_id": "button.menu_inventory_drop",
+        "to_button_id": "button.drop_one",
+        "mapping_type": "pressed"
+      },
+      {
+        "from_button_id": "button.menu_inventory_drop_all",
+        "to_button_id": "button.drop_all",
+        "mapping_type": "pressed"
+      }
+    ]
+  },
+
+  "quick_loot_all_container_slot_button_prototype@common.container_slot_button_prototype": {
+    "button_mappings": [
+      {
+        "from_button_id": "button.menu_select",
+        "to_button_id": "button.container_auto_place",
+        "mapping_type": "pressed"
+      },
+      {
+        "from_button_id": "button.menu_select",
+        "to_button_id": "button.container_take_all_place_all",
+        "mapping_type": "pressed"
+      },
+      {
+        "from_button_id": "button.menu_inventory_drop",
+        "to_button_id": "button.drop_one",
+        "mapping_type": "pressed"
+      },
+      {
+        "from_button_id": "button.menu_inventory_drop_all",
+        "to_button_id": "button.drop_all",
+        "mapping_type": "pressed"
+      }
+    ]
+  }
+}

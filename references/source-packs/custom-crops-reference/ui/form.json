@@ -1,0 +1,45 @@
+{
+    "namespace": "form",
+    "long_form_replacement": {
+        "type": "panel",
+        "size": [
+            "100%",
+            "100%"
+        ],
+        "controls": [
+            {
+                "menu_panel@menu.main_panel": {}
+            },
+            {
+                "stat_panel@stat.main_panel": {}
+            },
+            {
+                "guild_panel@guild.main_panel": {}
+            },
+            {
+                "gmenu_panel@gmenu.main_panel": {}
+            },
+            {
+                "ginfo_panel@ginfo.main_panel": {}
+            },
+            {
+                "quest_panel@quest.main_panel": {}
+            },
+            {
+                "skill_panel@skill.main_panel": {}
+            },
+            {
+                "craft_panel@craft.main_panel": {}
+            },
+            {
+                "npc_panel@npc.main_panel": {}
+            },
+            {
+                "shop_panel@shop.main_panel": {}
+            },
+            {
+                "boss_panel@boss.main_panel": {}
+            }
+        ]
+    }
+}

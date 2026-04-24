@@ -1,0 +1,107 @@
+{
+  "chat_grid_item/chat_background": {
+    "type": "image",
+    "texture": "textures/ui/Black",
+    "alpha": "$chat_background_opacity",
+    "size": [
+      "100%",
+      "100%c"
+    ],
+    "anims": [
+      "@hud.anim_chat_bg_wait"
+    ],
+    "controls": [
+      {
+        "chat_label": {
+          "type": "label",
+          "layer": 31,
+          "text": "#text",
+          "size": [
+            "100%",
+            "default"
+          ],
+          "shadow": true,
+          "localize": false,
+          "color": "$chat_text_color",
+          "enable_profanity_filter": true,
+          "font_type": "$chat_font_type",
+          "font_scale_factor": "$chat_font_scale_factor",
+          "line_padding": "$chat_line_spacing",
+          "anims": [
+            "@hud.anim_chat_txt_wait"
+          ],
+          "bindings": [
+            {
+              "binding_name": "#chat_text",
+              "binding_name_override": "#text",
+              "binding_type": "collection",
+              "binding_collection_name": "chat_text_grid",
+              "binding_condition": "once"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(((#text - 'hover_chat') = #text))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "hover_chat_label": {
+          "type": "label",
+          "layer": 32,
+          "text": "#custom_text",
+          "size": [
+            "100%",
+            "default"
+          ],
+          "shadow": true,
+          "localize": false,
+          "color": "$chat_text_color",
+          "enable_profanity_filter": true,
+          "font_type": "$chat_font_type",
+          "font_scale_factor": "$chat_font_scale_factor",
+          "line_padding": "$chat_line_spacing",
+          "anims": [
+            "@hud.anim_chat_txt_wait"
+          ],
+          "property_bag": {
+            "#prefix": "hover_chat",
+            "#f_text": "",
+            "#raw": "",
+            "#len1_num": 0,
+            "#value1": "",
+            "#is_hover_chat": false
+          },
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#text - 'hover_chat') = #text))",
+              "target_property_name": "#visible"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "('a' + #text - #prefix)",
+              "target_property_name": "#f_text"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(#f_text - 'a')",
+              "target_property_name": "#len1_num"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(('%.' + #len1_num + 's') * (#f_text - ('%.4s' * #f_text)))",
+              "target_property_name": "#value1"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "#value1",
+              "target_property_name": "#custom_text"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

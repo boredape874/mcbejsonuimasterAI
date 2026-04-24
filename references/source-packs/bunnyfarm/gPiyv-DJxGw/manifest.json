@@ -1,0 +1,20 @@
+{
+    "format_version": 2,
+    "header": {
+        "name": "Custom Scoreboard Pack",
+        "description": "커스텀 스코어보드 팩\n§7(Designed by NeroLuna)",
+        "uuid": "4d122422-9cef-4dc6-b0b3-e720ae4adcfd",
+        "version": [ 1, 1, 12 ],
+        "min_engine_version": [ 1, 21, 50 ]
+    },
+    "modules": [
+        {
+            "type": "resources",
+            "uuid": "a4babaa3-3e15-4831-a499-ff3156ffa332",
+            "version": [ 1, 0, 0 ]
+        }
+    ],
+    "metadata": {
+        "authors": [ "네로 루나" ]
+    }
+}

@@ -1,0 +1,715 @@
+{
+  "namespace": "hive_image_grid_modal",
+  "main_panel": {
+    "$main_size|default": [
+      400,
+      "100% - 70px"
+    ],
+    "$grid_wrapper_size|default": [
+      375,
+      "100%c + 20px"
+    ],
+    "$button_size|default": [
+      125,
+      "86%x"
+    ],
+    "$description_size|default": [
+      "100% - 5px",
+      "100%c + 10px"
+    ],
+    "variables": [
+      {
+        "requires": "($pocket_screen or $pocket_edition or $apple_os or $google_os)",
+        "$main_size": [
+          "100%-30px",
+          "100% - 70px"
+        ],
+        "$grid_wrapper_size": [
+          "100%-25px",
+          "100%c + 20px"
+        ],
+        "$button_size": [
+          "33%",
+          "100%c"
+        ],
+        "$description_size": [
+          "99% - 5px",
+          "100%c + 10px"
+        ]
+      }
+    ],
+    "type": "stack_panel",
+    "anchor_from": "top_middle",
+    "anchor_to": "top_middle",
+    "size": "$main_size",
+    "max_size": [
+      400,
+      "100% - 70px"
+    ],
+    "offset": [
+      0,
+      20
+    ],
+    "orientation": "vertical",
+    "controls": [
+      {
+        "title": {
+          "type": "panel",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "size": [
+            "100%",
+            21
+          ],
+          "controls": [
+            {
+              "modal_title": {
+                "type": "label",
+                "font_type": "MinecraftTen",
+                "localize": false,
+                "text": "#title_text",
+                "color": "white",
+                "text_alignment": "left",
+                "font_scale_factor": 2,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "size": [
+                  "default",
+                  20
+                ],
+                "offset": [
+                  0,
+                  0
+                ],
+                "layer": 53,
+                "shadow": false,
+                "bindings": [
+                  {
+                    "binding_name": "#title_text",
+                    "binding_type": "global"
+                  }
+                ]
+              }
+            },
+            {
+              "modal_title_shadow": {
+                "type": "label",
+                "font_type": "MinecraftTen",
+                "localize": false,
+                "text": "#title_text",
+                "color": "black",
+                "alpha": 0.4,
+                "text_alignment": "left",
+                "font_scale_factor": 2,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  1,
+                  1
+                ],
+                "size": [
+                  "default",
+                  21
+                ],
+                "layer": 52,
+                "shadow": false,
+                "bindings": [
+                  {
+                    "binding_name": "#title_text",
+                    "binding_type": "global"
+                  }
+                ]
+              }
+            },
+            {
+              "close_button@server_form.hive_close_button": {}
+            }
+          ]
+        }
+      },
+      {
+        "padding": {
+          "type": "panel",
+          "size": [
+            "100%c",
+            5
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left"
+        }
+      },
+      {
+        "shadow_bg": {
+          "size": [
+            "100%",
+            6
+          ],
+          "layer": 2,
+          "type": "image",
+          "texture": "textures/ui/hive/whitetransparency",
+          "alpha": 0.9,
+          "color": [
+            0.9,
+            0.9,
+            0.9
+          ],
+          "keep_ratio": false
+        }
+      },
+      {
+        "button_scroll_panel@button_scroll_panel": {
+          "size": [
+            "100%",
+            "100%"
+          ]
+        }
+      }
+    ]
+  },
+  "button_scroll_panel": {
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "layer": 2,
+    "type": "image",
+    "texture": "textures/ui/hive/whitetransparency",
+    "alpha": 1,
+    "color": [
+      0.06,
+      0.06,
+      0.06
+    ],
+    "keep_ratio": false,
+    "controls": [
+      {
+        "scroll_panel@button_scroll_panel_inner": {}
+      },
+      {
+        "fake_scroll_bar": {
+          "anchor_to": "top_right",
+          "anchor_from": "top_right",
+          "size": [
+            3,
+            "100% - 20px"
+          ],
+          "offset": [
+            -10,
+            10
+          ],
+          "layer": 2,
+          "type": "image",
+          "texture": "textures/ui/hive/whitetransparency",
+          "alpha": 0.9,
+          "color": [
+            0.26,
+            0.26,
+            0.26
+          ],
+          "keep_ratio": false,
+          "$hidden|default": false,
+          "ignored": "$touch"
+        }
+      }
+    ]
+  },
+  "button_scroll_panel_inner@common.scrolling_panel": {
+    "anchor_to": "top_left",
+    "anchor_from": "top_left",
+    "$show_background": false,
+    "$scroll_bar_contained": true,
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "$scrolling_content": "hive_image_grid_modal.grid_wrapper_wrapper",
+    "$scroll_size": [
+      5,
+      "100% - 18px"
+    ],
+    "$scrolling_pane_size": [
+      "100%",
+      "100%"
+    ],
+    "$scrolling_pane_offset": [
+      0,
+      0
+    ],
+    "$scroll_bar_right_padding_size": [
+      9,
+      0
+    ],
+    "$scroll_view_port_offset": [
+      -5,
+      0
+    ]
+  },
+  "grid_wrapper_wrapper": {
+    "type": "panel",
+    "size": [
+      "100%",
+      "100%c"
+    ],
+    "controls": [
+      {
+        "grid_wrapper@hive_image_grid_modal.grid_wrapper": {}
+      }
+    ]
+  },
+  "grid_wrapper": {
+    "type": "stack_panel",
+    "orientation": "vertical",
+    "offset": [
+      0,
+      7.5
+    ],
+    "size": "$grid_wrapper_size",
+    "controls": [
+      {
+        "description_panel": {
+          "type": "panel",
+          "anchor_from": "top_middle",
+          "anchor_to": "top_middle",
+          "size": [
+            "100%",
+            "100%c + 5px"
+          ],
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (#form_text \u003d \u0027\u0027))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "description": {
+                "size": "$description_size",
+                "layer": 2,
+                "type": "image",
+                "texture": "textures/ui/hive/hive_rounded_corners",
+                "alpha": 0.5,
+                "color": "black",
+                "keep_ratio": false,
+                "controls": [
+                  {
+                    "description_text": {
+                      "type": "label",
+                      "font_type": "default",
+                      "text": "#form_text",
+                      "text_alignment": "left",
+                      "line_padding": 4,
+                      "color": [
+                        0.36,
+                        0.752,
+                        1
+                      ],
+                      "offset": [
+                        10,
+                        5
+                      ],
+                      "font_scale_factor": 1,
+                      "anchor_from": "top_left",
+                      "anchor_to": "top_left",
+                      "size": [
+                        "100% - 20px",
+                        "default"
+                      ],
+                      "layer": 5,
+                      "shadow": true
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "button_grid@hive_image_grid_modal.button_grid": {}
+      }
+    ]
+  },
+  "button_grid": {
+    "type": "grid",
+    "size": [
+      "100%",
+      "100%c"
+    ],
+    "anchor_from": "top_middle",
+    "anchor_to": "top_middle",
+    "grid_item_template": "hive_image_grid_modal.banner_list_entry",
+    "grid_rescaling_type": "horizontal",
+    "collection_name": "form_buttons",
+    "bindings": [
+      {
+        "binding_name": "#form_button_length",
+        "binding_name_override": "#maximum_grid_items"
+      }
+    ]
+  },
+  "banner_list_entry": {
+    "type": "panel",
+    "size": "$button_size",
+    "controls": [
+      {
+        "button@common.button": {
+          "size": [
+            "100% - 5px",
+            "100%c + 5px"
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            2.5,
+            2.5
+          ],
+          "layer": 1,
+          "$pressed_button_name": "button.form_button_click",
+          "controls": [
+            {
+              "default@hive_image_grid_modal.button_image": {
+                "$state": "default"
+              }
+            },
+            {
+              "hover@hive_image_grid_modal.button_image": {
+                "$state": "hover"
+              }
+            },
+            {
+              "pressed@hive_image_grid_modal.button_image": {
+                "$state": "pressed"
+              }
+            }
+          ],
+          "bindings": [
+            {
+              "binding_type": "collection_details",
+              "binding_collection_name": "form_buttons"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "button_image": {
+    "type": "panel",
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "size": [
+      "100%",
+      "100%c"
+    ],
+    "$color|default": "black",
+    "controls": [
+      {
+        "background_wrapper": {
+          "size": [
+            "100%",
+            100
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "layer": 2,
+          "type": "image",
+          "texture": "textures/ui/hive/hive_rounded_corners",
+          "keep_ratio": false,
+          "alpha": 1,
+          "color": [
+            0.1,
+            0.1,
+            0.1
+          ],
+          "controls": [
+            {
+              "icon": {
+                "size": [
+                  "100% - 8px",
+                  "100% - 8px"
+                ],
+                "offset": [
+                  4,
+                  4
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2,
+                "type": "image",
+                "alpha": 1,
+                "keep_ratio": false,
+                "bilinear": true,
+                "bindings": [
+                  {
+                    "binding_name": "#form_button_texture",
+                    "binding_name_override": "#texture",
+                    "binding_type": "collection",
+                    "binding_collection_name": "form_buttons"
+                  },
+                  {
+                    "binding_name": "#form_button_texture_file_system",
+                    "binding_name_override": "#texture_file_system",
+                    "binding_type": "collection",
+                    "binding_collection_name": "form_buttons"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#texture \u003d \u0027\u0027) or (#texture \u003d \u0027loading\u0027)))",
+                    "target_property_name": "#visible"
+                  }
+                ],
+                "controls": [
+                  {
+                    "inside_corners": {
+                      "layer": 10,
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "anchor_from": "top_left",
+                      "anchor_to": "top_left",
+                      "type": "image",
+                      "texture": "textures/ui/hive/hive_inside_corners",
+                      "alpha": 1,
+                      "color": [
+                        0.1,
+                        0.1,
+                        0.1
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "tag": {
+                "size": [
+                  "100%c+3px",
+                  "10px"
+                ],
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 8,
+                "type": "image",
+                "texture": "textures/ui/hive/whitetransparency",
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "alpha": 0.6,
+                "color": "black",
+                "keep_ratio": false,
+                "controls": [
+                  {
+                    "tag_text": {
+                      "type": "label",
+                      "text": "#text",
+                      "color": [
+                        0.95,
+                        0.96,
+                        0
+                      ],
+                      "alpha": 0.9,
+                      "font_scale_factor": 0.75,
+                      "font_type": "MinecraftTen",
+                      "offset": [
+                        0,
+                        -1
+                      ],
+                      "text_alignment": "center",
+                      "line_padding": 10,
+                      "layer": 9,
+                      "bindings": [
+                        {
+                          "binding_type": "collection",
+                          "binding_collection_name": "form_buttons",
+                          "binding_condition": "none",
+                          "binding_name": "#form_button_text",
+                          "binding_name_override": "#form_button_text"
+                        },
+                        {
+                          "binding_type": "view",
+                          "source_property_name": "((#form_button_text - (\u0027%.100s\u0027 * #form_button_text)))",
+                          "target_property_name": "#text"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "bindings": [
+                  {
+                    "binding_type": "collection",
+                    "binding_collection_name": "form_buttons",
+                    "binding_condition": "none",
+                    "binding_name": "#form_button_text",
+                    "binding_name_override": "#form_button_text"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "((#form_button_text - (\u0027%.100s\u0027 * #form_button_text)))",
+                    "target_property_name": "#text"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not (#text \u003d \u0027\u0027))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "banner": {
+//                "$gradient_color|default": [
+//                  0.33,
+//                  0.1,
+//                  0.49
+//                ],
+                "$label_color|default": [
+                  1,
+                  1,
+                  1
+                ],
+                "$label_alpha|default": 0.85,
+                "$label_offset|default": [
+                  0,
+                  -8
+                ],
+//                "$gradient_height|default": [
+//                  "100% - 8px",
+//                  "50px"
+//                ],
+                "layer": 4,
+                "type": "image",
+                "texture": "textures/ui/hive/whitetransparencygradient",
+                "alpha": 0.8,
+                "color": [
+                  0.6,
+                  0.6,
+                  0.6
+                ],
+                "keep_ratio": false,
+                "anchor_from": "bottom_left",
+                "anchor_to": "bottom_left",
+                "size": [
+                  "100% - 8px",
+                  "50px"
+                ],
+                "offset": [
+                  4,
+                  -4
+                ],
+                "variables": [
+                  {
+                    "requires": "($state \u003d \u0027hover\u0027)",
+                    "color": [
+                      0.65,
+                      0.75,
+                      0.62
+                    ],
+                    "$label_color": [
+                      0.98,
+                      1,
+                      0
+                    ],
+                    "$label_alpha": 1,
+                  }
+                ],
+                "controls": [
+                  {
+                    "title_label": {
+                      "type": "panel",
+                      "anchor_from": "bottom_left",
+                      "anchor_to": "bottom_left",
+                      "size": [
+                        "100%",
+                        "100%cm"
+                      ],
+                      "offset": [
+                        0,
+                        -8
+                      ],
+                      "controls": [
+                        {
+                          "title_label": {
+                            "type": "label",
+                            "text": "#text",
+                            "line_padding": 0,
+                            "color": "$label_color",
+                            "alpha": "$label_alpha",
+                            "font_scale_factor": 1.2,
+                            "font_type": "MinecraftTen",
+                            "anchor_from": "top_left",
+                            "anchor_to": "top_left",
+                            "text_alignment": "center",
+                            "size": [
+                              "100%",
+                              "default"
+                            ],
+                            "layer": 5,
+                            "shadow": false,
+                            "bindings": [
+                              {
+                                "binding_type": "collection",
+                                "binding_collection_name": "form_buttons",
+                                "binding_condition": "none",
+                                "binding_name": "#form_button_text",
+                                "binding_name_override": "#form_button_text"
+                              },
+                              {
+                                "binding_type": "view",
+                                "source_property_name": "((\u0027%.100s\u0027 * #form_button_text) - \u0027\t\u0027)",
+                                "target_property_name": "#text"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "title_label_shadow": {
+                            "type": "label",
+                            "text": "#text",
+                            "line_padding": 0,
+                            "color": "black",
+                            "font_scale_factor": 1.2,
+                            "font_type": "MinecraftTen",
+                            "anchor_from": "top_left",
+                            "anchor_to": "top_left",
+                            "text_alignment": "center",
+                            "size": [
+                              "100%",
+                              "default"
+                            ],
+                            "offset": [
+                              1,
+                              1
+                            ],
+                            "layer": 4,
+                            "alpha": 0.5,
+                            "shadow": false,
+                            "bindings": [
+                              {
+                                "binding_type": "collection",
+                                "binding_collection_name": "form_buttons",
+                                "binding_condition": "none",
+                                "binding_name": "#form_button_text",
+                                "binding_name_override": "#form_button_text"
+                              },
+                              {
+                                "binding_type": "view",
+                                "source_property_name": "((\u0027%.100s\u0027 * #form_button_text) - \u0027\t\u0027)",
+                                "target_property_name": "#text"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
