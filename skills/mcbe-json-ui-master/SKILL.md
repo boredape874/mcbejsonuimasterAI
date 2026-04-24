@@ -25,7 +25,7 @@ Use this as the top-level skill for Bedrock JSON UI work.
    - tooling and editor workflow
 3. Read only the matching specialized skill reference.
 4. Answer with file-level changes, exact JSON locations, and exact texture paths.
-5. State whether a path or rule is:
+5. State whether a path, practice, or rule is:
    - confirmed from source
    - inferred from working samples
    - not verified

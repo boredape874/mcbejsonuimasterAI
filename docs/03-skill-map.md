@@ -104,6 +104,7 @@ Use for:
 - vanilla item icon verification
 - vanilla block icon verification
 - current vanilla screen file lookup
+- explaining how to search and apply the right vanilla source
 
 This skill uses `ZtechNetwork/MCBVanillaResourcePack` as the upstream authority.
 

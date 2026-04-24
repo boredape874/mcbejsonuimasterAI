@@ -12,6 +12,8 @@ Read these first:
 - `docs/05-external-research-map.md`
 - `docs/06-json-ui-rules.md`
 - `docs/12-local-utils-and-patterns.md`
+- `docs/13-vanilla-asset-workflow.md`
+- `docs/14-json-ui-best-practices.md`
 
 ## Level 2: topic indexes
 
@@ -26,6 +28,7 @@ Use topic indexes when the task type is known:
 - debugging
 - addon integration
 - vanilla lookup
+- vanilla asset workflow
 - external research
 
 ## Level 3: subtopic notes
@@ -45,6 +48,8 @@ Use subtopic notes only for the exact problem:
 - scroll panels
 - slider and toggle examples
 - vanilla UI texture lookup
+- vanilla asset usage workflow
+- performance and compatibility patterns
 
 ## Rule
 

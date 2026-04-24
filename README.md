@@ -91,6 +91,8 @@ See:
 - [Wiki Mirror Guide](docs/10-bedrock-wiki-mirror.md)
 - [Basics And Mental Model](docs/11-basics-and-mental-model.md)
 - [Local Utils And Patterns](docs/12-local-utils-and-patterns.md)
+- [Vanilla Asset Workflow](docs/13-vanilla-asset-workflow.md)
+- [JSON UI Best Practices](docs/14-json-ui-best-practices.md)
 
 ## Quick start
 
@@ -157,6 +159,7 @@ That skill routes into smaller topic files such as:
 - research
 - schemas
 - tooling
+- best-practice-oriented pattern selection
 
 ### Typical prompts
 
@@ -208,6 +211,12 @@ Use mcbe-json-ui-patterns and mcbe-json-ui-hud-and-chat, and adapt the local top
 Use mcbe-json-ui-vanilla-assets and verify the correct vanilla texture path for this icon.
 ```
 
+#### Vanilla asset usage, not just path lookup
+
+```text
+Use mcbe-json-ui-vanilla-assets and explain how to find the right Bedrock vanilla UI texture, item icon, or block icon path for this JSON UI control.
+```
+
 #### Schema setup
 
 ```text
@@ -251,6 +260,8 @@ Then read as needed:
 - [Schema And Tooling](docs/09-schema-and-tooling.md)
 - [Wiki Mirror Guide](docs/10-bedrock-wiki-mirror.md)
 - [Local Utils And Patterns](docs/12-local-utils-and-patterns.md)
+- [Vanilla Asset Workflow](docs/13-vanilla-asset-workflow.md)
+- [JSON UI Best Practices](docs/14-json-ui-best-practices.md)
 
 ## Is this enough to become a "JSON UI Master AI" in one shot?
 

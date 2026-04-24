@@ -135,6 +135,8 @@ Upstream authority:
   - <https://github.com/Mojang/bedrock-samples/tree/main/resource_pack/ui>
 - Bedrock Wiki JSON UI docs
   - <https://wiki.bedrock.dev/json-ui/json-ui-documentation>
+- Bedrock Wiki `best-practices`
+  - compatibility and performance guidance for JSON UI structure
 - `LeGend077/json-ui-examples`
   - pattern snippets for progress bars, toggles, sliders, scroll panels, and layout offsets
 - `Refaltor77/EasyUIBuilder`
@@ -145,6 +147,8 @@ Upstream authority:
   - high-level mental model and terminology
 - Bedrock Wiki `add-hud-elements`
   - reliable explanation of `root_panel` modification-based HUD insertion
+- Bedrock Wiki `numerical-item-ids`
+  - useful context when JSON UI examples or older systems refer to numeric item IDs for rendering behavior
 - `Blockception/Minecraft-bedrock-json-schemas`
   - Bedrock-wide schema project with UI schema coverage
 - `DJStompZone/MCBE-JSON-UI-Schemas`

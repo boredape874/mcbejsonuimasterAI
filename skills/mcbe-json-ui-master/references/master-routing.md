@@ -15,6 +15,8 @@
 - `../../../docs/10-bedrock-wiki-mirror.md`
 - `../../../docs/11-basics-and-mental-model.md`
 - `../../../docs/12-local-utils-and-patterns.md`
+- `../../../docs/13-vanilla-asset-workflow.md`
+- `../../../docs/14-json-ui-best-practices.md`
 
 ## Route by request type
 
@@ -83,6 +85,14 @@ Then load:
 - and only the exact needed subtopic under `topics/addon/`
 
 ### vanilla icon or texture path verification
+
+Use `mcbe-json-ui-vanilla-assets`.
+Then load:
+
+- `topics/vanilla/index.md`
+- and only the exact needed subtopic under `topics/vanilla/`
+
+### "what is the right vanilla source and how do I use it"
 
 Use `mcbe-json-ui-vanilla-assets`.
 Then load:
