@@ -93,6 +93,7 @@ See:
 - [Local Utils And Patterns](docs/12-local-utils-and-patterns.md)
 - [Vanilla Asset Workflow](docs/13-vanilla-asset-workflow.md)
 - [JSON UI Best Practices](docs/14-json-ui-best-practices.md)
+- [JSON UI File Role Catalog](docs/15-json-ui-file-role-catalog.md)
 
 ## Quick start
 
@@ -276,6 +277,7 @@ Then read as needed:
 - [Local Utils And Patterns](docs/12-local-utils-and-patterns.md)
 - [Vanilla Asset Workflow](docs/13-vanilla-asset-workflow.md)
 - [JSON UI Best Practices](docs/14-json-ui-best-practices.md)
+- [JSON UI File Role Catalog](docs/15-json-ui-file-role-catalog.md)
 
 ## Is this enough to become a "JSON UI Master AI" in one shot?
 

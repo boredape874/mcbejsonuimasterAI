@@ -6,3 +6,4 @@ Subtopics:
 
 - `resource-pack-basics.md`
 - `screen-size-and-layout.md`
+- `file-roles.md`

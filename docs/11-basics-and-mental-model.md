@@ -21,6 +21,10 @@ For JSON UI work, the pack is not just a single `hud_screen.json`. The UI usuall
 - texture paths under `textures/ui/*`
 - sometimes item and block atlases
 
+For file-by-file responsibility, also read:
+
+- `docs/15-json-ui-file-role-catalog.md`
+
 ## What Bedrock JSON UI is
 
 Bedrock JSON UI is a data-driven client UI system rendered by the Bedrock client.
