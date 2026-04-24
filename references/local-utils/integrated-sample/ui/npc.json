@@ -1,0 +1,253 @@
+{
+  "namespace": "npc",
+
+  "main_panel": {
+    "type": "panel",
+    "size": ["100%", "100%"],
+    "anchor_from": "center",
+    "anchor_to": "center",
+    "controls": [
+      {
+        "screen_dim": {
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "size": ["100%", "100%"],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "alpha": 0.55,
+          "layer": 0
+        }
+      },
+      {
+        "dialog_shell": {
+          "type": "panel",
+          "anchor_from": "bottom_middle",
+          "anchor_to": "bottom_middle",
+          "size": [360, 168],
+          "offset": [0, -26],
+          "layer": 2,
+          "controls": [
+            {
+              "dialog_frame": {
+                "type": "image",
+                "texture": "textures/dialogue/background",
+                "size": ["100%", "100%"],
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "controls": [
+                  {
+                    "portrait": {
+                      "type": "image",
+                      "texture": "textures/dialogue/default",
+                      "size": [96, 132],
+                      "anchor_from": "bottom_left",
+                      "anchor_to": "bottom_left",
+                      "offset": [14, -10],
+                      "alpha": 0.95,
+                      "layer": 1
+                    }
+                  },
+                  {
+                    "accent@npc.npc_design": {
+                      "anchor_from": "top_right",
+                      "anchor_to": "top_right",
+                      "offset": [-22, 18]
+                    }
+                  },
+                  {
+                    "title": {
+                      "type": "label",
+                      "text": "#title",
+                      "font_type": "MinecraftTen",
+                      "font_scale_factor": 1.0,
+                      "layer": 3,
+                      "color": [0.98, 0.92, 0.76],
+                      "shadow": true,
+                      "offset": [118, 22],
+                      "anchor_from": "top_left",
+                      "anchor_to": "top_left",
+                      "bindings": [
+                        {
+                          "binding_type": "view",
+                          "source_property_name": "(#title_text - 'menu.npc')",
+                          "target_property_name": "#title"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "body": {
+                      "type": "label",
+                      "text": "#form",
+                      "font_type": "MinecraftTen",
+                      "font_scale_factor": 0.9,
+                      "size": [214, 54],
+                      "layer": 3,
+                      "color": [0.95, 0.95, 0.92],
+                      "shadow": false,
+                      "text_alignment": "left",
+                      "offset": [118, 46],
+                      "anchor_from": "top_left",
+                      "anchor_to": "top_left",
+                      "bindings": [
+                        {
+                          "binding_type": "view",
+                          "source_property_name": "(#form_text - 'menu.invisible')",
+                          "target_property_name": "#form"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "button_panel": {
+                      "type": "panel",
+                      "size": [194, 66],
+                      "anchor_from": "bottom_right",
+                      "anchor_to": "bottom_right",
+                      "offset": [-18, -16],
+                      "controls": [
+                        {
+                          "stack_panel": {
+                            "type": "stack_panel",
+                            "orientation": "vertical",
+                            "anchor_from": "top_left",
+                            "anchor_to": "top_left",
+                            "size": ["100%", "100%c"],
+                            "collection_name": "form_buttons",
+                            "controls": [
+                              { "b0@npc.npc_button": { "collection_index": 0 } },
+                              {
+                                "gap": {
+                                  "type": "panel",
+                                  "size": ["100%", 6]
+                                }
+                              },
+                              { "b1@npc.npc_button": { "collection_index": 1 } }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_property_name": "(not (#title_text - 'menu.npc' = #title_text))",
+        "target_property_name": "#visible"
+      }
+    ]
+  },
+
+  "npc_button": {
+    "$button_size|default": [194, 24],
+    "$slot_size|default": [194, 24],
+    "$offset|default": [0, 0],
+    "$text_offset|default": [0, 6],
+    "$alpha|default": 0.8,
+    "$default_texture|default": "textures/ui/Black",
+    "$hover_texture|default": "textures/custom_ui/hover",
+    "type": "panel",
+    "size": "$slot_size",
+    "offset": "$offset",
+    "controls": [
+      {
+        "main_ui": {
+          "type": "panel",
+          "size": "$button_size",
+          "controls": [
+            {
+              "form_button@common_buttons.underline_button": {
+                "$pressed_button_name": "button.form_button_click",
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "size": "$button_size",
+                "$button_text": "#null",
+                "default_control": "default",
+                "pressed_control": "hover",
+                "hover_control": "hover",
+                "offset": "$offset",
+                "$button_text_binding_type": "collection",
+                "$button_text_grid_collection_name": "form_buttons",
+                "$button_text_max_size": ["100%", 20],
+                "bindings": [
+                  {
+                    "binding_type": "collection_details",
+                    "binding_collection_name": "form_buttons"
+                  }
+                ],
+                "controls": [
+                  {
+                    "default@common.empty_panel": {
+                      "controls": [
+                        {
+                          "image": {
+                            "type": "image",
+                            "texture": "$default_texture",
+                            "layer": 1,
+                            "size": "$button_size",
+                            "alpha": "$alpha"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "hover@common.empty_panel": {
+                      "controls": [
+                        {
+                          "image": {
+                            "type": "image",
+                            "texture": "$hover_texture",
+                            "layer": 1,
+                            "alpha": 1.0,
+                            "size": ["280%", "280%"]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "button_label": {
+                "type": "label",
+                "text": "#form_button_text",
+                "layer": 20,
+                "size": "$button_size",
+                "text_alignment": "center",
+                "color": [0.98, 0.97, 0.93],
+                "shadow": false,
+                "offset": "$text_offset",
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "bindings": [
+                  {
+                    "binding_name": "#form_button_text",
+                    "binding_type": "collection",
+                    "binding_collection_name": "form_buttons"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "npc_design": {
+    "type": "image",
+    "texture": "textures/custom_ui/design",
+    "alpha": 0.28,
+    "layer": 2,
+    "size": [92, 20]
+  }
+}

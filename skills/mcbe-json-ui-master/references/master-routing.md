@@ -13,6 +13,8 @@
 - `../../../docs/08-reference-hierarchy.md`
 - `../../../docs/09-schema-and-tooling.md`
 - `../../../docs/10-bedrock-wiki-mirror.md`
+- `../../../docs/11-basics-and-mental-model.md`
+- `../../../docs/12-local-utils-and-patterns.md`
 
 ## Route by request type
 
@@ -23,6 +25,14 @@ Then load:
 
 - `topics/foundations/index.md`
 - and only the exact needed subtopic under `topics/foundations/`
+
+### basics, mental model, pack overview, beginner explanation
+
+Use `mcbe-json-ui-basics`.
+Then load:
+
+- `topics/basics/index.md`
+- and only the exact needed subtopic under `topics/basics/`
 
 ### bindings, variables, parsing, conditions
 

@@ -1,0 +1,205 @@
+{
+  "namespace": "hud",
+
+  "hud_screen": {
+    "render_only_when_topmost": false
+  },
+
+  "root_panel/sidebar": {
+    "ignored": true
+  },
+
+  "root_panel": {
+    "modifications": [
+      {
+        "array_name": "controls",
+        "operation": "insert_back",
+        "value": [
+          {
+            "scoreboard_panel@hud.dual_scoreboard": {
+              "bindings": [
+                {
+                  "binding_name": "#scoreboard_sidebar_visible",
+                  "binding_name_override": "#visible"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+
+  "dual_scoreboard": {
+    "type": "panel",
+    "controls": [
+      { "hive@scoreboard.hive_sidebar": {} },
+      { "default@scoreboard.default_sidebar": {} }
+    ]
+  },
+
+  "subtitle_factory": {
+    "type": "stack_panel",
+    "orientation": "vertical",
+    "size": ["100%", "100%cm"],
+    "layer": 200,
+    "anchor_from": "top_middle",
+    "anchor_to": "top_middle",
+    "offset": [0, 18],
+    "factory": {
+      "name": "chat_item_factory",
+      "max_children_size": 1,
+      "control_ids": {
+        "chat_item": "@hud.subtitle_item"
+      }
+    }
+  },
+
+  "subtitle_alpha_in": {
+    "anim_type": "alpha",
+    "easing": "out_cubic",
+    "duration": 0.18,
+    "from": 0,
+    "to": 0.88,
+    "next": "@hud.subtitle_alpha_wait"
+  },
+  "subtitle_alpha_wait": {
+    "anim_type": "wait",
+    "duration": 2.7,
+    "next": "@hud.subtitle_alpha_out"
+  },
+  "subtitle_alpha_out": {
+    "anim_type": "alpha",
+    "easing": "in_cubic",
+    "duration": 0.28,
+    "from": 0.88,
+    "to": 0,
+    "next": "@hud.subtitle_destroy"
+  },
+  "subtitle_slide_in": {
+    "anim_type": "offset",
+    "easing": "out_cubic",
+    "duration": 0.22,
+    "from": [0, -10],
+    "to": [0, 0],
+    "next": "@hud.subtitle_slide_wait"
+  },
+  "subtitle_slide_wait": {
+    "anim_type": "wait",
+    "duration": 2.7,
+    "next": "@hud.subtitle_slide_out"
+  },
+  "subtitle_slide_out": {
+    "anim_type": "offset",
+    "easing": "in_cubic",
+    "duration": 0.28,
+    "from": [0, 0],
+    "to": [0, -8]
+  },
+  "subtitle_destroy": {
+    "anim_type": "wait",
+    "duration": 0,
+    "destroy_at_end": "chat_grid_item"
+  },
+
+  "subtitle_item": {
+    "$subtitle_flag": "!toptitle:",
+    "type": "panel",
+    "size": ["100%", "100%cm"],
+    "controls": [
+      {
+        "subtitle_banner": {
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "color": [0, 0, 0],
+          "alpha": 0,
+          "size": ["100%c + 48px", 30],
+          "anchor_from": "top_middle",
+          "anchor_to": "top_middle",
+          "anims": [
+            "@hud.subtitle_alpha_in",
+            "@hud.subtitle_slide_in"
+          ],
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "(#text - '<' - '>')",
+              "target_property_name": "#cleaned"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (('x' + #cleaned + 'x') - ('x' + $subtitle_flag) = ('x' + #cleaned + 'x')))",
+              "target_property_name": "#visible"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(#cleaned - $subtitle_flag)",
+              "target_property_name": "#display_text"
+            }
+          ],
+          "controls": [
+            {
+              "top_line": {
+                "type": "image",
+                "texture": "textures/ui/Black",
+                "color": [0.86, 0.72, 0.35],
+                "alpha": 1.0,
+                "size": ["100%", 2],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [0, 4]
+              }
+            },
+            {
+              "subtitle_label": {
+                "type": "label",
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "offset": [0, 1],
+                "text": "#display_text",
+                "color": [0.98, 0.95, 0.9],
+                "font_type": "MinecraftTen",
+                "font_scale_factor": 0.92,
+                "text_alignment": "center",
+                "shadow": true
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "chat_grid_item/chat_background": {
+    "$subtitle_flag": "!toptitle:",
+    "bindings": [
+      {
+        "binding_name": "#chat_text",
+        "binding_name_override": "#text",
+        "binding_collection_name": "chat_text_grid"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#text - '<' - '>')",
+        "target_property_name": "#output"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((#output - $subtitle_flag) = #output)",
+        "target_property_name": "#visible"
+      }
+    ]
+  },
+
+  "hud_content": {
+    "modifications": [
+      {
+        "array_name": "controls",
+        "operation": "insert_front",
+        "value": [
+          { "subtitle_display@hud.subtitle_factory": {} }
+        ]
+      }
+    ]
+  }
+}

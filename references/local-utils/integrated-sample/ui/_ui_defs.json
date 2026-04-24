@@ -1,0 +1,11 @@
+{
+    "ui_defs": [
+        "ui/ui_common.json",
+        "ui/scoreboards.json",
+        "ui/hud_screen.json",
+        "ui/chat_screen.json",
+        "ui/server_form.json",
+        "ui/form.json",
+        "ui/npc.json"
+    ]
+}

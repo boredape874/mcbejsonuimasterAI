@@ -1,0 +1,112 @@
+{
+  "namespace": "tooltip_card_utils",
+  "tooltip_text_stack": {
+    "type": "stack_panel",
+    "orientation": "vertical",
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "offset": [
+      6,
+      4
+    ],
+    "size": [
+      "100%c",
+      "100%c"
+    ],
+    "$content|default": [],
+    "controls": "$content"
+  },
+  "tooltip_common_card": {
+    "type": "image",
+    "texture": "tooltip_assets/common_background",
+    "alpha": 0.92,
+    "size": [
+      "100%c + 24px",
+      "100%cm + 10px"
+    ],
+    "$content|default": [],
+    "controls": "$content"
+  },
+  "tooltip_uncommon_card": {
+    "type": "image",
+    "texture": "tooltip_assets/uncommon_background",
+    "alpha": 0.92,
+    "size": [
+      "100%c + 24px",
+      "100%cm + 10px"
+    ],
+    "$content|default": [],
+    "controls": "$content"
+  },
+  "tooltip_rare_card": {
+    "type": "image",
+    "texture": "tooltip_assets/rare_background",
+    "alpha": 0.92,
+    "size": [
+      "100%c + 24px",
+      "100%cm + 10px"
+    ],
+    "$content|default": [],
+    "controls": "$content"
+  },
+  "tooltip_epic_card": {
+    "type": "image",
+    "texture": "tooltip_assets/epic_background",
+    "alpha": 0.92,
+    "size": [
+      "100%c + 24px",
+      "100%cm + 10px"
+    ],
+    "$content|default": [],
+    "controls": "$content"
+  },
+  "tooltip_legendary_card": {
+    "type": "image",
+    "texture": "tooltip_assets/legendary_background",
+    "alpha": 0.92,
+    "size": [
+      "100%c + 24px",
+      "100%cm + 10px"
+    ],
+    "$content|default": [],
+    "controls": "$content"
+  },
+  "tooltip_material_card": {
+    "type": "image",
+    "texture": "tooltip_assets/material_background",
+    "alpha": 0.92,
+    "size": [
+      "100%c + 24px",
+      "100%cm + 10px"
+    ],
+    "$content|default": [],
+    "controls": "$content"
+  },
+  "tooltip_title_label": {
+    "type": "label",
+    "text": "#text",
+    "text_alignment": "left",
+    "localize": false,
+    "layer": 2,
+    "shadow": true,
+    "color": [
+      1,
+      1,
+      1
+    ],
+    "font_size": "medium"
+  },
+  "tooltip_body_label": {
+    "type": "label",
+    "text": "#text",
+    "text_alignment": "left",
+    "localize": false,
+    "layer": 2,
+    "shadow": true,
+    "color": [
+      0.85,
+      0.85,
+      0.85
+    ]
+  }
+}

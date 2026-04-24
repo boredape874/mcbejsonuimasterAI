@@ -63,6 +63,55 @@ Primary files:
 - `blocks.json`
 - `manifest.json`
 
+## `references/local-utils/json-ui-utils`
+
+Strong for:
+
+- topbar chat notifications
+- reusable title-driven progress bars
+- prefix routing
+- string splitting
+- preserve-state patterns
+- tooltip cards
+- tablist HUD composition
+
+Primary files:
+
+- `topbar_chat_notification_utils.json`
+- `topbar_chat_notification_hud_patch.json`
+- `topbar_chat_notification_chat_screen_patch.json`
+- `progress_bar_utils.json`
+- `title_progress_utils.json`
+- `animated_bar_extra_example.json`
+- `split_string_utils.json`
+- `preserve_state_utils.json`
+- `prefix_router_utils.json`
+- `tooltip_card_utils.json`
+- `tablist_hud_screen.json`
+
+## `references/local-utils/integrated-sample`
+
+Strong for:
+
+- compact end-to-end pack structure
+- `_ui_defs.json` registration
+- HUD and chat coordination
+- scoreboards
+- server forms
+- NPC screens
+- shared template reuse
+
+Primary files:
+
+- `ui/_ui_defs.json`
+- `ui/ui_common.json`
+- `ui/hud_screen.json`
+- `ui/chat_screen.json`
+- `ui/scoreboards.json`
+- `ui/server_form.json`
+- `ui/form.json`
+- `ui/npc.json`
+
 ## `references/upstreams/MCBVanillaResourcePack`
 
 Optional local mirror of the upstream vanilla pack authority.
@@ -92,6 +141,10 @@ Upstream authority:
   - builder-oriented examples and generated JSON UI samples
 - `Herobrine643928/Chest-UI`
   - chest and furnace server-form pack with Script API support
+- Bedrock Wiki `json-ui-intro`
+  - high-level mental model and terminology
+- Bedrock Wiki `add-hud-elements`
+  - reliable explanation of `root_panel` modification-based HUD insertion
 - `Blockception/Minecraft-bedrock-json-schemas`
   - Bedrock-wide schema project with UI schema coverage
 - `DJStompZone/MCBE-JSON-UI-Schemas`

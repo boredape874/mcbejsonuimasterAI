@@ -6,3 +6,4 @@ Subtopics:
 
 - `entry-points.md`
 - `namespaces-and-modifications.md`
+- `integrated-pack-structure.md`

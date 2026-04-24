@@ -1,11 +1,23 @@
 # Skill Map
 
+# `mcbe-json-ui-basics`
+
+Use for:
+
+- beginner onboarding
+- what a resource pack is
+- what JSON UI is
+- `_ui_defs.json` mental model
+- screen vs template distinctions
+- practical screen-size and layout expectations
+
 ## `mcbe-json-ui-master`
 
 Top-level router for end-to-end Bedrock JSON UI work.
 
 Use this when the task spans multiple areas:
 
+- basics or mental model
 - pack structure
 - HUD or chat
 - title or actionbar protocols
@@ -59,10 +71,12 @@ Use for:
 Use for:
 
 - animated bars
+- topbar notifications
 - reusable templates
 - chest UI patterns
 - pocket container patterns
 - scoreboard patterns
+- tablist and utility-library patterns
 
 ## `mcbe-json-ui-debugging`
 

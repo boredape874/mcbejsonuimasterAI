@@ -1,0 +1,38 @@
+{
+  "namespace": "hud",
+
+  "topbar_chat_notification_item@topbar_chat_notification_utils.notification_item": {
+    "$notify_flag": "!topbar:",
+    "$default_icon_texture": "textures/ui/icon_import"
+  },
+
+  "topbar_chat_notification_factory@topbar_chat_notification_utils.notification_factory_host": {
+    "$item_control": "hud.topbar_chat_notification_item"
+  },
+
+  "hud_screen": {
+    "render_only_when_topmost": false,
+    "$additional_screen_content": "hud.topbar_chat_notification_factory"
+  },
+
+  "chat_grid_item/chat_background": {
+    "$flag": "!topbar:",
+    "bindings": [
+      {
+        "binding_name": "#chat_text",
+        "binding_name_override": "#text",
+        "binding_collection_name": "chat_text_grid"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#chat_text - '<' - '>')",
+        "target_property_name": "#output"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((#output - $flag) = #output)",
+        "target_property_name": "#visible"
+      }
+    ]
+  }
+}

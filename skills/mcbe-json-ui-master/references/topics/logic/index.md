@@ -6,3 +6,4 @@ Subtopics:
 
 - `bindings-and-variables.md`
 - `string-protocols.md`
+- `utility-string-routing.md`

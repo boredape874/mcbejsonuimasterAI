@@ -1,0 +1,58 @@
+{
+  "namespace": "prefix_router_utils",
+
+  "prefixed_text_data_panel_base": {
+    "$prefix|default": "info:",
+    "$raw_text_binding_name|default": "#text",
+    "type": "panel",
+    "size": [ 0, 0 ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_property_name": "(not (('짠?? + $raw_text_binding_name + '짠r') - ('짠?? + $prefix) = ('짠?? + $raw_text_binding_name + '짠r')))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "($raw_text_binding_name - $prefix)",
+        "target_property_name": "#data"
+      }
+    ]
+  },
+
+  "prefixed_title_data_panel@prefix_router_utils.prefixed_text_data_panel_base": {
+    "$raw_text_binding_name": "#hud_title_text_string"
+  },
+
+  "prefixed_actionbar_data_panel@prefix_router_utils.prefixed_text_data_panel_base": {
+    "$raw_text_binding_name": "#hud_actionbar_text_string"
+  },
+
+  "prefixed_chat_data_panel@prefix_router_utils.prefixed_text_data_panel_base": {
+    "$raw_text_binding_name": "#text"
+  },
+
+  "hud_flag_title_data_panel@prefix_router_utils.prefixed_title_data_panel": {
+    "$prefix": "!hud:"
+  },
+
+  "hud_flag_chat_data_panel@prefix_router_utils.prefixed_chat_data_panel": {
+    "$prefix": "!hud:"
+  },
+
+  "dialog_title_data_panel@prefix_router_utils.prefixed_title_data_panel": {
+    "$prefix": "dialog:"
+  },
+
+  "dialog_actionbar_data_panel@prefix_router_utils.prefixed_actionbar_data_panel": {
+    "$prefix": "dialog:"
+  },
+
+  "info_title_data_panel@prefix_router_utils.prefixed_title_data_panel": {
+    "$prefix": "info:"
+  },
+
+  "info_actionbar_data_panel@prefix_router_utils.prefixed_actionbar_data_panel": {
+    "$prefix": "info:"
+  }
+}

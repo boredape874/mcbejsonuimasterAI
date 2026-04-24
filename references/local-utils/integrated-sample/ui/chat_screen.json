@@ -1,0 +1,19 @@
+{
+  "namespace": "chat",
+
+  "messages_text/text": {
+    "$subtitle_flag": "!toptitle:",
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_property_name": "(('x' + #text + 'x') - ('x' + $subtitle_flag) = ('x' + #text + 'x'))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(('x' + #output + 'x') - ('x' + $subtitle_flag) = ('x' + #output + 'x'))",
+        "target_property_name": "#visible"
+      }
+    ]
+  }
+}

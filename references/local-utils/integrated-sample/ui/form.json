@@ -1,0 +1,15 @@
+{
+    "namespace": "form",
+    "long_form_replacement": {
+        "type": "panel",
+        "size": [
+            "100%",
+            "100%"
+        ],
+        "controls": [
+            {
+                "npc_panel@npc.main_panel": {}
+            }
+        ]
+    }
+}

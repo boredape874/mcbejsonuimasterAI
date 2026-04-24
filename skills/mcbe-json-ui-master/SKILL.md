@@ -1,6 +1,6 @@
 ---
 name: mcbe-json-ui-master
-description: Comprehensive Minecraft Bedrock JSON UI master skill. Use when Codex must handle Bedrock JSON UI end to end across pack structure, HUD, chat, title or actionbar driven UI, server form customization, bindings and string parsing logic, reusable patterns, addon integration, debugging, vanilla texture path lookup, source selection across local sample packs, Mojang bedrock-samples, Bedrock Wiki, and ZtechNetwork/MCBVanillaResourcePack, or schema and tooling workflows such as JSON UI editors, builders, and schema-based validation.
+description: Comprehensive Minecraft Bedrock JSON UI master skill. Use when Codex must handle Bedrock JSON UI end to end across basics and mental models, pack structure, HUD, chat, title or actionbar driven UI, server form customization, bindings and string parsing logic, reusable patterns, addon integration, debugging, vanilla texture path lookup, source selection across local sample packs, local utility mirrors, Mojang bedrock-samples, Bedrock Wiki, and ZtechNetwork/MCBVanillaResourcePack, or schema and tooling workflows such as JSON UI editors, builders, and schema-based validation.
 ---
 
 # MCBE JSON UI Master
@@ -11,6 +11,7 @@ Use this as the top-level skill for Bedrock JSON UI work.
 
 1. Read `references/master-routing.md`.
 2. Classify the request by primary need:
+   - basics or mental model
    - structure
    - logic
    - HUD or chat

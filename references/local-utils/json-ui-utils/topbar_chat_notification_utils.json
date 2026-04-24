@@ -1,0 +1,273 @@
+{
+  "namespace": "topbar_chat_notification_utils",
+
+  "notification_factory_host": {
+    "$layer|default": 200,
+    "$factory_size|default": [232, "100%cm"],
+    "$factory_offset|default": [0, 12],
+    "$factory_name|default": "chat_item_factory",
+    "$max_children_size|default": 5,
+    "$item_control|default": "topbar_chat_notification_utils.notification_item",
+    "type": "stack_panel",
+    "orientation": "vertical",
+    "size": "$factory_size",
+    "layer": "$layer",
+    "anchor_from": "top_middle",
+    "anchor_to": "top_middle",
+    "offset": "$factory_offset",
+    "factory": {
+      "name": "$factory_name",
+      "max_children_size": "$max_children_size",
+      "control_ids": {
+        "chat_item": "@$item_control"
+      }
+    }
+  },
+
+  "notification_alpha_in": {
+    "anim_type": "alpha",
+    "easing": "out_cubic",
+    "duration": 0.12,
+    "from": 0,
+    "to": 0.08,
+    "next": "@topbar_chat_notification_utils.notification_alpha_wait"
+  },
+
+  "notification_alpha_wait": {
+    "anim_type": "wait",
+    "duration": 2.8,
+    "next": "@topbar_chat_notification_utils.notification_alpha_out"
+  },
+
+  "notification_alpha_out": {
+    "anim_type": "alpha",
+    "easing": "in_cubic",
+    "duration": 0.2,
+    "from": 0.08,
+    "to": 0,
+    "next": "@topbar_chat_notification_utils.notification_destroy"
+  },
+
+  "notification_slide_in": {
+    "anim_type": "offset",
+    "easing": "out_cubic",
+    "duration": 0.35,
+    "from": [0, -42],
+    "to": [0, 12],
+    "next": "@topbar_chat_notification_utils.notification_slide_wait"
+  },
+
+  "notification_slide_wait": {
+    "anim_type": "wait",
+    "duration": 2.8,
+    "next": "@topbar_chat_notification_utils.notification_slide_out"
+  },
+
+  "notification_slide_out": {
+    "anim_type": "offset",
+    "easing": "in_cubic",
+    "duration": 0.28,
+    "from": [0, 12],
+    "to": [0, -42]
+  },
+
+  "notification_destroy": {
+    "$destroy_target|default": "chat_grid_item",
+    "anim_type": "wait",
+    "duration": 0,
+    "destroy_at_end": "$destroy_target"
+  },
+
+  "notification_item": {
+    "$notify_flag|default": "!topbar:",
+    "$default_icon_texture|default": "textures/ui/icon_import",
+    "$item_size|default": [232, 25],
+    "$card_size|default": [232, 18],
+    "$card_offset|default": [0, 0],
+    "$card_texture|default": "textures/ui/hud_tip_text_background",
+    "$card_color|default": [0, 0, 0],
+    "$icon_size|default": [12, 12],
+    "$icon_offset|default": [7, 0],
+    "$text_size|default": [168, 14],
+    "$text_offset|default": [8, 0],
+    "$text_color|default": [1, 1, 1],
+    "$text_font_type|default": "smooth",
+    "$text_scale|default": 1.0,
+    "type": "panel",
+    "size": "$item_size",
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "controls": [
+      {
+        "topbar_body": {
+          "type": "image",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "size": "$card_size",
+          "offset": "$card_offset",
+          "texture": "$card_texture",
+          "color": "$card_color",
+          "alpha": 0,
+          "anims": [
+            "@topbar_chat_notification_utils.notification_alpha_in",
+            "@topbar_chat_notification_utils.notification_slide_in"
+          ],
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (('x' + #text + 'x') - ('x' + $notify_flag) = ('x' + #text + 'x')))",
+              "target_property_name": "#visible"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(#text - $notify_flag)",
+              "target_property_name": "#payload_text"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "((#payload_text - ';') = #payload_text)",
+              "target_property_name": "#use_default_icon"
+            }
+          ],
+          "controls": [
+            {
+              "left_icon_default": {
+                "type": "image",
+                "anchor_from": "left_middle",
+                "anchor_to": "left_middle",
+                "size": "$icon_size",
+                "offset": "$icon_offset",
+                "texture": "$default_icon_texture",
+                "alpha": 1,
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "topbar_body",
+                    "source_property_name": "#use_default_icon",
+                    "target_property_name": "#visible",
+                    "resolve_sibling_scope": true
+                  }
+                ]
+              }
+            },
+            {
+              "left_icon_dynamic": {
+                "type": "image",
+                "anchor_from": "left_middle",
+                "anchor_to": "left_middle",
+                "size": "$icon_size",
+                "offset": "$icon_offset",
+                "texture": "$default_icon_texture",
+                "alpha": 1,
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "topbar_body",
+                    "source_property_name": "(not #use_default_icon)",
+                    "target_property_name": "#visible",
+                    "resolve_sibling_scope": true
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "topbar_body",
+                    "source_property_name": "#payload_text",
+                    "target_property_name": "#output",
+                    "resolve_sibling_scope": true
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#search + 1 * (not (('%.'+#search+'s') * #output = #output)) and (('%.'+#search+'s') * #output = ('%.'+#search+'s') * #output - ';')))",
+                    "target_property_name": "#search"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "((('%.'+#search+'s') * #output) - ';')",
+                    "target_property_name": "#texture"
+                  }
+                ]
+              }
+            },
+            {
+              "message_text_default": {
+                "type": "label",
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "offset": "$text_offset",
+                "size": "$text_size",
+                "text": "#text",
+                "color": "$text_color",
+                "font_type": "$text_font_type",
+                "font_scale_factor": "$text_scale",
+                "text_alignment": "center",
+                "shadow": false,
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "topbar_body",
+                    "source_property_name": "#use_default_icon",
+                    "target_property_name": "#visible",
+                    "resolve_sibling_scope": true
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "topbar_body",
+                    "source_property_name": "#payload_text",
+                    "target_property_name": "#text",
+                    "resolve_sibling_scope": true
+                  }
+                ]
+              }
+            },
+            {
+              "message_text_dynamic": {
+                "type": "label",
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "offset": "$text_offset",
+                "size": "$text_size",
+                "text": "#text",
+                "color": "$text_color",
+                "font_type": "$text_font_type",
+                "font_scale_factor": "$text_scale",
+                "text_alignment": "center",
+                "shadow": false,
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "topbar_body",
+                    "source_property_name": "(not #use_default_icon)",
+                    "target_property_name": "#visible",
+                    "resolve_sibling_scope": true
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "topbar_body",
+                    "source_property_name": "#payload_text",
+                    "target_property_name": "#output",
+                    "resolve_sibling_scope": true
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#search + 1 * (not (('%.'+#search+'s') * #output = #output)) and (('%.'+#search+'s') * #output = ('%.'+#search+'s') * #output - ';')))",
+                    "target_property_name": "#search"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#output - (('%.'+#search+'s') * #output))",
+                    "target_property_name": "#message_text"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "#message_text",
+                    "target_property_name": "#text",
+                    "resolve_sibling_scope": true
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

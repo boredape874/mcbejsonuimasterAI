@@ -1,0 +1,97 @@
+{
+  "namespace": "preserve_state_utils",
+  "preserved_title_display": {
+    "$update_string|default": "update",
+    "type": "label",
+    "text": "#text",
+    "controls": [
+      {
+        "data_control": {
+          "type": "panel",
+          "size": [
+            0,
+            0
+          ],
+          "property_bag": {
+            "#preserved_text": ""
+          },
+          "bindings": [
+            {
+              "binding_name": "#hud_title_text_string"
+            },
+            {
+              "binding_name": "#hud_title_text_string",
+              "binding_name_override": "#preserved_text",
+              "binding_condition": "visibility_changed"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $update_string) = #hud_title_text_string))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_control_name": "data_control",
+        "source_property_name": "(#preserved_text - $update_string)",
+        "target_property_name": "#text"
+      }
+    ]
+  },
+  "preserved_actionbar_display": {
+    "$update_string|default": "update",
+    "type": "label",
+    "text": "#text",
+    "controls": [
+      {
+        "data_control": {
+          "type": "panel",
+          "size": [
+            0,
+            0
+          ],
+          "property_bag": {
+            "#preserved_text": ""
+          },
+          "bindings": [
+            {
+              "binding_name": "#hud_actionbar_text_string"
+            },
+            {
+              "binding_name": "#hud_actionbar_text_string",
+              "binding_name_override": "#preserved_text",
+              "binding_condition": "visibility_changed"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (#hud_actionbar_text_string = #preserved_text) and not ((#hud_actionbar_text_string - $update_string) = #hud_actionbar_text_string))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_control_name": "data_control",
+        "source_property_name": "(#preserved_text - $update_string)",
+        "target_property_name": "#text"
+      }
+    ]
+  },
+  "preserved_text_data_panel": {
+    "type": "panel",
+    "size": [
+      0,
+      0
+    ],
+    "property_bag": {
+      "#preserved_text": ""
+    }
+  }
+}

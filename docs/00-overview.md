@@ -9,6 +9,13 @@ It is built around four principles:
 3. Validate vanilla paths against upstream sources instead of memory
 4. Answer in file-level terms that a PMMP or Bedrock developer can edit immediately
 
+It also now includes a beginner-safe layer so the AI can explain:
+
+- what a Bedrock resource pack is
+- what `_ui_defs.json` actually does
+- why screens and templates differ
+- why Bedrock does not have one fixed runtime screen size
+
 ## Covered areas
 
 - `_ui_defs.json`
@@ -23,6 +30,8 @@ It is built around four principles:
 - tooltip and common presets
 - bindings, variables, and string parsing
 - texture and addon integration
+- basics and mental models
+- local utility mirrors for topbar, title bars, and tablist patterns
 
 ## Main problem this repository solves
 

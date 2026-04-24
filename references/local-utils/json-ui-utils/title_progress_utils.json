@@ -1,0 +1,226 @@
+{
+  "namespace": "title_progress_utils",
+  "title_progress_source": {
+    "type": "panel",
+    "size": [
+      0,
+      0
+    ],
+    "$update_string|default": "customTitle_AniHPBar_",
+    "bindings": [
+      {
+        "binding_name": "#hud_title_text_string"
+      },
+      {
+        "binding_name": "#hud_title_text_string",
+        "binding_name_override": "#preserved_text",
+        "binding_condition": "visibility_changed"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $update_string) = #hud_title_text_string))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((#preserved_text - $update_string) + 0)",
+        "target_property_name": "#progress"
+      }
+    ]
+  },
+  "title_prefixed_label_panel": {
+    "type": "panel",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "$panel_offset|default": [
+      0,
+      0
+    ],
+    "$panel_anchor|default": "center",
+    "$prefix|default": "customTitle_AniHPBarText_",
+    "$control_name|default": "title_prefixed_label_control",
+    "$text_alignment|default": "center",
+    "$font_type|default": "smooth",
+    "$font_scale_factor|default": 1,
+    "$text_alpha|default": 0.5,
+    "controls": [
+      {
+        "prefixed_text_panel": {
+          "layer": 40,
+          "type": "panel",
+          "size": [
+            "100%c",
+            "100%c"
+          ],
+          "offset": "$panel_offset",
+          "anchor_from": "$panel_anchor",
+          "anchor_to": "$panel_anchor",
+          "controls": [
+            {
+              "prefixed_text@title_progress_utils.title_prefixed_label_base": {
+                "$custom_title_filter_name": "$prefix",
+                "$custom_title_control_name": "$control_name",
+                "$custom_title_text_alignment": "$text_alignment",
+                "$custom_title_font_type": "$font_type",
+                "$custom_title_font_scale_factor": "$font_scale_factor",
+                "alpha": "$text_alpha"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "title_prefixed_label_base": {
+    "$custom_title_filter_name|default": "customTitle_",
+    "$custom_title_control_name|default": "custom_title_control",
+    "$custom_title_size|default": [
+      "default",
+      "default"
+    ],
+    "$custom_title_max_size|default": [
+      "default",
+      "default"
+    ],
+    "$custom_title_offset|default": [
+      0,
+      0
+    ],
+    "$custom_title_anchor|default": "center",
+    "$custom_title_text_alignment|default": "center",
+    "$custom_title_font_type|default": "smooth",
+    "$custom_title_font_scale_factor|default": 2.2,
+    "type": "label",
+    "size": "$custom_title_size",
+    "max_size": "$custom_title_max_size",
+    "offset": "$custom_title_offset",
+    "anchor_from": "$custom_title_anchor",
+    "anchor_to": "$custom_title_anchor",
+    "text": "#fix_title_text",
+    "text_alignment": "$custom_title_text_alignment",
+    "font_type": "$custom_title_font_type",
+    "font_scale_factor": "$custom_title_font_scale_factor",
+    "shadow": true,
+    "alpha": 0.5,
+    "controls": [
+      {
+        "$custom_title_control_name": {
+          "type": "panel",
+          "size": [
+            0,
+            0
+          ],
+          "bindings": [
+            {
+              "binding_name": "#hud_title_text_string"
+            },
+            {
+              "binding_name": "#hud_title_text_string",
+              "binding_name_override": "#preserved_text",
+              "binding_condition": "visibility_changed"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $custom_title_filter_name) = #hud_title_text_string))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_control_name": "$custom_title_control_name",
+        "source_property_name": "(('§r' + (#preserved_text - $custom_title_filter_name)))",
+        "target_property_name": "#change_title_text"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(('§F' + #change_title_text))",
+        "target_property_name": "#fix_title_text"
+      }
+    ]
+  },
+  "title_hp_bar_overlay_preset": {
+    "type": "panel",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "$panel_layer|default": 30,
+    "$panel_visibility_binding|default": "#hotbar_with_xp_bar",
+    "$progress_prefix|default": "customTitle_AniHPBar_",
+    "$text_prefix|default": "customTitle_AniHPBarText_",
+    "$bar_anchor|default": "bottom_middle",
+    "$bar_offset|default": [
+      -50.5,
+      -32
+    ],
+    "$background_size|default": [
+      81,
+      10
+    ],
+    "$bar_size|default": [
+      "100% - 11px",
+      "100% - 6px"
+    ],
+    "$inner_bar_offset|default": [
+      10,
+      3
+    ],
+    "$multiplier|default": 0.01,
+    "$progress_binding|default": "#progress",
+    "$text_format|default": "('§z' + $progress_binding + '/100')",
+    "$text_panel_offset|default": [
+      -48.5,
+      -34.5
+    ],
+    "$text_alignment|default": "center",
+    "$text_font_type|default": "MinecraftTen",
+    "$text_font_scale_factor|default": 0.6,
+    "$text_alpha|default": 0.5,
+    "layer": "$panel_layer",
+    "controls": [
+      {
+        "progress_bar@progress_bar_utils.animated_progress_bar": {
+          "$background_size": "$background_size",
+          "$bar_size": "$bar_size",
+          "$bar_offset": "$inner_bar_offset",
+          "offset": "$bar_offset",
+          "anchor_from": "$bar_anchor",
+          "anchor_to": "$bar_anchor",
+          "$multiplier": "$multiplier",
+          "$data_source": "progress_source",
+          "$progress_binding": "$progress_binding",
+          "$text_format": "$text_format"
+        }
+      },
+      {
+        "progress_text@title_progress_utils.title_prefixed_label_panel": {
+          "$panel_offset": "$text_panel_offset",
+          "$panel_anchor": "$bar_anchor",
+          "$prefix": "$text_prefix",
+          "$control_name": "title_progress_text_control",
+          "$text_alignment": "$text_alignment",
+          "$font_type": "$text_font_type",
+          "$font_scale_factor": "$text_font_scale_factor",
+          "$text_alpha": "$text_alpha"
+        }
+      },
+      {
+        "progress_source@title_progress_utils.title_progress_source": {
+          "$update_string": "$progress_prefix"
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_name": "$panel_visibility_binding",
+        "binding_name_override": "#visible"
+      }
+    ]
+  }
+}

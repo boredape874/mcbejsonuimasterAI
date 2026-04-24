@@ -29,6 +29,7 @@ It is written in Bedrock addon and PMMP terms, not generic web UI terms.
 
 ### Skills
 
+- `mcbe-json-ui-basics`
 - `mcbe-json-ui-master`
 - `mcbe-json-ui-foundations`
 - `mcbe-json-ui-logic`
@@ -47,6 +48,11 @@ It is written in Bedrock addon and PMMP terms, not generic web UI terms.
 - `references/source-packs/1seulbi/`
 - `references/source-packs/bunnyfarm/`
 - `references/source-packs/custom-crops-reference/`
+
+### Local utility mirrors
+
+- `references/local-utils/json-ui-utils/`
+- `references/local-utils/integrated-sample/`
 
 ### External mirrored references
 
@@ -83,6 +89,8 @@ See:
 - [Reference Hierarchy](docs/08-reference-hierarchy.md)
 - [Schema And Tooling](docs/09-schema-and-tooling.md)
 - [Wiki Mirror Guide](docs/10-bedrock-wiki-mirror.md)
+- [Basics And Mental Model](docs/11-basics-and-mental-model.md)
+- [Local Utils And Patterns](docs/12-local-utils-and-patterns.md)
 
 ## Quick start
 
@@ -129,8 +137,15 @@ If the request is broad, use:
 Use mcbe-json-ui-master.
 ```
 
+If the request is beginner-oriented or first needs the mental model, use:
+
+```text
+Use mcbe-json-ui-basics and mcbe-json-ui-master.
+```
+
 That skill routes into smaller topic files such as:
 
+- basics
 - foundations
 - logic
 - hud-chat
@@ -149,6 +164,12 @@ That skill routes into smaller topic files such as:
 
 ```text
 Use mcbe-json-ui-master and fix this hud_screen.json layout.
+```
+
+#### Beginner explanation or onboarding
+
+```text
+Use mcbe-json-ui-basics and explain how Bedrock JSON UI is loaded, what _ui_defs.json does, and how HUD files fit together.
 ```
 
 #### `_ui_defs.json` or namespace problems
@@ -173,6 +194,12 @@ Use mcbe-json-ui-server-forms and convert this PMMP form protocol into server_fo
 
 ```text
 Use mcbe-json-ui-patterns and build a chest-like menu with a progress bar.
+```
+
+#### Local utility adaptation
+
+```text
+Use mcbe-json-ui-patterns and mcbe-json-ui-hud-and-chat, and adapt the local topbar chat notification utility into this pack.
 ```
 
 #### Vanilla path lookup
@@ -212,7 +239,8 @@ Read these first:
 2. [Source Catalog](docs/01-source-catalog.md)
 3. [Mastery Map](docs/02-mastery-map.md)
 4. [Skill Map](docs/03-skill-map.md)
-5. [Reference Hierarchy](docs/08-reference-hierarchy.md)
+5. [Basics And Mental Model](docs/11-basics-and-mental-model.md)
+6. [Reference Hierarchy](docs/08-reference-hierarchy.md)
 
 Then read as needed:
 
@@ -222,6 +250,7 @@ Then read as needed:
 - [External Example Sources](docs/07-external-example-sources.md)
 - [Schema And Tooling](docs/09-schema-and-tooling.md)
 - [Wiki Mirror Guide](docs/10-bedrock-wiki-mirror.md)
+- [Local Utils And Patterns](docs/12-local-utils-and-patterns.md)
 
 ## Is this enough to become a "JSON UI Master AI" in one shot?
 
@@ -231,7 +260,9 @@ What this repository now gives you:
 
 - portable skills
 - layered topic routing
+- beginner-to-advanced mental model docs
 - local working pack references
+- local utility mirrors for topbar, title bars, tablist, tooltip, and integrated sample screens
 - mirrored Bedrock Wiki JSON UI docs
 - mirrored external example repositories
 - schema references

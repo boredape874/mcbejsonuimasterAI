@@ -1,0 +1,279 @@
+{
+  "namespace": "progress_bar_utils",
+  "increase_anim": {
+    "anim_type": "size",
+    "from": [
+      0,
+      "100%"
+    ],
+    "to": [
+      "100%",
+      "100%"
+    ],
+    "duration": "$duration",
+    "easing": "$increase_easing"
+  },
+  "decrease_anim": {
+    "anim_type": "size",
+    "from": [
+      "100%",
+      "100%"
+    ],
+    "to": [
+      0,
+      "100%"
+    ],
+    "duration": "$duration",
+    "easing": "$decrease_easing"
+  },
+  "trail_anim": {
+    "anim_type": "wait",
+    "duration": "$trail_delay",
+    "next": "@progress_bar_utils.decrease_anim"
+  },
+  "animated_bar_image": {
+    "type": "panel",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "controls": [
+      {
+        "bar_image": {
+          "type": "image",
+          "size": "$size_anim",
+          "layer": 1,
+          "alpha": "$bar_alpha",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "texture": "$bar_texture"
+        }
+      },
+      {
+        "trail_image": {
+          "ignored": "$ignore_trail",
+          "type": "image",
+          "layer": 0,
+          "size": "@progress_bar_utils.trail_anim",
+          "alpha": "$trail_alpha",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "texture": "$trail_texture"
+        }
+      }
+    ]
+  },
+  "animated_progress_bar": {
+    "$duration": 0.25,
+    "$trail_delay|default": 0.25,
+    "$increase_easing|default": "in_out_sine",
+    "$decrease_easing|default": "in_out_circ",
+    "$background_size|default": [
+      80,
+      6
+    ],
+    "$background_texture|default": "textures/ui/bar_bg",
+    "$background_alpha|default": 1,
+    "$bar_texture|default": "textures/ui/bar",
+    "$bar_size|default": [
+      "100% - 2px",
+      "100% - 2px"
+    ],
+    "$bar_offset|default": [
+      1,
+      1
+    ],
+    "$bar_alpha|default": 1,
+    "$ignore_trail|default": false,
+    "$trail_texture|default": "textures/ui/White",
+    "$trail_alpha|default": 0.6,
+    "$multiplier|default": 0.05,
+    "$data_source|default": "<preserved title or subtitle panel>",
+    "$progress_binding|default": "#value",
+    "$ignore_text|default": true,
+    "$text_color|default": [
+      1,
+      1,
+      1
+    ],
+    "$text_font_type|default": "smooth",
+    "$text_font_scale_factor|default": 1,
+    "$text_shadow|default": true,
+    "$text_offset|default": [
+      0,
+      0
+    ],
+    "$text_size|default": [
+      "default",
+      "default"
+    ],
+    "$text_format|default": "('§z' + $progress_binding + '/20')",
+    "type": "panel",
+    "size": "$background_size",
+    "controls": [
+      {
+        "progress_bar_text": {
+          "ignored": "$ignore_text",
+          "type": "label",
+          "text": "#text",
+          "layer": 5,
+          "color": "$text_color",
+          "font_type": "$text_font_type",
+          "font_scale_factor": "$text_font_scale_factor",
+          "shadow": "$text_shadow",
+          "offset": "$text_offset",
+          "size": "$text_size",
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_control_name": "$data_source",
+              "source_property_name": "$text_format",
+              "target_property_name": "#text"
+            }
+          ]
+        }
+      },
+      {
+        "bar_parent_panel": {
+          "type": "panel",
+          "layer": 1,
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": "$bar_offset",
+          "size": "$bar_size",
+          "controls": [
+            {
+              "animated_bar_panel": {
+                "type": "panel",
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "use_anchored_offset": true,
+                "property_bag": {
+                  "#prev_value": 0
+                },
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "$data_source",
+                    "source_property_name": "#visible",
+                    "target_property_name": "#key"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "$data_source",
+                    "source_property_name": "$progress_binding",
+                    "target_property_name": "#changed_value"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#prev_value * (1 - #key) + #changed_value * #key)",
+                    "target_property_name": "#prev_value"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#changed_value + (#prev_value - #changed_value) * ((#prev_value - #changed_value) < 0))",
+                    "target_property_name": "#min"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(#min * $multiplier)",
+                    "target_property_name": "#anchored_offset_value_x"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "((#changed_value + #prev_value - 2 * #min) * $multiplier)",
+                    "target_property_name": "#size_binding_x"
+                  }
+                ],
+                "controls": [
+                  {
+                    "anim_increase": {
+                      "type": "collection_panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "$size_anim": "@progress_bar_utils.increase_anim",
+                      "$ignore_trail": true,
+                      "factory": {
+                        "name": "anim_increase",
+                        "control_name": "progress_bar_utils.animated_bar_image"
+                      },
+                      "bindings": [
+                        {
+                          "binding_type": "view",
+                          "source_control_name": "animated_bar_panel",
+                          "resolve_sibling_scope": true,
+                          "source_property_name": "((#changed_value > #prev_value) * 1)",
+                          "target_property_name": "#collection_length"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "anim_decrease": {
+                      "type": "collection_panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "$size_anim": "@progress_bar_utils.decrease_anim",
+                      "factory": {
+                        "name": "anim_decrease",
+                        "control_name": "progress_bar_utils.animated_bar_image"
+                      },
+                      "bindings": [
+                        {
+                          "binding_type": "view",
+                          "source_control_name": "animated_bar_panel",
+                          "resolve_sibling_scope": true,
+                          "source_property_name": "((#prev_value > #changed_value) * 1)",
+                          "target_property_name": "#collection_length"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "bar_panel": {
+                "type": "image",
+                "alpha": "$bar_alpha",
+                "texture": "$bar_texture",
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "bindings": [
+                  {
+                    "binding_type": "view",
+                    "source_control_name": "animated_bar_panel",
+                    "resolve_sibling_scope": true,
+                    "source_property_name": "(#min * $multiplier)",
+                    "target_property_name": "#size_binding_x"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "bar_bg": {
+          "type": "image",
+          "size": "$background_size",
+          "alpha": "$background_alpha",
+          "layer": 0,
+          "texture": "$background_texture"
+        }
+      }
+    ]
+  }
+}

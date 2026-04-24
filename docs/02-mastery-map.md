@@ -2,7 +2,23 @@
 
 Use this order to learn or analyze MCBE JSON UI efficiently.
 
-## 1. Entry points and structure
+## 1. Basics and mental model
+
+Learn first:
+
+- what a resource pack is
+- how JSON UI is loaded
+- why `_ui_defs.json` matters
+- why there is no one fixed Bedrock screen size
+- how screens differ from templates
+
+Primary files:
+
+- `docs/11-basics-and-mental-model.md`
+- `references/external/bedrock-wiki-json-ui/json-ui-intro.md`
+- `references/external/bedrock-wiki-json-ui/add-hud-elements.md`
+
+## 2. Entry points and structure
 
 Learn first:
 
@@ -17,8 +33,9 @@ Primary files:
 - `references/source-packs/1seulbi/ui/_ui_defs.json`
 - `references/source-packs/custom-crops-reference/ui/_ui_defs.json`
 - `references/source-packs/bunnyfarm/GfE8ULhgL4I/ui/_ui_defs.json`
+- `references/local-utils/integrated-sample/ui/_ui_defs.json`
 
-## 2. HUD and chat
+## 3. HUD and chat
 
 Learn next:
 
@@ -33,8 +50,10 @@ Primary files:
 - `references/source-packs/1seulbi/ui/chat_screen.json`
 - `references/source-packs/custom-crops-reference/ui/hud_screen.json`
 - `references/source-packs/bunnyfarm/z65tCLQRo0Q/ui/hud_screen.json`
+- `references/local-utils/json-ui-utils/topbar_chat_notification_utils.json`
+- `references/local-utils/json-ui-utils/tablist_hud_screen.json`
 
-## 3. Server forms
+## 4. Server forms
 
 Learn next:
 
@@ -49,7 +68,7 @@ Primary files:
 - `references/source-packs/custom-crops-reference/ui/server_form.json`
 - `references/source-packs/bunnyfarm/GfE8ULhgL4I/ui/server_form.json`
 
-## 4. Reusable patterns
+## 5. Reusable patterns
 
 Learn next:
 
@@ -64,8 +83,11 @@ Primary files:
 - `references/source-packs/bunnyfarm/tDAp1yJMUYo/ui/animated_bar.json`
 - `references/source-packs/1seulbi/ui/scoreboards.json`
 - `references/source-packs/bunnyfarm/Y5dOnRAM7js/ui/custom_pocket_containers.json`
+- `references/local-utils/json-ui-utils/progress_bar_utils.json`
+- `references/local-utils/json-ui-utils/title_progress_utils.json`
+- `references/local-utils/json-ui-utils/prefix_router_utils.json`
 
-## 5. Full addon integration
+## 6. Full addon integration
 
 Learn last:
 

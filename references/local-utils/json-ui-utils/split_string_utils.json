@@ -1,0 +1,144 @@
+{
+  "namespace": "split_string_utils",
+  "fixed_split_5_title_data": {
+    "type": "panel",
+    "size": [
+      0,
+      0
+    ],
+    "$prefix|default": "info:",
+    "$slot_size|default": 80,
+    "bindings": [
+      {
+        "binding_name": "#hud_title_text_string",
+        "binding_name_override": "#raw_text",
+        "binding_type": "global"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not ((#raw_text - $prefix) = #raw_text))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#raw_text - $prefix)",
+        "target_property_name": "#text_data"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(('%.80s' * #text_data) - '\t')",
+        "target_property_name": "#text1"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.160s' * #text_data) - ('%.80s' * #text_data)) - '\t')",
+        "target_property_name": "#text2"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.240s' * #text_data) - ('%.160s' * #text_data)) - '\t')",
+        "target_property_name": "#text3"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.320s' * #text_data) - ('%.240s' * #text_data)) - '\t')",
+        "target_property_name": "#text4"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.400s' * #text_data) - ('%.320s' * #text_data)) - '\t')",
+        "target_property_name": "#text5"
+      }
+    ]
+  },
+  "fixed_split_5_actionbar_data": {
+    "type": "panel",
+    "size": [
+      0,
+      0
+    ],
+    "$prefix|default": "info:",
+    "bindings": [
+      {
+        "binding_name": "#hud_actionbar_text_string",
+        "binding_name_override": "#raw_text",
+        "binding_type": "global"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not ((#raw_text - $prefix) = #raw_text))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#raw_text - $prefix)",
+        "target_property_name": "#text_data"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(('%.80s' * #text_data) - '\t')",
+        "target_property_name": "#text1"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.160s' * #text_data) - ('%.80s' * #text_data)) - '\t')",
+        "target_property_name": "#text2"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.240s' * #text_data) - ('%.160s' * #text_data)) - '\t')",
+        "target_property_name": "#text3"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.320s' * #text_data) - ('%.240s' * #text_data)) - '\t')",
+        "target_property_name": "#text4"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.400s' * #text_data) - ('%.320s' * #text_data)) - '\t')",
+        "target_property_name": "#text5"
+      }
+    ]
+  },
+  "fixed_split_3_title_data": {
+    "type": "panel",
+    "size": [
+      0,
+      0
+    ],
+    "$prefix|default": "info:",
+    "bindings": [
+      {
+        "binding_name": "#hud_title_text_string",
+        "binding_name_override": "#raw_text",
+        "binding_type": "global"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not ((#raw_text - $prefix) = #raw_text))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#raw_text - $prefix)",
+        "target_property_name": "#text_data"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(('%.80s' * #text_data) - '\t')",
+        "target_property_name": "#text1"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.160s' * #text_data) - ('%.80s' * #text_data)) - '\t')",
+        "target_property_name": "#text2"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((('%.240s' * #text_data) - ('%.160s' * #text_data)) - '\t')",
+        "target_property_name": "#text3"
+      }
+    ]
+  }
+}

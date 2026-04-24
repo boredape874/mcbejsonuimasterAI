@@ -1,0 +1,213 @@
+{
+  "namespace": "scoreboard",
+
+  "hive_entry_label": {
+    "type": "label",
+    "layer": 2,
+    "text": "#player_name_sidebar",
+    "localize": false,
+    "color": [0.99, 0.94, 0.82],
+    "size": ["default", 10],
+    "max_size": [160, 20],
+    "locked_alpha": 1.0,
+    "bindings": [
+      {
+        "binding_name": "#player_name_sidebar",
+        "binding_type": "collection",
+        "binding_collection_name": "scoreboard_players"
+      }
+    ]
+  },
+
+  "hive_sidebar_entry": {
+    "type": "panel",
+    "size": [142, 16],
+    "controls": [
+      {
+        "entry_bg": {
+          "type": "image",
+          "texture": "textures/ui/hive/hive_scoreboard_entry",
+          "alpha": 0.82,
+          "size": ["100%", "100%"],
+          "anchor_from": "top_right",
+          "anchor_to": "top_right",
+          "controls": [
+            {
+              "name_label@scoreboard.hive_entry_label": {
+                "offset": [8, 0],
+                "anchor_from": "left_middle",
+                "anchor_to": "left_middle"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_name": "#player_name_sidebar",
+        "binding_type": "collection",
+        "binding_collection_name": "scoreboard_players"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((not ((#player_name_sidebar - '§C§O§R§E') = #player_name_sidebar)) or ((#player_name_sidebar - '§C§O§R§E') = ''))",
+        "target_property_name": "#visible"
+      }
+    ]
+  },
+
+  "hive_sidebar": {
+    "type": "panel",
+    "size": [150, "100%c"],
+    "anchor_from": "top_right",
+    "anchor_to": "top_right",
+    "offset": [-10, 46],
+    "controls": [
+      {
+        "entry_stack": {
+          "type": "stack_panel",
+          "orientation": "vertical",
+          "size": [142, "100%c"],
+          "anchor_from": "top_right",
+          "anchor_to": "top_right",
+          "collection_name": "scoreboard_players",
+          "factory": {
+            "name": "player_list_factory",
+            "control_name": "scoreboard.hive_sidebar_entry"
+          },
+          "bindings": [
+            {
+              "binding_name": "#scoreboard_sidebar_size",
+              "binding_type": "global",
+              "binding_name_override": "#collection_length"
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "default_entry_label": {
+    "type": "label",
+    "layer": 2,
+    "text": "#player_name_sidebar",
+    "localize": false,
+    "locked_alpha": 1.0,
+    "color": [0.94, 0.96, 1.0],
+    "size": ["default", 11],
+    "max_size": [180, 20],
+    "shadow": false,
+    "bindings": [
+      {
+        "binding_name": "#player_name_sidebar",
+        "binding_type": "collection",
+        "binding_collection_name": "scoreboard_players"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(((#player_name_sidebar - '§C§O§R§E') = #player_name_sidebar) and (not ((#player_name_sidebar - '§C§O§R§E') = '')))",
+        "target_property_name": "#visible"
+      }
+    ]
+  },
+
+  "default_sidebar": {
+    "type": "panel",
+    "anchor_from": "top_right",
+    "anchor_to": "top_right",
+    "offset": [-10, 46],
+    "size": ["100%cm", "100%c"],
+    "controls": [
+      {
+        "bg": {
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "alpha": 0.52,
+          "anchor_from": "top_right",
+          "anchor_to": "top_right",
+          "size": ["100%cm + 16px", "100%c + 18px"],
+          "controls": [
+            {
+              "accent_strip": {
+                "type": "image",
+                "texture": "textures/ui/Black",
+                "color": [0.84, 0.69, 0.34],
+                "alpha": 1.0,
+                "size": [2, "100%"],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left"
+              }
+            },
+            {
+              "title_tint": {
+                "type": "image",
+                "texture": "textures/ui/Black",
+                "color": [0.84, 0.69, 0.34],
+                "alpha": 0.18,
+                "size": ["100%", 14],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left"
+              }
+            },
+            {
+              "title": {
+                "type": "label",
+                "text": "#objective_sidebar_name",
+                "localize": false,
+                "size": ["default", 10],
+                "max_size": [180, 12],
+                "text_alignment": "left",
+                "font_scale_factor": 0.9,
+                "locked_alpha": 1.0,
+                "layer": 2,
+                "color": [1.0, 0.93, 0.79],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [10, 6],
+                "bindings": [
+                  {
+                    "binding_name": "#objective_sidebar_name",
+                    "binding_type": "global"
+                  }
+                ]
+              }
+            },
+            {
+              "list_panel": {
+                "type": "panel",
+                "size": ["100%c", "100%cm"],
+                "offset": [10, 22],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "controls": [
+                  {
+                    "entry_list": {
+                      "type": "stack_panel",
+                      "size": ["100%cm", "100%c"],
+                      "orientation": "vertical",
+                      "anchor_from": "top_left",
+                      "anchor_to": "top_left",
+                      "collection_name": "scoreboard_players",
+                      "factory": {
+                        "name": "player_list_factory",
+                        "control_name": "scoreboard.default_entry_label"
+                      },
+                      "bindings": [
+                        {
+                          "binding_name": "#scoreboard_sidebar_size",
+                          "binding_type": "global",
+                          "binding_name_override": "#collection_length"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
