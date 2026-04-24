@@ -97,6 +97,10 @@ See:
 - [Screen-By-Screen Reference](docs/16-screen-by-screen-reference.md)
 - [Community Patterns: String, Score, And HUD Input](docs/17-community-patterns-string-score-hud.md)
 - [Tooling: AUX, Dumper, And StarLib](docs/18-tooling-auxgen-dumper-starlib.md)
+- [Bindings And Hardcoded Values](docs/19-bindings-and-hardcoded-values.md)
+- [Pack Merge Playbook](docs/20-pack-merge-playbook.md)
+- [Update Policy](docs/21-update-policy.md)
+- [AI Response Quality Rules](docs/22-ai-response-quality.md)
 
 ## Quick start
 
@@ -132,6 +136,30 @@ references/upstreams/MCBVanillaResourcePack/
 ```
 
 This mirror is intentionally not committed to Git because it is large and reproducible.
+
+### 4. Optional: sync selected Mojang `bedrock-samples` UI files
+
+```powershell
+.\scripts\sync-bedrock-samples-ui.ps1
+```
+
+This updates:
+
+```text
+references/official/bedrock-samples-ui/
+```
+
+### 5. Optional: validate a JSON UI pack or reference mirror
+
+```powershell
+.\scripts\validate-json-ui-pack.ps1 -PackPath references\source-packs\1seulbi
+```
+
+For partial reference mirrors:
+
+```powershell
+.\scripts\validate-json-ui-pack.ps1 -PackPath references\official\bedrock-samples-ui -AllowPartialUiDefs -AllowMissingTextures
+```
 
 ## How to use it with Codex
 
@@ -245,6 +273,10 @@ Use mcbe-json-ui-tooling and explain whether bedrock-json-ui-editor or EasyUIBui
   - copy-paste prompt examples for Codex
 - `examples/tasks/`
   - task templates that pair a real objective with the right skill flow
+- `examples/vscode/`
+  - workspace settings templates for schema-aware editing
+- `examples/integration/`
+  - PMMP and Script API integration notes
 - `scripts/`
   - installation and sync helpers
 
@@ -284,6 +316,10 @@ Then read as needed:
 - [Screen-By-Screen Reference](docs/16-screen-by-screen-reference.md)
 - [Community Patterns: String, Score, And HUD Input](docs/17-community-patterns-string-score-hud.md)
 - [Tooling: AUX, Dumper, And StarLib](docs/18-tooling-auxgen-dumper-starlib.md)
+- [Bindings And Hardcoded Values](docs/19-bindings-and-hardcoded-values.md)
+- [Pack Merge Playbook](docs/20-pack-merge-playbook.md)
+- [Update Policy](docs/21-update-policy.md)
+- [AI Response Quality Rules](docs/22-ai-response-quality.md)
 
 ## Is this enough to become a "JSON UI Master AI" in one shot?
 

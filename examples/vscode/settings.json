@@ -1,0 +1,32 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "/ui/**/*.json",
+        "/RP/ui/**/*.json"
+      ],
+      "url": "../../references/schemas/DJStompZone/ui.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/ui/_ui_defs.json",
+        "/RP/ui/_ui_defs.json"
+      ],
+      "url": "../../references/schemas/DJStompZone/ui_defs.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/ui/_global_variables.json",
+        "/RP/ui/_global_variables.json"
+      ],
+      "url": "../../references/schemas/DJStompZone/global_variables.schema.json"
+    }
+  ],
+  "files.associations": {
+    "*.jsonc": "jsonc"
+  },
+  "search.exclude": {
+    "**/references/upstreams": true,
+    "**/.git": true
+  }
+}

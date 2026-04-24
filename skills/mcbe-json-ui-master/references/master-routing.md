@@ -17,6 +17,14 @@
 - `../../../docs/12-local-utils-and-patterns.md`
 - `../../../docs/13-vanilla-asset-workflow.md`
 - `../../../docs/14-json-ui-best-practices.md`
+- `../../../docs/15-json-ui-file-role-catalog.md`
+- `../../../docs/16-screen-by-screen-reference.md`
+- `../../../docs/17-community-patterns-string-score-hud.md`
+- `../../../docs/18-tooling-auxgen-dumper-starlib.md`
+- `../../../docs/19-bindings-and-hardcoded-values.md`
+- `../../../docs/20-pack-merge-playbook.md`
+- `../../../docs/21-update-policy.md`
+- `../../../docs/22-ai-response-quality.md`
 
 ## Route by request type
 

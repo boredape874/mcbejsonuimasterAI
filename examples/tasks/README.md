@@ -21,3 +21,4 @@ Task groups:
 - `06-analyze-pack-architecture.md`
 - `07-string-payload-design.md`
 - `08-tooling-workflow.md`
+- `09-merge-json-ui-packs.md`

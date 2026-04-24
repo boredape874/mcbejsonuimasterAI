@@ -1,5 +1,14 @@
 # Bindings And Variables
 
+Read:
+
+- `../../../../../docs/19-bindings-and-hardcoded-values.md`
+- `../../../../../references/official/bedrock-samples-ui/hud_screen.json`
+- `../../../../../references/official/bedrock-samples-ui/chat_screen.json`
+- `../../../../../references/official/bedrock-samples-ui/server_form.json`
+
+Use this subtopic when exact binding and hardcoded value names matter.
+
 Best for:
 
 - binding relay

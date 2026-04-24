@@ -40,7 +40,7 @@ Use this when the question is:
 | `ui/horse_screen.json` | Horse inventory screen | Entity inventory layout matters | Mixed inventory + equipment slot patterns |
 | `ui/loom_screen.json` | Loom screen | Grid plus tab-like pattern study is needed | Selector-heavy screen study |
 | `ui/stonecutter_screen.json` | Stonecutter screen | Result list and selector logic matters | Collection and selector references |
-| `ui/trade2_screen.json` | Villager trade screen | Multi-item trade layouts or tier UI patterns matter | Trade cell references, item count and state logic |
+| `ui/trade_2_screen.json` | Villager trade screen | Multi-item trade layouts or tier UI patterns matter | Trade cell references, item count and state logic |
 | `ui/npc_interact_screen.json` or project NPC screen equivalents | NPC interaction UI | NPC menus or dialog systems are involved | NPC dialog/menu shell design |
 
 ## Most important screens for JSON UI authors
@@ -165,7 +165,7 @@ Some screens are especially valuable because they are complex, not because you p
 Examples:
 
 - `ui/command_block_screen.json`
-- `ui/trade2_screen.json`
+- `ui/trade_2_screen.json`
 - `ui/horse_screen.json`
 
 Use them as references for:

@@ -17,6 +17,7 @@ Primary files:
 - `docs/11-basics-and-mental-model.md`
 - `references/external/bedrock-wiki-json-ui/json-ui-intro.md`
 - `references/external/bedrock-wiki-json-ui/add-hud-elements.md`
+- `references/official/bedrock-samples-ui/_ui_defs.json`
 
 ## 2. Entry points and structure
 
@@ -87,7 +88,24 @@ Primary files:
 - `references/local-utils/json-ui-utils/title_progress_utils.json`
 - `references/local-utils/json-ui-utils/prefix_router_utils.json`
 
-## 6. Full addon integration
+## 6. Bindings, validation, and merge safety
+
+Learn next:
+
+- screen-specific bindings
+- hardcoded values
+- pack merge risks
+- validation script workflow
+
+Primary files:
+
+- `docs/19-bindings-and-hardcoded-values.md`
+- `docs/20-pack-merge-playbook.md`
+- `scripts/validate-json-ui-pack.ps1`
+- `references/official/bedrock-samples-ui/hud_screen.json`
+- `references/official/bedrock-samples-ui/server_form.json`
+
+## 7. Full addon integration
 
 Learn last:
 

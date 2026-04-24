@@ -129,6 +129,31 @@ Upstream authority:
 
 - <https://github.com/ZtechNetwork/MCBVanillaResourcePack>
 
+## `references/official/bedrock-samples-ui`
+
+Selected official Mojang `bedrock-samples` UI files.
+
+Use for:
+
+- confirming current official vanilla structure
+- comparing local packs against official screen files
+- validating binding and control names before patching
+
+Primary files:
+
+- `_ui_defs.json`
+- `_global_variables.json`
+- `hud_screen.json`
+- `chat_screen.json`
+- `server_form.json`
+- `inventory_screen.json`
+- `inventory_screen_pocket.json`
+- `ui_common.json`
+- `chest_screen.json`
+- `furnace_screen.json`
+- `trade_2_screen.json`
+- `command_block_screen.json`
+
 ## External sources
 
 - Mojang `bedrock-samples`

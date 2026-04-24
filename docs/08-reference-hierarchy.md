@@ -18,6 +18,10 @@ Read these first:
 - `docs/16-screen-by-screen-reference.md`
 - `docs/17-community-patterns-string-score-hud.md`
 - `docs/18-tooling-auxgen-dumper-starlib.md`
+- `docs/19-bindings-and-hardcoded-values.md`
+- `docs/20-pack-merge-playbook.md`
+- `docs/21-update-policy.md`
+- `docs/22-ai-response-quality.md`
 
 ## Level 2: topic indexes
 
@@ -58,6 +62,8 @@ Use subtopic notes only for the exact problem:
 - performance and compatibility patterns
 - community string, score, and interactive HUD patterns
 - dumper, AUX, and library tooling
+- binding and hardcoded value lookup
+- pack merge and version update workflow
 
 ## Rule
 
