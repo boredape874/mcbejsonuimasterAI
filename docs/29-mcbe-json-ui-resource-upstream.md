@@ -10,6 +10,11 @@ The repository is mirrored locally into:
 
 This upstream mirror is intentionally not committed because it contains thousands of files. Use it as a searchable source, then open only the exact matching files.
 
+When adapting code from this upstream, use:
+
+- `docs/30-file-and-code-fragment-usage.md`
+- `docs/31-fragment-routing-table.md`
+
 ## Sync
 
 ```powershell
@@ -84,4 +89,5 @@ Use this only when comparing a whole pack structure. For normal tasks, inspect t
 - Treat this upstream as an example archive, not runtime truth.
 - Check each pack's own license/readme before copying code or assets into public outputs.
 - Prefer summarizing patterns unless the file is clearly safe to reuse.
+- Split examples into `_ui_defs`, screen insertion, bindings, factories, textures, and server payload before applying them.
 - For vanilla path truth, still use `ZtechNetwork/MCBVanillaResourcePack`.

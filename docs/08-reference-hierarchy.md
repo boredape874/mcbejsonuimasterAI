@@ -59,6 +59,8 @@ Use subtopic notes only for the exact problem:
 - token-efficient routing
 - local example mining
 - mcbe-json-ui-resource upstream archive
+- file and code fragment usage
+- fragment routing table
 
 ## Rule
 

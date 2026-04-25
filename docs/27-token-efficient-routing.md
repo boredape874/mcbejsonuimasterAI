@@ -30,6 +30,7 @@ Load in this order:
 | broad audit | `docs/08-reference-hierarchy.md` | exact docs selected from the audit finding |
 | local example lookup | `docs/28-local-example-mining.md` | only the matching mirror or local folder |
 | broad upstream example archive | `docs/29-mcbe-json-ui-resource-upstream.md` | one exact tutorial or sample screen |
+| adapt one code fragment | `docs/30-file-and-code-fragment-usage.md` | `docs/31-fragment-routing-table.md` and one source file |
 
 ## Do not load by default
 

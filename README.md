@@ -108,6 +108,8 @@ See:
 - [Token-Efficient Routing](docs/27-token-efficient-routing.md)
 - [Local Example Mining](docs/28-local-example-mining.md)
 - [MCBE JSON UI Resource Upstream](docs/29-mcbe-json-ui-resource-upstream.md)
+- [File And Code Fragment Usage](docs/30-file-and-code-fragment-usage.md)
+- [Fragment Routing Table](docs/31-fragment-routing-table.md)
 
 ## Quick start
 
@@ -350,6 +352,8 @@ Then read as needed:
 - [Token-Efficient Routing](docs/27-token-efficient-routing.md)
 - [Local Example Mining](docs/28-local-example-mining.md)
 - [MCBE JSON UI Resource Upstream](docs/29-mcbe-json-ui-resource-upstream.md)
+- [File And Code Fragment Usage](docs/30-file-and-code-fragment-usage.md)
+- [Fragment Routing Table](docs/31-fragment-routing-table.md)
 
 ## Is this enough to become a "JSON UI Master AI" in one shot?
 

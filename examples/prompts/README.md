@@ -18,3 +18,4 @@ Prompt groups:
 - `06-pack-analysis.md`
 - `07-community-patterns-and-tools.md`
 - `08-token-efficient-work.md`
+- `09-fragment-based-adaptation.md`

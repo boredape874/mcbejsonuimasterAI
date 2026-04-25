@@ -112,6 +112,8 @@ Primary files:
 - `docs/26-common-failure-modes.md`
 - `docs/27-token-efficient-routing.md`
 - `docs/29-mcbe-json-ui-resource-upstream.md`
+- `docs/30-file-and-code-fragment-usage.md`
+- `docs/31-fragment-routing-table.md`
 - `scripts/validate-json-ui-pack.ps1`
 - `references/official/bedrock-samples-ui/hud_screen.json`
 - `references/official/bedrock-samples-ui/server_form.json`

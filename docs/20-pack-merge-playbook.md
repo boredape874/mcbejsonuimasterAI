@@ -2,6 +2,8 @@
 
 Use this when two JSON UI packs or two UI systems must be merged safely.
 
+For copying only part of an example, also use `docs/30-file-and-code-fragment-usage.md`.
+
 ## First pass
 
 1. compare `ui/_ui_defs.json`

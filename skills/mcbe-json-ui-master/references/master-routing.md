@@ -145,6 +145,15 @@ Then load only one matching mirror under `references/local-examples/`, or one ex
 Use `../../../docs/29-mcbe-json-ui-resource-upstream.md`.
 Then search `references/upstreams/mcbe-json-ui-resource/` with `rg` and open only one exact tutorial or sample screen.
 
+### file or code fragment adaptation
+
+Use:
+
+- `../../../docs/30-file-and-code-fragment-usage.md`
+- `../../../docs/31-fragment-routing-table.md`
+
+Then open only one matching source file and the target pack file that will be patched.
+
 ### merge, audit, or pack migration
 
 Use `../../../docs/20-pack-merge-playbook.md`.
