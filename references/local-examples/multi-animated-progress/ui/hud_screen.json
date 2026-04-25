@@ -1,0 +1,134 @@
+{
+  "hud_title_text/title_frame": {
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_control_name": "title",
+        "source_property_name": "(#text - 'bar:' = #text)",
+        "target_property_name": "#visible"
+      }
+    ]
+  },
+
+  "preserved_title": { // it's just an example. you can use it as-is or use your existing code
+    "type": "panel",
+    "size": [0, 0],
+    "$update_string": "bar:",
+    "bindings": [
+      {
+        "binding_name": "#hud_title_text_string"
+      },
+      {
+        "binding_name": "#hud_title_text_string",
+        "binding_name_override": "#preserved_text",
+        "binding_condition": "visibility_changed"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $update_string) = #hud_title_text_string))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((#preserved_text - $update_string) + 0)",
+        "target_property_name": "#progress"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((#preserved_text - ($update_string + #progress + ',')) + 0)",
+        "target_property_name": "#max_value"
+      }
+    ]
+  },
+
+
+  // usage example. the variables you might need to change are described in the other file :)
+
+  "root_panel": {
+    "modifications": [
+      {
+        "array_name": "controls",
+        "operation": "insert_back",
+        "value": [
+          { "bar_data@hud.preserved_title": {} },
+
+          // if you want to hide the bar conditionally, you can define bindings in these
+          {
+            "bar_1@animated_bar.animated_progress_bar": {
+              "$background_size": [120, 10],
+              "$bar_size": ["100% - 11px", "100% - 6px"],
+              "$bar_offset": [10, 3],
+              "offset": [0, 50],
+
+              "$multiplier": 0.02, // 1 / 50; 50 - max amount
+              "$data_source": "bar_data", // we're getting our data from the preserved_title panel above named 'bar_data'
+              "$progress_binding": "#progress", // see the bindings of preserved_title to understand better
+
+              "$text_format": "('§z' + $progress_binding + '/50')"
+            }
+          },
+          {
+            "temp_bar@animated_bar.animated_progress_bar": {
+              "anchor_from": "bottom_right",
+              "anchor_to": "bottom_right",
+              "offset": [-10, -10],
+
+              "$background_size": [7, 62],
+              "$bar_size": [5, 51],
+              "$bar_offset": [1, 0],
+              "$bar_texture": "textures/ui/temp_bar_fixed",
+              "$background_texture": "textures/ui/temp_bar_bg_fixed",
+
+              "$texture_type": "fixed",
+              "$fill_from": "down",
+              "$ignore_trail": true,
+              "$multiplier": 0.02, // 1 / 50
+              "$data_source": "bar_data",
+              "$progress_binding": "#progress",
+              "$ignore_text": true
+            }
+          },
+          // usage with dynamic max value
+          {
+            "bar_2@animated_bar.animated_progress_bar": {
+              "offset": [0, 80],
+
+              "$background_size": [120, 10],
+              "$bar_size": ["100% - 11px", "100% - 6px"],
+              "$bar_offset": [10, 3],
+
+              // "$multiplier": 0.02,  - no need for multiplier if you're using dynamic max value
+              "$data_source": "bar_data",
+              "$progress_binding": "#progress",
+              "$max_value_binding": "#max_value",
+
+              "$text_format": "('§z' + $progress_binding + '/' + $max_value_binding)"
+            }
+          },
+          {
+            "health_bar@animated_bar.animated_progress_bar": {
+              "anchor_from": "top_right",
+              "anchor_to": "top_right",
+              "offset": [-10, 20],
+
+              "$background_size": [80, 8],
+              "$bar_size": [68, 4],
+              "$bar_offset": [2, 2],
+              "$bar_texture": "textures/ui/health_bar_fixed",
+              "$background_texture": "textures/ui/health_bar_bg_fixed",
+
+              "$texture_type": "fixed",
+              "$fill_from": "right",
+              "$multiplier": 0.025, // 1 / 40
+              "$data_source": "bar_data",
+              "$text_font_scale_factor": 0.7,
+              "$text_offset": [0, -8],
+              "$progress_binding": "#progress",
+              "$text_format|default": "('§z' + $progress_binding + '/40')"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

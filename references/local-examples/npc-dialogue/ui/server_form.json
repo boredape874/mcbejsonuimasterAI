@@ -1,0 +1,216 @@
+{
+  "namespace": "server_form",
+
+  // ───────────────────────────────────────────
+  // NPC 대화창 스타일 서버폼
+  // 실제 예제 기반 구조:
+  //   - long_form 직접 재정의
+  //   - #title_text = NPC 이름
+  //   - #form_text = body 대화 텍스트
+  //   - form_buttons 컬렉션 = 선택지 버튼
+  // ───────────────────────────────────────────
+
+  // 화면 애니메이션 제거 (즉시 표시)
+  "third_party_server_screen": {
+    "$screen_animations": []
+  },
+
+  // ───────────────────────────────────────────
+  // long_form (Action Form) 재정의
+  // ───────────────────────────────────────────
+  "long_form": {
+    "type": "panel",
+    "size": ["100%", "100%"],
+    "controls": [
+      // 배경 딤
+      {
+        "dim_bg": {
+          "type": "image",
+          "size": ["300%", "300%"],
+          "texture": "textures/ui/White",
+          "color": [0, 0, 0],
+          "alpha": 0.15,
+          "layer": 0
+        }
+      },
+      // NPC 이름 탭 (대화창 위 중앙)
+      {
+        "name_tab": {
+          "type": "image",
+          "size": ["100%c + 20px", 18],
+          "texture": "textures/ui/npc_dialogue/name_bg",
+          "anchor_from": "bottom_middle",
+          "anchor_to": "bottom_middle",
+          "offset": [0, -135],
+          "layer": 3,
+          "controls": [
+            {
+              "name_label": {
+                "type": "label",
+                "size": ["default", "default"],
+                "text": "#title_text",
+                "color": [0.12, 0.12, 0.12],
+                "shadow": false,
+                "font_scale_factor": 1.0,
+                "layer": 4,
+                "bindings": [
+                  {
+                    "binding_name": "#title_text"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      // 대화창 본체
+      {
+        "dialogue_box": {
+          "type": "image",
+          "size": ["55%", 120],
+          "min_size": [260, 120],
+          "max_size": [420, 120],
+          "texture": "textures/ui/npc_dialogue/dialogue_bg",
+          "anchor_from": "bottom_middle",
+          "anchor_to": "bottom_middle",
+          "offset": [0, -30],
+          "layer": 1,
+          "controls": [
+            {
+              "content_padding": {
+                "type": "panel",
+                "size": ["100% - 16px", "100% - 12px"],
+                "controls": [
+                  {
+                    "content_stack": {
+                      "type": "stack_panel",
+                      "size": ["100%", "100%c"],
+                      "orientation": "vertical",
+                      "anchor_from": "top_left",
+                      "anchor_to": "top_left",
+                      "controls": [
+                        // body 텍스트 (#form_text)
+                        {
+                          "body_text": {
+                            "type": "label",
+                            "size": ["100%", "default"],
+                            "text": "#form_text",
+                            "color": [0.15, 0.15, 0.15],
+                            "shadow": false,
+                            "font_scale_factor": 0.9,
+                            "text_alignment": "left",
+                            "layer": 2,
+                            "bindings": [
+                              {
+                                "binding_name": "#form_text"
+                              }
+                            ]
+                          }
+                        },
+                        // 간격
+                        {
+                          "spacer": {
+                            "type": "panel",
+                            "size": ["100%", 6]
+                          }
+                        },
+                        // 선택지 버튼 (factory)
+                        {
+                          "buttons_stack": {
+                            "type": "stack_panel",
+                            "size": ["100%", "100%c"],
+                            "orientation": "vertical",
+                            "collection_name": "form_buttons",
+                            "factory": {
+                              "name": "buttons",
+                              "control_name": "server_form.npc_choice_button"
+                            },
+                            "bindings": [
+                              {
+                                "binding_name": "#form_button_length",
+                                "binding_name_override": "#collection_length"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      // 하단 안내 텍스트
+      {
+        "hint_text": {
+          "type": "label",
+          "size": ["100%", 10],
+          "text": "대화를 종료하시려면 §e웅크리기§r(§eR키§r)를 눌러주세요!",
+          "color": [0.85, 0.85, 0.85],
+          "shadow": true,
+          "font_scale_factor": 0.7,
+          "text_alignment": "center",
+          "anchor_from": "bottom_middle",
+          "anchor_to": "bottom_middle",
+          "offset": [0, -12],
+          "layer": 5
+        }
+      }
+    ]
+  },
+
+  // ───────────────────────────────────────────
+  // 선택지 버튼 (common_buttons.light_text_button 기반)
+  // ───────────────────────────────────────────
+  "npc_choice_button": {
+    "type": "panel",
+    "size": ["100%", 22],
+    "controls": [
+      {
+        "bg": {
+          "type": "image",
+          "size": ["100%", "100%"],
+          "texture": "textures/ui/npc_dialogue/button_bg",
+          "layer": 0
+        }
+      },
+      {
+        "text": {
+          "type": "label",
+          "size": ["100% - 10px", "default"],
+          "text": "#form_button_text",
+          "color": [0.2, 0.2, 0.2],
+          "shadow": false,
+          "font_scale_factor": 0.85,
+          "text_alignment": "center",
+          "layer": 2,
+          "bindings": [
+            {
+              "binding_name": "#form_button_text",
+              "binding_type": "collection",
+              "binding_collection_name": "form_buttons"
+            }
+          ]
+        }
+      },
+      {
+        "form_button@common_buttons.light_text_button": {
+          "$pressed_button_name": "button.form_button_click",
+          "size": ["100%", "100%"],
+          "$button_text": "#null",
+          "$button_text_binding_type": "collection",
+          "$button_text_grid_collection_name": "form_buttons",
+          "alpha": 0,
+          "bindings": [
+            {
+              "binding_type": "collection_details",
+              "binding_collection_name": "form_buttons"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

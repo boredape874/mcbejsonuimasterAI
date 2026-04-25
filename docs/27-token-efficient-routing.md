@@ -28,6 +28,7 @@ Load in this order:
 | missing texture or invisible UI | `docs/26-common-failure-modes.md` | exact debugging subtopic |
 | merge two packs | `docs/20-pack-merge-playbook.md` | only changed files from both packs |
 | broad audit | `docs/08-reference-hierarchy.md` | exact docs selected from the audit finding |
+| local example lookup | `docs/28-local-example-mining.md` | only the matching mirror or local folder |
 
 ## Do not load by default
 

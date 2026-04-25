@@ -55,6 +55,8 @@ For individual scoreboard HUD or interactable HUD menus, prefer `topics/hud-chat
 
 For PMMP-driven title/actionbar/chat bridges, prefer `../../../docs/25-pmmp-json-ui-bridge.md`.
 
+For local RPG HUD or multi-bar examples, prefer `../../../docs/28-local-example-mining.md`.
+
 ### server form or chest form routing
 
 Use `mcbe-json-ui-server-forms`.
@@ -132,6 +134,11 @@ Then load:
 - and only the exact needed subtopic under `topics/tooling/`
 
 For bedrock-auxgen, JSON-UI-Dumper, or StarLibV2, prefer `topics/tooling/aux-dumper-starlib.md`.
+
+### local archive examples
+
+Use `../../../docs/28-local-example-mining.md`.
+Then load only one matching mirror under `references/local-examples/`, or one exact local source file if the mirror is not enough.
 
 ### merge, audit, or pack migration
 

@@ -1,0 +1,47 @@
+{
+  "namespace": "hud",
+  // title 텍스트 중 바 prefix가 포함된 건 화면에 표시하지 않음
+  "hud_title_text": {
+    "bindings": [
+      {
+        "binding_name": "#hud_title_text_string",
+        "binding_type": "global"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(((#hud_title_text_string - 'Bar_') = #hud_title_text_string))",
+        "target_property_name": "#visible"
+      }
+    ]
+  },
+  // 바닐라 렌더러 숨기기
+  "heart_renderer": {
+    "ignored": true
+  },
+  "hunger_renderer": {
+    "ignored": true
+  },
+  "armor_renderer": {
+    "ignored": true
+  },
+
+  // 바닐라 레벨 숫자 숨기기 (XP바는 투명 텍스처로 대체)
+  "progress_text_label": {
+    "ignored": true
+  },
+
+  // RPG HUD 패널을 root_panel에 삽입
+  "root_panel": {
+    "modifications": [
+      {
+        "array_name": "controls",
+        "operation": "insert_front",
+        "value": [
+          {
+            "rpg_hud_panel@rpg_hud.rpg_hud_panel": {}
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -112,6 +112,56 @@ Primary files:
 - `ui/form.json`
 - `ui/npc.json`
 
+## `references/local-examples`
+
+Curated mirrors from a local resource-pack archive.
+
+Use these when the AI needs a compact concrete example without scanning the full local archive.
+
+### `references/local-examples/rpg-hud`
+
+Strong for:
+
+- title-driven RPG HUD bars
+- preserved title payload routing
+- multiple bar instances
+- reusable animated bar wiring
+
+Primary files:
+
+- `ui/_ui_defs.json`
+- `ui/hud_screen.json`
+- `ui/rpg_hud.json`
+- `ui/animated_bar.json`
+
+### `references/local-examples/npc-dialogue`
+
+Strong for:
+
+- NPC-style `server_form.json` layout
+- form title/body/button bindings
+- BP Script API form source context
+
+Primary files:
+
+- `ui/_ui_defs.json`
+- `ui/server_form.json`
+- `BP/scripts/main.js`
+
+### `references/local-examples/multi-animated-progress`
+
+Strong for:
+
+- multiple animated progress bars
+- title payload preservation
+- reusable bar component parameters
+
+Primary files:
+
+- `ui/_ui_defs.json`
+- `ui/hud_screen.json`
+- `ui/animated_bar.json`
+
 ## `references/upstreams/MCBVanillaResourcePack`
 
 Optional local mirror of the upstream vanilla pack authority.

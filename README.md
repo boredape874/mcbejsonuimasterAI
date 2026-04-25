@@ -106,6 +106,7 @@ See:
 - [PMMP To JSON UI Bridge](docs/25-pmmp-json-ui-bridge.md)
 - [Common Failure Modes](docs/26-common-failure-modes.md)
 - [Token-Efficient Routing](docs/27-token-efficient-routing.md)
+- [Local Example Mining](docs/28-local-example-mining.md)
 
 ## Quick start
 
@@ -332,6 +333,7 @@ Then read as needed:
 - [PMMP To JSON UI Bridge](docs/25-pmmp-json-ui-bridge.md)
 - [Common Failure Modes](docs/26-common-failure-modes.md)
 - [Token-Efficient Routing](docs/27-token-efficient-routing.md)
+- [Local Example Mining](docs/28-local-example-mining.md)
 
 ## Is this enough to become a "JSON UI Master AI" in one shot?
 

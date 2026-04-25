@@ -22,3 +22,4 @@ Task groups:
 - `07-string-payload-design.md`
 - `08-tooling-workflow.md`
 - `09-merge-json-ui-packs.md`
+- `10-mine-local-resource-pack-examples.md`

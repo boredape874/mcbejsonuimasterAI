@@ -1,0 +1,17 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "RPG HUD",
+    "description": "Volya's MMORPG HUD style - 5 animated bars",
+    "uuid": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 20, 0]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "f6e5d4c3-b2a1-4098-8765-4321fedcba98",
+      "version": [1, 0, 0]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "ui_defs": [
+    "ui/animated_bar.json",
+    "ui/rpg_hud.json"
+  ]
+}

@@ -91,6 +91,8 @@ Primary files:
 - `references/local-utils/json-ui-utils/progress_bar_utils.json`
 - `references/local-utils/json-ui-utils/title_progress_utils.json`
 - `references/local-utils/json-ui-utils/prefix_router_utils.json`
+- `references/local-examples/rpg-hud/ui/rpg_hud.json`
+- `references/local-examples/multi-animated-progress/ui/hud_screen.json`
 
 ## 6. Bindings, validation, and merge safety
 
@@ -125,3 +127,4 @@ Primary source:
 
 - `references/source-packs/custom-crops-reference/`
 - `docs/25-pmmp-json-ui-bridge.md`
+- `docs/28-local-example-mining.md`

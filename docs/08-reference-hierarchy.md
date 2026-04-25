@@ -57,6 +57,7 @@ Use subtopic notes only for the exact problem:
 - PMMP-to-JSON UI bridge
 - common failure triage
 - token-efficient routing
+- local example mining
 
 ## Rule
 

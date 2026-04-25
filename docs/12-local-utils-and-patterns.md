@@ -1,6 +1,6 @@
 # Local Utils And Patterns
 
-This document catalogs extra reusable material mirrored from the local `리소스팩 개발` workspace.
+This document catalogs extra reusable material mirrored from a local resource-pack workspace.
 
 Use these files when the task needs a working local pattern rather than a generic explanation.
 

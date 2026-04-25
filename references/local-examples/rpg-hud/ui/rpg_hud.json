@@ -1,0 +1,399 @@
+{
+  "namespace": "rpg_hud",
+  // ───────────────────────────────────────────
+  // preserved_title: prefix 기반 데이터 수신
+  // title 명령어에서 "prefix값" 형태로 수신
+  // ───────────────────────────────────────────
+  "preserved_title_base": {
+    "type": "panel",
+    "size": [
+      0,
+      0
+    ],
+    "$update_string|default": "bar_",
+    "bindings": [
+      {
+        "binding_name": "#hud_title_text_string"
+      },
+      {
+        "binding_name": "#hud_title_text_string",
+        "binding_name_override": "#preserved_text",
+        "binding_condition": "visibility_changed"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $update_string) = #hud_title_text_string))",
+        "target_property_name": "#visible"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((#preserved_text - $update_string) - 0)",
+        "target_property_name": "#progress"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((#preserved_text - ($update_string + #progress + ',')) - 0)",
+        "target_property_name": "#max_value"
+      }
+    ]
+  },
+  // 각 바별 preserved_title 인스턴스
+  "preserved_hp@rpg_hud.preserved_title_base": {
+    "$update_string": "hpBar_"
+  },
+  "preserved_mana@rpg_hud.preserved_title_base": {
+    "$update_string": "manaBar_"
+  },
+  "preserved_armor@rpg_hud.preserved_title_base": {
+    "$update_string": "armorBar_"
+  },
+  "preserved_food@rpg_hud.preserved_title_base": {
+    "$update_string": "foodBar_"
+  },
+  "preserved_exp@rpg_hud.preserved_title_base": {
+    "$update_string": "expBar_"
+  },
+  // ───────────────────────────────────────────
+  // 바 그룹: 왼쪽 (체력 + 마나)
+  // ───────────────────────────────────────────
+  "left_group": {
+    "type": "panel",
+    "size": [
+      98,
+      21
+    ],
+    "anchor_from": "bottom_middle",
+    "anchor_to": "bottom_middle",
+    "offset": [
+      -50,
+      -34
+    ],
+    "controls": [
+      {
+        "mana_icon": {
+          "type": "image",
+          "size": [
+            9,
+            9
+          ],
+          "texture": "textures/ui/rpghud/icon_mana",
+          "color": [
+            0.176,
+            0.486,
+            1.0
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left"
+        }
+      },
+      {
+        "mana_bar@animated_bar.animated_progress_bar": {
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            10,
+            0
+          ],
+          "$background_size": [
+            88,
+            9
+          ],
+          "$background_texture": "textures/ui/rpghud/bar_outline",
+          "$bar_texture": "textures/ui/rpghud/bar_fill",
+          "$bar_color": [
+            0.129,
+            0.561,
+            0.965
+          ],
+          "$max_value_binding": "#max_value",
+          "$data_source": "preserved_mana",
+          "$progress_binding": "#progress",
+          "$ignore_text": false,
+          "$text_shadow": true,
+          "$text_font_scale_factor": 0.5,
+          "$text_offset": [
+            0,
+            0
+          ],
+          "$text_anchor": "center",
+          "$text_format": "('\u00a7z' + $progress_binding + '/' + #max_value)"
+        }
+      },
+      {
+        "health_icon": {
+          "type": "image",
+          "size": [
+            9,
+            9
+          ],
+          "texture": "textures/ui/rpghud/icon_heart",
+          "color": [
+            0.796,
+            0.188,
+            0.251
+          ],
+          "anchor_from": "bottom_left",
+          "anchor_to": "bottom_left"
+        }
+      },
+      {
+        "health_bar@animated_bar.animated_progress_bar": {
+          "anchor_from": "bottom_left",
+          "anchor_to": "bottom_left",
+          "offset": [
+            10,
+            0
+          ],
+          "$background_size": [
+            88,
+            9
+          ],
+          "$background_texture": "textures/ui/rpghud/bar_outline",
+          "$bar_texture": "textures/ui/rpghud/bar_fill",
+          "$bar_color": [
+            0.796,
+            0.188,
+            0.251
+          ],
+          "$max_value_binding": "#max_value",
+          "$data_source": "preserved_hp",
+          "$progress_binding": "#progress",
+          "$ignore_text": false,
+          "$text_shadow": true,
+          "$text_font_scale_factor": 0.5,
+          "$text_offset": [
+            0,
+            0
+          ],
+          "$text_anchor": "center",
+          "$text_format": "('\u00a7z' + $progress_binding + '/' + #max_value)"
+        }
+      }
+    ]
+  },
+  // ───────────────────────────────────────────
+  // 바 그룹: 오른쪽 (방어력 + 음식)
+  // ───────────────────────────────────────────
+  "right_group": {
+    "type": "panel",
+    "size": [
+      98,
+      21
+    ],
+    "anchor_from": "bottom_middle",
+    "anchor_to": "bottom_middle",
+    "offset": [
+      50,
+      -34
+    ],
+    "controls": [
+      {
+        "food_bar@animated_bar.animated_progress_bar": {
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "$background_size": [
+            88,
+            9
+          ],
+          "$background_texture": "textures/ui/rpghud/bar_outline",
+          "$bar_texture": "textures/ui/rpghud/bar_fill",
+          "$bar_color": [
+            0.722,
+            0.518,
+            0.345
+          ],
+          "$max_value_binding": "#max_value",
+          "$data_source": "preserved_food",
+          "$progress_binding": "#progress",
+          "$ignore_text": false,
+          "$text_shadow": true,
+          "$text_font_scale_factor": 0.5,
+          "$text_offset": [
+            0,
+            0
+          ],
+          "$text_anchor": "center",
+          "$text_format": "('\u00a7z' + $progress_binding + '/' + #max_value)"
+        }
+      },
+      {
+        "food_icon": {
+          "type": "image",
+          "size": [
+            9,
+            9
+          ],
+          "texture": "textures/ui/rpghud/icon_food",
+          "color": [
+            0.722,
+            0.518,
+            0.345
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            89,
+            0
+          ]
+        }
+      },
+      {
+        "armor_bar@animated_bar.animated_progress_bar": {
+          "anchor_from": "bottom_left",
+          "anchor_to": "bottom_left",
+          "$background_size": [
+            88,
+            9
+          ],
+          "$background_texture": "textures/ui/rpghud/bar_outline",
+          "$bar_texture": "textures/ui/rpghud/bar_fill",
+          "$bar_color": [
+            0.710,
+            0.710,
+            0.710
+          ],
+          "$max_value_binding": "#max_value",
+          "$data_source": "preserved_armor",
+          "$progress_binding": "#progress",
+          "$ignore_text": false,
+          "$text_shadow": true,
+          "$text_font_scale_factor": 0.5,
+          "$text_offset": [
+            0,
+            0
+          ],
+          "$text_anchor": "center",
+          "$text_format": "('\u00a7z' + $progress_binding + '/' + #max_value)"
+        }
+      },
+      {
+        "armor_icon": {
+          "type": "image",
+          "size": [
+            9,
+            9
+          ],
+          "texture": "textures/ui/rpghud/icon_armor",
+          "color": [
+            0.710,
+            0.710,
+            0.710
+          ],
+          "anchor_from": "bottom_left",
+          "anchor_to": "bottom_left",
+          "offset": [
+            89,
+            0
+          ]
+        }
+      }
+    ]
+  },
+  // ───────────────────────────────────────────
+  // 경험치 바 (중앙)
+  // ───────────────────────────────────────────
+  "exp_group": {
+    "type": "panel",
+    "size": [
+      178,
+      15
+    ],
+    "anchor_from": "bottom_middle",
+    "anchor_to": "bottom_middle",
+    "offset": [
+      0,
+      -18
+    ],
+    "controls": [
+      {
+        "exp_bar@animated_bar.animated_progress_bar": {
+          "$background_size": [
+            178,
+            5
+          ],
+          "$background_texture": "textures/ui/rpghud/bar_outline_exp",
+          "$bar_texture": "textures/ui/rpghud/bar_fill_exp",
+          "$bar_color": [
+            0.502,
+            1.0,
+            0.125
+          ],
+          "$multiplier": 0.01,
+          "$max_value_binding": "#max_value",
+          "$data_source": "preserved_exp",
+          "$progress_binding": "#progress",
+          "$ignore_trail": true,
+          "$ignore_text": false,
+          "$text_shadow": true,
+          "$text_font_scale_factor": 0.7,
+          "$text_offset": [
+            1,
+            0
+          ],
+          "$text_anchor": "center",
+          "$text_format": "('§z' + $progress_binding + '%')"
+        }
+      },
+      {
+        "level_bg": {
+          "type": "image",
+          "texture": "textures/ui/rpghud/background_level",
+          "size": [
+            176,
+            10
+          ],
+          "anchor_from": "bottom_middle",
+          "anchor_to": "bottom_middle",
+          "offset": [
+            0,
+            0
+          ]
+        }
+      }
+    ]
+  },
+  // ───────────────────────────────────────────
+  // 메인 HUD 패널
+  // ───────────────────────────────────────────
+  "rpg_hud_panel": {
+    "type": "panel",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "layer": 30,
+    "controls": [
+      {
+        "preserved_hp@rpg_hud.preserved_hp": {}
+      },
+      {
+        "preserved_mana@rpg_hud.preserved_mana": {}
+      },
+      {
+        "preserved_armor@rpg_hud.preserved_armor": {}
+      },
+      {
+        "preserved_food@rpg_hud.preserved_food": {}
+      },
+      {
+        "preserved_exp@rpg_hud.preserved_exp": {}
+      },
+      {
+        "left_group@rpg_hud.left_group": {}
+      },
+      {
+        "right_group@rpg_hud.right_group": {}
+      },
+      {
+        "exp_group@rpg_hud.exp_group": {}
+      }
+    ],
+    "bindings": [
+      {
+        "binding_name": "#hud_visible_centered",
+        "binding_name_override": "#visible",
+        "binding_type": "global"
+      }
+    ]
+  }
+}
