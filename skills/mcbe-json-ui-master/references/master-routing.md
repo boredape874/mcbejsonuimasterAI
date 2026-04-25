@@ -1,30 +1,12 @@
 # Master Routing
 
-## Read these docs first
+## Read first
 
-- `../../../docs/00-overview.md`
-- `../../../docs/01-source-catalog.md`
-- `../../../docs/02-mastery-map.md`
-- `../../../docs/03-skill-map.md`
-- `../../../docs/04-source-priority.md`
-- `../../../docs/05-external-research-map.md`
-- `../../../docs/06-json-ui-rules.md`
-- `../../../docs/07-external-example-sources.md`
-- `../../../docs/08-reference-hierarchy.md`
-- `../../../docs/09-schema-and-tooling.md`
-- `../../../docs/10-bedrock-wiki-mirror.md`
-- `../../../docs/11-basics-and-mental-model.md`
-- `../../../docs/12-local-utils-and-patterns.md`
-- `../../../docs/13-vanilla-asset-workflow.md`
-- `../../../docs/14-json-ui-best-practices.md`
-- `../../../docs/15-json-ui-file-role-catalog.md`
-- `../../../docs/16-screen-by-screen-reference.md`
-- `../../../docs/17-community-patterns-string-score-hud.md`
-- `../../../docs/18-tooling-auxgen-dumper-starlib.md`
-- `../../../docs/19-bindings-and-hardcoded-values.md`
-- `../../../docs/20-pack-merge-playbook.md`
-- `../../../docs/21-update-policy.md`
-- `../../../docs/22-ai-response-quality.md`
+Read only this routing file first.
+
+If the request is broad or ambiguous, read `../../../docs/27-token-efficient-routing.md` and choose the smallest matching route.
+
+Do not load every docs file by default.
 
 ## Route by request type
 
@@ -44,6 +26,11 @@ Then load:
 - `topics/basics/index.md`
 - and only the exact needed subtopic under `topics/basics/`
 
+For pack basics, layout units, or beginner resource-pack context, prefer:
+
+- `../../../docs/23-bedrock-resource-pack-basics.md`
+- `../../../docs/24-json-ui-layout-units.md`
+
 ### bindings, variables, parsing, conditions
 
 Use `mcbe-json-ui-logic`.
@@ -54,6 +41,8 @@ Then load:
 
 For community string splitting, fixed-width slicing, or Unicode byte-width payloads, prefer `topics/logic/string-splitting-and-slicing.md`.
 
+For hardcoded value discovery and binding value limits, prefer `../../../docs/19-bindings-and-hardcoded-values.md`.
+
 ### HUD, chat, title, actionbar, scoreboard
 
 Use `mcbe-json-ui-hud-and-chat`.
@@ -63,6 +52,8 @@ Then load:
 - and only the exact needed subtopic under `topics/hud-chat/`
 
 For individual scoreboard HUD or interactable HUD menus, prefer `topics/hud-chat/personal-score-and-interactable-hud.md`.
+
+For PMMP-driven title/actionbar/chat bridges, prefer `../../../docs/25-pmmp-json-ui-bridge.md`.
 
 ### server form or chest form routing
 
@@ -87,6 +78,8 @@ Then load:
 
 - `topics/debugging/index.md`
 - and only the exact needed subtopic under `topics/debugging/`
+
+For first-pass triage, prefer `../../../docs/26-common-failure-modes.md`.
 
 ### UI plus addon resource linkage
 
@@ -128,6 +121,8 @@ Then load:
 - `topics/schemas/index.md`
 - and only the exact needed subtopic under `topics/schemas/`
 
+For pack validation scripts and update cadence, prefer `../../../docs/21-update-policy.md`.
+
 ### visual editor, builder, or tool-generated UI workflow
 
 Use `mcbe-json-ui-tooling`.
@@ -137,3 +132,13 @@ Then load:
 - and only the exact needed subtopic under `topics/tooling/`
 
 For bedrock-auxgen, JSON-UI-Dumper, or StarLibV2, prefer `topics/tooling/aux-dumper-starlib.md`.
+
+### merge, audit, or pack migration
+
+Use `../../../docs/20-pack-merge-playbook.md`.
+Then inspect only:
+
+- both packs' `_ui_defs.json`
+- target changed screen files
+- referenced custom utility files
+- referenced textures or atlases

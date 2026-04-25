@@ -10,6 +10,8 @@ Use for:
 - `_ui_defs.json` mental model
 - screen vs template distinctions
 - practical screen-size and layout expectations
+- resource-pack folder roles
+- JSON UI layout units
 
 ## `mcbe-json-ui-master`
 
@@ -87,6 +89,7 @@ Use for:
 - missing textures
 - wrong namespace injection
 - failed server form replacement
+- first-pass failure mode triage
 
 ## `mcbe-json-ui-addon-integration`
 
@@ -95,6 +98,7 @@ Use for:
 - UI linked to textures, fonts, blocks, items, entities, or addon data
 - BP and RP cross-reference work
 - addon-wide asset tracing
+- PMMP-to-title/actionbar/chat/form bridge design
 
 ## `mcbe-json-ui-vanilla-assets`
 

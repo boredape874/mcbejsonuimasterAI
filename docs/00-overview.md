@@ -8,6 +8,7 @@ It is built around four principles:
 2. Treat JSON UI as part of the full RP and addon structure
 3. Validate vanilla paths against upstream sources instead of memory
 4. Answer in file-level terms that a PMMP or Bedrock developer can edit immediately
+5. Keep AI context small by routing to one topic and one or two exact references
 
 It also now includes a beginner-safe layer so the AI can explain:
 
@@ -32,6 +33,7 @@ It also now includes a beginner-safe layer so the AI can explain:
 - texture and addon integration
 - basics and mental models
 - local utility mirrors for topbar, title bars, and tablist patterns
+- token-efficient routing for large packs
 
 ## Main problem this repository solves
 

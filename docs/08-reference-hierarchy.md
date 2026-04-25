@@ -4,24 +4,12 @@ This repository uses a layered reference model so the AI reads only what it need
 
 ## Level 1: top-level routing
 
-Read these first:
+Read these first only for broad orientation:
 
-- `docs/11-basics-and-mental-model.md`
 - `docs/03-skill-map.md`
-- `docs/04-source-priority.md`
-- `docs/05-external-research-map.md`
-- `docs/06-json-ui-rules.md`
-- `docs/12-local-utils-and-patterns.md`
-- `docs/13-vanilla-asset-workflow.md`
-- `docs/14-json-ui-best-practices.md`
-- `docs/15-json-ui-file-role-catalog.md`
-- `docs/16-screen-by-screen-reference.md`
-- `docs/17-community-patterns-string-score-hud.md`
-- `docs/18-tooling-auxgen-dumper-starlib.md`
-- `docs/19-bindings-and-hardcoded-values.md`
-- `docs/20-pack-merge-playbook.md`
-- `docs/21-update-policy.md`
-- `docs/22-ai-response-quality.md`
+- `docs/27-token-efficient-routing.md`
+
+Then pick only the exact topic document.
 
 ## Level 2: topic indexes
 
@@ -64,6 +52,11 @@ Use subtopic notes only for the exact problem:
 - dumper, AUX, and library tooling
 - binding and hardcoded value lookup
 - pack merge and version update workflow
+- Bedrock resource-pack basics
+- JSON UI layout units
+- PMMP-to-JSON UI bridge
+- common failure triage
+- token-efficient routing
 
 ## Rule
 

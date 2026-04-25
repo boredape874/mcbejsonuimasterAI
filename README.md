@@ -101,6 +101,11 @@ See:
 - [Pack Merge Playbook](docs/20-pack-merge-playbook.md)
 - [Update Policy](docs/21-update-policy.md)
 - [AI Response Quality Rules](docs/22-ai-response-quality.md)
+- [Bedrock Resource Pack Basics](docs/23-bedrock-resource-pack-basics.md)
+- [JSON UI Layout Units](docs/24-json-ui-layout-units.md)
+- [PMMP To JSON UI Bridge](docs/25-pmmp-json-ui-bridge.md)
+- [Common Failure Modes](docs/26-common-failure-modes.md)
+- [Token-Efficient Routing](docs/27-token-efficient-routing.md)
 
 ## Quick start
 
@@ -192,6 +197,8 @@ That skill routes into smaller topic files such as:
 - schemas
 - tooling
 - best-practice-oriented pattern selection
+
+For token efficiency, the master skill is designed to read one router, one topic index, and only the exact subtopic files needed for the request.
 
 ### Typical prompts
 
@@ -320,6 +327,11 @@ Then read as needed:
 - [Pack Merge Playbook](docs/20-pack-merge-playbook.md)
 - [Update Policy](docs/21-update-policy.md)
 - [AI Response Quality Rules](docs/22-ai-response-quality.md)
+- [Bedrock Resource Pack Basics](docs/23-bedrock-resource-pack-basics.md)
+- [JSON UI Layout Units](docs/24-json-ui-layout-units.md)
+- [PMMP To JSON UI Bridge](docs/25-pmmp-json-ui-bridge.md)
+- [Common Failure Modes](docs/26-common-failure-modes.md)
+- [Token-Efficient Routing](docs/27-token-efficient-routing.md)
 
 ## Is this enough to become a "JSON UI Master AI" in one shot?
 

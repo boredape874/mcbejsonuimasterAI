@@ -17,3 +17,4 @@ Prompt groups:
 - `05-debugging.md`
 - `06-pack-analysis.md`
 - `07-community-patterns-and-tools.md`
+- `08-token-efficient-work.md`

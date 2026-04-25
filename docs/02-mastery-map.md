@@ -11,10 +11,14 @@ Learn first:
 - why `_ui_defs.json` matters
 - why there is no one fixed Bedrock screen size
 - how screens differ from templates
+- how `manifest.json`, pack priority, `textures/`, `font/`, and `texts/` affect UI behavior
+- how JSON UI layout units and anchors behave across device modes
 
 Primary files:
 
 - `docs/11-basics-and-mental-model.md`
+- `docs/23-bedrock-resource-pack-basics.md`
+- `docs/24-json-ui-layout-units.md`
 - `references/external/bedrock-wiki-json-ui/json-ui-intro.md`
 - `references/external/bedrock-wiki-json-ui/add-hud-elements.md`
 - `references/official/bedrock-samples-ui/_ui_defs.json`
@@ -96,11 +100,15 @@ Learn next:
 - hardcoded values
 - pack merge risks
 - validation script workflow
+- common failure triage
+- token-efficient route selection
 
 Primary files:
 
 - `docs/19-bindings-and-hardcoded-values.md`
 - `docs/20-pack-merge-playbook.md`
+- `docs/26-common-failure-modes.md`
+- `docs/27-token-efficient-routing.md`
 - `scripts/validate-json-ui-pack.ps1`
 - `references/official/bedrock-samples-ui/hud_screen.json`
 - `references/official/bedrock-samples-ui/server_form.json`
@@ -111,7 +119,9 @@ Learn last:
 
 - how UI depends on textures, fonts, blocks, items, and addon data
 - where UI changes stop and addon asset changes begin
+- how PMMP drives title, actionbar, chat, scoreboard, and form UI
 
 Primary source:
 
 - `references/source-packs/custom-crops-reference/`
+- `docs/25-pmmp-json-ui-bridge.md`

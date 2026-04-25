@@ -24,6 +24,8 @@ For JSON UI work, the pack is not just a single `hud_screen.json`. The UI usuall
 For file-by-file responsibility, also read:
 
 - `docs/15-json-ui-file-role-catalog.md`
+- `docs/23-bedrock-resource-pack-basics.md`
+- `docs/24-json-ui-layout-units.md`
 
 ## What Bedrock JSON UI is
 
@@ -133,6 +135,10 @@ For "what is this system" questions, prefer:
 2. included local sample packs
 3. mirrored example repositories
 4. Ztech vanilla pack for real file paths and actual vanilla assets
+
+For PMMP-driven UI, use `docs/25-pmmp-json-ui-bridge.md`.
+For first-pass debugging, use `docs/26-common-failure-modes.md`.
+For large packs, use `docs/27-token-efficient-routing.md` before opening references.
 
 ## What the AI should avoid
 
