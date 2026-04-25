@@ -68,6 +68,7 @@ Use subtopic notes only for the exact problem:
 - dumper value cookbook
 - vanilla dumper screen recipes
 - advanced JSON UI recipes
+- design recommendation catalog
 
 ## Rule
 

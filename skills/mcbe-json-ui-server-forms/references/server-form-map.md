@@ -19,3 +19,7 @@
 - `1seulbi`: `customUI_` plus typed suffix routing
 - `custom-crops-reference`: chest or furnace token routing
 - `bunnyfarm/GfE8ULhgL4I`: lightweight server form skin override
+
+## Design recommendation
+
+- `../../../docs/39-design-recommendation-catalog.md`

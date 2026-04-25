@@ -25,3 +25,4 @@ Task groups:
 - `10-mine-local-resource-pack-examples.md`
 - `11-animation-binding-scroll-mining.md`
 - `12-dumper-recipe-mining.md`
+- `13-server-form-design-adaptation.md`

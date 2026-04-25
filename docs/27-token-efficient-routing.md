@@ -38,6 +38,7 @@ Load in this order:
 | dumper value such as factory/grid/renderer/focus | `docs/36-dumper-value-cookbook.md` | one exact vanilla source object |
 | vanilla screen recipe | `docs/37-vanilla-dumper-screen-recipes.md` | one exact screen and object |
 | advanced combined UI recipe | `docs/38-advanced-json-ui-recipes.md` | only the listed recipe sources |
+| server form design recommendation | `docs/39-design-recommendation-catalog.md` | one exact reference form or screen source |
 
 ## Do not load by default
 

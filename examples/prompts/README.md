@@ -20,3 +20,4 @@ Prompt groups:
 - `08-token-efficient-work.md`
 - `09-fragment-based-adaptation.md`
 - `10-animation-binding-scroll.md`
+- `11-server-form-design-recommendation.md`

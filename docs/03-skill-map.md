@@ -24,6 +24,7 @@ Use this when the task spans multiple areas:
 - HUD or chat
 - title or actionbar protocols
 - server forms
+- server form visual direction and design recommendation
 - debugging
 - addon integration
 - vanilla asset lookup
@@ -67,6 +68,7 @@ Use for:
 - long form routing
 - chest and furnace substitutions
 - title prefix or suffix routing
+- server form design family selection and size planning
 
 ## `mcbe-json-ui-patterns`
 
@@ -79,6 +81,7 @@ Use for:
 - pocket container patterns
 - scoreboard patterns
 - tablist and utility-library patterns
+- design catalogs for choosing a reference style before implementation
 
 ## `mcbe-json-ui-debugging`
 

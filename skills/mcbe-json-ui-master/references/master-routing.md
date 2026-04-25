@@ -67,6 +67,8 @@ Then load:
 - `topics/server-forms/index.md`
 - and only the exact needed subtopic under `topics/server-forms/`
 
+For server form visual direction, NPC dialogue style, chest/furnace form look, RPG menu layout, control panel sizing, or design recommendations, prefer `../../../docs/39-design-recommendation-catalog.md`.
+
 ### progress bar, chest UI, reusable templates
 
 Use `mcbe-json-ui-patterns`.
