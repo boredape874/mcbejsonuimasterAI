@@ -65,6 +65,9 @@ Use subtopic notes only for the exact problem:
 - animation patterns and dumper values
 - binding pattern value index
 - scroll and carousel patterns
+- dumper value cookbook
+- vanilla dumper screen recipes
+- advanced JSON UI recipes
 
 ## Rule
 

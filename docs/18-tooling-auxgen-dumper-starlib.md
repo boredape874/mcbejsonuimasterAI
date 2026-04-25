@@ -74,6 +74,8 @@ Animation note:
 
 - dumped vanilla UI includes animation blocks such as `anim_type`, `anims`, `animation_reset_name`, `play_event`, `end_event`, `next`, and `destroy_at_end`
 - use `docs/33-animation-patterns-and-dumper-values.md` when the task is animation-specific
+- use `docs/36-dumper-value-cookbook.md` when the task is about dumped vanilla values such as `factory`, `collection_name`, `renderer`, `button_mappings`, `variables`, `grid_dimensions`, or `property_bag`
+- use `docs/37-vanilla-dumper-screen-recipes.md` when the task names a vanilla screen such as HUD, chat, chest, inventory, or server form
 - copy the animation reference relationship as well as the animation definition; a standalone `anim_type` block is often not enough
 
 ## `pipangry/StarLibV2`
@@ -123,3 +125,4 @@ This repository should prefer:
 | dynamic form architecture | `StarLibV2` |
 | animation field discovery | JSON UI Dumper, Mojang `bedrock-samples`, `docs/33-animation-patterns-and-dumper-values.md` |
 | binding/search/slicing examples | StarLibV2, `docs/34-binding-patterns-value-index.md` |
+| dumped vanilla value recipes | `docs/36-dumper-value-cookbook.md`, `docs/37-vanilla-dumper-screen-recipes.md` |

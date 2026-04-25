@@ -79,6 +79,12 @@ For `anim_type`, animation chains, easing values, or JSON UI Dumper animation ex
 
 For scroll panels, horizontal scroll attempts, or clipped carousel animation, prefer `../../../docs/35-scroll-and-carousel-patterns.md`.
 
+For Dumper-derived values such as `factory`, `collection_name`, `grid_dimensions`, `renderer`, `button_mappings`, `focus_identifier`, `variables`, or `property_bag`, prefer `../../../docs/36-dumper-value-cookbook.md`.
+
+For screen-specific vanilla recipes from HUD, chat, chest, inventory, UI common, or server form, prefer `../../../docs/37-vanilla-dumper-screen-recipes.md`.
+
+For combined patterns such as animated tabs, searchable forms, item icon rows, polished long lists, interactive HUD overlays, or clipped carousels, prefer `../../../docs/38-advanced-json-ui-recipes.md`.
+
 ### bug or rendering failure
 
 Use `mcbe-json-ui-debugging`.
@@ -142,6 +148,8 @@ Then load:
 For bedrock-auxgen, JSON-UI-Dumper, or StarLibV2, prefer `topics/tooling/aux-dumper-starlib.md`.
 
 For Dumper animation values, use `../../../docs/33-animation-patterns-and-dumper-values.md` after the tooling note.
+
+For broader Dumper value recipes, use `../../../docs/36-dumper-value-cookbook.md` and `../../../docs/37-vanilla-dumper-screen-recipes.md`.
 
 ### local archive examples
 

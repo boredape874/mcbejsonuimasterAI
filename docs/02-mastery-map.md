@@ -80,6 +80,7 @@ Learn next:
 - animated bars
 - standalone animation chains
 - dumper-derived animation values
+- dumper-derived factories, grids, renderers, focus, and input mappings
 - scoreboard overlays
 - chest and pocket container layouts
 - vertical scroll panels
@@ -90,6 +91,9 @@ Primary files:
 
 - `docs/33-animation-patterns-and-dumper-values.md`
 - `docs/35-scroll-and-carousel-patterns.md`
+- `docs/36-dumper-value-cookbook.md`
+- `docs/37-vanilla-dumper-screen-recipes.md`
+- `docs/38-advanced-json-ui-recipes.md`
 - `references/source-packs/custom-crops-reference/ui/animated_bar.json`
 - `references/source-packs/bunnyfarm/tDAp1yJMUYo/ui/animated_bar.json`
 - `references/official/bedrock-samples-ui/hud_screen.json`

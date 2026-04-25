@@ -24,6 +24,12 @@
 - `../../references/source-packs/custom-crops-reference/ui/quest.json`
 - `../../references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/server_form_controls.json`
 
+## dumper value recipes
+
+- `../../docs/36-dumper-value-cookbook.md`
+- `../../docs/37-vanilla-dumper-screen-recipes.md`
+- `../../docs/38-advanced-json-ui-recipes.md`
+
 ## scoreboard
 
 - `../../references/source-packs/1seulbi/ui/scoreboards.json`

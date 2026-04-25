@@ -35,6 +35,9 @@ Load in this order:
 | animation or `anim_type` | `docs/33-animation-patterns-and-dumper-values.md` | one exact vanilla/local/RainbowPie animation source |
 | binding value or binding dump | `docs/34-binding-patterns-value-index.md` | target screen and one exact source binding file |
 | vertical scroll, horizontal scroll, carousel | `docs/35-scroll-and-carousel-patterns.md` | one exact scroll or offset-animation source |
+| dumper value such as factory/grid/renderer/focus | `docs/36-dumper-value-cookbook.md` | one exact vanilla source object |
+| vanilla screen recipe | `docs/37-vanilla-dumper-screen-recipes.md` | one exact screen and object |
+| advanced combined UI recipe | `docs/38-advanced-json-ui-recipes.md` | only the listed recipe sources |
 
 ## Do not load by default
 

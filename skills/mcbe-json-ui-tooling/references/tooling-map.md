@@ -53,6 +53,26 @@ Use for:
 - `next`
 - `destroy_at_end`
 
+## Dumper value cookbook
+
+- `../../../docs/36-dumper-value-cookbook.md`
+- `../../../docs/37-vanilla-dumper-screen-recipes.md`
+- `../../../docs/38-advanced-json-ui-recipes.md`
+
+Use for:
+
+- `factory`
+- `collection_name`
+- `grid_dimensions`
+- `grid_item_template`
+- `renderer`
+- `property_bag`
+- `variables`
+- `button_mappings`
+- `focus_identifier`
+- `common.scrolling_panel`
+- `uv`, `tiled`, `layer`
+
 ## Chest UI tooling
 
 - `../../../references/external/Chest-UI/README.md`

@@ -24,3 +24,4 @@ Task groups:
 - `09-merge-json-ui-packs.md`
 - `10-mine-local-resource-pack-examples.md`
 - `11-animation-binding-scroll-mining.md`
+- `12-dumper-recipe-mining.md`

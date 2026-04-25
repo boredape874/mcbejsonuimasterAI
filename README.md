@@ -114,10 +114,16 @@ See:
 - [Animation Patterns And Dumper Values](docs/33-animation-patterns-and-dumper-values.md)
 - [Binding Patterns Value Index](docs/34-binding-patterns-value-index.md)
 - [Scroll And Carousel Patterns](docs/35-scroll-and-carousel-patterns.md)
+- [Dumper Value Cookbook](docs/36-dumper-value-cookbook.md)
+- [Vanilla Dumper Screen Recipes](docs/37-vanilla-dumper-screen-recipes.md)
+- [Advanced JSON UI Recipes](docs/38-advanced-json-ui-recipes.md)
 - [Minecraft Bedrock JSON UI Sample Upstream](docs/32-minecraft-bedrock-json-ui-sample-upstream.md)
 - [Animation Patterns And Dumper Values](docs/33-animation-patterns-and-dumper-values.md)
 - [Binding Patterns Value Index](docs/34-binding-patterns-value-index.md)
 - [Scroll And Carousel Patterns](docs/35-scroll-and-carousel-patterns.md)
+- [Dumper Value Cookbook](docs/36-dumper-value-cookbook.md)
+- [Vanilla Dumper Screen Recipes](docs/37-vanilla-dumper-screen-recipes.md)
+- [Advanced JSON UI Recipes](docs/38-advanced-json-ui-recipes.md)
 
 ## Quick start
 
