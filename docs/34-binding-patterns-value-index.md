@@ -60,8 +60,8 @@ Use when customizing `server_form.json`.
 Source:
 
 - `references/local-examples/npc-dialogue/ui/server_form.json`
-- `references/source-packs/custom-crops-reference/ui/stat.json`
-- `references/source-packs/custom-crops-reference/ui/skill.json`
+- `references/source-packs/rpg-server-ui-reference/ui/stat.json`
+- `references/source-packs/rpg-server-ui-reference/ui/skill.json`
 
 Pattern:
 

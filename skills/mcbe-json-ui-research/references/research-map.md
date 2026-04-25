@@ -6,11 +6,11 @@
 - the user wants a working pattern to copy
 - the answer depends on PMMP or server driven text protocols
 
-Primary local sources:
+Primary included sources:
 
-- `../../references/source-packs/1seulbi/`
-- `../../references/source-packs/bunnyfarm/`
-- `../../references/source-packs/custom-crops-reference/`
+- `../../references/source-packs/modern-cloud-ui-reference/`
+- `../../references/source-packs/farm-ui-variants/`
+- `../../references/source-packs/rpg-server-ui-reference/`
 
 ## Use Mojang bedrock-samples when
 

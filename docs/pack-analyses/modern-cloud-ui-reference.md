@@ -1,8 +1,8 @@
-# 1seulbi Analysis
+# Modern Cloud UI Reference Analysis
 
 ## Why this pack matters
 
-`1seulbi` is one of the strongest packs in this repository for learning practical JSON UI structure.
+Modern Cloud UI Reference is one of the strongest packs in this repository for learning practical JSON UI structure.
 
 It is useful because:
 

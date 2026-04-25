@@ -45,9 +45,9 @@ It is written in Bedrock addon and PMMP terms, not generic web UI terms.
 
 ### Local pack references
 
-- `references/source-packs/1seulbi/`
-- `references/source-packs/bunnyfarm/`
-- `references/source-packs/custom-crops-reference/`
+- `references/source-packs/modern-cloud-ui-reference/`
+- `references/source-packs/farm-ui-variants/`
+- `references/source-packs/rpg-server-ui-reference/`
 
 ### Local utility mirrors
 
@@ -184,7 +184,7 @@ This mirror is intentionally not committed because it is large and searchable.
 ### 6. Optional: validate a JSON UI pack or reference mirror
 
 ```powershell
-.\scripts\validate-json-ui-pack.ps1 -PackPath references\source-packs\1seulbi
+.\scripts\validate-json-ui-pack.ps1 -PackPath references\source-packs\modern-cloud-ui-reference
 ```
 
 For partial reference mirrors:

@@ -1,10 +1,10 @@
-# Custom Crops Reference Analysis
+# RPG Server UI Reference Analysis
 
 ## Why this source matters
 
 This is not only a JSON UI sample. It is a full addon-oriented reference set where UI is tied to textures, gameplay systems, and broader resource-pack structure.
 
-That makes it the strongest local source for addon integration analysis.
+That makes it the strongest included source for addon integration analysis.
 
 ## Key JSON UI patterns
 

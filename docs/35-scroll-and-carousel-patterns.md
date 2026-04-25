@@ -1,4 +1,4 @@
-﻿# Scroll And Carousel Patterns
+# Scroll And Carousel Patterns
 
 This document indexes high-value scroll, horizontal layout, and scroll-like animation patterns.
 
@@ -9,8 +9,8 @@ Use for long forms, quest lists, shop lists, and settings panels.
 Sources:
 
 - `references/external/json-ui-examples/scroll_panel_template.json`
-- `references/source-packs/custom-crops-reference/ui/shop.json`
-- `references/source-packs/custom-crops-reference/ui/quest.json`
+- `references/source-packs/rpg-server-ui-reference/ui/shop.json`
+- `references/source-packs/rpg-server-ui-reference/ui/quest.json`
 - `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/server_form_controls.json`
 
 Important fields:
@@ -33,9 +33,9 @@ Use for rows of buttons, tab bars, quick slots, and horizontal item groups.
 
 Sources:
 
-- `references/source-packs/custom-crops-reference/ui/stat.json`
-- `references/source-packs/custom-crops-reference/ui/skill.json`
-- `references/source-packs/custom-crops-reference/ui/menu.json`
+- `references/source-packs/rpg-server-ui-reference/ui/stat.json`
+- `references/source-packs/rpg-server-ui-reference/ui/skill.json`
+- `references/source-packs/rpg-server-ui-reference/ui/menu.json`
 - `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/settings_sections/general_section_controls.json`
 
 Pattern:

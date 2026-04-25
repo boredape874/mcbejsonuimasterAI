@@ -2,7 +2,7 @@
 
 Use this when the task is to choose or inspect JSON UI schema files.
 
-Primary local sources:
+Primary included sources:
 
 - `../../../../../references/schemas/Blockception/`
 - `../../../../../references/schemas/DJStompZone/`

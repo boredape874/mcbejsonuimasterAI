@@ -9,6 +9,6 @@ Check:
 
 Best references:
 
-- `../../../../references/source-packs/1seulbi/ui/_ui_defs.json`
-- `../../../../references/source-packs/1seulbi/ui/hud_screen.json`
+- `../../../../references/source-packs/modern-cloud-ui-reference/ui/_ui_defs.json`
+- `../../../../references/source-packs/modern-cloud-ui-reference/ui/hud_screen.json`
 - `../../../../references/external/EasyUIBuilder/ui/custom_ui/panel_example.json`

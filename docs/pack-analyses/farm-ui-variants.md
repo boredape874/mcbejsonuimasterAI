@@ -1,8 +1,8 @@
-# Bunnyfarm Analysis
+# Farm UI Variants Analysis
 
 ## Why this pack group matters
 
-`bunnyfarm` is not one single JSON UI project. It is a collection of sample packs and extracted working pieces. Use it as a pattern library.
+Farm UI Variants is not one single JSON UI project. It is a collection of sample packs and curated working pieces. Use it as a pattern library.
 
 ## Important subpacks
 

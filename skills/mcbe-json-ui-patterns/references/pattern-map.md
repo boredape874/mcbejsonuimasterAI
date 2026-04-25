@@ -1,9 +1,9 @@
-﻿# Pattern Map
+# Pattern Map
 
 ## progress bar
 
-- `../../references/source-packs/custom-crops-reference/ui/animated_bar.json`
-- `../../references/source-packs/bunnyfarm/tDAp1yJMUYo/ui/animated_bar.json`
+- `../../references/source-packs/rpg-server-ui-reference/ui/animated_bar.json`
+- `../../references/source-packs/farm-ui-variants/tDAp1yJMUYo/ui/animated_bar.json`
 - `../../references/external/json-ui-examples/custom_progress_bar.json`
 - `../../references/external/json-ui-examples/custom_heart_or_hunger_like_progress_bar_icons.json`
 - `../../docs/33-animation-patterns-and-dumper-values.md`
@@ -20,8 +20,8 @@
 
 - `../../docs/35-scroll-and-carousel-patterns.md`
 - `../../references/external/json-ui-examples/scroll_panel_template.json`
-- `../../references/source-packs/custom-crops-reference/ui/shop.json`
-- `../../references/source-packs/custom-crops-reference/ui/quest.json`
+- `../../references/source-packs/rpg-server-ui-reference/ui/shop.json`
+- `../../references/source-packs/rpg-server-ui-reference/ui/quest.json`
 - `../../references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/server_form_controls.json`
 
 ## dumper value recipes
@@ -32,15 +32,15 @@
 
 ## scoreboard
 
-- `../../references/source-packs/1seulbi/ui/scoreboards.json`
-- `../../references/source-packs/bunnyfarm/GfE8ULhgL4I/ui/scoreboards.json`
-- `../../references/source-packs/bunnyfarm/gPiyv-DJxGw/ui/scoreboards.json`
+- `../../references/source-packs/modern-cloud-ui-reference/ui/scoreboards.json`
+- `../../references/source-packs/farm-ui-variants/GfE8ULhgL4I/ui/scoreboards.json`
+- `../../references/source-packs/farm-ui-variants/gPiyv-DJxGw/ui/scoreboards.json`
 
 ## chest or custom container
 
-- `../../references/source-packs/bunnyfarm/Y5dOnRAM7js/ui/chest_screen.json`
-- `../../references/source-packs/bunnyfarm/Y5dOnRAM7js/ui/custom_pocket_containers.json`
-- `../../references/source-packs/bunnyfarm/Y5dOnRAM7js/ui/custom_scroll_screen.json`
+- `../../references/source-packs/farm-ui-variants/Y5dOnRAM7js/ui/chest_screen.json`
+- `../../references/source-packs/farm-ui-variants/Y5dOnRAM7js/ui/custom_pocket_containers.json`
+- `../../references/source-packs/farm-ui-variants/Y5dOnRAM7js/ui/custom_scroll_screen.json`
 - `../../references/external/json-ui-examples/scroll_panel_template.json`
 - `../../references/external/json-ui-examples/custom_npc_screen_layout_reference_file.json`
 - `../../references/external/Chest-UI/RP/ui/chest_server_form.json`
@@ -48,12 +48,12 @@
 
 ## server form shell
 
-- `../../references/source-packs/1seulbi/ui/server_form.json`
-- `../../references/source-packs/custom-crops-reference/ui/server_form.json`
+- `../../references/source-packs/modern-cloud-ui-reference/ui/server_form.json`
+- `../../references/source-packs/rpg-server-ui-reference/ui/server_form.json`
 
 ## custom chat panel
 
-- `../../references/source-packs/1seulbi/ui/hud_screen.json`
+- `../../references/source-packs/modern-cloud-ui-reference/ui/hud_screen.json`
 
 ## sliders, toggles, and small control examples
 

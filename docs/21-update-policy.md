@@ -17,7 +17,7 @@ Use this when Bedrock updates or when upstream references change.
 .\scripts\sync-ztech-vanilla.ps1
 .\scripts\sync-bedrock-samples-ui.ps1
 .\scripts\sync-mcbe-json-ui-resource.ps1
-.\scripts\validate-json-ui-pack.ps1 -PackPath references\source-packs\1seulbi
+.\scripts\validate-json-ui-pack.ps1 -PackPath references\source-packs\modern-cloud-ui-reference
 ```
 
 For selected reference mirrors that intentionally do not contain every file from `_ui_defs.json`, use:

@@ -18,9 +18,13 @@ Use this table to choose the smallest file or code fragment for a task.
 | --- | --- | --- |
 | Custom action form | target `ui/server_form.json` | form title/body/button bindings |
 | NPC dialogue | `references/local-examples/npc-dialogue/ui/server_form.json` | dialogue layout and button item template |
-| Quest list form | `references/source-packs/custom-crops-reference/ui/quest.json` | 220x220 panel, 200x171 scroll viewport, 175x40 list buttons |
-| Shop form | `references/source-packs/custom-crops-reference/ui/shop.json` | compact shop panel, body text area, 3-column item rows |
-| Stat or skill form | `references/source-packs/custom-crops-reference/ui/stat.json` or `references/source-packs/custom-crops-reference/ui/skill.json` | card sizes, icon-backed buttons, compact RPG layout |
+| Quest list form | `references/source-packs/rpg-server-ui-reference/ui/quest.json` | 220x220 panel, 200x171 scroll viewport, 175x40 list buttons |
+| Shop form | `references/source-packs/rpg-server-ui-reference/ui/shop.json` | compact shop panel, body text area, 3-column item rows |
+| Modern cloud form router | `references/source-packs/modern-cloud-ui-reference/ui/server_form.json` | `customUI_` prefix routing and factory dispatch |
+| Modern large shop grid | `references/source-packs/modern-cloud-ui-reference/ui/form/redesign_shop_cloud_action_form.json` | 90%x95% shell, top options, paged item grid |
+| Inbox or mail form | `references/source-packs/modern-cloud-ui-reference/ui/form/inbox_cloud_action_form.json` | category rail, search row, scrollable message list |
+| Process/machine form | `references/source-packs/modern-cloud-ui-reference/ui/form/food_furnace_cloud_action_form.json` | 55% centered process shell and furnace/machine state image |
+| Stat or skill form | `references/source-packs/rpg-server-ui-reference/ui/stat.json` or `references/source-packs/rpg-server-ui-reference/ui/skill.json` | card sizes, icon-backed buttons, compact RPG layout |
 | Chest-like form | `docs/18-tooling-auxgen-dumper-starlib.md` | title routing and container substitution pattern |
 | Script API form source | `references/local-examples/npc-dialogue/BP/scripts/main.js` | title/body/button data shape only |
 

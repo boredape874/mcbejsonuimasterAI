@@ -21,7 +21,7 @@ Recommended response shape:
 
 ```text
 I can base this on one of these styles:
-1. Compact quest/shop panel: custom-crops quest/shop style, small RPG menu, good for dense PMMP menus.
+1. Compact quest/shop panel: RPG server UI quest/shop style, small RPG menu, good for dense PMMP menus.
 2. Framed NPC panel: header + side choices + large text body, good for quest/NPC/story screens.
 3. Vanilla-safe form skin: safer and simpler, good when compatibility matters.
 
@@ -40,14 +40,18 @@ Only proceed without asking when:
 | Need | Recommended style | Open first |
 | --- | --- | --- |
 | Safe modal form that still feels close to vanilla | vanilla server form shell | `references/official/bedrock-samples-ui/server_form.json` |
-| PMMP menu with custom form routing | token-routed server form | `references/source-packs/custom-crops-reference/ui/server_form.json` |
+| PMMP menu with custom form routing | token-routed server form | `references/source-packs/rpg-server-ui-reference/ui/server_form.json` |
 | NPC dialogue, quest text, story message | bottom dialogue box | `references/local-examples/npc-dialogue/ui/server_form.json` |
 | NPC or shop panel with side buttons and large body text | framed NPC panel | `references/upstreams/minecraft-bedrock-json-ui-sample/CNPC.UI.RP/CNPC UI [RP]/ui/npc_interact_screen.json` |
-| RPG stats, skills, profile, currency, shop categories | dark stat/card menu | `references/source-packs/custom-crops-reference/ui/stat.json` |
-| inventory-like custom form | chest-like form | `references/source-packs/custom-crops-reference/ui/chest_server_form.json` |
-| smelting, upgrade, craft, process UI | furnace-like form | `references/source-packs/custom-crops-reference/ui/furnace_server_form.json` |
+| RPG stats, skills, profile, currency, shop categories | dark stat/card menu | `references/source-packs/rpg-server-ui-reference/ui/stat.json` |
+| inventory-like custom form | chest-like form | `references/source-packs/rpg-server-ui-reference/ui/chest_server_form.json` |
+| smelting, upgrade, craft, process UI | furnace-like form | `references/source-packs/rpg-server-ui-reference/ui/furnace_server_form.json` |
 | settings/search/toggle/slider/text input style | RainbowPie form controls | `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/server_form_controls.json` |
 | large reusable custom form library pattern | StarLib form library | `references/upstreams/minecraft-bedrock-json-ui-sample/starLib/StarLibV2-1.0.3.3/StarLibV2-1.0.3.3/starlib2/package_custom/common_custom.jsonc` |
+| polished modern cloud form system | Modern Cloud forms | `references/source-packs/modern-cloud-ui-reference/ui/server_form.json` |
+| modern inbox/mail/notification forms | Modern Cloud communication forms | `references/source-packs/modern-cloud-ui-reference/ui/form/inbox_cloud_action_form.json` |
+| modern large shop/recipe grid | Modern Cloud shop/recipe forms | `references/source-packs/modern-cloud-ui-reference/ui/form/redesign_shop_cloud_action_form.json` |
+| modern process/machine UI | Modern Cloud furnace form | `references/source-packs/modern-cloud-ui-reference/ui/form/food_furnace_cloud_action_form.json` |
 
 ## Feature-Labeled Examples
 
@@ -55,7 +59,7 @@ If the user names a concrete server feature, prefer the example index:
 
 - `docs/40-server-form-example-index.md`
 
-That document labels examples as quest window, shop window, stat window, skill window, NPC dialogue, settings/config form, chest form, and furnace/process form. This helps the AI choose a reference before inspecting source JSON.
+That document labels examples as quest window, shop window, stat window, skill window, NPC dialogue, settings/config form, chest form, furnace/process form, Modern Cloud forms, inbox/mail forms, notification lists, and modern shop grids. This helps the AI choose a reference before inspecting source JSON.
 
 ## Size And Layout Rules
 
@@ -85,7 +89,7 @@ Use this when stability matters more than originality.
 References:
 
 - `references/official/bedrock-samples-ui/server_form.json`
-- `references/source-packs/custom-crops-reference/ui/server_form.json`
+- `references/source-packs/rpg-server-ui-reference/ui/server_form.json`
 
 Recommended use:
 
@@ -152,10 +156,10 @@ Use this for player profile, stats, skill pages, quest entries, shops, and curre
 
 References:
 
-- `references/source-packs/custom-crops-reference/ui/stat.json`
-- `references/source-packs/custom-crops-reference/ui/skill.json`
-- `references/source-packs/custom-crops-reference/ui/shop.json`
-- `references/source-packs/custom-crops-reference/ui/quest.json`
+- `references/source-packs/rpg-server-ui-reference/ui/stat.json`
+- `references/source-packs/rpg-server-ui-reference/ui/skill.json`
+- `references/source-packs/rpg-server-ui-reference/ui/shop.json`
+- `references/source-packs/rpg-server-ui-reference/ui/quest.json`
 
 Recommended size:
 
@@ -177,8 +181,8 @@ Use this when the form represents slots, rewards, storage, kit selection, or ite
 
 References:
 
-- `references/source-packs/custom-crops-reference/ui/chest_server_form.json`
-- `references/source-packs/custom-crops-reference/ui/chest_inventory_system.json`
+- `references/source-packs/rpg-server-ui-reference/ui/chest_server_form.json`
+- `references/source-packs/rpg-server-ui-reference/ui/chest_inventory_system.json`
 - `references/official/bedrock-samples-ui/chest_screen.json`
 
 Recommended size:
@@ -200,7 +204,7 @@ Use this for crafting, upgrading, smelting, timers, machines, and conversion men
 
 References:
 
-- `references/source-packs/custom-crops-reference/ui/furnace_server_form.json`
+- `references/source-packs/rpg-server-ui-reference/ui/furnace_server_form.json`
 - `references/official/bedrock-samples-ui/furnace_screen.json`
 
 Recommended size:

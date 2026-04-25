@@ -43,7 +43,7 @@ Use when the server sends multiple HUD messages or chat-like overlays.
 Sources:
 
 - `references/official/bedrock-samples-ui/chat_screen.json`
-- `references/source-packs/1seulbi/ui/hud_screen.json`
+- `references/source-packs/modern-cloud-ui-reference/ui/hud_screen.json`
 - `references/local-utils/json-ui-utils/topbar_chat_notification_utils.json`
 
 Core ideas:
@@ -78,8 +78,8 @@ Sources:
 
 - `references/official/bedrock-samples-ui/chat_screen.json`
 - `references/official/bedrock-samples-ui/ui_common.json`
-- `references/source-packs/custom-crops-reference/ui/shop.json`
-- `references/source-packs/custom-crops-reference/ui/quest.json`
+- `references/source-packs/rpg-server-ui-reference/ui/shop.json`
+- `references/source-packs/rpg-server-ui-reference/ui/quest.json`
 
 Core ideas:
 

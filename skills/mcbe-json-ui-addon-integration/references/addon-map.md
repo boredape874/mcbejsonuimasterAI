@@ -2,15 +2,15 @@
 
 ## Main integrated source
 
-- `../../../docs/pack-analyses/custom-crops-reference.md`
+- `../../../docs/pack-analyses/rpg-server-ui-reference.md`
 
 ## Key files
 
-- `../../references/source-packs/custom-crops-reference/manifest.json`
-- `../../references/source-packs/custom-crops-reference/blocks.json`
-- `../../references/source-packs/custom-crops-reference/ui/hud_screen.json`
-- `../../references/source-packs/custom-crops-reference/ui/server_form.json`
-- `../../references/source-packs/custom-crops-reference/textures/ui/`
+- `../../references/source-packs/rpg-server-ui-reference/manifest.json`
+- `../../references/source-packs/rpg-server-ui-reference/blocks.json`
+- `../../references/source-packs/rpg-server-ui-reference/ui/hud_screen.json`
+- `../../references/source-packs/rpg-server-ui-reference/ui/server_form.json`
+- `../../references/source-packs/rpg-server-ui-reference/textures/ui/`
 
 ## Why it matters
 

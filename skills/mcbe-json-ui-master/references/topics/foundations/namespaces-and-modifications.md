@@ -11,5 +11,5 @@ Check:
 
 Best examples:
 
-- `../../../../references/source-packs/1seulbi/ui/server_form.json`
+- `../../../../references/source-packs/modern-cloud-ui-reference/ui/server_form.json`
 - `../../../../references/external/EasyUIBuilder/ui/custom_ui/modification_example.json`

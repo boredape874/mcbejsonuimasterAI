@@ -17,7 +17,7 @@ Use this skill when the main problem is selecting or combining sources correctly
    - Ztech vanilla pack
 3. Mark the result as one of:
    - confirmed from upstream source
-   - confirmed from working local sample
+   - confirmed from working included sample
    - inferred from pattern
    - not verified
 4. Keep source selection explicit in the answer.

@@ -18,7 +18,7 @@ Best for:
 
 Best references:
 
-- `../../../../references/source-packs/custom-crops-reference/ui/hud_screen.json`
+- `../../../../references/source-packs/rpg-server-ui-reference/ui/hud_screen.json`
 - `../../../../references/external/EasyUIBuilder/ui/custom_ui/binding_example.json`
 - `../../../../references/external/EasyUIBuilder/ui/custom_ui/variable_example.json`
 - `../../../../references/external/EasyUIBuilder/ui/custom_ui/animation_example.json`

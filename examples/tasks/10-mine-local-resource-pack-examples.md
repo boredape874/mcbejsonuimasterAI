@@ -19,7 +19,7 @@ Read:
 - `docs/27-token-efficient-routing.md`
 - `docs/28-local-example-mining.md`
 
-Then inspect only the matching local mirror or local source path.
+Then inspect only the matching mirrored reference path.
 
 ## Prompt
 

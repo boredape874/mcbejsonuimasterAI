@@ -35,9 +35,9 @@ Learn first:
 
 Primary files:
 
-- `references/source-packs/1seulbi/ui/_ui_defs.json`
-- `references/source-packs/custom-crops-reference/ui/_ui_defs.json`
-- `references/source-packs/bunnyfarm/GfE8ULhgL4I/ui/_ui_defs.json`
+- `references/source-packs/modern-cloud-ui-reference/ui/_ui_defs.json`
+- `references/source-packs/rpg-server-ui-reference/ui/_ui_defs.json`
+- `references/source-packs/farm-ui-variants/GfE8ULhgL4I/ui/_ui_defs.json`
 - `references/local-utils/integrated-sample/ui/_ui_defs.json`
 
 ## 3. HUD and chat
@@ -51,10 +51,10 @@ Learn next:
 
 Primary files:
 
-- `references/source-packs/1seulbi/ui/hud_screen.json`
-- `references/source-packs/1seulbi/ui/chat_screen.json`
-- `references/source-packs/custom-crops-reference/ui/hud_screen.json`
-- `references/source-packs/bunnyfarm/z65tCLQRo0Q/ui/hud_screen.json`
+- `references/source-packs/modern-cloud-ui-reference/ui/hud_screen.json`
+- `references/source-packs/modern-cloud-ui-reference/ui/chat_screen.json`
+- `references/source-packs/rpg-server-ui-reference/ui/hud_screen.json`
+- `references/source-packs/farm-ui-variants/z65tCLQRo0Q/ui/hud_screen.json`
 - `references/local-utils/json-ui-utils/topbar_chat_notification_utils.json`
 - `references/local-utils/json-ui-utils/tablist_hud_screen.json`
 
@@ -69,9 +69,9 @@ Learn next:
 
 Primary files:
 
-- `references/source-packs/1seulbi/ui/server_form.json`
-- `references/source-packs/custom-crops-reference/ui/server_form.json`
-- `references/source-packs/bunnyfarm/GfE8ULhgL4I/ui/server_form.json`
+- `references/source-packs/modern-cloud-ui-reference/ui/server_form.json`
+- `references/source-packs/rpg-server-ui-reference/ui/server_form.json`
+- `references/source-packs/farm-ui-variants/GfE8ULhgL4I/ui/server_form.json`
 
 ## 5. Reusable patterns
 
@@ -97,12 +97,12 @@ Primary files:
 - `docs/38-advanced-json-ui-recipes.md`
 - `docs/39-design-recommendation-catalog.md`
 - `docs/40-server-form-example-index.md`
-- `references/source-packs/custom-crops-reference/ui/animated_bar.json`
-- `references/source-packs/bunnyfarm/tDAp1yJMUYo/ui/animated_bar.json`
+- `references/source-packs/rpg-server-ui-reference/ui/animated_bar.json`
+- `references/source-packs/farm-ui-variants/tDAp1yJMUYo/ui/animated_bar.json`
 - `references/official/bedrock-samples-ui/hud_screen.json`
 - `references/official/bedrock-samples-ui/ui_common.json`
-- `references/source-packs/1seulbi/ui/scoreboards.json`
-- `references/source-packs/bunnyfarm/Y5dOnRAM7js/ui/custom_pocket_containers.json`
+- `references/source-packs/modern-cloud-ui-reference/ui/scoreboards.json`
+- `references/source-packs/farm-ui-variants/Y5dOnRAM7js/ui/custom_pocket_containers.json`
 - `references/local-utils/json-ui-utils/progress_bar_utils.json`
 - `references/local-utils/json-ui-utils/title_progress_utils.json`
 - `references/local-utils/json-ui-utils/prefix_router_utils.json`
@@ -147,6 +147,6 @@ Learn last:
 
 Primary source:
 
-- `references/source-packs/custom-crops-reference/`
+- `references/source-packs/rpg-server-ui-reference/`
 - `docs/25-pmmp-json-ui-bridge.md`
 - `docs/28-local-example-mining.md`

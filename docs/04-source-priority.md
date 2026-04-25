@@ -6,9 +6,9 @@ Use sources in this order when answering MCBE JSON UI questions.
 
 Use the included source packs first when the task is about real implementation patterns:
 
-- `references/source-packs/1seulbi/`
-- `references/source-packs/bunnyfarm/`
-- `references/source-packs/custom-crops-reference/`
+- `references/source-packs/modern-cloud-ui-reference/`
+- `references/source-packs/farm-ui-variants/`
+- `references/source-packs/rpg-server-ui-reference/`
 
 Reason:
 

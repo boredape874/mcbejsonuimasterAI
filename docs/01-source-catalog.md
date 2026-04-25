@@ -2,7 +2,7 @@
 
 This document lists the included source groups and what they are good for.
 
-## `references/source-packs/1seulbi`
+## `references/source-packs/modern-cloud-ui-reference`
 
 Strong for:
 
@@ -22,7 +22,7 @@ Primary files:
 - `ui/server_form.json`
 - `ui/neroluna/form/*.json`
 
-## `references/source-packs/bunnyfarm`
+## `references/source-packs/farm-ui-variants`
 
 This is a sample collection, not one single UI pack. Use only the relevant subpack for the task.
 
@@ -41,7 +41,7 @@ Useful subpacks:
 - `z65tCLQRo0Q`
   - paired HUD and chat samples
 
-## `references/source-packs/custom-crops-reference`
+## `references/source-packs/rpg-server-ui-reference`
 
 Strong for:
 
@@ -114,9 +114,9 @@ Primary files:
 
 ## `references/local-examples`
 
-Curated mirrors from a local resource-pack archive.
+Curated mirrors from portable resource-pack references.
 
-Use these when the AI needs a compact concrete example without scanning the full local archive.
+Use these when the AI needs a compact concrete example without scanning the full reference archive.
 
 ### `references/local-examples/rpg-hud`
 

@@ -1,4 +1,4 @@
-﻿# Animation Patterns And Dumper Values
+# Animation Patterns And Dumper Values
 
 This document tells the AI how to use Bedrock JSON UI animations from vanilla dumps, local packs, and sample archives.
 
@@ -9,7 +9,7 @@ This document tells the AI how to use Bedrock JSON UI animations from vanilla du
 | vanilla HUD/title/actionbar animation behavior | `references/official/bedrock-samples-ui/hud_screen.json` |
 | common screen entrance/exit animations | `references/official/bedrock-samples-ui/ui_common.json` |
 | scroll bar fade animation | `references/official/bedrock-samples-ui/ui_common.json` |
-| reusable progress bar size animation | `references/local-examples/rpg-hud/ui/animated_bar.json` or `references/source-packs/custom-crops-reference/ui/animated_bar.json` |
+| reusable progress bar size animation | `references/local-examples/rpg-hud/ui/animated_bar.json` or `references/source-packs/rpg-server-ui-reference/ui/animated_bar.json` |
 | easing comparison and play/reset event pattern | `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/settings_sections/general_section_controls.json` |
 | toast pop animation | `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/toast_screen_controls.json` |
 | vanilla-like page transition offsets | `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/start_screen_controls.json` |
@@ -93,7 +93,7 @@ For animated progress:
 Confirmed source:
 
 - `references/local-examples/rpg-hud/ui/animated_bar.json`
-- `references/source-packs/custom-crops-reference/ui/animated_bar.json`
+- `references/source-packs/rpg-server-ui-reference/ui/animated_bar.json`
 
 ## Easing values seen in samples
 

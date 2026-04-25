@@ -157,10 +157,10 @@ For Dumper animation values, use `../../../docs/33-animation-patterns-and-dumper
 
 For broader Dumper value recipes, use `../../../docs/36-dumper-value-cookbook.md` and `../../../docs/37-vanilla-dumper-screen-recipes.md`.
 
-### local archive examples
+### curated example archive
 
 Use `../../../docs/28-local-example-mining.md`.
-Then load only one matching mirror under `references/local-examples/`, or one exact local source file if the mirror is not enough.
+Then load only one matching mirror under `references/local-examples/`, or one exact reference file if the mirror is not enough.
 
 ### broad JSON UI example archive
 

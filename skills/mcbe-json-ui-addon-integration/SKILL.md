@@ -21,5 +21,5 @@ Use this when the UI depends on the wider pack.
 
 ## Focus
 
-- `custom-crops-reference` is the main included addon-integration source.
-- `bunnyfarm` is secondary and broader.
+- RPG Server UI Reference is the main included addon-integration source.
+- Farm UI Variants is secondary and broader.
