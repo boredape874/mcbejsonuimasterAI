@@ -140,6 +140,11 @@ For bedrock-auxgen, JSON-UI-Dumper, or StarLibV2, prefer `topics/tooling/aux-dum
 Use `../../../docs/28-local-example-mining.md`.
 Then load only one matching mirror under `references/local-examples/`, or one exact local source file if the mirror is not enough.
 
+### broad JSON UI example archive
+
+Use `../../../docs/29-mcbe-json-ui-resource-upstream.md`.
+Then search `references/upstreams/mcbe-json-ui-resource/` with `rg` and open only one exact tutorial or sample screen.
+
 ### merge, audit, or pack migration
 
 Use `../../../docs/20-pack-merge-playbook.md`.

@@ -206,6 +206,10 @@ Primary files:
 
 ## External sources
 
+- `boredape874/mcbe-json-ui-resource`
+  - <https://github.com/boredape874/mcbe-json-ui-resource>
+  - optional local mirror: `references/upstreams/mcbe-json-ui-resource/`
+  - broad archive of JSON UI tutorials and sample UI packs
 - Mojang `bedrock-samples`
   - <https://github.com/Mojang/bedrock-samples/tree/main/resource_pack/ui>
 - Bedrock Wiki JSON UI docs

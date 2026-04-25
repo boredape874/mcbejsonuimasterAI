@@ -29,6 +29,7 @@ Load in this order:
 | merge two packs | `docs/20-pack-merge-playbook.md` | only changed files from both packs |
 | broad audit | `docs/08-reference-hierarchy.md` | exact docs selected from the audit finding |
 | local example lookup | `docs/28-local-example-mining.md` | only the matching mirror or local folder |
+| broad upstream example archive | `docs/29-mcbe-json-ui-resource-upstream.md` | one exact tutorial or sample screen |
 
 ## Do not load by default
 

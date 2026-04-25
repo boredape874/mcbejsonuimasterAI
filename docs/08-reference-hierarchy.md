@@ -58,6 +58,7 @@ Use subtopic notes only for the exact problem:
 - common failure triage
 - token-efficient routing
 - local example mining
+- mcbe-json-ui-resource upstream archive
 
 ## Rule
 

@@ -107,6 +107,7 @@ See:
 - [Common Failure Modes](docs/26-common-failure-modes.md)
 - [Token-Efficient Routing](docs/27-token-efficient-routing.md)
 - [Local Example Mining](docs/28-local-example-mining.md)
+- [MCBE JSON UI Resource Upstream](docs/29-mcbe-json-ui-resource-upstream.md)
 
 ## Quick start
 
@@ -155,7 +156,21 @@ This updates:
 references/official/bedrock-samples-ui/
 ```
 
-### 5. Optional: validate a JSON UI pack or reference mirror
+### 5. Optional: sync the MCBE JSON UI resource archive
+
+```powershell
+.\scripts\sync-mcbe-json-ui-resource.ps1
+```
+
+That creates:
+
+```text
+references/upstreams/mcbe-json-ui-resource/
+```
+
+This mirror is intentionally not committed because it is large and searchable.
+
+### 6. Optional: validate a JSON UI pack or reference mirror
 
 ```powershell
 .\scripts\validate-json-ui-pack.ps1 -PackPath references\source-packs\1seulbi
@@ -334,6 +349,7 @@ Then read as needed:
 - [Common Failure Modes](docs/26-common-failure-modes.md)
 - [Token-Efficient Routing](docs/27-token-efficient-routing.md)
 - [Local Example Mining](docs/28-local-example-mining.md)
+- [MCBE JSON UI Resource Upstream](docs/29-mcbe-json-ui-resource-upstream.md)
 
 ## Is this enough to become a "JSON UI Master AI" in one shot?
 

@@ -16,6 +16,7 @@ Use this when Bedrock updates or when upstream references change.
 ```powershell
 .\scripts\sync-ztech-vanilla.ps1
 .\scripts\sync-bedrock-samples-ui.ps1
+.\scripts\sync-mcbe-json-ui-resource.ps1
 .\scripts\validate-json-ui-pack.ps1 -PackPath references\source-packs\1seulbi
 ```
 

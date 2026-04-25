@@ -2,6 +2,15 @@
 
 These are the external sources that should be checked when the local pack samples are not enough.
 
+## Broad JSON UI example archive
+
+- `boredape874/mcbe-json-ui-resource`
+  - <https://github.com/boredape874/mcbe-json-ui-resource>
+  - optional local mirror: `references/upstreams/mcbe-json-ui-resource/`
+  - guide: `docs/29-mcbe-json-ui-resource-upstream.md`
+
+Use this for broad tutorial and sample-pack lookup. Search first with `rg`, then inspect only the exact tutorial or screen file.
+
 ## Official vanilla UI source
 
 - Mojang `bedrock-samples`
