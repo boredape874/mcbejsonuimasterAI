@@ -70,6 +70,12 @@ AI rule:
 - confirm critical paths against Ztech or bedrock-samples before making final claims
 - do not vendor its source unless licensing is clarified
 
+Animation note:
+
+- dumped vanilla UI includes animation blocks such as `anim_type`, `anims`, `animation_reset_name`, `play_event`, `end_event`, `next`, and `destroy_at_end`
+- use `docs/33-animation-patterns-and-dumper-values.md` when the task is animation-specific
+- copy the animation reference relationship as well as the animation definition; a standalone `anim_type` block is often not enough
+
 ## `pipangry/StarLibV2`
 
 Upstream:
@@ -115,3 +121,5 @@ This repository should prefer:
 | stable vanilla asset truth | `ZtechNetwork/MCBVanillaResourcePack` |
 | official sample confirmation | Mojang `bedrock-samples` |
 | dynamic form architecture | `StarLibV2` |
+| animation field discovery | JSON UI Dumper, Mojang `bedrock-samples`, `docs/33-animation-patterns-and-dumper-values.md` |
+| binding/search/slicing examples | StarLibV2, `docs/34-binding-patterns-value-index.md` |

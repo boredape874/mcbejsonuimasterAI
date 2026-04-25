@@ -31,6 +31,10 @@ Load in this order:
 | local example lookup | `docs/28-local-example-mining.md` | only the matching mirror or local folder |
 | broad upstream example archive | `docs/29-mcbe-json-ui-resource-upstream.md` | one exact tutorial or sample screen |
 | adapt one code fragment | `docs/30-file-and-code-fragment-usage.md` | `docs/31-fragment-routing-table.md` and one source file |
+| minecraft-bedrock-json-ui-sample archive | `docs/32-minecraft-bedrock-json-ui-sample-upstream.md` | one exact RainbowPie, StarLib, NPC, or integrated UI file |
+| animation or `anim_type` | `docs/33-animation-patterns-and-dumper-values.md` | one exact vanilla/local/RainbowPie animation source |
+| binding value or binding dump | `docs/34-binding-patterns-value-index.md` | target screen and one exact source binding file |
+| vertical scroll, horizontal scroll, carousel | `docs/35-scroll-and-carousel-patterns.md` | one exact scroll or offset-animation source |
 
 ## Do not load by default
 

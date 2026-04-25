@@ -110,6 +110,14 @@ See:
 - [MCBE JSON UI Resource Upstream](docs/29-mcbe-json-ui-resource-upstream.md)
 - [File And Code Fragment Usage](docs/30-file-and-code-fragment-usage.md)
 - [Fragment Routing Table](docs/31-fragment-routing-table.md)
+- [Minecraft Bedrock JSON UI Sample Upstream](docs/32-minecraft-bedrock-json-ui-sample-upstream.md)
+- [Animation Patterns And Dumper Values](docs/33-animation-patterns-and-dumper-values.md)
+- [Binding Patterns Value Index](docs/34-binding-patterns-value-index.md)
+- [Scroll And Carousel Patterns](docs/35-scroll-and-carousel-patterns.md)
+- [Minecraft Bedrock JSON UI Sample Upstream](docs/32-minecraft-bedrock-json-ui-sample-upstream.md)
+- [Animation Patterns And Dumper Values](docs/33-animation-patterns-and-dumper-values.md)
+- [Binding Patterns Value Index](docs/34-binding-patterns-value-index.md)
+- [Scroll And Carousel Patterns](docs/35-scroll-and-carousel-patterns.md)
 
 ## Quick start
 

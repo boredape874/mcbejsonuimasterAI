@@ -24,6 +24,35 @@ Use for:
 - builder-oriented element composition
 - generated control anatomy
 
+## Minecraft Bedrock JSON UI Sample archive
+
+- `../../../docs/32-minecraft-bedrock-json-ui-sample-upstream.md`
+- `../../../references/upstreams/minecraft-bedrock-json-ui-sample/` when locally synced
+
+Use for:
+
+- RainbowPie animation tests
+- StarLib search/filter/slicing bindings
+- binding dump lookup
+- custom NPC and dialogue UI examples
+- integrated HUD/chat samples
+
+Open only one exact source file after searching with `rg`.
+
+## Dumper and animation values
+
+- `../../../docs/33-animation-patterns-and-dumper-values.md`
+
+Use for:
+
+- `anim_type`
+- `anims`
+- `animation_reset_name`
+- `play_event`
+- `end_event`
+- `next`
+- `destroy_at_end`
+
 ## Chest UI tooling
 
 - `../../../references/external/Chest-UI/README.md`

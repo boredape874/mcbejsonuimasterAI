@@ -11,6 +11,13 @@ These are the external sources that should be checked when the local pack sample
 
 Use this for broad tutorial and sample-pack lookup. Search first with `rg`, then inspect only the exact tutorial or screen file.
 
+- `boredape874/minecraft-bedrock-json-ui-sample`
+  - <https://github.com/boredape874/minecraft-bedrock-json-ui-sample>
+  - optional local mirror: `references/upstreams/minecraft-bedrock-json-ui-sample/`
+  - guide: `docs/32-minecraft-bedrock-json-ui-sample-upstream.md`
+
+Use this for animation tests, StarLib form/search patterns, binding dumps, RainbowPie vanilla-like screen examples, custom NPC UI, and integrated HUD/chat examples.
+
 ## Official vanilla UI source
 
 - Mojang `bedrock-samples`
@@ -88,6 +95,15 @@ Check:
 2. `json-ui-examples`
 3. `EasyUIBuilder`
 4. Bedrock Wiki documentation for property confirmation
+
+### When building animation, binding, or scroll-heavy UI
+
+Check:
+
+1. `docs/33-animation-patterns-and-dumper-values.md`
+2. `docs/34-binding-patterns-value-index.md`
+3. `docs/35-scroll-and-carousel-patterns.md`
+4. only one exact source file from the listed mirrors
 
 ### When validating JSON UI structure in an editor
 

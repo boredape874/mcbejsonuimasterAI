@@ -1,4 +1,4 @@
-# Pattern Map
+﻿# Pattern Map
 
 ## progress bar
 
@@ -6,6 +6,23 @@
 - `../../references/source-packs/bunnyfarm/tDAp1yJMUYo/ui/animated_bar.json`
 - `../../references/external/json-ui-examples/custom_progress_bar.json`
 - `../../references/external/json-ui-examples/custom_heart_or_hunger_like_progress_bar_icons.json`
+- `../../docs/33-animation-patterns-and-dumper-values.md`
+
+## animation
+
+- `../../docs/33-animation-patterns-and-dumper-values.md`
+- `../../references/official/bedrock-samples-ui/hud_screen.json`
+- `../../references/official/bedrock-samples-ui/ui_common.json`
+- `../../references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/settings_sections/general_section_controls.json`
+- `../../references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/toast_screen_controls.json`
+
+## scroll and carousel
+
+- `../../docs/35-scroll-and-carousel-patterns.md`
+- `../../references/external/json-ui-examples/scroll_panel_template.json`
+- `../../references/source-packs/custom-crops-reference/ui/shop.json`
+- `../../references/source-packs/custom-crops-reference/ui/quest.json`
+- `../../references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/server_form_controls.json`
 
 ## scoreboard
 

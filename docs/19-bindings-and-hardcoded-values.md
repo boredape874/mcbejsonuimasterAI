@@ -38,6 +38,8 @@ Use cases:
 - personal score HUD
 - conditional rendering from title/actionbar content
 
+For a larger source-indexed pattern map, use `docs/34-binding-patterns-value-index.md`.
+
 ## Chat-related values
 
 | Binding | Use |
@@ -89,8 +91,9 @@ When a binding is needed:
 
 1. search the target pack first
 2. search `references/official/bedrock-samples-ui/`
-3. search Bedrock Wiki documentation
-4. label the result as confirmed or inferred
+3. search `references/upstreams/minecraft-bedrock-json-ui-sample/binding/binding_dump.txt` if the optional mirror exists
+4. search Bedrock Wiki documentation
+5. label the result as confirmed or inferred
 
 ## Red flags
 

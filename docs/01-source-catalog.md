@@ -210,6 +210,10 @@ Primary files:
   - <https://github.com/boredape874/mcbe-json-ui-resource>
   - optional local mirror: `references/upstreams/mcbe-json-ui-resource/`
   - broad archive of JSON UI tutorials and sample UI packs
+- `boredape874/minecraft-bedrock-json-ui-sample`
+  - <https://github.com/boredape874/minecraft-bedrock-json-ui-sample>
+  - optional local mirror: `references/upstreams/minecraft-bedrock-json-ui-sample/`
+  - broad sample archive with RainbowPie UI, StarLib examples, binding dumps, custom NPC UI, and integrated HUD/chat examples
 - Mojang `bedrock-samples`
   - <https://github.com/Mojang/bedrock-samples/tree/main/resource_pack/ui>
 - Bedrock Wiki JSON UI docs

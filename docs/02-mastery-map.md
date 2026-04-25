@@ -78,14 +78,22 @@ Primary files:
 Learn next:
 
 - animated bars
+- standalone animation chains
+- dumper-derived animation values
 - scoreboard overlays
 - chest and pocket container layouts
+- vertical scroll panels
+- horizontal carousel patterns
 - reusable presets
 
 Primary files:
 
+- `docs/33-animation-patterns-and-dumper-values.md`
+- `docs/35-scroll-and-carousel-patterns.md`
 - `references/source-packs/custom-crops-reference/ui/animated_bar.json`
 - `references/source-packs/bunnyfarm/tDAp1yJMUYo/ui/animated_bar.json`
+- `references/official/bedrock-samples-ui/hud_screen.json`
+- `references/official/bedrock-samples-ui/ui_common.json`
 - `references/source-packs/1seulbi/ui/scoreboards.json`
 - `references/source-packs/bunnyfarm/Y5dOnRAM7js/ui/custom_pocket_containers.json`
 - `references/local-utils/json-ui-utils/progress_bar_utils.json`
@@ -100,6 +108,8 @@ Learn next:
 
 - screen-specific bindings
 - hardcoded values
+- binding dump lookup
+- collection, view, and search binding patterns
 - pack merge risks
 - validation script workflow
 - common failure triage
@@ -108,12 +118,14 @@ Learn next:
 Primary files:
 
 - `docs/19-bindings-and-hardcoded-values.md`
+- `docs/34-binding-patterns-value-index.md`
 - `docs/20-pack-merge-playbook.md`
 - `docs/26-common-failure-modes.md`
 - `docs/27-token-efficient-routing.md`
 - `docs/29-mcbe-json-ui-resource-upstream.md`
 - `docs/30-file-and-code-fragment-usage.md`
 - `docs/31-fragment-routing-table.md`
+- `docs/32-minecraft-bedrock-json-ui-sample-upstream.md`
 - `scripts/validate-json-ui-pack.ps1`
 - `references/official/bedrock-samples-ui/hud_screen.json`
 - `references/official/bedrock-samples-ui/server_form.json`

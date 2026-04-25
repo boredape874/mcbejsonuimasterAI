@@ -8,3 +8,7 @@ Subtopics:
 - `string-protocols.md`
 - `utility-string-routing.md`
 - `string-splitting-and-slicing.md`
+
+External docs:
+
+- `../../../../../docs/34-binding-patterns-value-index.md`

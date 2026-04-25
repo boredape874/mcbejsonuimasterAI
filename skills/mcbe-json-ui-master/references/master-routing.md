@@ -43,6 +43,8 @@ For community string splitting, fixed-width slicing, or Unicode byte-width paylo
 
 For hardcoded value discovery and binding value limits, prefer `../../../docs/19-bindings-and-hardcoded-values.md`.
 
+For binding dumps, search/filter bindings, form collections, or value-source examples, prefer `../../../docs/34-binding-patterns-value-index.md`.
+
 ### HUD, chat, title, actionbar, scoreboard
 
 Use `mcbe-json-ui-hud-and-chat`.
@@ -72,6 +74,10 @@ Then load:
 
 - `topics/patterns/index.md`
 - and only the exact needed subtopic under `topics/patterns/`
+
+For `anim_type`, animation chains, easing values, or JSON UI Dumper animation examples, prefer `../../../docs/33-animation-patterns-and-dumper-values.md`.
+
+For scroll panels, horizontal scroll attempts, or clipped carousel animation, prefer `../../../docs/35-scroll-and-carousel-patterns.md`.
 
 ### bug or rendering failure
 
@@ -135,6 +141,8 @@ Then load:
 
 For bedrock-auxgen, JSON-UI-Dumper, or StarLibV2, prefer `topics/tooling/aux-dumper-starlib.md`.
 
+For Dumper animation values, use `../../../docs/33-animation-patterns-and-dumper-values.md` after the tooling note.
+
 ### local archive examples
 
 Use `../../../docs/28-local-example-mining.md`.
@@ -144,6 +152,11 @@ Then load only one matching mirror under `references/local-examples/`, or one ex
 
 Use `../../../docs/29-mcbe-json-ui-resource-upstream.md`.
 Then search `references/upstreams/mcbe-json-ui-resource/` with `rg` and open only one exact tutorial or sample screen.
+
+### minecraft-bedrock-json-ui-sample archive
+
+Use `../../../docs/32-minecraft-bedrock-json-ui-sample-upstream.md`.
+Then search `references/upstreams/minecraft-bedrock-json-ui-sample/` with `rg` and open only one exact RainbowPie, StarLib, NPC, binding, HUD, or scroll file.
 
 ### file or code fragment adaptation
 

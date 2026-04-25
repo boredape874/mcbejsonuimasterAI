@@ -19,3 +19,4 @@ Prompt groups:
 - `07-community-patterns-and-tools.md`
 - `08-token-efficient-work.md`
 - `09-fragment-based-adaptation.md`
+- `10-animation-binding-scroll.md`

@@ -23,3 +23,4 @@ Task groups:
 - `08-tooling-workflow.md`
 - `09-merge-json-ui-packs.md`
 - `10-mine-local-resource-pack-examples.md`
+- `11-animation-binding-scroll-mining.md`

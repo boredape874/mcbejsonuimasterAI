@@ -61,6 +61,10 @@ Use subtopic notes only for the exact problem:
 - mcbe-json-ui-resource upstream archive
 - file and code fragment usage
 - fragment routing table
+- minecraft-bedrock-json-ui-sample upstream archive
+- animation patterns and dumper values
+- binding pattern value index
+- scroll and carousel patterns
 
 ## Rule
 
