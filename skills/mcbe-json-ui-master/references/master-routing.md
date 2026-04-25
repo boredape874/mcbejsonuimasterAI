@@ -69,6 +69,10 @@ Then load:
 
 For server form visual direction, NPC dialogue style, chest/furnace form look, RPG menu layout, control panel sizing, or design recommendations, prefer `../../../docs/39-design-recommendation-catalog.md`.
 
+For feature-labeled server form examples such as quest window, shop window, stat window, skill window, NPC dialogue, settings panel, chest form, or furnace/process form, prefer `../../../docs/40-server-form-example-index.md`.
+
+If a server form request is visual but the user did not choose a style, present 2-3 design directions from `../../../docs/39-design-recommendation-catalog.md` or `../../../docs/40-server-form-example-index.md` before making final visual edits.
+
 ### progress bar, chest UI, reusable templates
 
 Use `mcbe-json-ui-patterns`.

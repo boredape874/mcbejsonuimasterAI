@@ -69,6 +69,7 @@ Use subtopic notes only for the exact problem:
 - vanilla dumper screen recipes
 - advanced JSON UI recipes
 - design recommendation catalog
+- server form example index
 
 ## Rule
 

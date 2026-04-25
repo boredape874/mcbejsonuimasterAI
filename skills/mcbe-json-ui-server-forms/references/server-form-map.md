@@ -23,3 +23,4 @@
 ## Design recommendation
 
 - `../../../docs/39-design-recommendation-catalog.md`
+- `../../../docs/40-server-form-example-index.md`

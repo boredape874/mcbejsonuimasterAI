@@ -18,6 +18,9 @@ Use this table to choose the smallest file or code fragment for a task.
 | --- | --- | --- |
 | Custom action form | target `ui/server_form.json` | form title/body/button bindings |
 | NPC dialogue | `references/local-examples/npc-dialogue/ui/server_form.json` | dialogue layout and button item template |
+| Quest list form | `references/source-packs/custom-crops-reference/ui/quest.json` | 220x220 panel, 200x171 scroll viewport, 175x40 list buttons |
+| Shop form | `references/source-packs/custom-crops-reference/ui/shop.json` | compact shop panel, body text area, 3-column item rows |
+| Stat or skill form | `references/source-packs/custom-crops-reference/ui/stat.json` or `references/source-packs/custom-crops-reference/ui/skill.json` | card sizes, icon-backed buttons, compact RPG layout |
 | Chest-like form | `docs/18-tooling-auxgen-dumper-starlib.md` | title routing and container substitution pattern |
 | Script API form source | `references/local-examples/npc-dialogue/BP/scripts/main.js` | title/body/button data shape only |
 

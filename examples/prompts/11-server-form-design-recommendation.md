@@ -22,6 +22,7 @@ Use:
 
 Return:
 - recommended design family
+- 2-3 alternative design directions if my preferred style is unclear
 - exact reference file to inspect
 - suggested root/body/button sizes
 - title prefix or routing strategy
@@ -50,6 +51,7 @@ Reference:
 - docs/39-design-recommendation-catalog.md
 
 Rules:
+- if the visual style is not explicit, ask me to pick from 2-3 recommended design references before implementing
 - keep layout dimensions stable for repeated buttons, slots, icons, and rows
 - use `%`, `%c`, anchors, and scroll areas for variable content
 - do not invent texture paths

@@ -23,6 +23,7 @@ Turn a PMMP-driven form into a polished Bedrock JSON UI design using an existing
 ## Required decisions
 
 - design family
+- whether the user has already chosen a visual reference, or whether the AI must present 2-3 options first
 - title prefix or routing condition
 - whether to keep vanilla server form fallback
 - modal width/height strategy
@@ -63,6 +64,7 @@ Data:
 - <button names, descriptions, icons, prices, stats, progress values>
 
 Requirements:
+- if style is not explicit, present 2-3 recommended design references before editing
 - keep vanilla fallback safe
 - state exact dimensions used
 - verify texture paths before using them

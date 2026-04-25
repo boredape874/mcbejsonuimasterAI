@@ -118,6 +118,7 @@ See:
 - [Vanilla Dumper Screen Recipes](docs/37-vanilla-dumper-screen-recipes.md)
 - [Advanced JSON UI Recipes](docs/38-advanced-json-ui-recipes.md)
 - [Design Recommendation Catalog](docs/39-design-recommendation-catalog.md)
+- [Server Form Example Index](docs/40-server-form-example-index.md)
 
 ## Quick start
 

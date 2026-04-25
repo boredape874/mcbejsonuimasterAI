@@ -39,6 +39,7 @@ Load in this order:
 | vanilla screen recipe | `docs/37-vanilla-dumper-screen-recipes.md` | one exact screen and object |
 | advanced combined UI recipe | `docs/38-advanced-json-ui-recipes.md` | only the listed recipe sources |
 | server form design recommendation | `docs/39-design-recommendation-catalog.md` | one exact reference form or screen source |
+| quest/shop/stat/skill/NPC form example | `docs/40-server-form-example-index.md` | one exact labeled example source |
 
 ## Do not load by default
 

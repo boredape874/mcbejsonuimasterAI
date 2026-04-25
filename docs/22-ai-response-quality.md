@@ -37,6 +37,7 @@ When the UI depends on server text:
 - define the exact title/actionbar/chat/form payload
 - say where PMMP or Script API sends it
 - state if JSON UI is parsing or only displaying it
+- when the user asks for a visual design but does not specify a style, offer 2-3 concrete design references before implementing the final look
 
 ## Risk flags
 

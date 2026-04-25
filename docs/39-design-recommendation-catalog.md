@@ -4,6 +4,37 @@ Use this when choosing a visual direction before implementing a Bedrock JSON UI 
 
 This is not a replacement for source inspection. It is a routing catalog: pick a design family, open the listed reference file, then copy only the needed layout fragments into the target resource pack.
 
+For feature-labeled examples such as "this is a quest window" or "this is a shop window", load `docs/40-server-form-example-index.md` after this document.
+
+## User Choice Rule
+
+Design is subjective. If the user did not already provide a clear visual direction, the AI should not silently pick one final style.
+
+Ask or present a short choice before implementation when:
+
+- the request says only "make it look good", "make a server form", "make a quest UI", or similar
+- multiple design families fit the feature
+- the target pack does not already have a strong established style
+- the change would affect the main visual identity of a server menu
+
+Recommended response shape:
+
+```text
+I can base this on one of these styles:
+1. Compact quest/shop panel: custom-crops quest/shop style, small RPG menu, good for dense PMMP menus.
+2. Framed NPC panel: header + side choices + large text body, good for quest/NPC/story screens.
+3. Vanilla-safe form skin: safer and simpler, good when compatibility matters.
+
+If you already have a preferred design reference, send the file/path/image and I will use that instead.
+```
+
+Only proceed without asking when:
+
+- the user already named a style or reference file
+- the task is a bug fix, not a design choice
+- the target pack has one obvious style that should be preserved
+- the user explicitly asked Codex to choose automatically
+
 ## Quick Choice Table
 
 | Need | Recommended style | Open first |
@@ -17,6 +48,14 @@ This is not a replacement for source inspection. It is a routing catalog: pick a
 | smelting, upgrade, craft, process UI | furnace-like form | `references/source-packs/custom-crops-reference/ui/furnace_server_form.json` |
 | settings/search/toggle/slider/text input style | RainbowPie form controls | `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/server_form_controls.json` |
 | large reusable custom form library pattern | StarLib form library | `references/upstreams/minecraft-bedrock-json-ui-sample/starLib/StarLibV2-1.0.3.3/StarLibV2-1.0.3.3/starlib2/package_custom/common_custom.jsonc` |
+
+## Feature-Labeled Examples
+
+If the user names a concrete server feature, prefer the example index:
+
+- `docs/40-server-form-example-index.md`
+
+That document labels examples as quest window, shop window, stat window, skill window, NPC dialogue, settings/config form, chest form, and furnace/process form. This helps the AI choose a reference before inspecting source JSON.
 
 ## Size And Layout Rules
 
@@ -217,12 +256,13 @@ Design notes:
 Before editing JSON UI:
 
 1. Choose the design family.
-2. Choose the route condition: title prefix, form type, or screen replacement.
-3. Verify the target pack loads the file from `_ui_defs.json`.
-4. Verify texture paths through `docs/13-vanilla-asset-workflow.md` or bundled assets.
-5. Decide fixed sizes only for repeated elements such as slots, icon buttons, list rows, and headers.
-6. Use `%`, `%c`, anchors, and scroll panels for content that must survive different window sizes.
-7. Preserve vanilla collection bindings such as `form_buttons` unless the source pattern intentionally replaces them.
+2. If the user did not choose a style, present 2-3 recommended design directions before implementation.
+3. Choose the route condition: title prefix, form type, or screen replacement.
+4. Verify the target pack loads the file from `_ui_defs.json`.
+5. Verify texture paths through `docs/13-vanilla-asset-workflow.md` or bundled assets.
+6. Decide fixed sizes only for repeated elements such as slots, icon buttons, list rows, and headers.
+7. Use `%`, `%c`, anchors, and scroll panels for content that must survive different window sizes.
+8. Preserve vanilla collection bindings such as `form_buttons` unless the source pattern intentionally replaces them.
 
 ## Prompt Shape For AI
 
