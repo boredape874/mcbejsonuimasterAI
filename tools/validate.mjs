@@ -1,15 +1,18 @@
 // tools/validate.mjs
 // Validate the compiled JSON UI: structural sanity + spec-driven rule checks.
-// Usage: node tools/validate.mjs <ui.json> [<solved.json>] [--strict-root]
+// Usage: node tools/validate.mjs <ui.json> [<solved.json>] [--strict-root] [--report <path>]
 //
-//   --strict-root   require ui.namespace + ui.root_panel (compiler output mode).
-//                   Default mode is permissive: handcrafted Bedrock UI files
-//                   often use 'main_screen_content' / 'hud_content' / a
-//                   modification entry instead of root_panel. In permissive
-//                   mode the namespace+root_panel checks are downgraded to
-//                   warnings, never errors.
+//   --strict-root      require ui.namespace + ui.root_panel (compiler output mode).
+//                      Default mode is permissive: handcrafted Bedrock UI files
+//                      often use 'main_screen_content' / 'hud_content' / a
+//                      modification entry instead of root_panel. In permissive
+//                      mode the namespace+root_panel checks are downgraded to
+//                      warnings, never errors.
+//
+//   --report <path>    write the JSON report to <path>. If omitted, only a
+//                      one-line stdout summary is printed (no file litter).
+//                      tools/run.mjs uses --report explicitly.
 
-import { dirname, basename, extname, join } from "node:path";
 import { log } from "./_lib/log.mjs";
 import { readJson, writeJson } from "./_lib/fsx.mjs";
 import { validateUiFile, partition } from "./_lib/ui-validator.mjs";
@@ -33,23 +36,27 @@ function structural(ui, strict) {
   return issues;
 }
 
-function reportPathFor(uiFile) {
-  // If input is "<dir>/ui.json" → "<dir>/report.json".
-  // Otherwise → "<dir>/<name>.report.json" so we never overwrite the input.
-  const dir = dirname(uiFile);
-  const ext = extname(uiFile);
-  const name = basename(uiFile, ext);
-  if (name === "ui" && ext === ".json") return join(dir, "report.json");
-  return join(dir, `${name}.report.json`);
+function reportPathFromArgs(argv) {
+  const i = argv.indexOf("--report");
+  if (i === -1) return null;
+  const v = argv[i + 1];
+  if (!v || v.startsWith("--")) return null;
+  return v;
 }
 
 async function main() {
   const argv = process.argv.slice(2);
   const strict = argv.includes("--strict-root");
-  const positional = argv.filter((a) => !a.startsWith("--"));
+  const reportPath = reportPathFromArgs(argv);
+  const positional = argv.filter((a, i) => {
+    if (a.startsWith("--")) return false;
+    // skip the value of --report
+    if (i > 0 && argv[i - 1] === "--report") return false;
+    return true;
+  });
   const [uiFile, solvedFile] = positional;
   if (!uiFile) {
-    log.error("usage: node tools/validate.mjs <ui.json> [<solved.json>] [--strict-root]");
+    log.error("usage: node tools/validate.mjs <ui.json> [<solved.json>] [--strict-root] [--report <path>]");
     process.exit(64);
   }
   const ui = await readJson(uiFile);
@@ -66,13 +73,12 @@ async function main() {
     solved: solvedFile || null,
     checkedAt: new Date().toISOString(),
   };
-  const reportPath = reportPathFor(uiFile);
-  await writeJson(reportPath, report);
+  if (reportPath) await writeJson(reportPath, report);
   if (!report.ok) {
-    log.error("validate FAIL", { errors: errors.length, warnings: warnings.length, report: reportPath });
+    log.error("validate FAIL", { errors: errors.length, warnings: warnings.length, ...(reportPath ? { report: reportPath } : {}) });
     process.exit(9);
   }
-  log.ok("validate OK", { warnings: warnings.length, infos: infos.length, report: reportPath });
+  log.ok("validate OK", { warnings: warnings.length, infos: infos.length, ...(reportPath ? { report: reportPath } : {}) });
 }
 
 main().catch((e) => {

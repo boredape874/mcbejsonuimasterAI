@@ -82,7 +82,7 @@ async function category2() {
     },
   };
   await writeFile(resolve(wsDir, "ui.json"), JSON.stringify(badUi, null, 2));
-  const r = await run(node, ["tools/validate.mjs", "workspace/_test_neg/ui.json"]);
+  const r = await run(node, ["tools/validate.mjs", "workspace/_test_neg/ui.json", "--strict-root", "--report", "workspace/_test_neg/report.json"]);
   const report = await readJsonSafe(resolve(wsDir, "report.json"));
   const sawAnchorErr = !!(report && report.errors.find((e) => /anchor_from "top_diagonal"/.test(e.message)));
   const sawBindingWarns = !!(report && report.warnings.find((w) => /source_property_name/.test(w.message)));

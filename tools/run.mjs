@@ -38,10 +38,11 @@ async function main() {
   code = runStep("compile", ["tools/compile.mjs", solved, ui]);
   if (code) process.exit(code);
 
-  code = runStep("validate", ["tools/validate.mjs", ui, solved, "--strict-root"]);
+  const reportPath = join(outDir, "report.json");
+  code = runStep("validate", ["tools/validate.mjs", ui, solved, "--strict-root", "--report", reportPath]);
   if (code) process.exit(code);
 
-  log.ok("pipeline complete", { ui, solved, report: ui.replace(/ui\.json$/, "report.json") });
+  log.ok("pipeline complete", { ui, solved, report: reportPath });
 }
 
 main().catch((e) => {

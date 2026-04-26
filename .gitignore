@@ -9,3 +9,9 @@ vanilla-index/screens.json
 vanilla-index/textures.json
 _ext/
 *.log
+
+# build artifacts (regenerable via tools/run.mjs)
+examples/handcrafted/*/ui.json
+examples/handcrafted/*/solved.json
+examples/handcrafted/*/report.json
+examples/handcrafted/*/RP/ui/*.report.json
