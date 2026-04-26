@@ -1,0 +1,21 @@
+{
+  "schema": "mcbe-jsonui-ai-kit/report@1",
+  "ok": false,
+  "errors": [
+    {
+      "severity": "error",
+      "path": "<root>",
+      "message": "missing namespace"
+    },
+    {
+      "severity": "error",
+      "path": "<root>",
+      "message": "missing root_panel"
+    }
+  ],
+  "warnings": [],
+  "infos": [],
+  "ui": "../요청/RP/ui/server_form.json",
+  "solved": null,
+  "checkedAt": "2026-04-26T08:24:23.313Z"
+}

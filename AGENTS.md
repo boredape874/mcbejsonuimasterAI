@@ -32,6 +32,7 @@ Pick the layer **based on what the user asked for**, not by default.
 | Beginner explanation, source lookup, vanilla path verification, schema setup | **Knowledge layer** |
 | "what properties / anchors / binding types are valid?" | `data/jsonui-spec.json` (single source of truth used by `tools/validate.mjs`) |
 | Mixed (layout + bindings + animation) | Tools layer for layout, then patch the compiled JSON UI with raw edits for bindings/animation |
+| "이걸로 실제 RP 만들어 줘" / "production-ready" / "skills 기반으로 마감" | **Two-stage**: tools for coords, then hand-finish the JSON UI per `docs/46-tools-output-to-handcrafted-ui.md` (3-state buttons, vanilla nineslice, modification-only routing). Template: `examples/handcrafted/simple_server_custom_form/`. |
 
 If unsure, ask the user one short question to disambiguate. Do not silently switch layers.
 
@@ -94,4 +95,5 @@ When work is done, the AI should hand back:
 - `docs/43-self-bootstrap-protocol.md` — design rationale for the AI bootstrap
 - `docs/44-design-to-ir-mapping.md` — converting `docs/39` design recommendations into IR constraints
 - `docs/45-jsonui-spec-and-presets.md` — `data/jsonui-spec.json` + `data/presets-catalog.json` and how the validator + IR `extends` use them
+- `docs/46-tools-output-to-handcrafted-ui.md` — when to stop at compiler output vs. when to hand-finish the JSON UI; checklist before declaring done
 - `skills/mcbe-json-ui-self-bootstrap/SKILL.md`, `skills/mcbe-json-ui-ir-authoring/SKILL.md`, `skills/mcbe-json-ui-tools-runner/SKILL.md`, `skills/mcbe-json-ui-vanilla-presets/SKILL.md`
