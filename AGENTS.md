@@ -32,7 +32,7 @@ Pick the layer **based on what the user asked for**, not by default.
 | Beginner explanation, source lookup, vanilla path verification, schema setup | **Knowledge layer** |
 | "what properties / anchors / binding types are valid?" | `data/jsonui-spec.json` (single source of truth used by `tools/validate.mjs`) |
 | Mixed (layout + bindings + animation) | Tools layer for layout, then patch the compiled JSON UI with raw edits for bindings/animation |
-| "이걸로 실제 RP 만들어 줘" / "production-ready" / "skills 기반으로 마감" | **Two-stage**: tools for coords, then hand-finish the JSON UI per `docs/46-tools-output-to-handcrafted-ui.md` (3-state buttons, vanilla nineslice, modification-only routing). Template: `examples/handcrafted/simple_server_custom_form/`. |
+| "이걸로 실제 RP 만들어 줘" / "production-ready" / "skills 기반으로 마감" | **Two-stage**: tools for coords, then hand-finish the JSON UI per `docs/46-tools-output-to-handcrafted-ui.md` (3-state buttons, vanilla nineslice, modification-only routing). **MD docs and `references/source-packs/*` are authoritative; tool `ok=true` is not sufficient — see `docs/26` and `docs/46` Authority order.** Template: `examples/handcrafted/simple_server_custom_form/`. |
 
 If unsure, ask the user one short question to disambiguate. Do not silently switch layers.
 
@@ -71,8 +71,10 @@ Use the existing routing already in this repo. Suggested entry points:
 
 ## 4. Safety and operational rules
 
+- **Authority order: `docs/*.md` > `references/source-packs/*` > `tools/*` output.** When a tool says `ok=true` but no documented pattern matches, the file is **not** done. See `docs/46-tools-output-to-handcrafted-ui.md` "Why this doc binds the AI".
 - Never invent vanilla texture paths. Verify against `references/upstreams/MCBVanillaResourcePack` (mirror) or `vanilla-index/textures.json`.
 - Never invent bindings or hardcoded names. Verify against `docs/19` and `docs/34`.
+- Never put `@another_namespace.base` inside a `modifications[].value[]` tree. See `docs/26` "`Type not specified` inside a modification". Use wholesale-replace + `#visible` gating instead.
 - Never bulk-rewrite `ui.json` if a small patch works.
 - Label claims in your reply per `docs/22-ai-response-quality.md`.
 - Do not run network installers, do not call sudo, do not change global Node/npm settings during bootstrap.

@@ -88,6 +88,76 @@ Check:
 - `server_form.json` factory controls
 - `#form_title`, `#form_text`, button collection bindings
 
+## `[UI][error] Type not specified (or @-base not found)` inside a modification
+
+Observed error path example:
+
+```
+/.../long_form/ssc_router/ssc_screen | Type not specified (or @-base not found) for control: ssc_screen
+```
+
+Real cause:
+
+- a control inside `modifications[].value[]` used `@another_namespace.something` to inherit its type.
+- Bedrock parses the modification value tree before cross-namespace inheritance is resolved, so the child has no type.
+- adding `"type": "panel"` to the @-extended child is **not** a reliable fix; the engine still rejects it.
+
+Correct pattern (used by both `references/source-packs/modern-cloud-ui-reference/ui/server_form.json` and `references/source-packs/rpg-server-ui-reference/ui/server_form.json`):
+
+- **wholesale-replace** `main_screen_content` (or `long_form`, depending on the reference) instead of inserting via `modifications`.
+- the replacement is a normal control tree, not a modification value, so cross-namespace `@` works inside it.
+- gate visibility with a per-child `#visible` view-binding using a `#title_text` prefix expression.
+
+Anti-pattern (do not ship):
+
+```jsonc
+"long_form": {
+  "modifications": [{
+    "array_name": "controls",
+    "operation": "insert_back",
+    "value": [{
+      "router": {
+        "type": "panel",
+        "controls": [
+          { "screen@other_ns.main_screen_content": {} } // FAILS at runtime
+        ]
+      }
+    }]
+  }]
+}
+```
+
+Reference-correct pattern:
+
+```jsonc
+"main_screen_content": {
+  "type": "panel", "size": ["100%", "100%"],
+  "$prefix": "customUI_MyPack_",
+  "controls": [
+    { "my_screen_panel": {
+        "type": "panel", "size": ["100%", "100%"],
+        "controls": [ { "screen@my_pack.main_screen_content": {} } ],
+        "bindings": [
+          { "binding_type": "view",
+            "source_property_name": "(not ((#title_text - $prefix) = #title_text))",
+            "target_property_name": "#visible" }
+        ]
+    } },
+    { "vanilla_long_form_panel": {
+        "type": "panel", "size": ["100%", "100%"],
+        "controls": [ { "vanilla_long_form@server_form.long_form": {} } ],
+        "bindings": [
+          { "binding_type": "view",
+            "source_property_name": "((#title_text - $prefix) = #title_text)",
+            "target_property_name": "#visible" }
+        ]
+    } }
+  ]
+}
+```
+
+Note: wholesale replacing `main_screen_content` always re-emits both `default_long_form_panel` and `default_custom_form_panel` so that vanilla forms keep working when the title prefix does not match.
+
 ## HUD value stops updating
 
 Likely causes:
