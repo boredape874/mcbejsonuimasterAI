@@ -40,14 +40,14 @@ Stage B — handcrafted finish (this doc)
 - Pure layout-debug iterations.
 - Tests in `examples/ir/` and `tests/run-all.mjs` (compiler output is the assertion target).
 
-## Example pair shipped with this repo
+## Reference pairs (READ-ONLY, do not copy wholesale)
 
-`examples/handcrafted/simple_server_custom_form/` (mirrors the `요청/` working pack):
+For Stage B patterns, study these (they are mirrored in `references/source-packs/*` and are the authority for routing/skin/binding shape):
 
-- `ir.yaml` — Stage A source (compiles into ui.json).
-- `RP/ui/<screen>.json` — Stage B handcrafted finish.
-- `RP/ui/server_form.json` — modification-based router with title prefix.
-- `BP/scripts/main.js` — uses the title prefix when calling `ActionFormData.title()`.
+- `references/source-packs/modern-cloud-ui-reference/ui/server_form.json` — `customUI_*` title-prefix factory routing, `form_filter_text` + `form_type` view bindings, `main_screen_content` wholesale-replace pattern.
+- `references/source-packs/rpg-server-ui-reference/ui/server_form.json` — compact RPG menu routing via `menu.*` markers.
+
+Do not import these into the kit as `examples/`; they are upstream references. Each project should hand-author its own RP files using docs + references as the spec.
 
 ## Validation
 

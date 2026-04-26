@@ -32,7 +32,7 @@ Pick the layer **based on what the user asked for**, not by default.
 | Beginner explanation, source lookup, vanilla path verification, schema setup | **Knowledge layer** |
 | "what properties / anchors / binding types are valid?" | `data/jsonui-spec.json` (single source of truth used by `tools/validate.mjs`) |
 | Mixed (layout + bindings + animation) | Tools layer for layout, then patch the compiled JSON UI with raw edits for bindings/animation |
-| "이걸로 실제 RP 만들어 줘" / "production-ready" / "skills 기반으로 마감" | **Two-stage**: tools for coords, then hand-finish the JSON UI per `docs/46-tools-output-to-handcrafted-ui.md` (3-state buttons, vanilla nineslice, modification-only routing). **MD docs and `references/source-packs/*` are authoritative; tool `ok=true` is not sufficient — see `docs/26` and `docs/46` Authority order.** Template: `examples/handcrafted/simple_server_custom_form/`. |
+| "이걸로 실제 RP 만들어 줘" / "production-ready" / "skills 기반으로 마감" | **Two-stage**: tools for coords, then hand-finish the JSON UI per `docs/46-tools-output-to-handcrafted-ui.md` (3-state buttons, vanilla nineslice, modification-only routing). **MD docs and `references/source-packs/*` are authoritative; tool `ok=true` is not sufficient — see `docs/26` and `docs/46` Authority order.** |
 
 If unsure, ask the user one short question to disambiguate. Do not silently switch layers.
 
