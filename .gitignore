@@ -1,1 +1,11 @@
 references/upstreams/
+
+# AI tool layer
+node_modules/
+workspace/
+.agent/state/
+vanilla-index/cache/
+vanilla-index/screens.json
+vanilla-index/textures.json
+_ext/
+*.log

@@ -21,3 +21,5 @@ Prompt groups:
 - `09-fragment-based-adaptation.md`
 - `10-animation-binding-scroll.md`
 - `11-server-form-design-recommendation.md`
+- `12-prompt-to-ir.md` (tools layer)
+- `13-image-to-ir.md` (tools layer)

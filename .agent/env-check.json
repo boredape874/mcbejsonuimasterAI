@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": 1,
+  "node": {
+    "min": "18.17.0",
+    "recommended": "20.x"
+  },
+  "requiredDirs": [
+    "tools",
+    "schemas",
+    "skills",
+    "docs",
+    "references"
+  ],
+  "createIfMissing": [
+    "workspace",
+    "vanilla-index/cache",
+    ".agent/state"
+  ],
+  "optionalNativeDeps": [
+    "@napi-rs/canvas",
+    "pixelmatch",
+    "pngjs"
+  ],
+  "indexSources": {
+    "vanillaPack": "references/upstreams/MCBVanillaResourcePack",
+    "bedrockSamplesUi": "references/official/bedrock-samples-ui"
+  },
+  "stateFile": ".agent/state/setup-state.json"
+}

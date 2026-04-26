@@ -1,0 +1,44 @@
+# Vanilla preset extension example.
+# Renders a server_form-style modal by extending common_dialogs.main_panel_no_buttons.
+# The compiler emits "frame@common_dialogs.main_panel_no_buttons" with the solved layout.
+
+screen: preset_modal
+base_resolution: [1920, 1080]
+gui_scale: 3
+
+elements:
+  - id: frame
+    kind: panel
+    extends: common_dialogs.main_panel_no_buttons
+    anchor: center
+    pos: [0, 0]
+    size: [560, 320]
+    variables:
+      $title_panel: common_dialogs.standard_title_label
+      $title_size: ["100% - 15px", 10]
+      $title_max_size: ["100% - 15px", 10]
+      $text_name: "#title_text"
+      $title_text_binding_type: none
+      $child_control: preset_modal.body
+    bindings:
+      - binding_name: "#title_text"
+
+  - id: body
+    parent: frame
+    kind: panel
+    anchor: top_left
+    pos: [16, 40]
+    size: [528, 232]
+
+  - id: btn_close
+    parent: frame
+    kind: button
+    extends: common_buttons.light_content_button
+    anchor: bottom_right
+    pos: [-16, -16]
+    size: [120, 28]
+    variables:
+      $pressed_button_name: button.close
+
+constraints:
+  - { op: edge_eq, a: "btn_close.right", b: "frame.right" }

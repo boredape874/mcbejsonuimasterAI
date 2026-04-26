@@ -1,0 +1,42 @@
+screen: sidebar_cards
+
+elements:
+  - id: side
+    kind: panel
+    anchor: left_middle
+    pos: [16, 0]
+    size: [220, 800]
+
+  - id: card_1
+    parent: side
+    kind: panel
+    anchor: top_left
+    pos: [8, 8]
+    size: [200, 56]
+
+  - id: card_2
+    parent: side
+    kind: panel
+    anchor: top_left
+    pos: [8, 72]
+    size: [200, 56]
+
+  - id: card_3
+    parent: side
+    kind: panel
+    anchor: top_left
+    pos: [8, 136]
+    size: [200, 56]
+
+  - id: card_4
+    parent: side
+    kind: panel
+    anchor: top_left
+    pos: [8, 200]
+    size: [200, 56]
+
+constraints:
+  - { op: same_width,  ids: [card_1, card_2, card_3, card_4] }
+  - { op: same_height, ids: [card_1, card_2, card_3, card_4] }
+  - { op: align_x,     ids: [card_1, card_2, card_3, card_4], edge: start }
+  - { op: equal_gap_y, ids: [card_1, card_2, card_3, card_4], gap: 8 }

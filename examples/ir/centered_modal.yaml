@@ -1,0 +1,44 @@
+screen: centered_modal
+base_resolution: [1920, 1080]
+gui_scale: 3
+
+elements:
+  - id: panel
+    kind: panel
+    anchor: center
+    pos: [0, 0]
+    size: [320, 180]
+
+  - id: title
+    parent: panel
+    kind: label
+    anchor: top_middle
+    pos: [0, 12]
+    size: [260, 18]
+
+  - id: body
+    parent: panel
+    kind: label
+    anchor: center
+    pos: [0, -8]
+    size: [280, 60]
+
+  - id: btn_no
+    parent: panel
+    kind: button
+    anchor: bottom_middle
+    pos: [-70, -12]
+    size: [120, 32]
+
+  - id: btn_yes
+    parent: panel
+    kind: button
+    anchor: bottom_middle
+    pos: [70, -12]
+    size: [120, 32]
+
+constraints:
+  - { op: same_size,    ids: [btn_no, btn_yes] }
+  - { op: symmetric_x,  ids: [btn_no, btn_yes] }
+  - { op: align_y,      ids: [btn_no, btn_yes], edge: end }
+  - { op: align_x,      ids: [title, body],     edge: center }

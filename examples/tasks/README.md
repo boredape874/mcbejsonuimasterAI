@@ -26,3 +26,5 @@ Task groups:
 - `11-animation-binding-scroll-mining.md`
 - `12-dumper-recipe-mining.md`
 - `13-server-form-design-adaptation.md`
+- `14-author-ir-and-compile.md` (tools layer)
+- `15-image-driven-iteration.md` (tools layer)

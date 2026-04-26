@@ -6,6 +6,8 @@ This is not a replacement for source inspection. It is a routing catalog: pick a
 
 For feature-labeled examples such as "this is a quest window" or "this is a shop window", load `docs/40-server-form-example-index.md` after this document.
 
+When the chosen design will be authored through the kit's tools layer (IR), see `docs/44-design-to-ir-mapping.md` for direct constraint encodings.
+
 ## User Choice Rule
 
 Design is subjective. If the user did not already provide a clear visual direction, the AI should not silently pick one final style.

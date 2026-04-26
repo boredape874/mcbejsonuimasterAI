@@ -1,0 +1,43 @@
+screen: symmetric_button_row
+base_resolution: [1920, 1080]
+gui_scale: 3
+
+elements:
+  - id: bar
+    kind: panel
+    anchor: bottom_middle
+    pos: [0, -40]
+    size: [560, 56]
+
+  - id: b1
+    parent: bar
+    kind: button
+    anchor: left_middle
+    pos: [16, 0]
+    size: [120, 36]
+
+  - id: b2
+    parent: bar
+    kind: button
+    anchor: left_middle
+    pos: [144, 0]
+    size: [120, 36]
+
+  - id: b3
+    parent: bar
+    kind: button
+    anchor: left_middle
+    pos: [272, 0]
+    size: [120, 36]
+
+  - id: b4
+    parent: bar
+    kind: button
+    anchor: left_middle
+    pos: [400, 0]
+    size: [120, 36]
+
+constraints:
+  - { op: same_size,   ids: [b1, b2, b3, b4] }
+  - { op: align_y,     ids: [b1, b2, b3, b4], edge: center }
+  - { op: equal_gap_x, ids: [b1, b2, b3, b4], gap: 8 }

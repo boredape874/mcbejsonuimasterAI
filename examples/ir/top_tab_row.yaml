@@ -1,0 +1,31 @@
+screen: top_tab_row
+
+elements:
+  - id: tab_1
+    kind: button
+    anchor: top_left
+    pos: [16, 12]
+    size: [96, 28]
+
+  - id: tab_2
+    kind: button
+    anchor: top_left
+    pos: [120, 12]
+    size: [96, 28]
+
+  - id: tab_3
+    kind: button
+    anchor: top_left
+    pos: [224, 12]
+    size: [96, 28]
+
+  - id: tab_4
+    kind: button
+    anchor: top_left
+    pos: [328, 12]
+    size: [96, 28]
+
+constraints:
+  - { op: same_size,   ids: [tab_1, tab_2, tab_3, tab_4] }
+  - { op: align_y,     ids: [tab_1, tab_2, tab_3, tab_4], edge: start }
+  - { op: equal_gap_x, ids: [tab_1, tab_2, tab_3, tab_4], gap: 8 }

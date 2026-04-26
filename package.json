@@ -1,0 +1,35 @@
+{
+  "name": "mcbe-jsonui-ai-kit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic AI tool layer for Minecraft Bedrock JSON UI: IR + solver + compiler + validator on top of the mcbejsonuimasterAI knowledge base.",
+  "type": "module",
+  "engines": {
+    "node": ">=18.17"
+  },
+  "scripts": {
+    "setup": "node tools/setup.mjs",
+    "doctor": "node tools/doctor.mjs",
+    "doctor:quick": "node tools/doctor.mjs --quick",
+    "doctor:fix": "node tools/doctor.mjs --fix",
+    "run": "node tools/run.mjs",
+    "ir:validate": "node tools/ir-validate.mjs",
+    "solve": "node tools/solve.mjs",
+    "compile": "node tools/compile.mjs",
+    "validate": "node tools/validate.mjs",
+    "build:vanilla-index": "node tools/build-vanilla-index.mjs",
+    "render": "node tools/render.mjs",
+    "diff": "node tools/diff.mjs",
+    "test": "node tests/run-all.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "yaml": "^2.5.0"
+  },
+  "optionalDependencies": {
+    "@napi-rs/canvas": "^0.1.53",
+    "pixelmatch": "^6.0.0",
+    "pngjs": "^7.0.0"
+  }
+}

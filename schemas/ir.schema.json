@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/boredape874/mcbejsonuimasterAI/schemas/ir.schema.json",
+  "title": "MCBE JSON UI IR",
+  "description": "Intermediate representation for layout-only Bedrock JSON UI authoring. Compiled deterministically into JSON UI by tools/compile.mjs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["screen", "elements"],
+  "properties": {
+    "screen": {
+      "type": "string",
+      "description": "Logical screen name. Used as the namespace and root panel name when compiling.",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "namespace": {
+      "type": "string",
+      "description": "Optional override for the JSON UI namespace. Defaults to the screen name.",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "base_resolution": {
+      "type": "array",
+      "description": "Reference resolution in pixels. Default [1920, 1080].",
+      "items": { "type": "integer", "minimum": 320 },
+      "minItems": 2,
+      "maxItems": 2,
+      "default": [1920, 1080]
+    },
+    "gui_scale": {
+      "type": "integer",
+      "description": "Reference GUI scale used by the renderer for visual sanity only. Does not affect compiled JSON.",
+      "minimum": 1,
+      "maximum": 8,
+      "default": 3
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowPercent": { "type": "boolean", "default": false, "description": "Set true only if the user explicitly requested parent-relative units." }
+      }
+    },
+    "root": {
+      "type": "object",
+      "description": "Optional root panel description. If omitted a default full-screen panel is used.",
+      "additionalProperties": false,
+      "properties": {
+        "size": { "$ref": "#/$defs/size" },
+        "anchor": { "$ref": "#/$defs/anchor" }
+      }
+    },
+    "elements": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/element" }
+    },
+    "constraints": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/constraint" },
+      "default": []
+    }
+  },
+  "$defs": {
+    "anchor": {
+      "type": "string",
+      "enum": [
+        "top_left", "top_middle", "top_right",
+        "left_middle", "center", "right_middle",
+        "bottom_left", "bottom_middle", "bottom_right"
+      ]
+    },
+    "size": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "oneOf": [
+          { "type": "integer", "minimum": 0 },
+          { "type": "string", "pattern": "^(default|fill|\\d+%c?m?|\\d+%(x|y|sm)?|\\d+px)$" }
+        ]
+      },
+      "description": "Size as [w, h]. Numbers are pixels. Strings allow vanilla unit syntax only when units.allowPercent=true."
+    },
+    "pos": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "type": "integer" },
+      "description": "Pixel offset from the chosen anchor. Negative values mean opposite-edge inset."
+    },
+    "element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "size"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "parent": { "type": "string", "description": "Parent element id. Defaults to root." },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "panel", "image", "label", "button",
+            "stack_h", "stack_v",
+            "stack_panel", "grid", "scroll_view",
+            "toggle", "edit_box", "dropdown", "custom"
+          ],
+          "default": "panel",
+          "description": "stack_h / stack_v are sugar for stack_panel with orientation horizontal/vertical."
+        },
+        "anchor": { "$ref": "#/$defs/anchor", "default": "top_left" },
+        "pos": { "$ref": "#/$defs/pos", "default": [0, 0] },
+        "size": { "$ref": "#/$defs/size" },
+        "z": { "type": "integer", "default": 0, "description": "Higher draws on top." },
+        "extends": {
+          "type": "string",
+          "description": "Vanilla preset reference (e.g. 'common_dialogs.main_panel_no_buttons'). When set, the compiled child key becomes 'id@<extends>'.",
+          "pattern": "^[a-z][a-z0-9_]*\\.[a-z][a-z0-9_]*$"
+        },
+        "variables": {
+          "type": "object",
+          "description": "Preset variables ($-prefixed keys) emitted verbatim onto the compiled control.",
+          "additionalProperties": true
+        },
+        "bindings": {
+          "type": "array",
+          "description": "JSON UI bindings emitted verbatim. Validated by tools/validate.mjs against data/jsonui-spec.json.",
+          "items": { "type": "object" }
+        },
+        "props": {
+          "type": "object",
+          "description": "Pass-through JSON UI properties merged at compile time. Use sparingly.",
+          "additionalProperties": true
+        }
+      }
+    },
+    "constraint": {
+      "oneOf": [
+        { "$ref": "#/$defs/c_pair" },
+        { "$ref": "#/$defs/c_group" },
+        { "$ref": "#/$defs/c_gap" },
+        { "$ref": "#/$defs/c_edge" }
+      ]
+    },
+    "c_pair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "ids"],
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": ["symmetric_x", "symmetric_y"]
+        },
+        "about": {
+          "type": "string",
+          "enum": ["parent_center", "midpoint"],
+          "default": "parent_center"
+        },
+        "ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "c_group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "ids"],
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": ["align_x", "align_y", "same_size", "same_width", "same_height"]
+        },
+        "edge": {
+          "type": "string",
+          "enum": ["start", "center", "end"],
+          "default": "start",
+          "description": "Used by align_x/align_y."
+        },
+        "ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2
+        }
+      }
+    },
+    "c_gap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "ids"],
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": ["equal_gap_x", "equal_gap_y"]
+        },
+        "ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 3
+        },
+        "gap": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "If set, forces this exact pixel gap. If omitted, gap is averaged from current positions."
+        }
+      }
+    },
+    "c_edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "a", "b"],
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": ["edge_eq", "edge_offset"]
+        },
+        "a": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*\\.(left|right|top|bottom|center_x|center_y)$"
+        },
+        "b": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*\\.(left|right|top|bottom|center_x|center_y)$"
+        },
+        "delta": {
+          "type": "integer",
+          "default": 0,
+          "description": "Used by edge_offset: a = b + delta."
+        }
+      }
+    }
+  }
+}

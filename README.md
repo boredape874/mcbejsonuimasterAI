@@ -119,6 +119,11 @@ See:
 - [Advanced JSON UI Recipes](docs/38-advanced-json-ui-recipes.md)
 - [Design Recommendation Catalog](docs/39-design-recommendation-catalog.md)
 - [Server Form Example Index](docs/40-server-form-example-index.md)
+- [IR Spec](docs/41-ir-spec.md) (tools layer)
+- [Tools Reference](docs/42-tools-reference.md) (tools layer)
+- [Self-Bootstrap Protocol](docs/43-self-bootstrap-protocol.md) (tools layer)
+- [Design → IR Mapping](docs/44-design-to-ir-mapping.md) (tools layer)
+- [JSON UI Spec & Preset Catalogs](docs/45-jsonui-spec-and-presets.md) (tools layer)
 
 ## Quick start
 
@@ -192,6 +197,24 @@ For partial reference mirrors:
 ```powershell
 .\scripts\validate-json-ui-pack.ps1 -PackPath references\official\bedrock-samples-ui -AllowPartialUiDefs -AllowMissingTextures
 ```
+
+### 7. AI tools layer (Node)
+
+If your AI client uses [AGENTS.md](AGENTS.md), it can self-bootstrap on first open. To prepare manually:
+
+```powershell
+npm install
+node tools/setup.mjs
+```
+
+Then, for any layout work:
+
+```powershell
+node tools/init-project.mjs my_screen
+node tools/run.mjs workspace/my_screen/ir.yaml
+```
+
+See [AGENTS.md](AGENTS.md), [docs/41-ir-spec.md](docs/41-ir-spec.md), [docs/42-tools-reference.md](docs/42-tools-reference.md).
 
 ## How to use it with Codex
 
@@ -295,6 +318,24 @@ Use mcbe-json-ui-schemas and set up VSCode json.schemas for ui, _ui_defs, and _g
 Use mcbe-json-ui-tooling and explain whether bedrock-json-ui-editor or EasyUIBuilder fits this task better.
 ```
 
+## Use with any AI (MCP-free)
+
+Any AI client that can read files and run terminal commands works with this kit:
+
+- Cursor, Claude Code, Codex, GitHub Copilot, Continue, Aider, etc.
+- The AI reads `AGENTS.md` first, performs self-bootstrap if needed, then routes layout work through `tools/*.mjs` and bindings/animation work through the existing knowledge-layer skills.
+
+Typical user flow:
+
+```text
+1. git clone <this repo>
+2. open the folder in your AI client
+3. ask "build a centered confirmation modal with two symmetric buttons"
+   → AI authors workspace/<name>/ir.yaml, runs node tools/run.mjs, returns ui.json
+```
+
+For layout-only work the kit is deterministic: same IR → same JSON UI.
+
 ## Repository layout
 
 - `skills/`
@@ -313,6 +354,9 @@ Use mcbe-json-ui-tooling and explain whether bedrock-json-ui-editor or EasyUIBui
   - PMMP and Script API integration notes
 - `scripts/`
   - installation and sync helpers
+- `AGENTS.md`, `.agent/`, `tools/`, `schemas/`, `data/`, `vanilla-index/`, `workspace/`
+  - AI tools layer (Node CLI). See `docs/41`–`docs/45` and `AGENTS.md`.
+  - `data/jsonui-spec.json` (control/anchor/binding catalog, ported from gamezaSRC/JSON-UI-Web-Editor MIT) and `data/presets-catalog.json` (vanilla preset references) drive the validator and the IR `extends` field.
 
 ## Ready-made examples
 

@@ -1,0 +1,83 @@
+{
+  "$schema": "mcbe-jsonui-ai-kit/presets-catalog@1",
+  "_attribution": {
+    "note": "Independently authored. Reference patterns observed in SebTheSigma/JSON-UI-Maker (no LICENSE declared upstream); no source code copied. Names and shapes match Mojang vanilla packs (common.json, common_dialogs.json, common_buttons.json, server_form.json, ui_screens.json, ui_defs.json) which are the de facto vanilla preset surface.",
+    "upstream_inspiration": "https://github.com/SebTheSigma/JSON-UI-Maker"
+  },
+  "namespace_examples": ["my_pack", "common", "common_dialogs", "common_buttons", "server_form", "achievement", "settings"],
+  "common_refs": [
+    {
+      "ref": "common.empty_panel",
+      "purpose": "Invisible spacer panel.",
+      "fits_kind": "panel"
+    },
+    {
+      "ref": "common.button",
+      "purpose": "Vanilla generic button skeleton; override $pressed_button_name and content variables.",
+      "fits_kind": "button",
+      "common_variables": ["$button_text", "$button_text_max_size", "$pressed_button_name", "$default_button_texture", "$hover_button_texture", "$pressed_button_texture"]
+    },
+    {
+      "ref": "common.cancel_button",
+      "purpose": "Standard 'X' close button; pair with $pressed_button_name to handle close action.",
+      "fits_kind": "button",
+      "common_variables": ["$pressed_button_name"]
+    },
+    {
+      "ref": "common.scrolling_panel",
+      "purpose": "Generic scroll_view scaffold with bar/track/viewport sub-controls preconfigured.",
+      "fits_kind": "scroll_view",
+      "common_variables": ["$scrolling_content", "$scroll_size", "$scrolling_pane_size", "$scroll_box_size", "$show_background"]
+    }
+  ],
+  "common_dialogs_refs": [
+    {
+      "ref": "common_dialogs.main_panel_no_buttons",
+      "purpose": "Title-bar + body modal frame without OK/Cancel; use for forms or custom dialogs.",
+      "fits_kind": "panel",
+      "common_variables": ["$title_panel", "$child_control", "$title_size", "$title_max_size", "$text_name", "$title_text_binding_type"]
+    },
+    {
+      "ref": "common_dialogs.main_panel_two_buttons",
+      "purpose": "Title-bar + body + OK/Cancel pair; standard confirm dialog frame.",
+      "fits_kind": "panel",
+      "common_variables": ["$title_panel", "$child_control", "$button1_panel", "$button2_panel"]
+    },
+    {
+      "ref": "common_dialogs.standard_title_label",
+      "purpose": "Centered title label sized for the standard dialog header.",
+      "fits_kind": "label",
+      "common_variables": ["$text_name"]
+    }
+  ],
+  "common_buttons_refs": [
+    {
+      "ref": "common_buttons.light_content_button",
+      "purpose": "Light-themed clickable content button used for menu rows / form buttons.",
+      "fits_kind": "button",
+      "common_variables": ["$default_button_texture", "$hover_button_texture", "$pressed_button_texture", "$pressed_button_name", "$button_content"]
+    },
+    {
+      "ref": "common_buttons.dark_content_button",
+      "purpose": "Dark-themed counterpart to light_content_button.",
+      "fits_kind": "button"
+    }
+  ],
+  "server_form_refs": [
+    {
+      "ref": "server_form.long_form",
+      "purpose": "Default scrolling form layout used by ScriptAPI/Player.sendForm; override $title_text and the body $form_buttons collection.",
+      "fits_kind": "panel"
+    },
+    {
+      "ref": "server_form.long_form_panel",
+      "purpose": "Inner body grid for long_form; pair with #form_buttons collection bindings."
+    }
+  ],
+  "ir_extends_usage": {
+    "field": "extends",
+    "where": "elements[].extends",
+    "shape": "string referencing a vanilla preset, e.g. 'common_dialogs.main_panel_no_buttons'",
+    "compiler_behavior": "When set, the compiled control name becomes 'name@<extends>' and any 'variables' field on the IR element is emitted verbatim into the JSON UI node. Layout (anchor/offset/size) is still emitted from the solver."
+  }
+}

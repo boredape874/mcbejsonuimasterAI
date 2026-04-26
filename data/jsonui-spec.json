@@ -1,0 +1,194 @@
+{
+  "$schema": "mcbe-jsonui-ai-kit/jsonui-spec@1",
+  "_attribution": {
+    "source": "Ported from gamezaSRC/JSON-UI-Web-Editor (MIT License) src/types/JsonUITypes.ts and src/core/UIValidator.ts. Restructured into JSON, kept names/values exact.",
+    "license": "MIT",
+    "upstream": "https://github.com/gamezaSRC/JSON-UI-Web-Editor"
+  },
+  "control_types": [
+    "panel", "stack_panel", "grid", "label", "image", "button", "toggle",
+    "slider", "edit_box", "dropdown", "scroll_view", "scrollbar_box",
+    "factory", "screen", "custom", "selection_wheel", "tab", "carousel_label",
+    "grid_item", "input_panel"
+  ],
+  "anchors": [
+    "top_left", "top_middle", "top_right",
+    "left_middle", "center", "right_middle",
+    "bottom_left", "bottom_middle", "bottom_right"
+  ],
+  "orientations": ["horizontal", "vertical"],
+  "font_sizes": ["small", "normal", "large", "extra_large"],
+  "font_types": ["default", "smooth", "rune", "MinecraftTen", "unicode"],
+  "text_alignments": ["left", "center", "right"],
+  "clip_directions": ["left", "right", "up", "down", "center"],
+  "binding_types": ["global", "collection", "collection_details", "view", "none"],
+  "binding_conditions": ["always", "visible", "once", "always_when_visible", "visibility_changed", "none"],
+  "animation_types": ["alpha", "color", "size", "offset", "uv", "flip_book", "wait", "aseprite_flip_book", "clip"],
+  "easings": [
+    "linear", "spring",
+    "in_bounce", "out_bounce", "in_out_bounce",
+    "in_expo", "out_expo", "in_out_expo",
+    "in_sine", "out_sine", "in_out_sine",
+    "in_cubic", "out_cubic", "in_out_cubic",
+    "in_back", "out_back", "in_out_back",
+    "in_elastic", "out_elastic", "in_out_elastic",
+    "in_quart", "out_quart", "in_out_quart",
+    "in_quint", "out_quint", "in_out_quint",
+    "in_quad", "out_quad", "in_out_quad",
+    "in_circ", "out_circ", "in_out_circ"
+  ],
+  "grid_rescaling_types": ["none", "horizontal"],
+  "grid_fill_directions": ["none", "left_to_right", "right_to_left", "top_to_bottom", "bottom_to_top"],
+  "modification_operations": [
+    "insert_back", "insert_front", "insert_after", "insert_before",
+    "move_back", "move_front", "move_after", "move_before",
+    "swap", "remove", "replace"
+  ],
+  "edit_box_text_types": ["ExtendedASCII", "IdentifierChars", "NumberChars"],
+  "renderer_types": [
+    "hover_text_renderer", "3d_structure_renderer", "splash_text_renderer", "ui_holo_cursor",
+    "trial_time_renderer", "panorama_renderer", "actor_portrait_renderer", "banner_pattern_renderer",
+    "live_player_renderer", "web_view_renderer", "hunger_renderer", "bubbles_renderer",
+    "mob_effects_renderer", "cursor_renderer", "progress_indicator_renderer", "camera_renderer",
+    "horse_jump_renderer", "armor_renderer", "horse_heart_renderer", "heart_renderer",
+    "hotbar_cooldown_renderer", "hotbar_renderer", "hud_player_renderer", "live_horse_renderer",
+    "holographic_postrenderer", "enchanting_book_renderer", "debug_screen_renderer", "gradient_renderer",
+    "paper_doll_renderer", "name_tag_renderer", "flying_item_renderer", "inventory_item_renderer",
+    "credits_renderer", "vignette_renderer", "progress_bar_renderer", "debug_overlay_renderer",
+    "background_renderer", "bundle_renderer", "editor_gizmo_renderer", "dash_renderer",
+    "equipment_preview_renderer", "editor_volume_highlight_renderer", "editor_compass_renderer",
+    "profile_image_renderer", "locator_bar", "bundle_tooltip_renderer", "animated_gif_renderer",
+    "qr_code_renderer", "bohr_model_renderer", "toast_renderer", "netease_paper_doll_renderer",
+    "netease_mini_map_renderer"
+  ],
+  "properties": {
+    "core": [
+      "type", "controls", "variables", "modifications", "ignored"
+    ],
+    "layout": [
+      "anchor_from", "anchor_to", "size", "max_size", "min_size", "offset",
+      "contained", "draggable", "follows_cursor",
+      "inherit_max_sibling_width", "inherit_max_sibling_height", "use_anchored_offset"
+    ],
+    "control": [
+      "visible", "enabled", "layer", "z_order", "alpha", "propagate_alpha",
+      "clips_children", "allow_clipping", "clip_offset", "clip_state_change_event",
+      "enable_scissor_test", "property_bag", "selected", "use_child_anchors"
+    ],
+    "stack_panel": ["orientation"],
+    "label": [
+      "text", "color", "locked_color", "shadow", "font_size", "font_scale_factor",
+      "font_type", "backup_font_type", "text_alignment", "alignment", "localize",
+      "line_padding", "hide_hyphen", "enable_profanity_filter", "locked_alpha",
+      "notify_on_ellipses", "notify_ellipses_sibling",
+      "use_place_holder", "place_holder_text", "place_holder_text_color"
+    ],
+    "image": [
+      "texture", "uv", "uv_size", "texture_file_system", "nineslice_size",
+      "tiled", "tiled_scale", "clip_direction", "clip_ratio", "clip_pixelperfect",
+      "pixel_perfect", "keep_ratio", "bilinear", "fill", "grayscale",
+      "force_texture_reload", "base_size", "zip_folder", "allow_debug_missing_texture"
+    ],
+    "sound": ["sound_name", "sound_volume", "sound_pitch", "sounds"],
+    "button": [
+      "default_control", "hover_control", "pressed_control", "locked_control"
+    ],
+    "toggle": [
+      "radio_toggle_group", "toggle_name", "toggle_default_state",
+      "toggle_group_forced_index", "toggle_group_default_selected", "reset_on_focus_lost",
+      "toggle_on_hover", "toggle_on_button", "toggle_off_button",
+      "enable_directional_toggling", "toggle_grid_collection_name",
+      "checked_control", "unchecked_control",
+      "checked_hover_control", "unchecked_hover_control",
+      "checked_locked_control", "unchecked_locked_control",
+      "checked_locked_hover_control", "unchecked_locked_hover_control"
+    ],
+    "slider": [
+      "slider_track_button", "slider_small_decrease_button", "slider_small_increase_button",
+      "slider_steps", "slider_direction", "slider_timeout", "slider_collection_name",
+      "slider_name", "slider_select_on_hover", "slider_selected_button", "slider_deselected_button",
+      "slider_box_control",
+      "background_control", "background_hover_control",
+      "progress_control", "progress_hover_control"
+    ],
+    "grid": [
+      "grid_dimensions", "maximum_grid_items", "grid_dimension_binding",
+      "grid_rescaling_type", "grid_fill_direction", "precached_grid_item_count",
+      "grid_item_template", "grid_position"
+    ],
+    "edit_box": [
+      "text_box_name", "text_edit_box_grid_collection_name", "constrain_to_rect",
+      "enabled_newline", "text_type", "max_length", "text_control",
+      "place_holder_control", "can_be_deselected", "always_listening",
+      "virtual_keyboard_buffer_control"
+    ],
+    "scroll_view": [
+      "scrollbar_track_button", "scrollbar_touch_button", "scroll_speed",
+      "gesture_control_enabled", "always_handle_scrolling", "touch_mode",
+      "scrollbar_box", "scrollbar_track", "scroll_view_port", "scroll_content",
+      "scroll_box_and_track_panel", "jump_to_bottom_on_update",
+      "allow_scroll_even_when_content_fits", "scrollbar_always_visible"
+    ],
+    "factory": ["factory", "control_name", "control_ids"],
+    "bindings": ["bindings"],
+    "collection": ["collection_name", "collection_index"],
+    "focus": [
+      "default_focus_precedence", "focus_enabled", "focus_wrap_enabled", "focus_magnet_enabled",
+      "focus_identifier", "focus_change_down", "focus_change_up",
+      "focus_change_left", "focus_change_right", "focus_container", "use_last_focus"
+    ],
+    "input": [
+      "button_mappings", "modal", "inline_modal", "always_listen_to_input",
+      "always_handle_pointer", "always_handle_controller_direction", "hover_enabled",
+      "prevent_touch_input", "consume_event", "consume_hover_events"
+    ],
+    "screen": [
+      "render_only_when_topmost", "screen_not_flushable", "always_accepts_input",
+      "render_game_behind", "absorbs_input", "is_showing_menu", "is_modal",
+      "should_steal_mouse", "low_frequency_rendering", "screen_draws_last",
+      "force_render_below", "close_on_player_hurt", "cache_screen", "gamepad_cursor"
+    ],
+    "custom_renderer": [
+      "renderer", "camera_tilt_degrees", "starting_rotation",
+      "use_selected_skin", "use_uuid", "use_skin_gui_scale", "use_player_paperdoll",
+      "rotation", "animation_looped"
+    ],
+    "gradient": ["gradient_direction", "color1", "color2"],
+    "animations_attach": ["anims", "disable_anim_fast_forward", "animation_reset_name"],
+    "animation_element": [
+      "anim_type", "duration", "next", "destroy_at_end", "play_event",
+      "end_event", "start_event", "reset_event", "easing",
+      "from", "to", "initial_uv", "fps", "frame_count", "frame_step",
+      "reversible", "resettable", "scale_from_starting_alpha",
+      "activated", "looping"
+    ],
+    "tts": [
+      "tts_name", "tts_control_header", "tts_section_header",
+      "tts_control_type_order_priority", "tts_index_priority",
+      "tts_toggle_on", "tts_toggle_off", "tts_override_control_value",
+      "tts_inherit_siblings", "tts_skip_message"
+    ],
+    "dropdown": ["dropdown_name", "dropdown_content_control", "dropdown_area"],
+    "selection_wheel": [
+      "inner_radius", "outer_radius", "state_controls", "slice_count",
+      "button_name", "iterate_left_button_name", "iterate_right_button_name",
+      "initial_button_slice", "select_button_name", "hover_button_name"
+    ]
+  },
+  "binding_entry_keys": [
+    "binding_name", "binding_name_override", "binding_type", "binding_collection_name",
+    "binding_condition", "source_control_name", "source_property_name", "target_property_name",
+    "resolve_ancestor_scope", "resolve_sibling_scope"
+  ],
+  "modification_entry_keys": [
+    "array_name", "control_name", "operation", "value", "where", "target", "target_control"
+  ],
+  "modification_array_names": ["controls", "bindings", "button_mappings"],
+  "rules": {
+    "layer_warn_above": 100,
+    "grid_requires": "grid_item_template OR controls[]",
+    "scroll_view_recommends": "scrollbar_track_button OR scrollbar_touch_button",
+    "binding_view_requires": ["source_property_name", "target_property_name"],
+    "binding_collection_requires": ["binding_collection_name"]
+  }
+}

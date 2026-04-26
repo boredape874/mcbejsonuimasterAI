@@ -1,0 +1,33 @@
+screen: bottom_dialogue
+
+elements:
+  - id: panel
+    kind: panel
+    anchor: bottom_middle
+    pos: [0, -16]
+    size: [1200, 120]
+
+  - id: header
+    parent: panel
+    kind: label
+    anchor: top_left
+    pos: [16, 8]
+    size: [400, 18]
+
+  - id: body
+    parent: panel
+    kind: label
+    anchor: top_left
+    pos: [16, 32]
+    size: [1000, 56]
+
+  - id: btn_continue
+    parent: panel
+    kind: button
+    anchor: bottom_right
+    pos: [-16, -12]
+    size: [140, 32]
+
+constraints:
+  - { op: align_x, ids: [header, body], edge: start }
+  - { op: edge_eq, a: "btn_continue.right", b: "panel.right", }
