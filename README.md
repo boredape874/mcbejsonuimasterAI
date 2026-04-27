@@ -119,6 +119,8 @@ See:
 - [Advanced JSON UI Recipes](docs/38-advanced-json-ui-recipes.md)
 - [Design Recommendation Catalog](docs/39-design-recommendation-catalog.md)
 - [Server Form Example Index](docs/40-server-form-example-index.md)
+- [Custom AUX IDs And Server Form Progress](docs/47-custom-auxid-and-form-progress.md)
+- [JSON UI Field Catalogue](docs/48-json-ui-field-catalogue.md)
 - [IR Spec](docs/41-ir-spec.md) (tools layer)
 - [Tools Reference](docs/42-tools-reference.md) (tools layer)
 - [Self-Bootstrap Protocol](docs/43-self-bootstrap-protocol.md) (tools layer)
@@ -407,6 +409,8 @@ Then read as needed:
 - [MCBE JSON UI Resource Upstream](docs/29-mcbe-json-ui-resource-upstream.md)
 - [File And Code Fragment Usage](docs/30-file-and-code-fragment-usage.md)
 - [Fragment Routing Table](docs/31-fragment-routing-table.md)
+- [Custom AUX IDs And Server Form Progress](docs/47-custom-auxid-and-form-progress.md)
+- [JSON UI Field Catalogue](docs/48-json-ui-field-catalogue.md)
 
 ## Is this enough to become a "JSON UI Master AI" in one shot?
 

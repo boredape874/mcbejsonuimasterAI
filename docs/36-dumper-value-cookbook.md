@@ -25,6 +25,10 @@ Use this after `docs/33-animation-patterns-and-dumper-values.md` when the questi
 | `close_on_player_hurt` | `references/official/bedrock-samples-ui/chest_screen.json` | container/screen behavior |
 | `text_alignment`, `font_type`, `font_scale_factor` | `references/official/bedrock-samples-ui/hud_screen.json`, `chat_screen.json` | readable HUD text and chat text |
 
+For a broader schema-like catalogue of element types, inherited property groups, renderers, animation fields, input/focus fields, and text/sprite properties, use:
+
+- `docs/48-json-ui-field-catalogue.md`
+
 ## Factory pattern
 
 Use when the UI needs elements created by a collection or an engine-provided stream.

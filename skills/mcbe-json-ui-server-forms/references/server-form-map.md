@@ -19,6 +19,7 @@
 - Modern Cloud UI Reference: `customUI_` plus typed suffix routing
 - RPG Server UI Reference: chest or furnace token routing
 - `farm-ui-variants/GfE8ULhgL4I`: lightweight server form skin override
+- `../../../docs/47-custom-auxid-and-form-progress.md`: `#form_text` numeric prefix progress bar pattern
 
 ## Design recommendation
 

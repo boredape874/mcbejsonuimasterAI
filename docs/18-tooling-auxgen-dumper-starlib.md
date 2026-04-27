@@ -42,6 +42,12 @@ Do not use it for:
 - normal UI image texture paths
 - replacing `textures/item_texture.json` verification
 
+Custom addon note:
+
+- For custom block/item AUX IDs derived from pack file ordering, use `docs/47-custom-auxid-and-form-progress.md`.
+- The practical custom ordering model is separate from the simple `aux = item_id << 16` explanation.
+- The custom model has platform risk: PC reports may not match Android or iOS.
+
 ## `TheoristMC/JSON-UI-Dumper`
 
 Upstream:
@@ -126,3 +132,5 @@ This repository should prefer:
 | animation field discovery | JSON UI Dumper, Mojang `bedrock-samples`, `docs/33-animation-patterns-and-dumper-values.md` |
 | binding/search/slicing examples | StarLibV2, `docs/34-binding-patterns-value-index.md` |
 | dumped vanilla value recipes | `docs/36-dumper-value-cookbook.md`, `docs/37-vanilla-dumper-screen-recipes.md` |
+| custom addon AUX ordering and server form progress payloads | `docs/47-custom-auxid-and-form-progress.md` |
+| schema-like element/property field lookup | `docs/48-json-ui-field-catalogue.md` |

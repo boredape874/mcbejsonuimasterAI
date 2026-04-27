@@ -95,6 +95,10 @@ Confirmed source:
 - `references/local-examples/rpg-hud/ui/animated_bar.json`
 - `references/source-packs/rpg-server-ui-reference/ui/animated_bar.json`
 
+For server form body driven progress using `#form_text`, numeric prefixes, and `#clip_ratio`, use:
+
+- `docs/47-custom-auxid-and-form-progress.md`
+
 ## Easing values seen in samples
 
 The RainbowPie sample includes a practical easing test list:

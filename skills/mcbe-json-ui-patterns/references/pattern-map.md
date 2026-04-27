@@ -7,6 +7,7 @@
 - `../../references/external/json-ui-examples/custom_progress_bar.json`
 - `../../references/external/json-ui-examples/custom_heart_or_hunger_like_progress_bar_icons.json`
 - `../../docs/33-animation-patterns-and-dumper-values.md`
+- `../../docs/47-custom-auxid-and-form-progress.md`
 
 ## animation
 
@@ -29,6 +30,7 @@
 - `../../docs/36-dumper-value-cookbook.md`
 - `../../docs/37-vanilla-dumper-screen-recipes.md`
 - `../../docs/38-advanced-json-ui-recipes.md`
+- `../../docs/48-json-ui-field-catalogue.md`
 
 ## scoreboard
 
