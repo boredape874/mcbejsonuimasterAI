@@ -52,6 +52,9 @@ Use this table to choose the smallest file or code fragment for a task.
 | Scroll list | example with `common.scrolling_panel` | `$scrolling_content`, grid/list content, scroll size |
 | Search/filter UI | `docs/29-mcbe-json-ui-resource-upstream.md` route for Search Bar JSON-UI | text box binding and filtered visibility logic |
 | Text input | upstream Text Input Box tutorial | input control and target property binding |
+| Tutorial buttons/toggles/sliders | `docs/49-json-ui-tutorial-index.md` | one control template and state controls |
+| Tutorial progress bar | `docs/49-json-ui-tutorial-index.md` | `clip_ratio`, bar textures, or animated bar component |
+| Tutorial factories/cyclers | `docs/49-json-ui-tutorial-index.md` | factory, draggable, image cycler, or label cycler fragment |
 
 ## Textures And Fonts
 

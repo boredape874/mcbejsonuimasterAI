@@ -14,6 +14,7 @@ When adapting code from this upstream, use:
 
 - `docs/30-file-and-code-fragment-usage.md`
 - `docs/31-fragment-routing-table.md`
+- `docs/49-json-ui-tutorial-index.md`
 
 ## Sync
 
@@ -30,6 +31,10 @@ When adapting code from this upstream, use:
 | `UI SAMPLE/BedrockUi+ Beta` | Broad UI replacement patterns and screen coverage. |
 | `UI SAMPLE/Déesse UI` | Full UI pack examples for vanilla screen coverage. |
 | `Json ui tutorial/*` | Small focused tutorials such as preserved title text, search bar, text input, server form, custom buttons, custom grids, custom textures. |
+
+For the tutorial folder, prefer the dedicated index:
+
+- `docs/49-json-ui-tutorial-index.md`
 
 ## Search first
 
@@ -73,6 +78,18 @@ Start with:
 - `Json ui tutorial/Text Input Box/`
 
 Use this when the task involves filtering, typed UI, or text input controls.
+
+### Buttons, toggles, sliders, progress, and factories
+
+Start with:
+
+- `docs/49-json-ui-tutorial-index.md`
+- `Json ui tutorial/Custom Text Button and Toggle/`
+- `Json ui tutorial/Custom_slider.json/`
+- `Json ui tutorial/custom progress bar/`
+- `Json ui tutorial/Custom Element Factories/`
+
+Use this when the task involves reusable controls, animated button states, progress bars, factories, draggable elements, or cyclers.
 
 ### Full screen replacement comparison
 

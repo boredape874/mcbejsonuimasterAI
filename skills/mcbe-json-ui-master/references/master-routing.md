@@ -167,6 +167,8 @@ Then load only one matching mirror under `references/local-examples/`, or one ex
 Use `../../../docs/29-mcbe-json-ui-resource-upstream.md`.
 Then search `references/upstreams/mcbe-json-ui-resource/` with `rg` and open only one exact tutorial or sample screen.
 
+For focused tutorial files under `Json ui tutorial`, use `../../../docs/49-json-ui-tutorial-index.md` before opening files.
+
 ### minecraft-bedrock-json-ui-sample archive
 
 Use `../../../docs/32-minecraft-bedrock-json-ui-sample-upstream.md`.

@@ -8,6 +8,7 @@
 - `../../references/external/json-ui-examples/custom_heart_or_hunger_like_progress_bar_icons.json`
 - `../../docs/33-animation-patterns-and-dumper-values.md`
 - `../../docs/47-custom-auxid-and-form-progress.md`
+- `../../docs/49-json-ui-tutorial-index.md`
 
 ## animation
 
@@ -31,6 +32,7 @@
 - `../../docs/37-vanilla-dumper-screen-recipes.md`
 - `../../docs/38-advanced-json-ui-recipes.md`
 - `../../docs/48-json-ui-field-catalogue.md`
+- `../../docs/49-json-ui-tutorial-index.md`
 
 ## scoreboard
 
@@ -64,3 +66,4 @@
 - `../../references/external/EasyUIBuilder/ui/custom_ui/slider_example.json`
 - `../../references/external/EasyUIBuilder/ui/custom_ui/toggle_example.json`
 - `../../references/external/EasyUIBuilder/ui/custom_ui/button_example.json`
+- `../../docs/49-json-ui-tutorial-index.md`
