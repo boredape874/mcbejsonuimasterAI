@@ -25,6 +25,7 @@ Use this table to choose the smallest file or code fragment for a task.
 | Inbox or mail form | `references/source-packs/modern-cloud-ui-reference/ui/form/inbox_cloud_action_form.json` | category rail, search row, scrollable message list |
 | Process/machine form | `references/source-packs/modern-cloud-ui-reference/ui/form/food_furnace_cloud_action_form.json` | 55% centered process shell and furnace/machine state image |
 | Stat or skill form | `references/source-packs/rpg-server-ui-reference/ui/stat.json` or `references/source-packs/rpg-server-ui-reference/ui/skill.json` | card sizes, icon-backed buttons, compact RPG layout |
+| Premium adventure form system | `docs/50-advanced-ui-reference-analysis.md` | router, template modules, and one feature form family |
 | Chest-like form | `docs/18-tooling-auxgen-dumper-starlib.md` | title routing and container substitution pattern |
 | Script API form source | `references/local-examples/npc-dialogue/BP/scripts/main.js` | title/body/button data shape only |
 

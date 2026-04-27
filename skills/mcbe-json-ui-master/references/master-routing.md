@@ -169,6 +169,8 @@ Then search `references/upstreams/mcbe-json-ui-resource/` with `rg` and open onl
 
 For focused tutorial files under `Json ui tutorial`, use `../../../docs/49-json-ui-tutorial-index.md` before opening files.
 
+For the private advanced adventure UI reference, use `../../../docs/50-advanced-ui-reference-analysis.md`. Open raw private files only if `references/private/advanced-ui-reference/` exists locally.
+
 ### minecraft-bedrock-json-ui-sample archive
 
 Use `../../../docs/32-minecraft-bedrock-json-ui-sample-upstream.md`.

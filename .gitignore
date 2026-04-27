@@ -1,4 +1,5 @@
 references/upstreams/
+references/private/
 
 # AI tool layer
 node_modules/

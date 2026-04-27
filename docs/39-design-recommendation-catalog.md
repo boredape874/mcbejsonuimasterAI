@@ -54,6 +54,7 @@ Only proceed without asking when:
 | modern inbox/mail/notification forms | Modern Cloud communication forms | `references/source-packs/modern-cloud-ui-reference/ui/form/inbox_cloud_action_form.json` |
 | modern large shop/recipe grid | Modern Cloud shop/recipe forms | `references/source-packs/modern-cloud-ui-reference/ui/form/redesign_shop_cloud_action_form.json` |
 | modern process/machine UI | Modern Cloud furnace form | `references/source-packs/modern-cloud-ui-reference/ui/form/food_furnace_cloud_action_form.json` |
+| premium RPG adventure UI, battle pass, store, quest, equipment, map | Advanced Adventure UI Reference | `docs/50-advanced-ui-reference-analysis.md` |
 
 ## Feature-Labeled Examples
 
@@ -243,6 +244,32 @@ Design notes:
 - keep labels short and values visible
 - put destructive commands behind confirmation
 - if using custom input behavior, document which vanilla binding or collection source drives it
+
+### Advanced Adventure UI System
+
+Use this when a UI should feel like a polished adventure/RPG product instead of a small server utility.
+
+Reference:
+
+- `docs/50-advanced-ui-reference-analysis.md`
+
+Recommended use:
+
+- battle pass
+- store and purchase flows
+- RPG equipment screens
+- quest campaign screens
+- NPC vendor and quest dialogue
+- map/navigation pages
+- reward toasts
+- large PMMP form routers
+
+Design notes:
+
+- start with the architecture in the analysis doc, not with raw source copying
+- keep templates, router, feature forms, and textures as separate layers
+- use private reference files only for local analysis unless redistribution rights are clear
+- translate source-specific route flags into target-owned PMMP prefixes
 
 ## Choosing A Style For PMMP Menus
 

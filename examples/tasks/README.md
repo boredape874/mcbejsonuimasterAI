@@ -28,3 +28,4 @@ Task groups:
 - `13-server-form-design-adaptation.md`
 - `14-author-ir-and-compile.md` (tools layer)
 - `15-image-driven-iteration.md` (tools layer)
+- `16-advanced-adventure-ui-adaptation.md`
