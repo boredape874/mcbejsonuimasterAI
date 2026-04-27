@@ -26,6 +26,7 @@ Use this table to choose the smallest file or code fragment for a task.
 | Process/machine form | `references/source-packs/modern-cloud-ui-reference/ui/form/food_furnace_cloud_action_form.json` | 55% centered process shell and furnace/machine state image |
 | Stat or skill form | `references/source-packs/rpg-server-ui-reference/ui/stat.json` or `references/source-packs/rpg-server-ui-reference/ui/skill.json` | card sizes, icon-backed buttons, compact RPG layout |
 | Premium adventure form system | `docs/50-advanced-ui-reference-analysis.md` | router, template modules, and one feature form family |
+| Compact menu or pocket inventory system | `docs/51-compact-crafting-pocket-ui-reference.md` | small route panel, toast HUD, cooking/chest, split pocket inventory |
 | Chest-like form | `docs/18-tooling-auxgen-dumper-starlib.md` | title routing and container substitution pattern |
 | Script API form source | `references/local-examples/npc-dialogue/BP/scripts/main.js` | title/body/button data shape only |
 

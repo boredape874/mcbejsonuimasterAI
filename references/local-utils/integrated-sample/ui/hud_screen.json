@@ -33,7 +33,7 @@
   "dual_scoreboard": {
     "type": "panel",
     "controls": [
-      { "hive@scoreboard.hive_sidebar": {} },
+      { "generic@scoreboard.generic_sidebar": {} },
       { "default@scoreboard.default_sidebar": {} }
     ]
   },

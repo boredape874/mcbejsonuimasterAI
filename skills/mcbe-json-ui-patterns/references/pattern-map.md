@@ -55,6 +55,7 @@
 - `../../references/source-packs/modern-cloud-ui-reference/ui/server_form.json`
 - `../../references/source-packs/rpg-server-ui-reference/ui/server_form.json`
 - `../../docs/50-advanced-ui-reference-analysis.md`
+- `../../docs/51-compact-crafting-pocket-ui-reference.md`
 
 ## custom chat panel
 

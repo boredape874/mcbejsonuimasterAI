@@ -55,6 +55,7 @@ Only proceed without asking when:
 | modern large shop/recipe grid | Modern Cloud shop/recipe forms | `references/source-packs/modern-cloud-ui-reference/ui/form/redesign_shop_cloud_action_form.json` |
 | modern process/machine UI | Modern Cloud furnace form | `references/source-packs/modern-cloud-ui-reference/ui/form/food_furnace_cloud_action_form.json` |
 | premium RPG adventure UI, battle pass, store, quest, equipment, map | Advanced Adventure UI Reference | `docs/50-advanced-ui-reference-analysis.md` |
+| compact main menu, cooking station, toast HUD, pocket split inventory | Compact Crafting And Pocket UI Reference | `docs/51-compact-crafting-pocket-ui-reference.md` |
 
 ## Feature-Labeled Examples
 
@@ -270,6 +271,30 @@ Design notes:
 - keep templates, router, feature forms, and textures as separate layers
 - use private reference files only for local analysis unless redistribution rights are clear
 - translate source-specific route flags into target-owned PMMP prefixes
+
+### Compact Crafting And Pocket UI System
+
+Use this when the UI should be compact, practical, and server-menu oriented rather than full-screen premium.
+
+Reference:
+
+- `docs/51-compact-crafting-pocket-ui-reference.md`
+
+Recommended use:
+
+- compact main menu
+- chest-like menu
+- cooking or crafting station UI
+- small custom toast panels
+- scoreboard/HUD coordination
+- split pocket inventory layout
+
+Design notes:
+
+- keep the custom route small and leave vanilla fallback intact
+- prefer fixed small button dimensions for compact menus
+- separate inventory slot collections from decorative panels
+- use the private reference only for local analysis, not as public source material
 
 ## Choosing A Style For PMMP Menus
 

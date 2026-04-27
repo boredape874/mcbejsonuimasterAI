@@ -8,16 +8,16 @@
     ],
     "controls": [
       {
-        "hive_ui_sidebar_check": {
+        "generic_ui_sidebar_check": {
           "type": "panel",
-          "$flag_ui": "support.playhive.com/ui",
+          "$flag_ui": "custom.scoreboard/ui",
           "size": [
             "100%",
             "100%"
           ],
           "controls": [
             {
-              "sidebar@scoreboard.hive_ui_scoreboard_sidebar": {}
+              "sidebar@scoreboard.generic_ui_scoreboard_sidebar": {}
             }
           ],
           "bindings": [
@@ -61,7 +61,7 @@
       }
     ]
   },
-  "hive_ui_scoreboard_sidebar": {
+  "generic_ui_scoreboard_sidebar": {
     "type": "panel",
     "size": [
       "100%c",
@@ -89,7 +89,7 @@
           "collection_name": "scoreboard_players",
           "factory": {
             "name": "player_list_factory",
-            "control_name": "scoreboard.hive_scoreboard_entry_final"
+            "control_name": "scoreboard.generic_scoreboard_entry_final"
           },
           "bindings": [
             {
@@ -119,7 +119,7 @@
       }
     ]
   },
-  "hive_scoreboard_entry_final": {
+  "generic_scoreboard_entry_final": {
     "type": "panel",
     "size": [
       "100%cm + 3px",
@@ -150,7 +150,7 @@
       {
         "background": {
           "type": "image",
-          "texture": "textures/ui/hive/hive_scoreboard_entry",
+          "texture": "textures/ui/generic/generic_scoreboard_entry",
           "alpha": 0.55,
           "size": [
             "100%sm + 4px",
@@ -180,7 +180,7 @@
       {
         "title": {
           "type": "image",
-          "texture": "textures/ui/hive/whitetransparency",
+          "texture": "textures/ui/generic/whitetransparency",
           "color": [
             1,
             0.6823,
@@ -282,7 +282,7 @@
       {
         "score_container": {
           "type": "image",
-          "texture": "textures/ui/hive/whitetransparency",
+          "texture": "textures/ui/generic/whitetransparency",
           "color": [
             0,
             0.7764,
@@ -454,7 +454,7 @@
       {
         "background": {
           "type": "image",
-          "texture": "textures/ui/hive/hive_rounded_corners",
+          "texture": "textures/ui/generic/generic_rounded_corners",
           "color": [
             0.031,
             0.0705,

@@ -1,5 +1,5 @@
 {
-  "namespace": "hive_square_image_modal",
+  "namespace": "generic_square_image_modal",
   "main_panel": {
     "type": "panel",
     "size": [
@@ -20,7 +20,7 @@
           ],
           "controls": [
             {
-              "main_panel@hive_square_image_modal.main_panel_internal": {}
+              "main_panel@generic_square_image_modal.main_panel_internal": {}
             }
           ]
         }
@@ -142,7 +142,7 @@
               }
             },
             {
-              "close_button@server_form.hive_close_button": {}
+              "close_button@server_form.generic_close_button": {}
             }
           ]
         }
@@ -156,7 +156,7 @@
           ],
           "controls": [
             {
-              "banner_renderer@hive_square_image_modal.banner_renderer": {}
+              "banner_renderer@generic_square_image_modal.banner_renderer": {}
             }
           ]
         }
@@ -171,13 +171,13 @@
           "anchor_to": "bottom_left",
           "layer": 2,
           "type": "image",
-          "texture": "textures/ui/hive/hive_rounded_corners",
+          "texture": "textures/ui/generic/generic_rounded_corners",
           "alpha": 0.5,
           "color": "black",
           "keep_ratio": false,
           "controls": [
             {
-              "description_scroll_panel@hive_square_image_modal.description_text_wrapper": {}
+              "description_scroll_panel@generic_square_image_modal.description_text_wrapper": {}
             }
           ]
         }
@@ -196,7 +196,7 @@
     ],
     "controls": [
       {
-        "text@hive_square_image_modal.description_text": {}
+        "text@generic_square_image_modal.description_text": {}
       }
     ]
   },
@@ -239,7 +239,7 @@
     ],
     "factory": {
       "name": "button_list_factory",
-      "control_name": "hive_square_image_modal.banner_entry"
+      "control_name": "generic_square_image_modal.banner_entry"
     },
     "collection_name": "form_buttons",
     "bindings": [
@@ -258,7 +258,7 @@
     "$flag_banner": "§m§a",
     "controls": [
       {
-        "banner_image@hive_square_image_modal.banner_image": {}
+        "banner_image@generic_square_image_modal.banner_image": {}
       }
     ],
     "bindings": [

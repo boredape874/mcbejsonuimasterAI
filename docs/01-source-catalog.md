@@ -20,7 +20,7 @@ Primary files:
 - `ui/chat_screen.json`
 - `ui/scoreboards.json`
 - `ui/server_form.json`
-- `ui/neroluna/form/*.json`
+- `ui/form/*.json`
 
 ## `references/source-packs/farm-ui-variants`
 
@@ -59,9 +59,7 @@ Primary files:
 - `ui/chest_server_form.json`
 - `ui/chest_inventory_system.json`
 - `ui/animated_bar.json`
-- `textures/ui/*`
-- `blocks.json`
-- `manifest.json`
+- texture paths referenced from UI JSON
 
 ## `references/local-utils/json-ui-utils`
 
@@ -242,3 +240,18 @@ Primary files:
   - Bedrock-wide schema project with UI schema coverage
 - `DJStompZone/MCBE-JSON-UI-Schemas`
   - focused JSON UI schema files
+
+## Private Design References
+
+Private local references are intentionally not committed. Use their public analysis docs first, then inspect the ignored local mirror only when it exists on the current machine.
+
+- `docs/50-advanced-ui-reference-analysis.md`
+  - premium RPG/adventure UI, store, quest, equipment, battle pass, map, reward toast
+- `docs/51-compact-crafting-pocket-ui-reference.md`
+  - compact menu, chest/cooking panels, HUD toasts, split pocket inventory
+
+Rules:
+
+- do not publish original manifests, pack icons, unused textures, or source names
+- keep public docs source-neutral
+- copy only JSON UI files and texture files directly referenced by JSON UI into private mirrors

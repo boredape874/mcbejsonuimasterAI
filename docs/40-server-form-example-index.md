@@ -79,11 +79,11 @@ Use this set when the user wants a more polished modern UI than the compact RPG 
 
 Do not mix the cloud form system into a target pack by copying only `server_form.json`. It depends on:
 
-- `ui/neroluna/form_common.json`
-- `ui/neroluna/form_template.json`
-- `ui/neroluna/form_anims_template.json`
-- `ui/neroluna/form/facelift_cloud_action_form.json`
-- `ui/neroluna/form/facelift_cloud_modal_form.json`
+- `ui/form_common.json`
+- `ui/form_template.json`
+- `ui/form_anims_template.json`
+- `ui/form/facelift_cloud_action_form.json`
+- `ui/form/facelift_cloud_modal_form.json`
 - the specific cloud action/modal form file being routed
 - the relevant textures under `textures/ui/form/*`
 
@@ -121,6 +121,7 @@ Do not mix the cloud form system into a target pack by copying only `server_form
 | Modern Cloud pause/menu layout | `references/source-packs/modern-cloud-ui-reference/ui/pause_screen.json` | polished pause/menu structure, world info panel, 26px menu rows, 28px side icon buttons, player list panels | pause screen inspiration only |
 | Advanced adventure form router | `docs/50-advanced-ui-reference-analysis.md` | production-scale long/custom form router with many feature pages, template modules, and title flag dispatch | project-owned flags |
 | Advanced battle pass/store/quest/equipment UI | `docs/50-advanced-ui-reference-analysis.md` | large feature-specific form families: battle pass, store, quest, NPC, crafting, equipment, map, rewards | project-owned flags |
+| Compact main menu form | `docs/51-compact-crafting-pocket-ui-reference.md` | small title-routed menu panel, fixed icon buttons, custom close button, vanilla fallback | project-owned flags |
 | Dynamic dialogue bridge | `references/upstreams/minecraft-bedrock-json-ui-sample/DynamicDialogV2-2/DynamicDialogV2-2/RP/ui/hud_screen.json` | dialogue driven through HUD/title-like data instead of normal server form | title/actionbar protocol |
 | Chest server form | `references/source-packs/rpg-server-ui-reference/ui/chest_server_form.json` | server form transformed into inventory-like menu | `chest:` or custom token |
 | Chest inventory system | `references/source-packs/rpg-server-ui-reference/ui/chest_inventory_system.json` | slot/grid composition and inventory-like repeated controls | `chest:` |

@@ -1,5 +1,5 @@
 {
-  "namespace": "hive_grid_modal",
+  "namespace": "generic_grid_modal",
   "main_panel": {
     "$main_size|default": [
       400,
@@ -128,7 +128,7 @@
               }
             },
             {
-              "close_button@server_form.hive_close_button": {}
+              "close_button@server_form.generic_close_button": {}
             }
           ]
         }
@@ -152,7 +152,7 @@
           ],
           "layer": 2,
           "type": "image",
-          "texture": "textures/ui/hive/whitetransparency",
+          "texture": "textures/ui/generic/whitetransparency",
           "alpha": 0.9,
           "color": [
             0.49,
@@ -179,7 +179,7 @@
     ],
     "layer": 2,
     "type": "image",
-    "texture": "textures/ui/hive/whitetransparency",
+    "texture": "textures/ui/generic/whitetransparency",
     "alpha": 0.85,
     "color": [
       0.06,
@@ -205,7 +205,7 @@
           ],
           "layer": 2,
           "type": "image",
-          "texture": "textures/ui/hive/whitetransparency",
+          "texture": "textures/ui/generic/whitetransparency",
           "alpha": 0.9,
           "color": [
             0.26,
@@ -227,7 +227,7 @@
       "100%",
       "100%"
     ],
-    "$scrolling_content": "hive_grid_modal.grid_wrapper_wrapper",
+    "$scrolling_content": "generic_grid_modal.grid_wrapper_wrapper",
     "$scroll_size": [
       5,
       "100% - 18px"
@@ -257,7 +257,7 @@
     ],
     "controls": [
       {
-        "grid_wrapper@hive_grid_modal.grid_wrapper": {}
+        "grid_wrapper@generic_grid_modal.grid_wrapper": {}
       }
     ]
   },
@@ -292,7 +292,7 @@
                 "size": "$description_size",
                 "layer": 2,
                 "type": "image",
-                "texture": "textures/ui/hive/hive_rounded_corners",
+                "texture": "textures/ui/generic/generic_rounded_corners",
                 "alpha": 0.5,
                 "color": "black",
                 "keep_ratio": false,
@@ -327,7 +327,7 @@
         }
       },
       {
-        "button_grid@hive_grid_modal.button_grid": {}
+        "button_grid@generic_grid_modal.button_grid": {}
       }
     ]
   },
@@ -339,7 +339,7 @@
     ],
     "anchor_from": "top_middle",
     "anchor_to": "top_middle",
-    "grid_item_template": "hive_grid_modal.banner_list_entry",
+    "grid_item_template": "generic_grid_modal.banner_list_entry",
     "grid_rescaling_type": "horizontal",
     "collection_name": "form_buttons",
     "bindings": [
@@ -370,17 +370,17 @@
           "$pressed_button_name": "button.form_button_click",
           "controls": [
             {
-              "default@hive_grid_modal.button_image": {
+              "default@generic_grid_modal.button_image": {
                 "$state": "default"
               }
             },
             {
-              "hover@hive_grid_modal.button_image": {
+              "hover@generic_grid_modal.button_image": {
                 "$state": "hover"
               }
             },
             {
-              "pressed@hive_grid_modal.button_image": {
+              "pressed@generic_grid_modal.button_image": {
                 "$state": "pressed"
               }
             }
@@ -421,7 +421,7 @@
           "anchor_to": "top_left",
           "layer": 2,
           "type": "image",
-          "texture": "textures/ui/hive/hive_rounded_corners",
+          "texture": "textures/ui/generic/generic_rounded_corners",
           "keep_ratio": false,
           "alpha": 0.5,
           "color": "black",
@@ -440,7 +440,7 @@
                 "anchor_to": "top_left",
                 "layer": 2,
                 "type": "image",
-                "texture": "textures/ui/hive/hive_rounded_corners",
+                "texture": "textures/ui/generic/generic_rounded_corners",
                 "color": [
                   0.40,
                   0.898,
@@ -500,7 +500,7 @@
                             "alpha": 0.6,
                             "layer": 1,
                             "keep_ratio": true,
-                            "texture": "textures/ui/hive/loading_grid",
+                            "texture": "textures/ui/generic/loading_grid",
                             "bindings": [
                               {
                                 "binding_type": "view",

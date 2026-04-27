@@ -6,12 +6,10 @@
 
 ## Key files
 
-- `../../references/source-packs/rpg-server-ui-reference/manifest.json`
-- `../../references/source-packs/rpg-server-ui-reference/blocks.json`
 - `../../references/source-packs/rpg-server-ui-reference/ui/hud_screen.json`
 - `../../references/source-packs/rpg-server-ui-reference/ui/server_form.json`
-- `../../references/source-packs/rpg-server-ui-reference/textures/ui/`
+- `../../references/source-packs/rpg-server-ui-reference/ui/_ui_defs.json`
 
 ## Why it matters
 
-This source shows that Bedrock UI often depends on textures, blocks, fonts, and addon-side conventions. A UI fix can be wrong if it ignores the pack layer around it.
+This source shows that Bedrock UI often depends on broader addon-side conventions. In this public kit, keep the reference focused on JSON UI files and texture path usage; inspect private or target-pack assets only when the user provides them.

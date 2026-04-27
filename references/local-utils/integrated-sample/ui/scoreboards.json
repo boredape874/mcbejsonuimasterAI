@@ -1,7 +1,7 @@
 {
   "namespace": "scoreboard",
 
-  "hive_entry_label": {
+  "generic_entry_label": {
     "type": "label",
     "layer": 2,
     "text": "#player_name_sidebar",
@@ -19,21 +19,21 @@
     ]
   },
 
-  "hive_sidebar_entry": {
+  "generic_sidebar_entry": {
     "type": "panel",
     "size": [142, 16],
     "controls": [
       {
         "entry_bg": {
           "type": "image",
-          "texture": "textures/ui/hive/hive_scoreboard_entry",
+          "texture": "textures/ui/generic/generic_scoreboard_entry",
           "alpha": 0.82,
           "size": ["100%", "100%"],
           "anchor_from": "top_right",
           "anchor_to": "top_right",
           "controls": [
             {
-              "name_label@scoreboard.hive_entry_label": {
+              "name_label@scoreboard.generic_entry_label": {
                 "offset": [8, 0],
                 "anchor_from": "left_middle",
                 "anchor_to": "left_middle"
@@ -57,7 +57,7 @@
     ]
   },
 
-  "hive_sidebar": {
+  "generic_sidebar": {
     "type": "panel",
     "size": [150, "100%c"],
     "anchor_from": "top_right",
@@ -74,7 +74,7 @@
           "collection_name": "scoreboard_players",
           "factory": {
             "name": "player_list_factory",
-            "control_name": "scoreboard.hive_sidebar_entry"
+            "control_name": "scoreboard.generic_sidebar_entry"
           },
           "bindings": [
             {

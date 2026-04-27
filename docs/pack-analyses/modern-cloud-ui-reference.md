@@ -7,7 +7,7 @@ Modern Cloud UI Reference is one of the strongest packs in this repository for l
 It is useful because:
 
 - `_ui_defs.json` is organized cleanly
-- reusable modules are split into `pause_utils`, `utils`, and `neroluna/form`
+- reusable modules are split into `pause_utils`, `utils`, and `form`
 - HUD, chat, scoreboard, inventory, and server form work are present in one pack
 
 ## Key patterns

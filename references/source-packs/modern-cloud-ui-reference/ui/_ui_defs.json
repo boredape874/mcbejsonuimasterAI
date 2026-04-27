@@ -18,18 +18,18 @@
     "ui/colorful/ui_template_colorful.json",
 
     // Server Form
-    "ui/neroluna/form_common.json",
-    "ui/neroluna/form_template.json",
-    "ui/neroluna/form_anims_template.json",
-    "ui/neroluna/form/facelift_cloud_action_form.json",
-    "ui/neroluna/form/facelift_cloud_modal_form.json",
-    "ui/neroluna/form/multi_a_cloud_action_form.json", // Server Menu + Friends List
-    "ui/neroluna/form/notification_list_cloud_action_form.json",
-    "ui/neroluna/form/inbox_cloud_action_form.json",
-    "ui/neroluna/form/mail_info_cloud_action_form.json",
-    "ui/neroluna/form/food_furnace_cloud_action_form.json",
-    "ui/neroluna/form/food_recipe_select_cloud_action_form.json",
-    "ui/neroluna/form/redesign_shop_cloud_action_form.json",
-    "ui/neroluna/form/redesign_shop_buy_sell_cloud_modal_form.json"
+    "ui/form_common.json",
+    "ui/form_template.json",
+    "ui/form_anims_template.json",
+    "ui/form/facelift_cloud_action_form.json",
+    "ui/form/facelift_cloud_modal_form.json",
+    "ui/form/multi_a_cloud_action_form.json", // Server Menu + Friends List
+    "ui/form/notification_list_cloud_action_form.json",
+    "ui/form/inbox_cloud_action_form.json",
+    "ui/form/mail_info_cloud_action_form.json",
+    "ui/form/food_furnace_cloud_action_form.json",
+    "ui/form/food_recipe_select_cloud_action_form.json",
+    "ui/form/redesign_shop_cloud_action_form.json",
+    "ui/form/redesign_shop_buy_sell_cloud_modal_form.json"
   ]
 }
