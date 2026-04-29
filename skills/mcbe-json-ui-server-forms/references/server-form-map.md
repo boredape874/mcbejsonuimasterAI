@@ -27,6 +27,8 @@
 ## Strong patterns
 
 - Community server-form search-bar pattern: `common.text_edit_box` plus button visibility binding against `#form_button_text`.
+- Case-normalized search-bar extension: generated text helper with `property_bag` character mapping; normalize both the typed query and the server-provided searchable key when case-insensitive behavior matters.
+- Dialogue-style server form shell reference: title-token routed form, `common_dialogs.main_panel_no_buttons` shell, `collection_panel` payload extraction, and skip/visibility toggle state. Use as structure only; do not copy restricted reference code.
 - Modern Cloud UI Reference: `customUI_` plus typed suffix routing
 - RPG Server UI Reference: chest or furnace token routing
 - `farm-ui-variants/GfE8ULhgL4I`: lightweight server form skin override

@@ -105,7 +105,7 @@ For server form visual direction, NPC dialogue style, chest/furnace form look, R
 
 For feature-labeled server form examples such as quest window, shop window, stat window, skill window, NPC dialogue, settings panel, chest form, or furnace/process form, prefer `../../../docs/40-server-form-example-index.md`.
 
-For server form search bars that filter `form_buttons` by button text, use `topics/server-forms/search-bar.md`.
+For server form search bars that filter `form_buttons` by button text, case-sensitive contains checks, or generated lowercase/character-map input normalization, use `topics/server-forms/search-bar.md`.
 
 For premium multi-route form dispatch, icon rows with loading placeholders, and chest/menu-style form bridges, prefer `../../../docs/53-premium-ui-pattern-reference.md`.
 
@@ -188,6 +188,8 @@ Then load:
 
 - `topics/schemas/index.md`
 - and only the exact needed subtopic under `topics/schemas/`
+
+For direct JSON UI schema URLs, sprite UI schema coverage, screen/type/property catalogues, or comparison against Bugrock JSON UI schema coverage, use `mcbe-json-ui-schemas` and `references/schema-map.md`.
 
 For pack validation scripts and update cadence, prefer `../../../docs/21-update-policy.md`.
 

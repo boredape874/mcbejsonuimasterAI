@@ -150,3 +150,11 @@
 
 - `mcbe-json-ui-master/references/topics/server-forms/search-bar.md`
 - pattern: `common.text_edit_box` provides search text, each `form_buttons` item computes `#search_match`, then binds `#visible`.
+- subpattern: case-normalized input uses a generated text helper plus `property_bag` character mapping; normalize the server-provided button/search key too when true case-insensitive search is required.
+
+## server form dialogue shell
+
+- public Bedrock UI project reference: `https://github.com/TheoristMC/Bedrock-UI-Projects`
+- verified HEAD on 2026-04-29: `62bb2a8ae10b7c44d34206d337bc3998498b095a`
+- useful pattern: route a special server form by title token, render a custom dialog shell, use `collection_panel` over `form_buttons` for payload fields, and gate a skip/visibility state with a toggle binding.
+- note: reference project license/readme disallows copying or redistributing code; use it only for structural study.
