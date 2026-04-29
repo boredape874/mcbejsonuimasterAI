@@ -4,6 +4,8 @@ Use this when choosing a visual direction before implementing a Bedrock JSON UI 
 
 This is not a replacement for source inspection. It is a routing catalog: pick a design family, open the listed reference file, then copy only the needed layout fragments into the target resource pack.
 
+For the stricter design-selection matrix and diagrams, load `docs/58-design-reference-atlas.md` before choosing a final style.
+
 For feature-labeled examples such as "this is a quest window" or "this is a shop window", load `docs/40-server-form-example-index.md` after this document.
 
 When the chosen design will be authored through the kit's tools layer (IR), see `docs/44-design-to-ir-mapping.md` for direct constraint encodings.
@@ -41,19 +43,19 @@ Only proceed without asking when:
 
 | Need | Recommended style | Open first |
 | --- | --- | --- |
-| Safe modal form that still feels close to vanilla | vanilla server form shell | `references/official/bedrock-samples-ui/server_form.json` |
-| PMMP menu with custom form routing | token-routed server form | `references/source-packs/rpg-server-ui-reference/ui/server_form.json` |
+| Safe modal form that still feels close to vanilla | vanilla server form shell | `references/verified-samples/bedrock-samples-ui/server_form.json` |
+| PMMP menu with custom form routing | token-routed server form | `references/sample-packs/rpg-server-ui-reference/ui/server_form.json` |
 | NPC dialogue, quest text, story message | bottom dialogue box | `references/local-examples/npc-dialogue/ui/server_form.json` |
-| NPC or shop panel with side buttons and large body text | framed NPC panel | `references/upstreams/minecraft-bedrock-json-ui-sample/CNPC.UI.RP/CNPC UI [RP]/ui/npc_interact_screen.json` |
-| RPG stats, skills, profile, currency, shop categories | dark stat/card menu | `references/source-packs/rpg-server-ui-reference/ui/stat.json` |
-| inventory-like custom form | chest-like form | `references/source-packs/rpg-server-ui-reference/ui/chest_server_form.json` |
-| smelting, upgrade, craft, process UI | furnace-like form | `references/source-packs/rpg-server-ui-reference/ui/furnace_server_form.json` |
-| settings/search/toggle/slider/text input style | RainbowPie form controls | `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/server_form_controls.json` |
-| large reusable custom form library pattern | StarLib form library | `references/upstreams/minecraft-bedrock-json-ui-sample/starLib/StarLibV2-1.0.3.3/StarLibV2-1.0.3.3/starlib2/package_custom/common_custom.jsonc` |
-| polished modern cloud form system | Modern Cloud forms | `references/source-packs/modern-cloud-ui-reference/ui/server_form.json` |
-| modern inbox/mail/notification forms | Modern Cloud communication forms | `references/source-packs/modern-cloud-ui-reference/ui/form/inbox_cloud_action_form.json` |
-| modern large shop/recipe grid | Modern Cloud shop/recipe forms | `references/source-packs/modern-cloud-ui-reference/ui/form/redesign_shop_cloud_action_form.json` |
-| modern process/machine UI | Modern Cloud furnace form | `references/source-packs/modern-cloud-ui-reference/ui/form/food_furnace_cloud_action_form.json` |
+| NPC or shop panel with side buttons and large body text | framed NPC panel | `references/reference-mirrors/minecraft-bedrock-json-ui-sample/CNPC.UI.RP/CNPC UI [RP]/ui/npc_interact_screen.json` |
+| RPG stats, skills, profile, currency, shop categories | dark stat/card menu | `references/sample-packs/rpg-server-ui-reference/ui/stat.json` |
+| inventory-like custom form | chest-like form | `references/sample-packs/rpg-server-ui-reference/ui/chest_server_form.json` |
+| smelting, upgrade, craft, process UI | furnace-like form | `references/sample-packs/rpg-server-ui-reference/ui/furnace_server_form.json` |
+| settings/search/toggle/slider/text input style | sample UI suite form controls | `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/server_form_controls.json` |
+| large reusable custom form library pattern | dynamic form library form library | `references/reference-mirrors/minecraft-bedrock-json-ui-sample/dynamic form library/dynamic form libraryV2-1.0.3.3/dynamic form libraryV2-1.0.3.3/dynamic form library2/package_custom/common_custom.jsonc` |
+| polished modern cloud form system | Modern Cloud forms | `references/sample-packs/modern-cloud-ui-reference/ui/server_form.json` |
+| modern inbox/mail/notification forms | Modern Cloud communication forms | `references/sample-packs/modern-cloud-ui-reference/ui/form/inbox_cloud_action_form.json` |
+| modern large shop/recipe grid | Modern Cloud shop/recipe forms | `references/sample-packs/modern-cloud-ui-reference/ui/form/redesign_shop_cloud_action_form.json` |
+| modern process/machine UI | Modern Cloud furnace form | `references/sample-packs/modern-cloud-ui-reference/ui/form/food_furnace_cloud_action_form.json` |
 | premium RPG adventure UI, battle pass, store, quest, equipment, map | Advanced Adventure UI Reference | `docs/50-advanced-ui-reference-analysis.md` |
 | compact main menu, cooking station, toast HUD, pocket split inventory | Compact Crafting And Pocket UI Reference | `docs/51-compact-crafting-pocket-ui-reference.md` |
 
@@ -92,8 +94,8 @@ Use this when stability matters more than originality.
 
 References:
 
-- `references/official/bedrock-samples-ui/server_form.json`
-- `references/source-packs/rpg-server-ui-reference/ui/server_form.json`
+- `references/verified-samples/bedrock-samples-ui/server_form.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/server_form.json`
 
 Recommended use:
 
@@ -137,7 +139,7 @@ Use this when the form needs both navigation and a large reading area.
 
 Reference:
 
-- `references/upstreams/minecraft-bedrock-json-ui-sample/CNPC.UI.RP/CNPC UI [RP]/ui/npc_interact_screen.json`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/CNPC.UI.RP/CNPC UI [RP]/ui/npc_interact_screen.json`
 
 Recommended size:
 
@@ -160,10 +162,10 @@ Use this for player profile, stats, skill pages, quest entries, shops, and curre
 
 References:
 
-- `references/source-packs/rpg-server-ui-reference/ui/stat.json`
-- `references/source-packs/rpg-server-ui-reference/ui/skill.json`
-- `references/source-packs/rpg-server-ui-reference/ui/shop.json`
-- `references/source-packs/rpg-server-ui-reference/ui/quest.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/stat.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/skill.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/shop.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/quest.json`
 
 Recommended size:
 
@@ -185,9 +187,9 @@ Use this when the form represents slots, rewards, storage, kit selection, or ite
 
 References:
 
-- `references/source-packs/rpg-server-ui-reference/ui/chest_server_form.json`
-- `references/source-packs/rpg-server-ui-reference/ui/chest_inventory_system.json`
-- `references/official/bedrock-samples-ui/chest_screen.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/chest_server_form.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/chest_inventory_system.json`
+- `references/verified-samples/bedrock-samples-ui/chest_screen.json`
 
 Recommended size:
 
@@ -208,8 +210,8 @@ Use this for crafting, upgrading, smelting, timers, machines, and conversion men
 
 References:
 
-- `references/source-packs/rpg-server-ui-reference/ui/furnace_server_form.json`
-- `references/official/bedrock-samples-ui/furnace_screen.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/furnace_server_form.json`
+- `references/verified-samples/bedrock-samples-ui/furnace_screen.json`
 
 Recommended size:
 
@@ -230,7 +232,7 @@ Use this for settings, search, toggles, sliders, text input, filters, and server
 
 Reference:
 
-- `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/server_form_controls.json`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/server_form_controls.json`
 
 Recommended size:
 
@@ -269,7 +271,7 @@ Design notes:
 
 - start with the architecture in the analysis doc, not with raw source copying
 - keep templates, router, feature forms, and textures as separate layers
-- use private reference files only for local analysis unless redistribution rights are clear
+- use restricted reference files only for local analysis unless redistribution rights are clear
 - translate source-specific route flags into target-owned PMMP prefixes
 
 ### Compact Crafting And Pocket UI System
@@ -294,7 +296,7 @@ Design notes:
 - keep the custom route small and leave vanilla fallback intact
 - prefer fixed small button dimensions for compact menus
 - separate inventory slot collections from decorative panels
-- use the private reference only for local analysis, not as public source material
+- use the restricted reference only for local analysis, not as public source material
 
 ## Choosing A Style For PMMP Menus
 

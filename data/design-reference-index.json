@@ -1,0 +1,206 @@
+{
+  "version": 1,
+  "purpose": "Machine-readable design reference atlas for Bedrock JSON UI visual work.",
+  "workflowDocs": [
+    "docs/58-design-reference-atlas.md",
+    "docs/59-diagrammatic-workflows.md",
+    "docs/54-visual-fit-and-reference-discipline.md"
+  ],
+  "families": [
+    {
+      "id": "compact_rpg_panel",
+      "keywords": ["rpg", "stat", "skill", "quest", "guild", "craft", "compact menu"],
+      "skeleton": "fixed center modal with title, compact rows/cards, close/back/action row",
+      "docs": ["docs/39-design-recommendation-catalog.md", "docs/40-server-form-example-index.md"],
+      "references": ["references/sample-packs/rpg-server-ui-reference/ui/stat.json", "references/sample-packs/rpg-server-ui-reference/ui/skill.json", "references/sample-packs/rpg-server-ui-reference/ui/quest.json"],
+      "dimensions": {
+        "rootWidth": "220-360px",
+        "rootHeight": "150-240px",
+        "headerHeight": "18-28px",
+        "rowHeight": "18-48px",
+        "gap": "2-6px"
+      }
+    },
+    {
+      "id": "modern_cloud_panel",
+      "keywords": ["modern", "cloud", "large menu", "inbox", "notification", "recipe", "friends"],
+      "skeleton": "85-95 percent panel with title bar, scrollable body, optional category rail",
+      "docs": ["docs/39-design-recommendation-catalog.md", "docs/40-server-form-example-index.md"],
+      "references": ["references/sample-packs/modern-cloud-ui-reference/ui/server_form.json", "references/sample-packs/modern-cloud-ui-reference/ui/form/facelift_cloud_action_form.json"],
+      "dimensions": {
+        "root": "85%-95%",
+        "titleHeight": "24-30px",
+        "closeButton": "18-22px",
+        "categoryRail": "120-160px",
+        "scrollbar": "5px"
+      }
+    },
+    {
+      "id": "bottom_dialogue",
+      "keywords": ["npc", "dialogue", "story", "conversation", "quest text"],
+      "skeleton": "bottom anchored dialogue panel with optional portrait and choices",
+      "docs": ["docs/39-design-recommendation-catalog.md", "docs/40-server-form-example-index.md"],
+      "references": ["references/local-examples/npc-dialogue/ui/server_form.json"],
+      "dimensions": {
+        "rootWidth": "80%-95%",
+        "rootHeight": "55-95px",
+        "portrait": "40-64px",
+        "choiceRow": "24-32px"
+      }
+    },
+    {
+      "id": "item_grid_shop",
+      "keywords": ["shop", "kit", "reward", "item grid", "recipe", "equipment"],
+      "skeleton": "header, category tabs, item grid, selected item detail, action strip",
+      "docs": ["docs/40-server-form-example-index.md"],
+      "references": ["references/sample-packs/rpg-server-ui-reference/ui/shop.json", "references/sample-packs/modern-cloud-ui-reference/ui/form/redesign_shop_cloud_action_form.json"],
+      "dimensions": {
+        "cell": "42-70px compact or percentage cell for cloud",
+        "icon": "24-40px",
+        "statusLabel": "10-16px",
+        "actionButton": "24-36px"
+      }
+    },
+    {
+      "id": "premium_shop_form_gallery",
+      "keywords": ["shop", "store", "auction", "crate", "reward", "gifting", "city menu", "premium form"],
+      "skeleton": "polished routed server form with shared frame primitives, scroll body, tabs, cards, status labels, and stateful buttons",
+      "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/63-premium-form-gallery.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/server_form.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/common/common.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/menus/other/store.json"],
+      "dimensions": {
+        "root": "320-420px wide, 190-260px high",
+        "shopRoot": "around 380px wide, 200-240px high",
+        "headerRow": "18-32px",
+        "productCard": "70-120px wide, 42-84px high",
+        "smallLabel": "9-14px high"
+      }
+    },
+    {
+      "id": "maze_progression_hud_form_suite",
+      "keywords": ["maze ui", "ability", "skill tree", "battlepass", "progression", "shop", "purchase popup", "quest tab", "npc book", "cooldown hud", "reward overlay"],
+      "skeleton": "animation-heavy game-mode UI with shared dark window chrome, routed form shells, feature components, progress bars, horizontal progression strips, purchase popups, and HUD overlays",
+      "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/64-motion-form-hud-reference.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/common.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_form.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/ability/ability_upgrades_tab.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/shop/shop_browser.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_hud/maze.json"],
+      "dimensions": {
+        "formRoot": "feature-specific; keep modal/window dimensions fixed before adding dynamic content",
+        "nodeCard": "stable card size inside clipped horizontal strip",
+        "shopCard": "dense product card with separate icon, price/status, and label zones",
+        "barHeight": "5-10px for HUD/form progress; labels outside very thin bars",
+        "smallLabel": "9-14px high with explicit size"
+      }
+    },
+    {
+      "id": "hud_status_cluster",
+      "keywords": ["hud", "hp", "mana", "stamina", "xp", "status bars"],
+      "skeleton": "portrait/icon plus compact bars and optional numeric labels",
+      "docs": ["docs/25-pmmp-json-ui-bridge.md", "docs/58-design-reference-atlas.md"],
+      "references": ["references/local-examples/rpg-hud/ui/rpg_hud.json", "references/local-examples/multi-animated-progress/ui/animated_bar.json"],
+      "dimensions": {
+        "portrait": "32-64px",
+        "barWidth": "80-180px",
+        "barHeight": "5-12px",
+        "labelPlacement": "outside bar if under 10px"
+      }
+    },
+    {
+      "id": "utility_chat_sidebar",
+      "keywords": ["command palette", "quick command", "chat formatting", "sidebar"],
+      "skeleton": "chat screen with collapsible side panel and command categories",
+      "docs": ["docs/56-local-json-ui-reference-pack-analysis.md"],
+      "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/fast-commands/ui/chat_screen.json"],
+      "dimensions": {
+        "buttonHeight": "16-24px",
+        "categoryHeader": "18-24px",
+        "sidebarWidth": "120-180px"
+      }
+    },
+    {
+      "id": "cinematic_loading",
+      "keywords": ["loading", "progress screen", "joining screen", "percent"],
+      "skeleton": "full-screen background with bottom or center progress bar",
+      "docs": ["docs/53-premium-ui-pattern-reference.md", "docs/54-visual-fit-and-reference-discipline.md"],
+      "references": ["references/verified-samples/bedrock-samples-ui/progress_screen.json"],
+      "dimensions": {
+        "barWidth": "40%-70% or 320-640px",
+        "barHeight": "4-10px",
+        "labelHeight": "12-18px"
+      }
+    },
+    {
+      "id": "diegetic_phone_device",
+      "keywords": ["phone", "pda", "device form", "special form", "profile card", "quest book", "guidebook"],
+      "skeleton": "fixed shell texture with mapped top/left/middle/bottom button regions",
+      "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/62-special-form-device-ui-patterns.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/device_phone/second.json"],
+      "dimensions": {
+        "root": "260-640px wide depending shell",
+        "regionGap": "2-8px",
+        "smallButton": "16-30px high",
+        "cardButton": "54-130px high",
+        "icon": "32-72px"
+      }
+    },
+    {
+      "id": "creature_database_panel",
+      "keywords": ["database", "encyclopedia", "dex", "details", "search", "completion"],
+      "skeleton": "database grid/detail split with persistent search/back/page controls",
+      "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/creature_database.json"],
+      "dimensions": {
+        "gridCell": "32-64px",
+        "detailPanel": "35%-60% width",
+        "navButton": "18-30px",
+        "textRow": "12-18px"
+      }
+    },
+    {
+      "id": "battle_command_panel",
+      "keywords": ["battle", "move selection", "actor card", "pp bar", "turn command"],
+      "skeleton": "actor detail panels with grouped move/action buttons and compact progress bars",
+      "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/attack.json"],
+      "dimensions": {
+        "moveButton": "70-150px wide, 24-48px high",
+        "actorCard": "120-220px wide",
+        "barHeight": "4-8px",
+        "gap": "3-8px"
+      }
+    },
+    {
+      "id": "compact_addon_form_suite",
+      "keywords": ["compact form", "special form", "button template", "team panel", "battle buttons", "custom app"],
+      "skeleton": "small routed server form with compact main/detail views and reusable button state templates",
+      "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/62-special-form-device-ui-patterns.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/server_form.json", "references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/creaturesv.json", "references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/creaturebt.json"],
+      "dimensions": {
+        "root": "280-480px wide, 160-300px high",
+        "cardCell": "54-110px wide, 24-64px high",
+        "icon": "18-36px square",
+        "label": "10-16px high",
+        "scrollbar": "4-6px"
+      }
+    },
+    {
+      "id": "storage_pc_grid",
+      "keywords": ["pc storage", "box", "storage", "party slots", "filter", "search"],
+      "skeleton": "storage grid with side/top control stack and party slot strip",
+      "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/pc.json"],
+      "dimensions": {
+        "slot": "24-44px",
+        "partyStrip": "32-72px wide",
+        "toolButton": "18-28px",
+        "gridGap": "2-5px"
+      }
+    }
+  ],
+  "requiredEvidence": [
+    "designFamily",
+    "layoutSkeleton",
+    "statePattern",
+    "dataSource",
+    "closestReference",
+    "patchTarget",
+    "visualFitChecks"
+  ]
+}

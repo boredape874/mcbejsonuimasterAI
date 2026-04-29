@@ -44,7 +44,7 @@ Send the number or send another reference, and I will base the implementation on
 
 This reference set is one of the strongest design references in the repository:
 
-- portable repository mirror: `references/source-packs/rpg-server-ui-reference/ui`
+- portable repository mirror: `references/sample-packs/rpg-server-ui-reference/ui`
 
 Treat these files as one coherent RPG/server menu design language:
 
@@ -62,7 +62,7 @@ Do not copy local absolute paths into public instructions or target packs. Use t
 
 This reference set contains a polished modern form system:
 
-- portable repository mirror: `references/source-packs/modern-cloud-ui-reference/ui`
+- portable repository mirror: `references/sample-packs/modern-cloud-ui-reference/ui`
 
 Treat these files as a separate "cloud form" design language:
 
@@ -91,46 +91,48 @@ Do not mix the cloud form system into a target pack by copying only `server_form
 
 | Feature | Example source | What it teaches | Suggested route prefix |
 | --- | --- | --- | --- |
-| Main RPG menu | `references/source-packs/rpg-server-ui-reference/ui/menu.json` | 325px-wide main menu with player/info art, compact navigation buttons, custom `player` and `info` textures | `menu.menu` or `main:` |
-| Modern cloud action form fallback | `references/source-packs/modern-cloud-ui-reference/ui/form/facelift_cloud_action_form.json` | generic cloud-skinned action form, 85% height panel, 26px title bar, 20x20 close button, scrollable content | `customUI_*` |
-| Modern cloud modal form fallback | `references/source-packs/modern-cloud-ui-reference/ui/form/facelift_cloud_modal_form.json` | generic cloud-skinned custom/modal form structure | `customUI_*` |
-| Modern server menu / friends list | `references/source-packs/modern-cloud-ui-reference/ui/form/multi_a_cloud_action_form.json` | 85%x85% menu panel, 33.33% card grid, status icons, scrollable menu button grid | `customUI_MultiACloudForm_` |
-| Cloud inbox | `references/source-packs/modern-cloud-ui-reference/ui/form/inbox_cloud_action_form.json` | 95%x95% inbox layout, 140px category rail, search row, icon categories, right-side message list | `customUI_InboxCloudForm_` |
-| Cloud mail detail | `references/source-packs/modern-cloud-ui-reference/ui/form/mail_info_cloud_action_form.json` | 85%x80% mail reader, 60% text panel, reward/action rows, scrollable text and reward list | `customUI_MailInfoCloudForm_` |
-| Cloud shop grid | `references/source-packs/modern-cloud-ui-reference/ui/form/redesign_shop_cloud_action_form.json` | 90%x95% shop, top option buttons, paged item grid, 10% width item cells, 24px page controls | `customUI_RedesignShopCloudForm_` |
-| Cloud buy/sell modal | `references/source-packs/modern-cloud-ui-reference/ui/form/redesign_shop_buy_sell_cloud_modal_form.json` | custom/modal buy-sell confirmation with generated modal fields | `customUI_RedesignShopBuySellCloudForm_` |
-| Cloud recipe grid | `references/source-packs/modern-cloud-ui-reference/ui/form/food_recipe_select_cloud_action_form.json` | 90%x95% recipe selector, item grid, page controls, rounded item buttons | `customUI_FoodRecipeSelectCloudForm_` |
-| Cloud furnace/process form | `references/source-packs/modern-cloud-ui-reference/ui/form/food_furnace_cloud_action_form.json` | 55% width process panel, 60% content grid, furnace image state/animation, input-output process feel | `customUI_FoodFurnaceCloudForm_` |
-| Cloud notification list | `references/source-packs/modern-cloud-ui-reference/ui/form/notification_list_cloud_action_form.json` | 100%-20px panel, 75% centered list, 50%x45 notification cards, top-bottom entrance animations | `customUI_NotificationListCloudForm_` |
-| Quest list window | `references/source-packs/rpg-server-ui-reference/ui/quest.json` | compact 220px quest panel, scrollable list, 175x40 quest buttons, `menu.quest` title filtering | `menu.quest` or `quest:` |
-| Shop category/item window | `references/source-packs/rpg-server-ui-reference/ui/shop.json` | 220x220 shop body, 150px scroll area, 3-column rows, item button grid | `menu.shop` or `shop:` |
-| Player stat window | `references/source-packs/rpg-server-ui-reference/ui/stat.json` | 325x200 stat panel, large title, 5 wide stat cards, icon-backed buttons | `menu.stat` or `stats:` |
-| Skill menu | `references/source-packs/rpg-server-ui-reference/ui/skill.json` | 260x160 compact skill panel, 50x50 skill icons, card-like skill choices | `menu.skill` or `skill:` |
-| Craft menu | `references/source-packs/rpg-server-ui-reference/ui/craft.json` | 260x160 crafting panel, 50x50 craft item cards, 116.6x26.6 action button style | `menu.craft` or `craft:` |
-| Boss menu | `references/source-packs/rpg-server-ui-reference/ui/boss.json` | compact boss-selection panel, 116.6x26.6 list buttons, stat-themed background | `menu.boss` or `boss:` |
-| Guild main menu | `references/source-packs/rpg-server-ui-reference/ui/gmenu.json` | guild menu with narrow 57.6x25.6 buttons, compact 150x150 stat-themed panel, close/back controls | `menu.gmenu` or `guild:` |
-| Guild info menu | `references/source-packs/rpg-server-ui-reference/ui/ginfo.json` | guild info/detail panel with 180x150 card and 170x110 inner dark content area | `menu.ginfo` or `guild.info:` |
-| Guild management menu | `references/source-packs/rpg-server-ui-reference/ui/guild.json` | guild action panel similar to ginfo, compact management buttons and detail card | `menu.guild` or `guild.manage:` |
-| NPC custom menu | `references/source-packs/rpg-server-ui-reference/ui/npc.json` | NPC-specific wide form route, spacious action buttons, hover decoration | `menu.npc` or `npc:` |
-| General custom form router | `references/source-packs/rpg-server-ui-reference/ui/form.json` | shared form logic and target-specific form composition | project-specific |
-| Vanilla-safe server form | `references/official/bedrock-samples-ui/server_form.json` | vanilla form hierarchy, button collection shape, safe fallback behavior | none; default fallback |
-| Token-routed server form | `references/source-packs/rpg-server-ui-reference/ui/server_form.json` | route different form types from title/body markers | `menu.*` |
+| Main RPG menu | `references/sample-packs/rpg-server-ui-reference/ui/menu.json` | 325px-wide main menu with player/info art, compact navigation buttons, custom `player` and `info` textures | `menu.menu` or `main:` |
+| Modern cloud action form fallback | `references/sample-packs/modern-cloud-ui-reference/ui/form/facelift_cloud_action_form.json` | generic cloud-skinned action form, 85% height panel, 26px title bar, 20x20 close button, scrollable content | `customUI_*` |
+| Modern cloud modal form fallback | `references/sample-packs/modern-cloud-ui-reference/ui/form/facelift_cloud_modal_form.json` | generic cloud-skinned custom/modal form structure | `customUI_*` |
+| Modern server menu / friends list | `references/sample-packs/modern-cloud-ui-reference/ui/form/multi_a_cloud_action_form.json` | 85%x85% menu panel, 33.33% card grid, status icons, scrollable menu button grid | `customUI_MultiACloudForm_` |
+| Cloud inbox | `references/sample-packs/modern-cloud-ui-reference/ui/form/inbox_cloud_action_form.json` | 95%x95% inbox layout, 140px category rail, search row, icon categories, right-side message list | `customUI_InboxCloudForm_` |
+| Cloud mail detail | `references/sample-packs/modern-cloud-ui-reference/ui/form/mail_info_cloud_action_form.json` | 85%x80% mail reader, 60% text panel, reward/action rows, scrollable text and reward list | `customUI_MailInfoCloudForm_` |
+| Cloud shop grid | `references/sample-packs/modern-cloud-ui-reference/ui/form/redesign_shop_cloud_action_form.json` | 90%x95% shop, top option buttons, paged item grid, 10% width item cells, 24px page controls | `customUI_RedesignShopCloudForm_` |
+| Cloud buy/sell modal | `references/sample-packs/modern-cloud-ui-reference/ui/form/redesign_shop_buy_sell_cloud_modal_form.json` | custom/modal buy-sell confirmation with generated modal fields | `customUI_RedesignShopBuySellCloudForm_` |
+| Cloud recipe grid | `references/sample-packs/modern-cloud-ui-reference/ui/form/food_recipe_select_cloud_action_form.json` | 90%x95% recipe selector, item grid, page controls, rounded item buttons | `customUI_FoodRecipeSelectCloudForm_` |
+| Cloud furnace/process form | `references/sample-packs/modern-cloud-ui-reference/ui/form/food_furnace_cloud_action_form.json` | 55% width process panel, 60% content grid, furnace image state/animation, input-output process feel | `customUI_FoodFurnaceCloudForm_` |
+| Cloud notification list | `references/sample-packs/modern-cloud-ui-reference/ui/form/notification_list_cloud_action_form.json` | 100%-20px panel, 75% centered list, 50%x45 notification cards, top-bottom entrance animations | `customUI_NotificationListCloudForm_` |
+| Quest list window | `references/sample-packs/rpg-server-ui-reference/ui/quest.json` | compact 220px quest panel, scrollable list, 175x40 quest buttons, `menu.quest` title filtering | `menu.quest` or `quest:` |
+| Shop category/item window | `references/sample-packs/rpg-server-ui-reference/ui/shop.json` | 220x220 shop body, 150px scroll area, 3-column rows, item button grid | `menu.shop` or `shop:` |
+| Player stat window | `references/sample-packs/rpg-server-ui-reference/ui/stat.json` | 325x200 stat panel, large title, 5 wide stat cards, icon-backed buttons | `menu.stat` or `stats:` |
+| Skill menu | `references/sample-packs/rpg-server-ui-reference/ui/skill.json` | 260x160 compact skill panel, 50x50 skill icons, card-like skill choices | `menu.skill` or `skill:` |
+| Craft menu | `references/sample-packs/rpg-server-ui-reference/ui/craft.json` | 260x160 crafting panel, 50x50 craft item cards, 116.6x26.6 action button style | `menu.craft` or `craft:` |
+| Boss menu | `references/sample-packs/rpg-server-ui-reference/ui/boss.json` | compact boss-selection panel, 116.6x26.6 list buttons, stat-themed background | `menu.boss` or `boss:` |
+| Guild main menu | `references/sample-packs/rpg-server-ui-reference/ui/gmenu.json` | guild menu with narrow 57.6x25.6 buttons, compact 150x150 stat-themed panel, close/back controls | `menu.gmenu` or `guild:` |
+| Guild info menu | `references/sample-packs/rpg-server-ui-reference/ui/ginfo.json` | guild info/detail panel with 180x150 card and 170x110 inner dark content area | `menu.ginfo` or `guild.info:` |
+| Guild management menu | `references/sample-packs/rpg-server-ui-reference/ui/guild.json` | guild action panel similar to ginfo, compact management buttons and detail card | `menu.guild` or `guild.manage:` |
+| NPC custom menu | `references/sample-packs/rpg-server-ui-reference/ui/npc.json` | NPC-specific wide form route, spacious action buttons, hover decoration | `menu.npc` or `npc:` |
+| General custom form router | `references/sample-packs/rpg-server-ui-reference/ui/form.json` | shared form logic and target-specific form composition | project-specific |
+| Vanilla-safe server form | `references/verified-samples/bedrock-samples-ui/server_form.json` | vanilla form hierarchy, button collection shape, safe fallback behavior | none; default fallback |
+| Token-routed server form | `references/sample-packs/rpg-server-ui-reference/ui/server_form.json` | route different form types from title/body markers | `menu.*` |
 | Bottom NPC dialogue | `references/local-examples/npc-dialogue/ui/server_form.json` | bottom anchored dialogue box and dialogue button style | `npc:` or `dialogue:` |
-| Full NPC interaction panel | `references/upstreams/minecraft-bedrock-json-ui-sample/CNPC.UI.RP/CNPC UI [RP]/ui/npc_interact_screen.json` | framed NPC window, header, close button, side options, large body text | screen replacement or NPC route |
-| Modern Cloud NPC student/teacher panel | `references/source-packs/modern-cloud-ui-reference/ui/npc_interact_screen.json` | 125%y x 75% NPC panel, model area, scrollable message area, 40% button column, 26px response buttons | vanilla NPC screen replacement |
-| Modern Cloud pause/menu layout | `references/source-packs/modern-cloud-ui-reference/ui/pause_screen.json` | polished pause/menu structure, world info panel, 26px menu rows, 28px side icon buttons, player list panels | pause screen inspiration only |
+| Full NPC interaction panel | `references/reference-mirrors/minecraft-bedrock-json-ui-sample/CNPC.UI.RP/CNPC UI [RP]/ui/npc_interact_screen.json` | framed NPC window, header, close button, side options, large body text | screen replacement or NPC route |
+| Modern Cloud NPC student/teacher panel | `references/sample-packs/modern-cloud-ui-reference/ui/npc_interact_screen.json` | 125%y x 75% NPC panel, model area, scrollable message area, 40% button column, 26px response buttons | vanilla NPC screen replacement |
+| Modern Cloud pause/menu layout | `references/sample-packs/modern-cloud-ui-reference/ui/pause_screen.json` | polished pause/menu structure, world info panel, 26px menu rows, 28px side icon buttons, player list panels | pause screen inspiration only |
 | Advanced adventure form router | `docs/50-advanced-ui-reference-analysis.md` | production-scale long/custom form router with many feature pages, template modules, and title flag dispatch | project-owned flags |
 | Advanced battle pass/store/quest/equipment UI | `docs/50-advanced-ui-reference-analysis.md` | large feature-specific form families: battle pass, store, quest, NPC, crafting, equipment, map, rewards | project-owned flags |
 | Compact main menu form | `docs/51-compact-crafting-pocket-ui-reference.md` | small title-routed menu panel, fixed icon buttons, custom close button, vanilla fallback | project-owned flags |
-| Dynamic dialogue bridge | `references/upstreams/minecraft-bedrock-json-ui-sample/DynamicDialogV2-2/DynamicDialogV2-2/RP/ui/hud_screen.json` | dialogue driven through HUD/title-like data instead of normal server form | title/actionbar protocol |
-| Chest server form | `references/source-packs/rpg-server-ui-reference/ui/chest_server_form.json` | server form transformed into inventory-like menu | `chest:` or custom token |
-| Chest inventory system | `references/source-packs/rpg-server-ui-reference/ui/chest_inventory_system.json` | slot/grid composition and inventory-like repeated controls | `chest:` |
-| Furnace/process form | `references/source-packs/rpg-server-ui-reference/ui/furnace_server_form.json` | process-style UI with input/output/progress mental model | `furnace:` or `process:` |
-| Chest UI external tool pattern | `references/external/Chest-UI/RP/ui/server_form.json` | external chest-form authoring structure | tool-specific |
-| EasyUIBuilder generated form | `references/external/EasyUIBuilder/ui/server_form.json` | builder-style generated server form structure | generated |
-| RainbowPie modern form controls | `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/server_form_controls.json` | search/input/toggle/slider/dropdown-style form controls | settings/config |
-| StarLib custom form library | `references/upstreams/minecraft-bedrock-json-ui-sample/starLib/StarLibV2-1.0.3.3/StarLibV2-1.0.3.3/starlib2/package_custom/common_custom.jsonc` | reusable form library layout and component composition | library-defined |
-| Magic learning station | `references/upstreams/minecraft-bedrock-json-ui-sample/magicwayui/magic_learning_station_screen.json` | RPG station screen and magic/skill progression visual direction | station or skill route |
+| Dynamic dialogue bridge | `references/reference-mirrors/minecraft-bedrock-json-ui-sample/DynamicDialogV2-2/DynamicDialogV2-2/RP/ui/hud_screen.json` | dialogue driven through HUD/title-like data instead of normal server form | title/actionbar protocol |
+| Chest server form | `references/sample-packs/rpg-server-ui-reference/ui/chest_server_form.json` | server form transformed into inventory-like menu | `chest:` or custom token |
+| Chest inventory system | `references/sample-packs/rpg-server-ui-reference/ui/chest_inventory_system.json` | slot/grid composition and inventory-like repeated controls | `chest:` |
+| Furnace/process form | `references/sample-packs/rpg-server-ui-reference/ui/furnace_server_form.json` | process-style UI with input/output/progress mental model | `furnace:` or `process:` |
+| Chest UI external tool pattern | `references/mirrors/Chest-UI/RP/ui/server_form.json` | external chest-form authoring structure | tool-specific |
+| EasyUIBuilder generated form | `references/mirrors/EasyUIBuilder/ui/server_form.json` | builder-style generated server form structure | generated |
+| sample UI suite modern form controls | `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/server_form_controls.json` | search/input/toggle/slider/dropdown-style form controls | settings/config |
+| dynamic form library custom form library | `references/reference-mirrors/minecraft-bedrock-json-ui-sample/dynamic form library/dynamic form libraryV2-1.0.3.3/dynamic form libraryV2-1.0.3.3/dynamic form library2/package_custom/common_custom.jsonc` | reusable form library layout and component composition | library-defined |
+| Magic learning station | `references/reference-mirrors/minecraft-bedrock-json-ui-sample/magicwayui/magic_learning_station_screen.json` | RPG station screen and magic/skill progression visual direction | station or skill route |
+| Premium multi-route form router | `docs/53-premium-ui-pattern-reference.md` | production-scale title-token dispatch, vanilla fallback, icon rows with loading placeholders | `ui:*` or project-owned hidden tokens |
+| Premium chest/menu form bridge | `docs/53-premium-ui-pattern-reference.md` | maps `form_buttons` into chest/menu-like slots while preserving click routing | `ui:chest` or project-owned hidden tokens |
 
 ## Concrete Design Notes By Example
 
@@ -138,7 +140,7 @@ Do not mix the cloud form system into a target pack by copying only `server_form
 
 Source:
 
-- `references/source-packs/modern-cloud-ui-reference/ui/server_form.json`
+- `references/sample-packs/modern-cloud-ui-reference/ui/server_form.json`
 
 Observed behavior:
 
@@ -170,7 +172,7 @@ Implementation advice:
 
 Source:
 
-- `references/source-packs/modern-cloud-ui-reference/ui/form/facelift_cloud_action_form.json`
+- `references/sample-packs/modern-cloud-ui-reference/ui/form/facelift_cloud_action_form.json`
 
 Observed useful dimensions:
 
@@ -197,8 +199,8 @@ Implementation advice:
 
 Sources:
 
-- `references/source-packs/modern-cloud-ui-reference/ui/form/inbox_cloud_action_form.json`
-- `references/source-packs/modern-cloud-ui-reference/ui/form/mail_info_cloud_action_form.json`
+- `references/sample-packs/modern-cloud-ui-reference/ui/form/inbox_cloud_action_form.json`
+- `references/sample-packs/modern-cloud-ui-reference/ui/form/mail_info_cloud_action_form.json`
 
 Observed useful dimensions:
 
@@ -228,9 +230,9 @@ Implementation advice:
 
 Sources:
 
-- `references/source-packs/modern-cloud-ui-reference/ui/form/redesign_shop_cloud_action_form.json`
-- `references/source-packs/modern-cloud-ui-reference/ui/form/redesign_shop_buy_sell_cloud_modal_form.json`
-- `references/source-packs/modern-cloud-ui-reference/ui/form/food_recipe_select_cloud_action_form.json`
+- `references/sample-packs/modern-cloud-ui-reference/ui/form/redesign_shop_cloud_action_form.json`
+- `references/sample-packs/modern-cloud-ui-reference/ui/form/redesign_shop_buy_sell_cloud_modal_form.json`
+- `references/sample-packs/modern-cloud-ui-reference/ui/form/food_recipe_select_cloud_action_form.json`
 
 Observed useful dimensions:
 
@@ -258,7 +260,7 @@ Implementation advice:
 
 Source:
 
-- `references/source-packs/modern-cloud-ui-reference/ui/form/food_furnace_cloud_action_form.json`
+- `references/sample-packs/modern-cloud-ui-reference/ui/form/food_furnace_cloud_action_form.json`
 
 Observed useful dimensions:
 
@@ -286,7 +288,7 @@ Implementation advice:
 
 Source:
 
-- `references/source-packs/modern-cloud-ui-reference/ui/form/multi_a_cloud_action_form.json`
+- `references/sample-packs/modern-cloud-ui-reference/ui/form/multi_a_cloud_action_form.json`
 
 Observed useful dimensions:
 
@@ -312,7 +314,7 @@ Implementation advice:
 
 Source:
 
-- `references/source-packs/modern-cloud-ui-reference/ui/form/notification_list_cloud_action_form.json`
+- `references/sample-packs/modern-cloud-ui-reference/ui/form/notification_list_cloud_action_form.json`
 
 Observed useful dimensions:
 
@@ -340,7 +342,7 @@ Implementation advice:
 
 Source:
 
-- `references/source-packs/modern-cloud-ui-reference/ui/npc_interact_screen.json`
+- `references/sample-packs/modern-cloud-ui-reference/ui/npc_interact_screen.json`
 
 Observed useful dimensions:
 
@@ -369,7 +371,7 @@ Implementation advice:
 
 Source:
 
-- `references/source-packs/rpg-server-ui-reference/ui/menu.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/menu.json`
 
 Observed useful dimensions:
 
@@ -397,7 +399,7 @@ Implementation advice:
 
 Source:
 
-- `references/source-packs/rpg-server-ui-reference/ui/quest.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/quest.json`
 
 Observed useful dimensions:
 
@@ -425,7 +427,7 @@ Implementation advice:
 
 Source:
 
-- `references/source-packs/rpg-server-ui-reference/ui/shop.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/shop.json`
 
 Observed useful dimensions:
 
@@ -454,7 +456,7 @@ Implementation advice:
 
 Source:
 
-- `references/source-packs/rpg-server-ui-reference/ui/stat.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/stat.json`
 
 Observed useful dimensions:
 
@@ -482,7 +484,7 @@ Implementation advice:
 
 Source:
 
-- `references/source-packs/rpg-server-ui-reference/ui/skill.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/skill.json`
 
 Observed useful dimensions:
 
@@ -509,7 +511,7 @@ Implementation advice:
 
 Source:
 
-- `references/source-packs/rpg-server-ui-reference/ui/craft.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/craft.json`
 
 Observed useful dimensions:
 
@@ -536,7 +538,7 @@ Implementation advice:
 
 Source:
 
-- `references/source-packs/rpg-server-ui-reference/ui/boss.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/boss.json`
 
 Observed useful dimensions:
 
@@ -562,9 +564,9 @@ Implementation advice:
 
 Sources:
 
-- `references/source-packs/rpg-server-ui-reference/ui/gmenu.json`
-- `references/source-packs/rpg-server-ui-reference/ui/ginfo.json`
-- `references/source-packs/rpg-server-ui-reference/ui/guild.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/gmenu.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/ginfo.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/guild.json`
 
 Observed useful dimensions:
 
@@ -594,9 +596,9 @@ Implementation advice:
 Sources:
 
 - `references/local-examples/npc-dialogue/ui/server_form.json`
-- `references/source-packs/rpg-server-ui-reference/ui/npc.json`
-- `references/upstreams/minecraft-bedrock-json-ui-sample/CNPC.UI.RP/CNPC UI [RP]/ui/npc_interact_screen.json`
-- `references/upstreams/minecraft-bedrock-json-ui-sample/DynamicDialogV2-2/DynamicDialogV2-2/RP/ui/hud_screen.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/npc.json`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/CNPC.UI.RP/CNPC UI [RP]/ui/npc_interact_screen.json`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/DynamicDialogV2-2/DynamicDialogV2-2/RP/ui/hud_screen.json`
 
 Observed useful dimensions in the custom crops NPC menu:
 
@@ -627,9 +629,9 @@ Implementation advice:
 
 Sources:
 
-- `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/server_form_controls.json`
-- `references/upstreams/minecraft-bedrock-json-ui-sample/starLib/StarLibV2-1.0.3.3/StarLibV2-1.0.3.3/starlib2/package_custom/common_custom.jsonc`
-- `references/external/EasyUIBuilder/ui/server_form.json`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/server_form_controls.json`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/dynamic form library/dynamic form libraryV2-1.0.3.3/dynamic form libraryV2-1.0.3.3/dynamic form library2/package_custom/common_custom.jsonc`
+- `references/mirrors/EasyUIBuilder/ui/server_form.json`
 
 Use when:
 
@@ -664,7 +666,7 @@ Implementation advice:
 | modern app-like server menu cards | Modern Cloud UI Reference `multi_a_cloud_action_form.json` |
 | inventory-like menu | chest server form and chest inventory system |
 | production, processing, upgrading | furnace/process form |
-| settings/config panel | RainbowPie controls or StarLib common custom form |
+| settings/config panel | sample UI suite controls or dynamic form library common custom form |
 | generic main menu | `menu.json`, vanilla shell, or token-routed server form |
 
 ## What To Put In Final Answers
@@ -673,7 +675,7 @@ When the AI uses one of these examples, it should say:
 
 ```text
 Design reference:
-- source: references/source-packs/rpg-server-ui-reference/ui/quest.json
+- source: references/sample-packs/rpg-server-ui-reference/ui/quest.json
 - role: quest list window
 - reused: 220x220 compact panel, 200x171 scroll viewport, 175x40 list buttons
 - changed: namespace, route prefix, textures, PMMP button payload

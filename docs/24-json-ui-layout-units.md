@@ -62,3 +62,35 @@ Never claim Bedrock has one universal base resolution. JSON UI must survive:
 - For mobile-sensitive work, check pocket-specific screens and touch controls.
 - Preserve existing vanilla sizing expressions when modifying vanilla-derived controls.
 
+## Dynamic size and value-driven layout
+
+When the user asks for panels or controls that change by value or content, split the work:
+
+- Static outer skeleton: use IR/tools for the safe region, anchor, fixed bounds, alignment, and spacing.
+- Dynamic inner content: hand-finish raw JSON UI with content sizing, bindings, clipping, collections, or animations.
+
+Common mappings:
+
+| User intent | Recommended JSON UI direction |
+| --- | --- |
+| Panel grows with text/buttons | bounded parent panel + child using `"100%c"` or `"100%cm"` where verified |
+| Long text may overflow | fixed safe area + clipped label or scroll region |
+| Progress/HP/EXP changes | fixed background image + foreground using `clip_ratio` and `clip_direction` |
+| Parts show/hide by state | separate controls with view binding to `#visible` |
+| Color changes by state | separate controls or state-derived color binding when verified |
+| Number of rows changes | collection/factory pattern plus scroll region |
+| Carousel/scrolling animation | clipped parent + animated child offset |
+
+Do not make the whole layout push nearby elements unless the user explicitly wants reflow. Bedrock JSON UI is safer when dynamic content is bounded.
+
+## Control texture questions
+
+Before implementing button rows, scroll views, progress bars, or icon controls, capture the texture policy:
+
+- vanilla textures only
+- reuse existing target RP textures
+- add custom textures later
+- simple panels with minimal texture dependencies
+- mixed vanilla frame plus custom icons
+
+For buttons, ask whether `default_control`, `hover_control`, `pressed_control`, `locked_control`, and selected/checked visuals are needed. For scroll areas, ask whether the scrollbar should be visible, hidden, vanilla, or custom skinned.

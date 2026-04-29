@@ -9,5 +9,5 @@ Use:
 
 Local examples:
 
-- `../../../../references/source-packs/rpg-server-ui-reference/textures/ui/`
-- `../../../../references/source-packs/farm-ui-variants/tDAp1yJMUYo/textures/ui/`
+- `../../../../references/sample-packs/game-hud-sample/textures/ui/`
+- `../../../../references/sample-packs/ui-variant-samples/tDAp1yJMUYo/textures/ui/`

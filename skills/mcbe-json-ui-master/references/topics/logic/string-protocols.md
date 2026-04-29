@@ -4,8 +4,8 @@ Use this when titles, subtitles, actionbars, or chat messages carry structured d
 
 Best references:
 
-- `../../../../references/source-packs/modern-cloud-ui-reference/ui/hud_screen.json`
-- `../../../../references/source-packs/modern-cloud-ui-reference/ui/chat_screen.json`
-- `../../../../references/source-packs/rpg-server-ui-reference/ui/hud_screen.json`
-- `../../../../references/source-packs/modern-cloud-ui-reference/ui/server_form.json`
-- `../../../../references/source-packs/rpg-server-ui-reference/ui/server_form.json`
+- `../../../../references/sample-packs/form-router-sample/ui/hud_screen.json`
+- `../../../../references/sample-packs/form-router-sample/ui/chat_screen.json`
+- `../../../../references/sample-packs/game-hud-sample/ui/hud_screen.json`
+- `../../../../references/sample-packs/form-router-sample/ui/server_form.json`
+- `../../../../references/sample-packs/game-hud-sample/ui/server_form.json`

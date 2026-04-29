@@ -1,6 +1,6 @@
 ---
 name: mcbe-json-ui-vanilla-assets
-description: Verify and use vanilla Minecraft Bedrock texture and icon paths for JSON UI. Use when Codex must confirm `textures/ui/*`, item icon atlas entries, block icon atlas entries, vanilla screen file names, or explain how to find and apply the correct vanilla asset source without hallucinating nonexistent paths. Use ZtechNetwork/MCBVanillaResourcePack as the upstream asset authority.
+description: Verify and use vanilla Minecraft Bedrock texture and icon paths for JSON UI. Use when Codex must confirm `textures/ui/*`, item icon atlas entries, block icon atlas entries, vanilla screen file names, or explain how to find and apply the correct vanilla asset source without hallucinating nonexistent paths. Use vanilla resource mirror as the upstream asset authority.
 ---
 
 # MCBE JSON UI Vanilla Assets

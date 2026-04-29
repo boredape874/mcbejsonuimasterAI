@@ -4,7 +4,7 @@ Use this when the task needs verified vanilla file names or texture paths.
 
 Primary authority:
 
-- <https://github.com/ZtechNetwork/MCBVanillaResourcePack>
+- <https://github.com/vanilla resource mirror>
 
 Search in:
 

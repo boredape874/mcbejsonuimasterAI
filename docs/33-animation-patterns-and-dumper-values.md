@@ -6,17 +6,19 @@ This document tells the AI how to use Bedrock JSON UI animations from vanilla du
 
 | Need | Preferred source |
 | --- | --- |
-| vanilla HUD/title/actionbar animation behavior | `references/official/bedrock-samples-ui/hud_screen.json` |
-| common screen entrance/exit animations | `references/official/bedrock-samples-ui/ui_common.json` |
-| scroll bar fade animation | `references/official/bedrock-samples-ui/ui_common.json` |
-| reusable progress bar size animation | `references/local-examples/rpg-hud/ui/animated_bar.json` or `references/source-packs/rpg-server-ui-reference/ui/animated_bar.json` |
-| easing comparison and play/reset event pattern | `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/settings_sections/general_section_controls.json` |
-| toast pop animation | `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/toast_screen_controls.json` |
-| vanilla-like page transition offsets | `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/start_screen_controls.json` |
+| vanilla HUD/title/actionbar animation behavior | `references/verified-samples/bedrock-samples-ui/hud_screen.json` |
+| common screen entrance/exit animations | `references/verified-samples/bedrock-samples-ui/ui_common.json` |
+| scroll bar fade animation | `references/verified-samples/bedrock-samples-ui/ui_common.json` |
+| reusable progress bar size animation | `references/local-examples/rpg-hud/ui/animated_bar.json` or `references/sample-packs/rpg-server-ui-reference/ui/animated_bar.json` |
+| easing comparison and play/reset event pattern | `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/settings_sections/general_section_controls.json` |
+| toast pop animation | `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/toast_screen_controls.json` |
+| vanilla-like page transition offsets | `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/start_screen_controls.json` |
 
 ## Animation object shape
 
 Animation definitions use `anim_type` instead of `type`.
+
+For animation-heavy form and HUD examples from the restricted neutral reference family, also use `docs/64-motion-form-hud-reference.md`. It indexes the closest files for ability carousels, shop/purchase popups, reward overlays, HUD cooldowns, progress clipping, and flip-book icons.
 
 Common fields seen in the sources:
 
@@ -38,13 +40,13 @@ Common fields seen in the sources:
 | `anim_type` | Best source example | Typical use |
 | --- | --- | --- |
 | `alpha` | `bedrock-samples-ui/hud_screen.json` | title/actionbar fade in/out, background fade |
-| `offset` | `RainbowPieUI/.../general_section_controls.json` | sliding panels, easing tests, toast offsets |
+| `offset` | `sample UI suiteUI/.../general_section_controls.json` | sliding panels, easing tests, toast offsets |
 | `size` | `local-examples/rpg-hud/ui/animated_bar.json` | progress bar growth/shrink |
 | `wait` | `bedrock-samples-ui/hud_screen.json` | chain delay between fade in and fade out |
 | `flip_book` | `bedrock-samples-ui/hud_screen.json` auto-save animation | sprite-sheet frame animation |
-| `uv` | Bedrock Wiki and vanilla image examples | moving or swapping UV region |
-| `aseprite_flip_book` | `references/external/bedrock-wiki-json-ui/aseprite-animations.md` | Aseprite exported sprite sheets |
-| `color` | Bedrock Wiki documentation | color interpolation |
+| `uv` | community reference docs and vanilla image examples | moving or swapping UV region |
+| `aseprite_flip_book` | `references/mirrors/bedrock-wiki-json-ui/aseprite-animations.md` | Aseprite exported sprite sheets |
+| `color` | community reference docs documentation | color interpolation |
 
 ## Applying an animation
 
@@ -78,7 +80,7 @@ For fade in, hold, fade out:
 
 Confirmed source:
 
-- `references/official/bedrock-samples-ui/hud_screen.json`
+- `references/verified-samples/bedrock-samples-ui/hud_screen.json`
 
 ## Progress bar pattern
 
@@ -93,15 +95,26 @@ For animated progress:
 Confirmed source:
 
 - `references/local-examples/rpg-hud/ui/animated_bar.json`
-- `references/source-packs/rpg-server-ui-reference/ui/animated_bar.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/animated_bar.json`
 
 For server form body driven progress using `#form_text`, numeric prefixes, and `#clip_ratio`, use:
 
 - `docs/47-custom-auxid-and-form-progress.md`
 
+## Maze Reference Animation Values
+
+For animation-heavy form and HUD work, `docs/64-motion-form-hud-reference.md` indexes the closest restricted files. The main reusable values are:
+
+| Use | Value |
+| --- | --- |
+| horizontal ability carousel stabilization | `anim_type: "offset"`, `from: ["-50%", 0]`, `to: ["-50%", 0]`, `duration: 1` |
+| location/status flip book | `anim_type: "flip_book"`, `frame_count: 12`, `frame_step: 32`, `fps: 12` |
+| glitch/status flip book | `anim_type: "flip_book"`, `frame_count: 4`, `frame_step: 16`, `fps: 2` |
+| XP/effect/progress fill | foreground image with `clip_ratio` and explicit fixed bar size |
+
 ## Easing values seen in samples
 
-The RainbowPie sample includes a practical easing test list:
+The sample UI suite sample includes a practical easing test list:
 
 ```text
 linear, spring,
@@ -121,6 +134,8 @@ Treat these as sample-observed values. If version safety matters, confirm in the
 
 ## Dumper workflow
 
+For production-style examples of `flip_book`, world loading bars, HUD progress clipping, and server-form loading placeholders, also use `docs/53-premium-ui-pattern-reference.md`. Treat it as a pattern summary; rebuild with neutral names and target-pack assets.
+
 When using JSON UI Dumper or a dumped vanilla UI archive:
 
 1. search for `anim_type`
@@ -132,6 +147,6 @@ When using JSON UI Dumper or a dumped vanilla UI archive:
 Useful searches:
 
 ```powershell
-rg -n '\"anim_type\"|\"anims\"|\"alpha\": \"@|\"offset\": \"@|\"size\": \"@' references/official/bedrock-samples-ui -g *.json
-rg -n '\"play_event\"|\"end_event\"|\"destroy_at_end\"|\"animation_reset_name\"' references/official/bedrock-samples-ui references/upstreams/minecraft-bedrock-json-ui-sample -g *.json -g *.jsonc
+rg -n '\"anim_type\"|\"anims\"|\"alpha\": \"@|\"offset\": \"@|\"size\": \"@' references/verified-samples/bedrock-samples-ui -g *.json
+rg -n '\"play_event\"|\"end_event\"|\"destroy_at_end\"|\"animation_reset_name\"' references/verified-samples/bedrock-samples-ui references/reference-mirrors/minecraft-bedrock-json-ui-sample -g *.json -g *.jsonc
 ```

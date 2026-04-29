@@ -1,6 +1,6 @@
 ---
 name: mcbe-json-ui-tooling
-description: Use tools and tool-generated references for Minecraft Bedrock JSON UI work. Use when Codex must reason about visual JSON UI editing, builder-generated UI examples, chest-like form tooling, AUX ID generation, vanilla JSON UI dumping, StarLibV2-style form libraries, or practical authoring workflows from bedrock-json-ui-editor, EasyUIBuilder, Chest-UI, bedrock-auxgen, JSON-UI-Dumper, and StarLibV2.
+description: Use tools and tool-generated references for Minecraft Bedrock JSON UI work. Use when Codex must reason about visual JSON UI editing, builder-generated UI examples, chest-like form tooling, AUX ID generation, vanilla JSON UI dumping, dynamic-form-library-style form libraries, or practical authoring workflows from bedrock-json-ui-editor, builder-sample, container-form-sample, bedrock-auxgen, JSON-UI-Dumper, and dynamic-form-library.
 ---
 
 # MCBE JSON UI Tooling

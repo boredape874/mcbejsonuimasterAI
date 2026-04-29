@@ -4,5 +4,5 @@ Use this when the task is about how a builder models JSON UI elements or emits s
 
 Primary source:
 
-- `../../../../../references/external/EasyUIBuilder/README.md`
-- `../../../../../references/external/EasyUIBuilder/ui/custom_ui/`
+- `../../../../../references/mirrors/builder-sample/README.md`
+- `../../../../../references/mirrors/builder-sample/ui/custom_ui/`

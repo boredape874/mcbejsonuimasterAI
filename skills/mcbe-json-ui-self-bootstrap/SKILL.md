@@ -26,7 +26,7 @@ Use this skill when:
 - Never install Node, npm, or any system package on the user's machine.
 - Never modify files outside this repository during bootstrap.
 - Never overwrite an existing AI-client config (`.cursor/`, `CLAUDE.md`, `.github/copilot-instructions.md`) without explicit user consent.
-- If a step requires cloning a large mirror (e.g. ZtechNetwork/MCBVanillaResourcePack), ask the user first; do not auto-clone.
+- If a step requires cloning a large mirror (e.g. vanilla resource mirror), ask the user first; do not auto-clone.
 
 ## References
 

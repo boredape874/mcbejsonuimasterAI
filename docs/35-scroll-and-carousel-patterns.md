@@ -8,10 +8,10 @@ Use for long forms, quest lists, shop lists, and settings panels.
 
 Sources:
 
-- `references/external/json-ui-examples/scroll_panel_template.json`
-- `references/source-packs/rpg-server-ui-reference/ui/shop.json`
-- `references/source-packs/rpg-server-ui-reference/ui/quest.json`
-- `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/server_form_controls.json`
+- `references/mirrors/json-ui-examples/scroll_panel_template.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/shop.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/quest.json`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/server_form_controls.json`
 
 Important fields:
 
@@ -33,10 +33,10 @@ Use for rows of buttons, tab bars, quick slots, and horizontal item groups.
 
 Sources:
 
-- `references/source-packs/rpg-server-ui-reference/ui/stat.json`
-- `references/source-packs/rpg-server-ui-reference/ui/skill.json`
-- `references/source-packs/rpg-server-ui-reference/ui/menu.json`
-- `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/settings_sections/general_section_controls.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/stat.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/skill.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/menu.json`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/settings_sections/general_section_controls.json`
 
 Pattern:
 
@@ -56,16 +56,18 @@ Bedrock's common vanilla helper is mostly vertical-scroll oriented. For horizont
 
 Practical source for raw scroll components:
 
-- `references/external/json-ui-examples/scroll_panel_template.json`
+- `references/mirrors/json-ui-examples/scroll_panel_template.json`
 
 Practical source for offset animation:
 
-- `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/settings_sections/general_section_controls.json`
-- `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/start_screen_controls.json`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/settings_sections/general_section_controls.json`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/start_screen_controls.json`
 
 ## Horizontal scroll animation recipe
 
 Use when you want a carousel, rotating banner, or sliding tab page.
+
+For ability, skill tree, or battlepass-like node strips, first use `docs/64-motion-form-hud-reference.md` and the `ability_upgrade_carousel` route. That reference combines a clipped horizontal node strip with slider-derived offset values and an `anim_type: "offset"` stabilizer.
 
 1. Create a fixed-size parent panel.
 2. Set `clips_children` to `true`.
@@ -89,5 +91,6 @@ rg -n '\"anim_type\": \"offset\"|\"play_event\"|\"animation_reset_name\"' refere
 
 - For normal long lists, use vertical `common.scrolling_panel`.
 - For horizontal carousels, prefer clipped offset animation unless a raw horizontal `scroll_view` has been tested in the target pack.
+- For progression node strips, open the `ability_upgrade_carousel` reference before writing new geometry from scratch.
 - Keep scroll content separate from the scrollbar controls.
 - Always register any custom utility file in `_ui_defs.json`.

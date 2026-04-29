@@ -1,0 +1,367 @@
+{
+  "version": 2,
+  "purpose": "Machine-readable routing index for Bedrock JSON UI tasks.",
+  "rules": {
+    "openSmallestReferenceFirst": true,
+    "nameReferencesInFinalAnswer": true,
+    "applyVisualFitForLayoutTasks": true,
+    "visualFitDoc": "docs/54-visual-fit-and-reference-discipline.md",
+    "hierarchyIndex": "data/reference-hierarchy.json",
+    "designIndex": "data/design-reference-index.json",
+    "restrictedReferencePolicy": "Use references/restricted as local pattern evidence only. Do not publish original names, source comments, credits, or texture paths."
+  },
+  "targets": [
+    {
+      "id": "hud_overlay",
+      "keywords": ["hud", "rpg hud", "health bar", "mana", "stamina", "actionbar ui", "overlay"],
+      "docs": ["docs/16-screen-by-screen-reference.md", "docs/25-pmmp-json-ui-bridge.md", "docs/54-visual-fit-and-reference-discipline.md", "docs/57-hierarchical-task-router.md"],
+      "references": ["references/verified-samples/bedrock-samples-ui/hud_screen.json", "references/local-examples/rpg-hud/ui/rpg_hud.json", "references/local-examples/multi-animated-progress/ui/animated_bar.json"],
+      "patchTargets": ["RP/ui/hud_screen.json", "RP/ui/*.json"]
+    },
+    {
+      "id": "hotbar_relayout",
+      "keywords": ["hotbar", "vertical hotbar", "left hotbar", "right hotbar", "circular hotbar", "radial hotbar", "numbered hotbar"],
+      "docs": ["docs/16-screen-by-screen-reference.md", "docs/54-visual-fit-and-reference-discipline.md", "docs/56-local-json-ui-reference-pack-analysis.md", "docs/57-hierarchical-task-router.md"],
+      "references": ["references/verified-samples/bedrock-samples-ui/hud_screen.json"],
+      "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/vertical-hotbar-left-right/VerticalHotbarLeft/ui/hud_screen.json", "references/restricted/json-ui-reference-packs/vertical-hotbar-left-right/VerticalHotbarRight/ui/hud_screen.json", "references/restricted/json-ui-reference-packs/circular-hotbar/ui/hud_screen.json"],
+      "patchTargets": ["RP/ui/hud_screen.json", "RP/ui/_global_variables.json"]
+    },
+    {
+      "id": "interactive_hud_tools",
+      "keywords": ["interactive hud", "minimap", "3d renderer", "structure renderer", "hud slider", "hud settings", "toggle overlay"],
+      "docs": ["docs/38-advanced-json-ui-recipes.md", "docs/56-local-json-ui-reference-pack-analysis.md", "docs/57-hierarchical-task-router.md"],
+      "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/minimap-overlay/ui/hud_screen.json", "references/restricted/json-ui-reference-packs/minimap-overlay/ui/pause_screen.json"],
+      "patchTargets": ["RP/ui/hud_screen.json", "RP/ui/pause_screen.json", "RP/entity/*.json", "RP/models/**/*.json", "RP/render_controllers/*.json"]
+    },
+    {
+      "id": "chat_ui",
+      "keywords": ["chat", "chat panel", "chat position", "notification", "topbar"],
+      "docs": ["docs/25-pmmp-json-ui-bridge.md", "docs/37-vanilla-dumper-screen-recipes.md"],
+      "references": ["references/verified-samples/bedrock-samples-ui/chat_screen.json", "references/local-utils/json-ui-utils/topbar_chat_notification_utils.json"],
+      "patchTargets": ["RP/ui/chat_screen.json", "RP/ui/hud_screen.json"]
+    },
+    {
+      "id": "chat_command_palette",
+      "keywords": ["command palette", "quick command", "fast command", "chat sidebar", "chat formatting", "formatting codes"],
+      "docs": ["docs/37-vanilla-dumper-screen-recipes.md", "docs/56-local-json-ui-reference-pack-analysis.md", "docs/57-hierarchical-task-router.md"],
+      "references": ["references/verified-samples/bedrock-samples-ui/chat_screen.json"],
+      "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/fast-commands/ui/chat_screen.json", "references/restricted/json-ui-reference-packs/fast-commands/ui/ui_common.json"],
+      "patchTargets": ["RP/ui/chat_screen.json", "RP/ui/ui_common.json"]
+    },
+    {
+      "id": "server_form",
+      "keywords": ["server form", "action form", "custom form", "quest", "shop", "skill", "stat", "npc", "menu"],
+      "docs": ["docs/39-design-recommendation-catalog.md", "docs/40-server-form-example-index.md", "docs/53-premium-ui-pattern-reference.md", "docs/57-hierarchical-task-router.md", "docs/63-premium-form-gallery.md"],
+      "references": ["references/sample-packs/rpg-server-ui-reference/ui/server_form.json", "references/sample-packs/modern-cloud-ui-reference/ui/server_form.json"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/server_form.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/common/common.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/menus/other/store.json"],
+      "patchTargets": ["RP/ui/server_form.json", "RP/ui/form/*.json"]
+    },
+    {
+      "id": "maze_progression_form_suite",
+      "keywords": ["ability form", "skill tree", "battlepass", "progression menu", "shop popup", "purchase popup", "quest tab", "cosmetics form", "npc book"],
+      "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/64-motion-form-hud-reference.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_form.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/ability/ability_upgrades_tab.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/shop/shop_browser.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/purchase/purchase_popup.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/quest/quest_tab.json"],
+      "patchTargets": ["RP/ui/server_form.json", "RP/ui/mai/*.json", "RP/ui/form/*.json"]
+    },
+    {
+      "id": "maze_hud_overlay",
+      "keywords": ["maze hud", "cooldown hud", "effect hud", "reward hud", "status progress hud", "ability cooldown"],
+      "docs": ["docs/25-pmmp-json-ui-bridge.md", "docs/33-animation-patterns-and-dumper-values.md", "docs/64-motion-form-hud-reference.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_hud/maze.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_hud/reward.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_hud.json"],
+      "patchTargets": ["RP/ui/hud_screen.json", "RP/ui/*.json"]
+    },
+    {
+      "id": "special_device_form",
+      "keywords": ["phone form", "device form", "pda", "quest book", "guidebook", "profile device", "special server form"],
+      "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/62-special-form-device-ui-patterns.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/device_phone/second.json", "references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/server_form.json", "references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/server_form.json", "references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/creaturesv.json", "references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/creaturebt.json"],
+      "patchTargets": ["RP/ui/server_form.json", "RP/ui/device_*.json", "RP/ui/_ui_defs.json"]
+    },
+    {
+      "id": "battle_command_ui",
+      "keywords": ["battle ui", "move selection", "actor card", "pp bar", "fight menu", "turn command"],
+      "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/54-visual-fit-and-reference-discipline.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/attack.json"],
+      "patchTargets": ["RP/ui/server_form.json", "RP/ui/battle*.json"]
+    },
+    {
+      "id": "database_or_storage_ui",
+      "keywords": ["database ui", "encyclopedia", "details page", "pc storage", "box storage", "team menu"],
+      "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/54-visual-fit-and-reference-discipline.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/creature_database.json", "references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/pc.json", "references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/creature.json"],
+      "patchTargets": ["RP/ui/server_form.json", "RP/ui/database*.json", "RP/ui/storage*.json"]
+    },
+    {
+      "id": "container_chest",
+      "keywords": ["chest ui", "container", "inventory menu", "slot menu"],
+      "docs": ["docs/18-tooling-auxgen-dumper-dynamic form library.md", "docs/47-custom-auxid-and-form-progress.md", "docs/60-advanced-ui-set-special-ui-reference.md"],
+      "references": ["references/sample-packs/rpg-server-ui-reference/ui/chest_server_form.json", "references/sample-packs/rpg-server-ui-reference/ui/chest_inventory_system.json"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/chest_server_form.json"],
+      "patchTargets": ["RP/ui/chest_screen.json", "RP/ui/server_form.json"]
+    },
+    {
+      "id": "loading_screen",
+      "keywords": ["loading", "progress screen", "joining screen", "world loading", "percent"],
+      "docs": ["docs/53-premium-ui-pattern-reference.md", "docs/54-visual-fit-and-reference-discipline.md", "docs/57-hierarchical-task-router.md"],
+      "references": ["references/verified-samples/bedrock-samples-ui/progress_screen.json"],
+      "patchTargets": ["RP/ui/progress_screen.json"]
+    },
+    {
+      "id": "scoreboard_sidebar",
+      "keywords": ["scoreboard", "sidebar", "personal score", "player score"],
+      "docs": ["docs/17-community-patterns-string-score-hud.md", "docs/34-binding-patterns-value-index.md"],
+      "references": ["references/sample-packs/modern-cloud-ui-reference/ui/scoreboards.json"],
+      "patchTargets": ["RP/ui/scoreboards.json", "RP/ui/hud_screen.json"]
+    },
+    {
+      "id": "tooltip_hover_ui",
+      "keywords": ["tooltip", "hover text", "animated hover", "rarity tooltip", "item hover"],
+      "docs": ["docs/36-dumper-value-cookbook.md", "docs/56-local-json-ui-reference-pack-analysis.md", "docs/57-hierarchical-task-router.md"],
+      "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/animated-hover-text/ui/ui_common.json"],
+      "patchTargets": ["RP/ui/ui_common.json", "RP/ui/inventory*.json"]
+    }
+  ],
+  "features": [
+    {
+      "id": "animated_progress_bar",
+      "keywords": ["animated bar", "progress bar", "hp bar", "mana bar", "stamina bar", "clip_ratio"],
+      "openFirst": ["references/local-examples/multi-animated-progress/ui/animated_bar.json"],
+      "extract": ["background/fill/trail layering", "clip_ratio binding", "data source panel"],
+      "checks": ["clip_ratio polarity", "bar text fit", "optional text for bars under 10px"]
+    },
+    {
+      "id": "rpg_multi_bar_hud",
+      "keywords": ["rpg hud", "hp mp", "multi bar", "title payload"],
+      "openFirst": ["references/local-examples/rpg-hud/ui/rpg_hud.json", "references/local-examples/rpg-hud/ui/animated_bar.json"],
+      "extract": ["preserved title panels", "bottom grouped bars", "payload prefixes"],
+      "checks": ["hotbar not removed unless requested", "hunger/heart renderer choice"]
+    },
+    {
+      "id": "vertical_hotbar",
+      "keywords": ["vertical hotbar", "left hotbar", "right hotbar", "numbered hotbar"],
+      "openFirst": ["docs/56-local-json-ui-reference-pack-analysis.md", "references/verified-samples/bedrock-samples-ui/hud_screen.json"],
+      "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/vertical-hotbar-left-right/VerticalHotbarLeft/ui/hud_screen.json", "references/restricted/json-ui-reference-packs/vertical-hotbar-left-right/VerticalHotbarRight/ui/hud_screen.json"],
+      "extract": ["grid_dimensions [1, 9]", "custom hotbar stack", "slot label variables"],
+      "checks": ["hotbar renderer side effects", "XP/hunger/hotbar visibility", "mobile safe zone"]
+    },
+    {
+      "id": "circular_hotbar",
+      "keywords": ["circular hotbar", "radial hotbar", "round hotbar"],
+      "openFirst": ["docs/56-local-json-ui-reference-pack-analysis.md", "references/verified-samples/bedrock-samples-ui/hud_screen.json"],
+      "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/circular-hotbar/ui/hud_screen.json"],
+      "extract": ["manual slot offset list", "selected slot binding", "hotbar collection reuse"],
+      "checks": ["vanilla hotbar fallback", "do not mix with unrelated HUD changes"]
+    },
+    {
+      "id": "animated_hover_tooltip",
+      "keywords": ["hover text", "tooltip", "rarity", "item tooltip", "animated hover"],
+      "openFirst": ["docs/56-local-json-ui-reference-pack-analysis.md"],
+      "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/animated-hover-text/ui/ui_common.json"],
+      "extract": ["alpha animation", "size animation", "hover_text visibility", "rarity selector"],
+      "checks": ["normalize control names", "replace restricted textures", "pointer event behavior"]
+    },
+    {
+      "id": "command_palette_chat_ui",
+      "keywords": ["command palette", "quick command", "chat sidebar", "formatting panel"],
+      "openFirst": ["docs/56-local-json-ui-reference-pack-analysis.md", "references/verified-samples/bedrock-samples-ui/chat_screen.json"],
+      "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/fast-commands/ui/chat_screen.json"],
+      "extract": ["edit_box #message_text_box", "hidden send button", "expandable category", "button texture states"],
+      "checks": ["remove restricted text", "keep chat fallback", "touch keyboard mapping"]
+    },
+    {
+      "id": "hud_minimap_overlay",
+      "keywords": ["minimap", "3d_structure_renderer", "hud slider", "interactive overlay"],
+      "openFirst": ["docs/56-local-json-ui-reference-pack-analysis.md", "docs/38-advanced-json-ui-recipes.md"],
+      "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/minimap-overlay/ui/hud_screen.json"],
+      "extract": ["setting toggles", "slider-bound offsets", "3d_structure_renderer", "addon dependencies"],
+      "checks": ["input flags", "renderer dependencies", "pause toggle bridge"]
+    },
+    {
+      "id": "form_router",
+      "keywords": ["form router", "title routing", "customUI", "menu.quest", "menu.shop"],
+      "openFirst": ["references/sample-packs/modern-cloud-ui-reference/ui/server_form.json", "references/sample-packs/rpg-server-ui-reference/ui/server_form.json"],
+      "extract": ["factory dispatch", "title prefix checks", "vanilla fallback"],
+      "checks": ["long_form fallback", "custom_form fallback"]
+    },
+    {
+      "id": "premium_shop_and_market_form",
+      "keywords": ["shop form", "store form", "auction form", "crate form", "reward form", "premium server form", "product card"],
+      "openFirst": ["docs/63-premium-form-gallery.md", "data/advanced-ui-set-file-index.json"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/server_form.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/common/common.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/menus/other/store.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/menus/other/auction_house.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/menus/crates/preview_v2.json"],
+      "extract": ["shared form frame", "header stats", "category tabs", "product/reward cards", "scrollbar and pagination", "button state textures"],
+      "checks": ["replace restricted texture paths", "document form_buttons index contract", "text scale fits card height"]
+    },
+    {
+      "id": "maze_ability_progression_form",
+      "keywords": ["ability", "skill tree", "battlepass", "progression", "upgrade node", "horizontal carousel"],
+      "openFirst": ["docs/64-motion-form-hud-reference.md", "data/advanced-ui-set-file-index.json"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/ability/ability_upgrades_tab.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/ability/ability_xp.json"],
+      "extract": ["clipped node strip", "slider-derived horizontal offset", "locked/unlocked card states", "XP progress bar", "offset animation stabilizer"],
+      "checks": ["node labels fit", "bar labels outside thin fills", "restricted marker strings renamed"]
+    },
+    {
+      "id": "maze_shop_purchase_flow",
+      "keywords": ["shop", "purchase popup", "product browser", "store grid", "buy confirm", "waiting popup"],
+      "openFirst": ["docs/64-motion-form-hud-reference.md", "data/advanced-ui-set-file-index.json"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/shop/shop_browser.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/purchase/purchase_popup.json"],
+      "extract": ["indexed product card grid", "price/status label zones", "confirmation/waiting/success/failure state split"],
+      "checks": ["document form_buttons index mapping", "same size across button states", "replace restricted texture metadata"]
+    },
+    {
+      "id": "maze_status_reward_hud",
+      "keywords": ["cooldown hud", "effect hud", "reward hud", "status hud", "flip book", "clip_ratio hud"],
+      "openFirst": ["docs/64-motion-form-hud-reference.md", "docs/33-animation-patterns-and-dumper-values.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_hud/maze.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_hud/reward.json"],
+      "extract": ["cooldown overlays", "effect duration clip bars", "status flip-book values", "reward overlay grouping"],
+      "checks": ["title/actionbar payload contract documented", "HUD does not remove vanilla gameplay elements unless requested"]
+    },
+    {
+      "id": "scroll_list",
+      "keywords": ["scroll", "scrollbar", "list", "rows", "carousel"],
+      "openFirst": ["docs/35-scroll-and-carousel-patterns.md", "references/verified-samples/bedrock-samples-ui/chat_screen.json"],
+      "extract": ["common.scrolling_panel", "viewport/content separation", "row template"],
+      "checks": ["scrollbar width", "content padding", "equal row height"]
+    },
+    {
+      "id": "button_states",
+      "keywords": ["button", "hover", "pressed", "locked", "selected", "toggle"],
+      "openFirst": ["docs/49-json-ui-tutorial-index.md", "references/verified-samples/bedrock-samples-ui/ui_common.json"],
+      "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/fast-commands/ui/chat_screen.json"],
+      "extract": ["default/hover/pressed controls", "button_mappings", "texture state family"],
+      "checks": ["same size across states", "text padding"]
+    },
+    {
+      "id": "phone_device_form",
+      "keywords": ["phone form", "pda", "device shell", "region buttons", "special form"],
+      "openFirst": ["docs/62-special-form-device-ui-patterns.md", "data/advanced-ui-set-file-index.json"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/device_phone/second.json"],
+      "extract": ["full shell image", "region stack panels", "per-region factories", "marker-gated form button placement"],
+      "checks": ["neutralize marker strings", "replace restricted shell texture", "keep form_button_click mapping"]
+    },
+    {
+      "id": "compact_form_button_suite",
+      "keywords": ["compact form", "button template suite", "custom card button", "small team panel", "battle button texture"],
+      "openFirst": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "data/advanced-ui-set-file-index.json"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/server_form.json", "references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/creaturesv.json", "references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/creaturebt.json"],
+      "extract": ["prefix route panel", "compact form view", "shared button state template", "texture metadata sizing"],
+      "checks": ["visible markers removed", "state controls keep identical size", "font_scale_factor fits inside card cells"]
+    },
+    {
+      "id": "title_payload_hud_suite",
+      "keywords": ["title payload", "protocol hud", "phone hud", "currency hud", "sidebar protocol"],
+      "openFirst": ["docs/60-advanced-ui-set-special-ui-reference.md", "data/advanced-ui-set-file-index.json"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/phud/phud.json"],
+      "extract": ["preserved data control", "prefix router", "separate renderer components"],
+      "checks": ["document prefix protocol", "keep player-visible title clean", "avoid prefix collision"]
+    },
+    {
+      "id": "advanced_chest_form_router",
+      "keywords": ["chest form router", "inventory-like form", "slot form", "auction form", "backpack form"],
+      "openFirst": ["docs/61-advanced-ui-set-file-pattern-routes.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/chest_server_form.json"],
+      "extract": ["grid variants", "item renderer branch", "stack/count parser", "title route flags"],
+      "checks": ["aux/item id compatibility", "button index mapping", "mobile size"]
+    },
+    {
+      "id": "battle_move_selection",
+      "keywords": ["move selection", "battle buttons", "actor details", "pp bar"],
+      "openFirst": ["docs/61-advanced-ui-set-file-pattern-routes.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/attack.json"],
+      "extract": ["move button template", "actor card panels", "dynamic progress bar", "action button groups"],
+      "checks": ["long move names fit", "PP labels not inside too-small bars", "hover state equal size"]
+    },
+    {
+      "id": "database_storage_suite",
+      "keywords": ["database", "pc storage", "team menu", "details", "box"],
+      "openFirst": ["docs/61-advanced-ui-set-file-pattern-routes.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/creature_database.json", "references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/pc.json", "references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/creature.json"],
+      "extract": ["grid/detail split", "search/filter controls", "party/storage regions", "selected card state"],
+      "checks": ["consistent slot size", "visible focus state", "separate detail view for long text"]
+    }
+  ],
+  "dataSources": [
+    {
+      "id": "title_packet",
+      "keywords": ["title", "preserved title", "hud_title_text_string"],
+      "docs": ["docs/25-pmmp-json-ui-bridge.md"],
+      "requiredNote": "Document exact prefix, delimiter, and sender code."
+    },
+    {
+      "id": "actionbar_packet",
+      "keywords": ["actionbar", "setActionBar", "hud_actionbar_text"],
+      "docs": ["docs/25-pmmp-json-ui-bridge.md"],
+      "requiredNote": "Reserve enough width for long dynamic text."
+    },
+    {
+      "id": "server_form_collection",
+      "keywords": ["form_buttons", "form_text", "title_text"],
+      "docs": ["docs/40-server-form-example-index.md"],
+      "requiredNote": "Use collection bindings, not manually fixed fake button data."
+    },
+    {
+      "id": "scoreboard_collection",
+      "keywords": ["scoreboard_scored_list_collection", "players_collection"],
+      "docs": ["docs/17-community-patterns-string-score-hud.md"],
+      "requiredNote": "Warn about collection-heavy HUD cost."
+    },
+    {
+      "id": "chat_input",
+      "keywords": ["#message_text_box", "text_edit_box", "button.send", "chat command"],
+      "docs": ["docs/37-vanilla-dumper-screen-recipes.md", "docs/56-local-json-ui-reference-pack-analysis.md"],
+      "requiredNote": "Confirm text box name, send button mapping, and touch keyboard behavior."
+    },
+    {
+      "id": "addon_renderer",
+      "keywords": ["3d_structure_renderer", "renderer", "model", "entity", "render_controller"],
+      "docs": ["docs/15-json-ui-file-role-catalog.md", "docs/56-local-json-ui-reference-pack-analysis.md"],
+      "requiredNote": "Treat as BP/RP or RP addon integration, not isolated JSON UI."
+    }
+  ],
+  "styles": [
+    {
+      "id": "vanilla_safe",
+      "keywords": ["vanilla", "simple", "compatible"],
+      "references": ["references/verified-samples/bedrock-samples-ui"],
+      "avoid": ["invented texture paths", "restricted assets"]
+    },
+    {
+      "id": "compact_rpg",
+      "keywords": ["rpg", "quest", "skill", "stat", "compact"],
+      "references": ["references/sample-packs/rpg-server-ui-reference/ui"],
+      "avoid": ["large paragraphs in small panels"]
+    },
+    {
+      "id": "modern_cloud",
+      "keywords": ["modern", "cloud", "polished", "large form"],
+      "references": ["references/sample-packs/modern-cloud-ui-reference/ui"],
+      "avoid": ["copying one file without dependencies"]
+    },
+    {
+      "id": "premium_dark",
+      "keywords": ["premium", "dark", "loading", "adventure"],
+      "references": ["docs/53-premium-ui-pattern-reference.md"],
+      "avoid": ["source branding", "restricted asset names"]
+    },
+    {
+      "id": "utility_tool",
+      "keywords": ["command", "tool", "editor", "sidebar", "settings"],
+      "references": ["docs/56-local-json-ui-reference-pack-analysis.md"],
+      "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/fast-commands/ui/chat_screen.json", "references/restricted/json-ui-reference-packs/minimap-overlay/ui/hud_screen.json"],
+      "avoid": ["source credit strings", "gameplay input capture without intent"]
+    },
+    {
+      "id": "special_rpg_device",
+      "keywords": ["phone", "device", "battle", "database", "storage", "special form"],
+      "references": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/62-special-form-device-ui-patterns.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/device_phone/second.json", "references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/attack.json", "references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/creaturesv.json", "references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/creaturebt.json"],
+      "avoid": ["original restricted namespaces", "restricted shell texture paths", "visible hidden markers"]
+    },
+    {
+      "id": "premium_marketplace_form",
+      "keywords": ["premium", "store", "auction", "crate", "product card", "polished form"],
+      "references": ["docs/63-premium-form-gallery.md"],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/common/common.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/menus/other/store.json"],
+      "avoid": ["original restricted namespaces", "restricted route flags", "restricted brand or server names", "restricted texture paths"]
+    }
+  ]
+}

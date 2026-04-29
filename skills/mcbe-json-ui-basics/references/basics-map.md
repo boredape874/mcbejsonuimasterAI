@@ -10,11 +10,11 @@ Read these first:
 Then use only the exact source needed:
 
 - for Bedrock terminology and loading model:
-  - `../../../references/external/bedrock-wiki-json-ui/json-ui-intro.md`
+  - `../../../references/mirrors/bedrock-wiki-json-ui/json-ui-intro.md`
 - for exact screen and property reference:
-  - `../../../references/external/bedrock-wiki-json-ui/json-ui-documentation.md`
+  - `../../../references/mirrors/bedrock-wiki-json-ui/json-ui-documentation.md`
 - for how HUD insertion works in practice:
-  - `../../../references/external/bedrock-wiki-json-ui/add-hud-elements.md`
+  - `../../../references/mirrors/bedrock-wiki-json-ui/add-hud-elements.md`
 - for local practical examples:
   - `../../../references/local-utils/integrated-sample/ui/_ui_defs.json`
   - `../../../references/local-utils/integrated-sample/ui/hud_screen.json`

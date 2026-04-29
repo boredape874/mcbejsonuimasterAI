@@ -19,7 +19,7 @@ Reference:
 - docs/50-advanced-ui-reference-analysis.md
 
 Rules:
-- if references/private/advanced-ui-reference/ui-pack exists, inspect only the relevant feature family, not every file
+- if references/restricted/advanced-ui-reference/ui-pack exists, inspect only the relevant feature family, not every file
 - do not copy original source JSON or textures unless this project owns equivalent assets
 - rewrite the pattern into the target namespace
 - define project-owned route prefixes

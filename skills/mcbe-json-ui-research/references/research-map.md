@@ -8,11 +8,11 @@
 
 Primary included sources:
 
-- `../../references/source-packs/modern-cloud-ui-reference/`
-- `../../references/source-packs/farm-ui-variants/`
-- `../../references/source-packs/rpg-server-ui-reference/`
+- `../../references/sample-packs/form-router-sample/`
+- `../../references/sample-packs/ui-variant-samples/`
+- `../../references/sample-packs/game-hud-sample/`
 
-## Use Mojang bedrock-samples when
+## Use official sample screens when
 
 - the question is about vanilla screen files
 - the question is about official `_ui_defs.json` structure
@@ -20,9 +20,9 @@ Primary included sources:
 
 Primary upstream:
 
-- <https://github.com/Mojang/bedrock-samples/tree/main/resource_pack/ui>
+- <https://github.com/verified sample source/official-samples/tree/main/resource_pack/ui>
 
-## Use Bedrock Wiki when
+## Use community reference docs when
 
 - the question is about bindings, operators, techniques, or best practices
 - the user needs explanation of JSON UI behavior
@@ -45,7 +45,7 @@ Primary pages:
 
 Primary upstream:
 
-- <https://github.com/ZtechNetwork/MCBVanillaResourcePack>
+- <https://github.com/vanilla resource mirror>
 
 ## Use external example repositories when
 
@@ -55,8 +55,8 @@ Primary upstream:
 
 Primary sources:
 
-- `../../references/external/json-ui-examples/`
-- `../../references/external/EasyUIBuilder/`
-- `../../references/external/Chest-UI/`
-- `../../references/external/bedrock-json-ui-editor/`
-- `../../references/external/bedrock-wiki-json-ui/`
+- `../../references/mirrors/json-ui-examples/`
+- `../../references/mirrors/builder-sample/`
+- `../../references/mirrors/container-form-sample/`
+- `../../references/mirrors/bedrock-json-ui-editor/`
+- `../../references/mirrors/bedrock-wiki-json-ui/`

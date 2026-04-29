@@ -8,8 +8,8 @@ Use when a custom screen has multiple tabs or categories.
 
 Sources:
 
-- `references/official/bedrock-samples-ui/inventory_screen.json`
-- `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/settings_sections/general_section_controls.json`
+- `references/verified-samples/bedrock-samples-ui/inventory_screen.json`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/settings_sections/general_section_controls.json`
 
 Core ideas:
 
@@ -26,7 +26,7 @@ Use when a PMMP form has many buttons and needs filtering.
 
 Sources:
 
-- `references/upstreams/minecraft-bedrock-json-ui-sample/starLib/StarLibV2-1.0.3.3/StarLibV2-1.0.3.3/starlib2/package_custom/common_custom.jsonc`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/dynamic form library/dynamic form libraryV2-1.0.3.3/dynamic form libraryV2-1.0.3.3/dynamic form library2/package_custom/common_custom.jsonc`
 - `docs/34-binding-patterns-value-index.md`
 
 Core ideas:
@@ -42,8 +42,8 @@ Use when the server sends multiple HUD messages or chat-like overlays.
 
 Sources:
 
-- `references/official/bedrock-samples-ui/chat_screen.json`
-- `references/source-packs/modern-cloud-ui-reference/ui/hud_screen.json`
+- `references/verified-samples/bedrock-samples-ui/chat_screen.json`
+- `references/sample-packs/modern-cloud-ui-reference/ui/hud_screen.json`
 - `references/local-utils/json-ui-utils/topbar_chat_notification_utils.json`
 
 Core ideas:
@@ -59,8 +59,8 @@ Use when a UI needs item icons from game collections, not static texture paths.
 
 Sources:
 
-- `references/official/bedrock-samples-ui/chat_screen.json` autocomplete item renderer
-- `references/official/bedrock-samples-ui/hud_screen.json` hotbar item renderer
+- `references/verified-samples/bedrock-samples-ui/chat_screen.json` autocomplete item renderer
+- `references/verified-samples/bedrock-samples-ui/hud_screen.json` hotbar item renderer
 
 Core ideas:
 
@@ -76,10 +76,10 @@ Use for shops, quests, settings, and server form pages.
 
 Sources:
 
-- `references/official/bedrock-samples-ui/chat_screen.json`
-- `references/official/bedrock-samples-ui/ui_common.json`
-- `references/source-packs/rpg-server-ui-reference/ui/shop.json`
-- `references/source-packs/rpg-server-ui-reference/ui/quest.json`
+- `references/verified-samples/bedrock-samples-ui/chat_screen.json`
+- `references/verified-samples/bedrock-samples-ui/ui_common.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/shop.json`
+- `references/sample-packs/rpg-server-ui-reference/ui/quest.json`
 
 Core ideas:
 
@@ -95,8 +95,8 @@ Use when a HUD element must accept clicks or keyboard input.
 Sources:
 
 - `references/community-patterns/interactable-hud-menu.md`
-- `references/official/bedrock-samples-ui/chat_screen.json`
-- `references/official/bedrock-samples-ui/hud_screen.json`
+- `references/verified-samples/bedrock-samples-ui/chat_screen.json`
+- `references/verified-samples/bedrock-samples-ui/hud_screen.json`
 
 Core ideas:
 
@@ -112,7 +112,7 @@ Use when horizontal scroll is unreliable or too hard to focus across devices.
 Sources:
 
 - `docs/35-scroll-and-carousel-patterns.md`
-- `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/start_screen_controls.json`
+- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/start_screen_controls.json`
 
 Core ideas:
 
@@ -123,6 +123,8 @@ Core ideas:
 - buttons trigger page events
 
 ## Debug route for advanced recipes
+
+For stronger production-style recipes, use `docs/53-premium-ui-pattern-reference.md`. It covers multi-route server form dispatch, loading placeholders, custom world loading screens, HUD progress bars, pocket-safe progress layout, container/cooking station UI, and reusable button/toggle templates.
 
 If a copied recipe fails:
 

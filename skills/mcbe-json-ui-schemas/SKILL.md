@@ -21,5 +21,5 @@ Use this when schema validation is the main concern.
 ## Hard rules
 
 - Treat schemas as validation aids, not runtime truth.
-- Prefer runtime examples and Bedrock Wiki when explaining behavior.
+- Prefer runtime examples and community reference docs when explaining behavior.
 - Prefer schema files when the question is about allowed structure or editor setup.

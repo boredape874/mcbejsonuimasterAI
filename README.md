@@ -45,9 +45,9 @@ It is written in Bedrock addon and PMMP terms, not generic web UI terms.
 
 ### Local pack references
 
-- `references/source-packs/modern-cloud-ui-reference/`
-- `references/source-packs/farm-ui-variants/`
-- `references/source-packs/rpg-server-ui-reference/`
+- `references/sample-packs/modern-cloud-ui-reference/`
+- `references/sample-packs/farm-ui-variants/`
+- `references/sample-packs/rpg-server-ui-reference/`
 
 ### Local utility mirrors
 
@@ -56,11 +56,11 @@ It is written in Bedrock addon and PMMP terms, not generic web UI terms.
 
 ### External mirrored references
 
-- `references/external/bedrock-wiki-json-ui/`
-- `references/external/json-ui-examples/`
-- `references/external/EasyUIBuilder/`
-- `references/external/Chest-UI/`
-- `references/external/bedrock-json-ui-editor/`
+- `references/mirrors/bedrock-wiki-json-ui/`
+- `references/mirrors/json-ui-examples/`
+- `references/mirrors/EasyUIBuilder/`
+- `references/mirrors/Chest-UI/`
+- `references/mirrors/bedrock-json-ui-editor/`
 
 ### Schema references
 
@@ -71,19 +71,19 @@ It is written in Bedrock addon and PMMP terms, not generic web UI terms.
 
 This repository uses a strict source priority model:
 
-1. included local working packs in `references/source-packs/`
-2. official Mojang `bedrock-samples`
-3. Bedrock Wiki JSON UI pages
-4. `ZtechNetwork/MCBVanillaResourcePack` for vanilla asset truth
+1. included local working packs in `references/sample-packs/`
+2. official verified sample source `bedrock-samples`
+3. community reference docs JSON UI pages
+4. `vanilla resource mirror` for vanilla asset truth
 
 For vanilla texture validation, the canonical upstream authority is:
 
-- <https://github.com/ZtechNetwork/MCBVanillaResourcePack>
+- <https://github.com/vanilla resource mirror>
 
 See:
 
 - [Source Priority](docs/04-source-priority.md)
-- [External Research Map](docs/05-external-research-map.md)
+- [reference research Map](docs/05-external-research-map.md)
 - [JSON UI Rules](docs/06-json-ui-rules.md)
 - [External Example Sources](docs/07-external-example-sources.md)
 - [Reference Hierarchy](docs/08-reference-hierarchy.md)
@@ -96,7 +96,7 @@ See:
 - [JSON UI File Role Catalog](docs/15-json-ui-file-role-catalog.md)
 - [Screen-By-Screen Reference](docs/16-screen-by-screen-reference.md)
 - [Community Patterns: String, Score, And HUD Input](docs/17-community-patterns-string-score-hud.md)
-- [Tooling: AUX, Dumper, And StarLib](docs/18-tooling-auxgen-dumper-starlib.md)
+- [Tooling: AUX, Dumper, And Dynamic Form Library](docs/18-tooling-auxgen-dumper-dynamic form library.md)
 - [Bindings And Hardcoded Values](docs/19-bindings-and-hardcoded-values.md)
 - [Pack Merge Playbook](docs/20-pack-merge-playbook.md)
 - [Update Policy](docs/21-update-policy.md)
@@ -124,10 +124,21 @@ See:
 - [JSON UI Tutorial Index](docs/49-json-ui-tutorial-index.md)
 - [Advanced Adventure UI Reference Analysis](docs/50-advanced-ui-reference-analysis.md)
 - [Compact Crafting And Pocket UI Reference](docs/51-compact-crafting-pocket-ui-reference.md)
+- [JSON UI Intake Questionnaire](docs/52-json-ui-intake-questionnaire.md)
+- [Premium UI Pattern Reference](docs/53-premium-ui-pattern-reference.md)
+- [Visual Fit And Reference Discipline](docs/54-visual-fit-and-reference-discipline.md)
+- [Reference Task Taxonomy](docs/55-reference-task-taxonomy.md)
+- [Local JSON UI Reference Pack Analysis](docs/56-local-json-ui-reference-pack-analysis.md)
+- [Hierarchical Task Router](docs/57-hierarchical-task-router.md)
+- [Design Reference Atlas](docs/58-design-reference-atlas.md)
+- [Diagrammatic Workflows](docs/59-diagrammatic-workflows.md)
+- [advanced-ui-set Special UI Reference](docs/60-advanced-ui-set-special-ui-reference.md)
+- [advanced-ui-set File Pattern Routes](docs/61-advanced-ui-set-file-pattern-routes.md)
+- [Special Form Device UI Patterns](docs/62-special-form-device-ui-patterns.md)
 - [IR Spec](docs/41-ir-spec.md) (tools layer)
 - [Tools Reference](docs/42-tools-reference.md) (tools layer)
 - [Self-Bootstrap Protocol](docs/43-self-bootstrap-protocol.md) (tools layer)
-- [Design → IR Mapping](docs/44-design-to-ir-mapping.md) (tools layer)
+- [Design ??IR Mapping](docs/44-design-to-ir-mapping.md) (tools layer)
 - [JSON UI Spec & Preset Catalogs](docs/45-jsonui-spec-and-presets.md) (tools layer)
 
 ## Quick start
@@ -160,12 +171,12 @@ This copies every directory under `skills/` into:
 That creates:
 
 ```text
-references/upstreams/MCBVanillaResourcePack/
+references/reference-mirrors/vanilla resource mirror/
 ```
 
 This mirror is intentionally not committed to Git because it is large and reproducible.
 
-### 4. Optional: sync selected Mojang `bedrock-samples` UI files
+### 4. Optional: sync selected verified sample source `bedrock-samples` UI files
 
 ```powershell
 .\scripts\sync-bedrock-samples-ui.ps1
@@ -174,7 +185,7 @@ This mirror is intentionally not committed to Git because it is large and reprod
 This updates:
 
 ```text
-references/official/bedrock-samples-ui/
+references/verified-samples/bedrock-samples-ui/
 ```
 
 ### 5. Optional: sync the MCBE JSON UI resource archive
@@ -186,7 +197,7 @@ references/official/bedrock-samples-ui/
 That creates:
 
 ```text
-references/upstreams/mcbe-json-ui-resource/
+references/reference-mirrors/mcbe-json-ui-resource/
 ```
 
 This mirror is intentionally not committed because it is large and searchable.
@@ -194,7 +205,7 @@ This mirror is intentionally not committed because it is large and searchable.
 ### 6. Optional: validate a JSON UI pack or reference mirror
 
 ```powershell
-.\scripts\validate-json-ui-pack.ps1 -PackPath references\source-packs\modern-cloud-ui-reference
+.\scripts\validate-json-ui-pack.ps1 -PackPath references\sample-packs\modern-cloud-ui-reference
 ```
 
 For partial reference mirrors:
@@ -336,10 +347,10 @@ Typical user flow:
 1. git clone <this repo>
 2. open the folder in your AI client
 3. ask "build a centered confirmation modal with two symmetric buttons"
-   → AI authors workspace/<name>/ir.yaml, runs node tools/run.mjs, returns ui.json
+   ??AI authors workspace/<name>/ir.yaml, runs node tools/run.mjs, returns ui.json
 ```
 
-For layout-only work the kit is deterministic: same IR → same JSON UI.
+For layout-only work the kit is deterministic: same IR ??same JSON UI.
 
 ## Repository layout
 
@@ -360,7 +371,7 @@ For layout-only work the kit is deterministic: same IR → same JSON UI.
 - `scripts/`
   - installation and sync helpers
 - `AGENTS.md`, `.agent/`, `tools/`, `schemas/`, `data/`, `vanilla-index/`, `workspace/`
-  - AI tools layer (Node CLI). See `docs/41`–`docs/45` and `AGENTS.md`.
+  - AI tools layer (Node CLI). See `docs/41`??docs/45` and `AGENTS.md`.
   - `data/jsonui-spec.json` (control/anchor/binding catalog, ported from gamezaSRC/JSON-UI-Web-Editor MIT) and `data/presets-catalog.json` (vanilla preset references) drive the validator and the IR `extends` field.
 
 ## Ready-made examples
@@ -387,7 +398,7 @@ Read these first:
 Then read as needed:
 
 - [Source Priority](docs/04-source-priority.md)
-- [External Research Map](docs/05-external-research-map.md)
+- [reference research Map](docs/05-external-research-map.md)
 - [JSON UI Rules](docs/06-json-ui-rules.md)
 - [External Example Sources](docs/07-external-example-sources.md)
 - [Schema And Tooling](docs/09-schema-and-tooling.md)
@@ -398,7 +409,7 @@ Then read as needed:
 - [JSON UI File Role Catalog](docs/15-json-ui-file-role-catalog.md)
 - [Screen-By-Screen Reference](docs/16-screen-by-screen-reference.md)
 - [Community Patterns: String, Score, And HUD Input](docs/17-community-patterns-string-score-hud.md)
-- [Tooling: AUX, Dumper, And StarLib](docs/18-tooling-auxgen-dumper-starlib.md)
+- [Tooling: AUX, Dumper, And Dynamic Form Library](docs/18-tooling-auxgen-dumper-dynamic form library.md)
 - [Bindings And Hardcoded Values](docs/19-bindings-and-hardcoded-values.md)
 - [Pack Merge Playbook](docs/20-pack-merge-playbook.md)
 - [Update Policy](docs/21-update-policy.md)
@@ -417,6 +428,15 @@ Then read as needed:
 - [JSON UI Tutorial Index](docs/49-json-ui-tutorial-index.md)
 - [Advanced Adventure UI Reference Analysis](docs/50-advanced-ui-reference-analysis.md)
 - [Compact Crafting And Pocket UI Reference](docs/51-compact-crafting-pocket-ui-reference.md)
+- [Visual Fit And Reference Discipline](docs/54-visual-fit-and-reference-discipline.md)
+- [Reference Task Taxonomy](docs/55-reference-task-taxonomy.md)
+- [Local JSON UI Reference Pack Analysis](docs/56-local-json-ui-reference-pack-analysis.md)
+- [Hierarchical Task Router](docs/57-hierarchical-task-router.md)
+- [Design Reference Atlas](docs/58-design-reference-atlas.md)
+- [Diagrammatic Workflows](docs/59-diagrammatic-workflows.md)
+- [advanced-ui-set Special UI Reference](docs/60-advanced-ui-set-special-ui-reference.md)
+- [advanced-ui-set File Pattern Routes](docs/61-advanced-ui-set-file-pattern-routes.md)
+- [Special Form Device UI Patterns](docs/62-special-form-device-ui-patterns.md)
 
 ## Is this enough to become a "JSON UI Master AI" in one shot?
 
@@ -429,7 +449,7 @@ What this repository now gives you:
 - beginner-to-advanced mental model docs
 - local working pack references
 - local utility mirrors for topbar, title bars, tablist, tooltip, and integrated sample screens
-- mirrored Bedrock Wiki JSON UI docs
+- mirrored community reference docs JSON UI docs
 - mirrored external example repositories
 - schema references
 - vanilla asset authority flow

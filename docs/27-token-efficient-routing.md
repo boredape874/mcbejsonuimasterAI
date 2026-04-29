@@ -28,11 +28,21 @@ Load in this order:
 | missing texture or invisible UI | `docs/26-common-failure-modes.md` | exact debugging subtopic |
 | merge two packs | `docs/20-pack-merge-playbook.md` | only changed files from both packs |
 | broad audit | `docs/08-reference-hierarchy.md` | exact docs selected from the audit finding |
+| planning a new JSON UI from scratch | `docs/52-json-ui-intake-questionnaire.md` | `docs/39-design-recommendation-catalog.md`, `docs/44-design-to-ir-mapping.md`, then the exact topic doc |
+| choose visual design family | `docs/58-design-reference-atlas.md` | `data/design-reference-index.json`, then one exact reference file |
+| follow a systematic UI workflow | `docs/59-diagrammatic-workflows.md` | the one matching flowchart and target files |
+| choose the right reference for a UI task | `docs/55-reference-task-taxonomy.md` | `data/reference-task-index.json`, then one exact source file |
+| choose a major/mid/sub topic route | `docs/57-hierarchical-task-router.md` | `data/reference-hierarchy.json`, then one exact source file |
+| use local restricted JSON UI references | `docs/56-local-json-ui-reference-pack-analysis.md` | one neutral restricted mirror under `references/restricted/json-ui-reference-packs/` if it exists locally |
+| use the top-tier `advanced-ui-set` restricted reference | `docs/60-advanced-ui-set-special-ui-reference.md` | `data/advanced-ui-set-file-index.json`, then one neutral restricted mirror under `references/restricted/advanced-ui-set-ui/` |
+| phone/PDA/device special form | `docs/62-special-form-device-ui-patterns.md` | `docs/61-advanced-ui-set-file-pattern-routes.md`, then one device page file |
+| battle/database/storage special UI | `docs/61-advanced-ui-set-file-pattern-routes.md` | one `monster-rpg-b/ui/creature/*.json` file |
+| protocol HUD suite | `docs/60-advanced-ui-set-special-ui-reference.md` | `monster-rpg-b/ui/phud/phud.json`, then one component file |
 | local example lookup | `docs/28-local-example-mining.md` | only the matching mirror or local folder |
 | broad upstream example archive | `docs/29-mcbe-json-ui-resource-upstream.md` | one exact tutorial or sample screen |
 | adapt one code fragment | `docs/30-file-and-code-fragment-usage.md` | `docs/31-fragment-routing-table.md` and one source file |
-| minecraft-bedrock-json-ui-sample archive | `docs/32-minecraft-bedrock-json-ui-sample-upstream.md` | one exact RainbowPie, StarLib, NPC, or integrated UI file |
-| animation or `anim_type` | `docs/33-animation-patterns-and-dumper-values.md` | one exact vanilla/local/RainbowPie animation source |
+| minecraft-bedrock-json-ui-sample archive | `docs/32-minecraft-bedrock-json-ui-sample-upstream.md` | one exact sample UI suite, dynamic form library, NPC, or integrated UI file |
+| animation or `anim_type` | `docs/33-animation-patterns-and-dumper-values.md` | one exact vanilla/local/sample UI suite animation source |
 | binding value or binding dump | `docs/34-binding-patterns-value-index.md` | target screen and one exact source binding file |
 | vertical scroll, horizontal scroll, carousel | `docs/35-scroll-and-carousel-patterns.md` | one exact scroll or offset-animation source |
 | dumper value such as factory/grid/renderer/focus | `docs/36-dumper-value-cookbook.md` | one exact vanilla source object |
@@ -43,11 +53,12 @@ Load in this order:
 
 ## Do not load by default
 
-- full Mojang `bedrock-samples`
+- full verified sample source `bedrock-samples`
 - full Ztech vanilla pack
 - all local sample packs
+- all restricted reference packs
 - all schema files
-- all external examples
+- all mirrored examples
 
 Use `rg` to find exact paths first, then open only the matching files.
 

@@ -4,7 +4,7 @@ Read:
 
 - `../../../../../docs/11-basics-and-mental-model.md`
 - `../../../../../docs/15-json-ui-file-role-catalog.md`
-- `../../../../../references/external/bedrock-wiki-json-ui/json-ui-intro.md`
+- `../../../../../references/mirrors/bedrock-wiki-json-ui/json-ui-intro.md`
 
 Use this subtopic for:
 

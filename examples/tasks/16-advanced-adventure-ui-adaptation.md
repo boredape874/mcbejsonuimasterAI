@@ -4,7 +4,7 @@ Use this when a pack needs a large polished UI system: store, battle pass, quest
 
 ## Goal
 
-Adapt the architecture from `docs/50-advanced-ui-reference-analysis.md` into a target Bedrock resource pack without copying private source assets.
+Adapt the architecture from `docs/50-advanced-ui-reference-analysis.md` into a target Bedrock resource pack without copying restricted source assets.
 
 ## Recommended Skills
 
@@ -19,7 +19,7 @@ Adapt the architecture from `docs/50-advanced-ui-reference-analysis.md` into a t
 2. target pack `ui/_ui_defs.json`
 3. target pack `ui/server_form.json` or the target screen file
 4. target pack texture folders
-5. if available locally, only the matching private reference family under `references/private/advanced-ui-reference/ui-pack/ui/<feature_root>/`
+5. if available locally, only the matching private reference family under `references/restricted/advanced-ui-reference/ui-pack/ui/<feature_root>/`
 
 ## Required Decisions
 
@@ -69,7 +69,7 @@ Style constraints:
 Requirements:
 - use docs/50-advanced-ui-reference-analysis.md as the design source
 - inspect private reference files only if they exist locally
-- do not commit or paste private source JSON
+- do not commit or paste restricted source JSON
 - rewrite into the target namespace
 - keep vanilla fallback where needed
 - state exact sizes and texture paths

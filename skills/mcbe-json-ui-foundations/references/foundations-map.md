@@ -6,15 +6,15 @@
 - `../../../docs/02-mastery-map.md`
 - `../../../docs/04-source-priority.md`
 - `../../../docs/06-json-ui-rules.md`
-- `../../../docs/pack-analyses/modern-cloud-ui-reference.md`
+- `../../../docs/pack-analyses/form-router-sample.md`
 
 ## Primary source files
 
-- `../../references/source-packs/modern-cloud-ui-reference/ui/_ui_defs.json`
-- `../../references/source-packs/rpg-server-ui-reference/ui/_ui_defs.json`
-- `../../references/source-packs/farm-ui-variants/GfE8ULhgL4I/ui/_ui_defs.json`
-- `../../references/source-packs/farm-ui-variants/tDAp1yJMUYo/ui/_ui_defs.json`
-- `../../references/source-packs/farm-ui-variants/Y5dOnRAM7js/ui/_ui_defs.json`
+- `../../references/sample-packs/form-router-sample/ui/_ui_defs.json`
+- `../../references/sample-packs/game-hud-sample/ui/_ui_defs.json`
+- `../../references/sample-packs/ui-variant-samples/GfE8ULhgL4I/ui/_ui_defs.json`
+- `../../references/sample-packs/ui-variant-samples/tDAp1yJMUYo/ui/_ui_defs.json`
+- `../../references/sample-packs/ui-variant-samples/Y5dOnRAM7js/ui/_ui_defs.json`
 
 ## Common mistakes
 

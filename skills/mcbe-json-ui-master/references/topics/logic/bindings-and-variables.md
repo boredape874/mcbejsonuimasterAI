@@ -3,9 +3,9 @@
 Read:
 
 - `../../../../../docs/19-bindings-and-hardcoded-values.md`
-- `../../../../../references/official/bedrock-samples-ui/hud_screen.json`
-- `../../../../../references/official/bedrock-samples-ui/chat_screen.json`
-- `../../../../../references/official/bedrock-samples-ui/server_form.json`
+- `../../../../../references/verified-samples/official-samples-ui/hud_screen.json`
+- `../../../../../references/verified-samples/official-samples-ui/chat_screen.json`
+- `../../../../../references/verified-samples/official-samples-ui/server_form.json`
 
 Use this subtopic when exact binding and hardcoded value names matter.
 
@@ -18,7 +18,7 @@ Best for:
 
 Best references:
 
-- `../../../../references/source-packs/rpg-server-ui-reference/ui/hud_screen.json`
-- `../../../../references/external/EasyUIBuilder/ui/custom_ui/binding_example.json`
-- `../../../../references/external/EasyUIBuilder/ui/custom_ui/variable_example.json`
-- `../../../../references/external/EasyUIBuilder/ui/custom_ui/animation_example.json`
+- `../../../../references/sample-packs/game-hud-sample/ui/hud_screen.json`
+- `../../../../references/mirrors/builder-sample/ui/custom_ui/binding_example.json`
+- `../../../../references/mirrors/builder-sample/ui/custom_ui/variable_example.json`
+- `../../../../references/mirrors/builder-sample/ui/custom_ui/animation_example.json`

@@ -2,8 +2,8 @@
 
 ## Upstream authority
 
-- `ZtechNetwork/MCBVanillaResourcePack`
-- `<https://github.com/ZtechNetwork/MCBVanillaResourcePack>`
+- `vanilla resource mirror`
+- `<https://github.com/vanilla resource mirror>`
 
 ## Local repo notes
 

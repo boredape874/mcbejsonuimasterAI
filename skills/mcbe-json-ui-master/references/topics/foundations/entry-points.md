@@ -8,6 +8,6 @@ Check these first:
 
 Primary examples:
 
-- `../../../../references/source-packs/modern-cloud-ui-reference/ui/_ui_defs.json`
-- `../../../../references/source-packs/rpg-server-ui-reference/ui/_ui_defs.json`
-- `../../../../references/external/EasyUIBuilder/ui/_ui_defs.json`
+- `../../../../references/sample-packs/form-router-sample/ui/_ui_defs.json`
+- `../../../../references/sample-packs/game-hud-sample/ui/_ui_defs.json`
+- `../../../../references/mirrors/builder-sample/ui/_ui_defs.json`

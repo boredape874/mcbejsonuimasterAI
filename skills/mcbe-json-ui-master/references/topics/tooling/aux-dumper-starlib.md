@@ -1,8 +1,8 @@
-# AUX, Dumper, And StarLib
+# AUX, Dumper, And dynamic form library
 
 Read:
 
-- `../../../../../docs/18-tooling-auxgen-dumper-starlib.md`
+- `../../../../../docs/18-tooling-auxgen-dumper-dynamic form library.md`
 - `../../../../../docs/47-custom-auxid-and-form-progress.md`
 - `../../../../../docs/48-json-ui-field-catalogue.md`
 
@@ -13,11 +13,11 @@ Use this subtopic for:
 - `#item_id_aux` context
 - schema-like JSON UI field lookup
 - JSON UI Dumper stable vs preview discovery workflows
-- StarLibV2-style dynamic form architecture
+- dynamic-form-library-style dynamic form architecture
 - license-aware tool usage
 
 Upstreams:
 
 - `DreamlandMC/bedrock-auxgen`
 - `TheoristMC/JSON-UI-Dumper`
-- `pipangry/StarLibV2`
+- `pipangry/dynamic-form-library`

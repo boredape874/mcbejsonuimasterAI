@@ -6,7 +6,7 @@ The raw reference is intentionally treated as a private local source. Do not com
 
 Local private mirror convention:
 
-- `references/private/advanced-ui-reference/`
+- `references/restricted/advanced-ui-reference/`
 - ignored by git
 - imported with `scripts/import-private-advanced-ui-reference.ps1`
 - the import script normalizes the first detected Bedrock UI pack to `ui-pack`
@@ -27,15 +27,15 @@ This reference is valuable because it is not a small single-screen snippet. It d
 When the private mirror exists, open these first:
 
 ```text
-references/private/advanced-ui-reference/ui-pack/ui/_ui_defs.json
-references/private/advanced-ui-reference/ui-pack/ui/server_form.json
-references/private/advanced-ui-reference/ui-pack/ui/<feature_root>/templates/common.json
-references/private/advanced-ui-reference/ui-pack/ui/<feature_root>/templates/buttons.json
-references/private/advanced-ui-reference/ui-pack/ui/<feature_root>/templates/dialogs.json
-references/private/advanced-ui-reference/ui-pack/ui/<feature_root>/templates/toggle.json
-references/private/advanced-ui-reference/ui-pack/ui/hud_screen.json
-references/private/advanced-ui-reference/ui-pack/ui/inventory_screen.json
-references/private/advanced-ui-reference/ui-pack/ui/npc_interact_screen.json
+references/restricted/advanced-ui-reference/ui-pack/ui/_ui_defs.json
+references/restricted/advanced-ui-reference/ui-pack/ui/server_form.json
+references/restricted/advanced-ui-reference/ui-pack/ui/<feature_root>/templates/common.json
+references/restricted/advanced-ui-reference/ui-pack/ui/<feature_root>/templates/buttons.json
+references/restricted/advanced-ui-reference/ui-pack/ui/<feature_root>/templates/dialogs.json
+references/restricted/advanced-ui-reference/ui-pack/ui/<feature_root>/templates/toggle.json
+references/restricted/advanced-ui-reference/ui-pack/ui/hud_screen.json
+references/restricted/advanced-ui-reference/ui-pack/ui/inventory_screen.json
+references/restricted/advanced-ui-reference/ui-pack/ui/npc_interact_screen.json
 ```
 
 Do not start by opening every file. Start from `_ui_defs.json`, find the concrete feature-root folder registered there, then jump to the exact form family. Public docs intentionally call that folder `<feature_root>` so the repository stays source-neutral.

@@ -3,7 +3,7 @@
 Read:
 
 - `../../../../../docs/11-basics-and-mental-model.md`
-- `../../../../../references/external/bedrock-wiki-json-ui/json-ui-documentation.md`
+- `../../../../../references/mirrors/bedrock-wiki-json-ui/json-ui-documentation.md`
 
 Use this subtopic for:
 

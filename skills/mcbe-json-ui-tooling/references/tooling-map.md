@@ -2,8 +2,8 @@
 
 ## Visual editor
 
-- `../../../references/external/bedrock-json-ui-editor/README.md`
-- `../../../references/external/bedrock-json-ui-editor/app.js`
+- `../../../references/mirrors/bedrock-json-ui-editor/README.md`
+- `../../../references/mirrors/bedrock-json-ui-editor/app.js`
 - `../../../docs/09-schema-and-tooling.md`
 
 Use for:
@@ -15,8 +15,8 @@ Use for:
 
 ## Builder-generated examples
 
-- `../../../references/external/EasyUIBuilder/README.md`
-- `../../../references/external/EasyUIBuilder/ui/custom_ui/`
+- `../../../references/mirrors/builder-sample/README.md`
+- `../../../references/mirrors/builder-sample/ui/custom_ui/`
 
 Use for:
 
@@ -27,12 +27,12 @@ Use for:
 ## Minecraft Bedrock JSON UI Sample archive
 
 - `../../../docs/32-minecraft-bedrock-json-ui-sample-upstream.md`
-- `../../../references/upstreams/minecraft-bedrock-json-ui-sample/` when locally synced
+- `../../../references/reference-mirrors/minecraft-bedrock-json-ui-sample/` when locally synced
 
 Use for:
 
-- RainbowPie animation tests
-- StarLib search/filter/slicing bindings
+- sample UI suite animation tests
+- dynamic form library search/filter/slicing bindings
 - binding dump lookup
 - custom NPC and dialogue UI examples
 - integrated HUD/chat samples
@@ -75,9 +75,9 @@ Use for:
 
 ## Chest UI tooling
 
-- `../../../references/external/Chest-UI/README.md`
-- `../../../references/external/Chest-UI/RP/ui/`
-- `../../../references/external/Chest-UI/BP-scripts/extensions/forms.js`
+- `../../../references/mirrors/container-form-sample/README.md`
+- `../../../references/mirrors/container-form-sample/RP/ui/`
+- `../../../references/mirrors/container-form-sample/BP-scripts/extensions/forms.js`
 
 Use for:
 

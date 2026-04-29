@@ -6,7 +6,7 @@ The raw reference is private local material. Do not commit original pack names, 
 
 Local private mirror convention:
 
-- `references/private/compact-crafting-pocket-ui-reference/`
+- `references/restricted/compact-crafting-pocket-ui-reference/`
 - ignored by git
 - imported with `scripts/import-private-ui-reference.ps1`
 - contains only detected UI packs, their `ui/` folders, and texture files directly referenced by those UI JSON files
@@ -32,17 +32,17 @@ It is best treated as a design and layout reference, not as a source pack to cop
 When the private mirror exists, open these first:
 
 ```text
-references/private/compact-crafting-pocket-ui-reference/ui-pack/ui/_ui_defs.json
-references/private/compact-crafting-pocket-ui-reference/ui-pack/ui/server_form.json
-references/private/compact-crafting-pocket-ui-reference/ui-pack/ui/chest_screen.json
-references/private/compact-crafting-pocket-ui-reference/ui-pack/ui/cooking_pot.json
-references/private/compact-crafting-pocket-ui-reference/ui-pack/ui/hud_screen.json
-references/private/compact-crafting-pocket-ui-reference/ui-pack/ui/scoreboards.json
-references/private/compact-crafting-pocket-ui-reference/ui-pack/ui/chat_screen.json
-references/private/compact-crafting-pocket-ui-reference/ui-pack-02/ui/_ui_defs.json
-references/private/compact-crafting-pocket-ui-reference/ui-pack-02/ui/custom_pocket_containers.json
-references/private/compact-crafting-pocket-ui-reference/ui-pack-02/ui/inventoryui/vertical_screen.json
-references/private/compact-crafting-pocket-ui-reference/ui-pack-02/ui/inventoryui/vertical_scroll_screen.json
+references/restricted/compact-crafting-pocket-ui-reference/ui-pack/ui/_ui_defs.json
+references/restricted/compact-crafting-pocket-ui-reference/ui-pack/ui/server_form.json
+references/restricted/compact-crafting-pocket-ui-reference/ui-pack/ui/chest_screen.json
+references/restricted/compact-crafting-pocket-ui-reference/ui-pack/ui/cooking_pot.json
+references/restricted/compact-crafting-pocket-ui-reference/ui-pack/ui/hud_screen.json
+references/restricted/compact-crafting-pocket-ui-reference/ui-pack/ui/scoreboards.json
+references/restricted/compact-crafting-pocket-ui-reference/ui-pack/ui/chat_screen.json
+references/restricted/compact-crafting-pocket-ui-reference/ui-pack-02/ui/_ui_defs.json
+references/restricted/compact-crafting-pocket-ui-reference/ui-pack-02/ui/custom_pocket_containers.json
+references/restricted/compact-crafting-pocket-ui-reference/ui-pack-02/ui/inventoryui/vertical_screen.json
+references/restricted/compact-crafting-pocket-ui-reference/ui-pack-02/ui/inventoryui/vertical_scroll_screen.json
 ```
 
 Do not expose the original folder names or source pack names in generated docs. Refer to the two imported packs as `ui-pack` and `ui-pack-02`.

@@ -14,4 +14,4 @@ Use this subtopic for:
 
 If needed, also read:
 
-- `../../../../../references/external/bedrock-wiki-json-ui/add-hud-elements.md`
+- `../../../../../references/mirrors/bedrock-wiki-json-ui/add-hud-elements.md`

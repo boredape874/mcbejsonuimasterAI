@@ -1,0 +1,249 @@
+{
+  "version": 1,
+  "purpose": "Hierarchical Bedrock JSON UI routing from user intent to closest docs, references, and patch targets.",
+  "flow": [
+    "majorTopic",
+    "midTopic",
+    "subTopic",
+    "designFamily",
+    "dataSource",
+    "style",
+    "closestReference",
+    "patchTarget"
+  ],
+  "rules": {
+    "openOnlyOneClosestReferenceFirst": true,
+    "useVisualFitForLayout": true,
+    "userestrictedReferencesAsPatternEvidenceOnly": true,
+    "doNotPublishrestrictedNamesOrTexturePaths": true
+  },
+  "topics": [
+    {
+      "major": "HUD",
+      "mid": "RPG/status bars",
+      "subtopics": [
+        {
+          "id": "rpg_status_bars",
+          "keywords": ["rpg hud", "hp", "health", "mana", "stamina", "xp", "exp bar"],
+          "docs": ["docs/25-pmmp-json-ui-bridge.md", "docs/54-visual-fit-and-reference-discipline.md"],
+          "references": ["references/local-examples/rpg-hud/ui/rpg_hud.json", "references/local-examples/multi-animated-progress/ui/animated_bar.json"],
+          "patchTargets": ["RP/ui/hud_screen.json"],
+          "checks": ["preserve vanilla hotbar unless requested", "bars have stable height", "dynamic labels fit"]
+        },
+        {
+          "id": "vanilla_renderer_relayout",
+          "keywords": ["move hunger", "move armor", "renderer relocation", "actionbar fade", "vanilla hud renderer"],
+          "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md"],
+          "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/hud_screen.json"],
+          "patchTargets": ["RP/ui/hud_screen.json"],
+          "extract": ["centered and non-centered renderer panels", "vanilla renderer moved by control insertion", "actionbar alpha animations"],
+          "checks": ["do not hide gameplay renderers accidentally", "anchor offsets are explicit", "hotbar fallback remains unless requested"]
+        },
+        {
+          "id": "scoreboard_personal_hud",
+          "keywords": ["personal score", "scoreboard hud", "sidebar", "score"],
+          "docs": ["docs/17-community-patterns-string-score-hud.md", "docs/34-binding-patterns-value-index.md"],
+          "references": ["references/sample-packs/modern-cloud-ui-reference/ui/scoreboards.json"],
+          "patchTargets": ["RP/ui/scoreboards.json", "RP/ui/hud_screen.json"],
+          "checks": ["collection cost noted", "offline player rows handled"]
+        },
+        {
+          "id": "maze_status_reward_hud",
+          "keywords": ["cooldown hud", "effect hud", "reward hud", "status hud", "ability cooldown", "flip book hud"],
+          "docs": ["docs/33-animation-patterns-and-dumper-values.md", "docs/64-motion-form-hud-reference.md"],
+          "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_hud/maze.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_hud/reward.json"],
+          "patchTargets": ["RP/ui/hud_screen.json", "RP/ui/*.json"],
+          "extract": ["status progress bars", "effect duration bars", "cooldown overlays", "flip-book icon animations", "reward overlay grouping"],
+          "checks": ["payload contract documented", "vanilla HUD elements preserved unless requested", "thin bars do not contain cramped labels"]
+        }
+      ]
+    },
+    {
+      "major": "HUD",
+      "mid": "Hotbar relayout",
+      "subtopics": [
+        {
+          "id": "vertical_hotbar",
+          "keywords": ["vertical hotbar", "left hotbar", "right hotbar", "numbered hotbar"],
+          "docs": ["docs/16-screen-by-screen-reference.md", "docs/56-local-json-ui-reference-pack-analysis.md"],
+          "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/vertical-hotbar-left-right/VerticalHotbarLeft/ui/hud_screen.json", "references/restricted/json-ui-reference-packs/vertical-hotbar-left-right/VerticalHotbarRight/ui/hud_screen.json"],
+          "patchTargets": ["RP/ui/hud_screen.json", "RP/ui/_global_variables.json"],
+          "extract": ["grid_dimensions [1, 9]", "custom hotbar anchor", "slot label variables"],
+          "checks": ["hotbar renderer side effects", "XP and hunger visibility", "mobile safe zone"]
+        },
+        {
+          "id": "circular_hotbar",
+          "keywords": ["circular hotbar", "radial hotbar", "round hotbar"],
+          "docs": ["docs/16-screen-by-screen-reference.md", "docs/56-local-json-ui-reference-pack-analysis.md"],
+          "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/circular-hotbar/ui/hud_screen.json"],
+          "patchTargets": ["RP/ui/hud_screen.json"],
+          "extract": ["manual slot offset map", "selected slot state", "hotbar collection reuse"],
+          "checks": ["do not combine with unrelated RPG HUD unless requested", "vanilla hotbar fallback"]
+        }
+      ]
+    },
+    {
+      "major": "HUD",
+      "mid": "Interactable overlay",
+      "subtopics": [
+        {
+          "id": "minimap_or_3d_overlay",
+          "keywords": ["minimap", "3d renderer", "structure renderer", "interactive hud", "settings overlay", "hud slider"],
+          "docs": ["docs/38-advanced-json-ui-recipes.md", "docs/56-local-json-ui-reference-pack-analysis.md"],
+          "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/minimap-overlay/ui/hud_screen.json", "references/restricted/json-ui-reference-packs/minimap-overlay/ui/pause_screen.json"],
+          "patchTargets": ["RP/ui/hud_screen.json", "RP/ui/pause_screen.json", "RP/entity/*.json", "RP/models/**/*.json", "RP/render_controllers/*.json"],
+          "extract": ["toggle/settings overlay", "slider-bound position and scale", "3d_structure_renderer", "pause toggle bridge"],
+          "checks": ["input flags do not break gameplay", "addon files are copied or recreated", "renderer dependencies exist"]
+        }
+      ]
+    },
+    {
+      "major": "Chat",
+      "mid": "Command and formatting tools",
+      "subtopics": [
+        {
+          "id": "chat_command_palette",
+          "keywords": ["command palette", "fast commands", "quick command", "chat formatting", "chat sidebar"],
+          "docs": ["docs/37-vanilla-dumper-screen-recipes.md", "docs/56-local-json-ui-reference-pack-analysis.md"],
+          "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/fast-commands/ui/chat_screen.json"],
+          "patchTargets": ["RP/ui/chat_screen.json", "RP/ui/ui_common.json"],
+          "extract": ["edit_box #message_text_box", "hidden send button", "expandable categories", "button texture state family"],
+          "checks": ["remove restricted strings", "keep vanilla chat fallback", "touch keyboard mappings checked"]
+        }
+      ]
+    },
+    {
+      "major": "Tooltip",
+      "mid": "Hover text",
+      "subtopics": [
+        {
+          "id": "animated_hover_tooltip",
+          "keywords": ["hover text", "tooltip", "animated tooltip", "rarity tooltip", "item hover"],
+          "docs": ["docs/36-dumper-value-cookbook.md", "docs/56-local-json-ui-reference-pack-analysis.md"],
+          "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/animated-hover-text/ui/ui_common.json"],
+          "patchTargets": ["RP/ui/ui_common.json", "RP/ui/inventory*.json"],
+          "extract": ["alpha animation", "size animation", "hover_text binding", "rarity selector"],
+          "checks": ["normalize internal names", "replace restricted rarity textures", "tooltip does not consume pointer unexpectedly"]
+        }
+      ]
+    },
+    {
+      "major": "Server Form",
+      "mid": "Menu design",
+      "subtopics": [
+        {
+          "id": "server_form_quest_shop_skill",
+          "keywords": ["quest", "shop", "skill", "stat", "npc", "server form", "action form"],
+          "docs": ["docs/39-design-recommendation-catalog.md", "docs/40-server-form-example-index.md", "docs/53-premium-ui-pattern-reference.md"],
+          "references": ["references/sample-packs/rpg-server-ui-reference/ui/server_form.json", "references/sample-packs/modern-cloud-ui-reference/ui/server_form.json"],
+          "patchTargets": ["RP/ui/server_form.json"],
+          "checks": ["fallback long_form/custom_form remains", "button rows/cards use consistent sizing", "body/title fit"]
+        },
+        {
+          "id": "premium_shop_store_form",
+          "keywords": ["shop", "store", "auction", "crate", "reward", "gifting", "premium form", "product card"],
+          "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/63-premium-form-gallery.md"],
+          "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/server_form.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/common/common.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/menus/other/store.json"],
+          "patchTargets": ["RP/ui/server_form.json", "RP/ui/common/*.json", "RP/textures/ui/**/*.json"],
+          "extract": ["shared common templates", "header stats row", "category tabs", "card grid", "pagination", "button state textures"],
+          "checks": ["restricted texture paths replaced", "form_buttons indices documented", "product labels fit"]
+        },
+        {
+          "id": "maze_ability_progression_or_battlepass_form",
+          "keywords": ["ability", "skill tree", "battlepass", "progression", "upgrade node", "horizontal carousel"],
+          "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/64-motion-form-hud-reference.md"],
+          "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/ability/ability_upgrades_tab.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/ability/ability_xp.json"],
+          "patchTargets": ["RP/ui/server_form.json", "RP/ui/*.json"],
+          "extract": ["clipped horizontal node strip", "slider-derived offset", "locked/unlocked node states", "XP progress strip", "offset animation stabilizer"],
+          "checks": ["node size stable", "text labels fit", "restricted route markers renamed"]
+        },
+        {
+          "id": "maze_shop_purchase_or_quest_form",
+          "keywords": ["shop", "purchase popup", "quest tab", "product browser", "buy confirm", "objective browser"],
+          "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/64-motion-form-hud-reference.md"],
+          "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/shop/shop_browser.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/purchase/purchase_popup.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/quest/quest_tab.json"],
+          "patchTargets": ["RP/ui/server_form.json", "RP/ui/*.json"],
+          "extract": ["indexed item cards", "purchase state machine", "quest tab/detail split", "shared form chrome"],
+          "checks": ["form_buttons index contract documented", "same size across states", "restricted texture paths replaced"]
+        }
+      ]
+    },
+    {
+      "major": "Special Form",
+      "mid": "Device or phone shell",
+      "subtopics": [
+        {
+          "id": "diegetic_device_form",
+          "keywords": ["phone", "pda", "device form", "special form", "quest book", "profile card"],
+          "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/62-special-form-device-ui-patterns.md"],
+          "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/device_phone/second.json", "references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/server_form.json"],
+          "patchTargets": ["RP/ui/server_form.json", "RP/ui/device_*.json", "RP/ui/_ui_defs.json"],
+          "extract": ["server_form route flag", "device shell image", "region stack panels", "button factories"],
+          "checks": ["replace restricted textures", "rename markers", "preserve vanilla fallback"]
+        },
+        {
+          "id": "compact_routed_form_suite",
+          "keywords": ["compact routed form", "small custom form", "button template suite", "team panel", "custom card button"],
+          "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/62-special-form-device-ui-patterns.md"],
+          "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/server_form.json", "references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/creaturesv.json", "references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/creaturebt.json"],
+          "patchTargets": ["RP/ui/server_form.json", "RP/ui/*.json", "RP/textures/ui/buttons/*.json"],
+          "extract": ["prefix router", "compact view panels", "grid/stack form_buttons layout", "shared default/hover/locked button states"],
+          "checks": ["state controls identical size", "button label font fits", "restricted texture metadata replaced"]
+        }
+      ]
+    },
+    {
+      "major": "Battle UI",
+      "mid": "Move and actor command panel",
+      "subtopics": [
+        {
+          "id": "battle_move_selection",
+          "keywords": ["battle ui", "move selection", "actor card", "pp bar", "fight menu"],
+          "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md", "docs/54-visual-fit-and-reference-discipline.md"],
+          "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/attack.json"],
+          "patchTargets": ["RP/ui/server_form.json", "RP/ui/battle*.json"],
+          "extract": ["move button groups", "actor detail panels", "dynamic progress bars"],
+          "checks": ["long labels fit", "states same size", "form button click mapping"]
+        }
+      ]
+    },
+    {
+      "major": "Database And Storage",
+      "mid": "Grid/detail application UI",
+      "subtopics": [
+        {
+          "id": "database_detail_viewer",
+          "keywords": ["database", "encyclopedia", "details", "search", "completion"],
+          "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md"],
+          "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/creature_database.json"],
+          "patchTargets": ["RP/ui/server_form.json", "RP/ui/database*.json"],
+          "extract": ["grid page", "detail page", "search/back/page controls"],
+          "checks": ["detail text has enough width", "grid cells fixed", "search route documented"]
+        },
+        {
+          "id": "storage_box_ui",
+          "keywords": ["pc storage", "box", "storage", "party slots", "filter"],
+          "docs": ["docs/60-advanced-ui-set-special-ui-reference.md", "docs/61-advanced-ui-set-file-pattern-routes.md"],
+          "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/creature/pc.json"],
+          "patchTargets": ["RP/ui/server_form.json", "RP/ui/storage*.json"],
+          "extract": ["storage grid", "tool button stack", "party strip"],
+          "checks": ["slot size consistent", "filter/search controls visible", "mobile safe zone"]
+        }
+      ]
+    },
+    {
+      "major": "Loading",
+      "mid": "Progress screen",
+      "subtopics": [
+        {
+          "id": "world_loading_progress",
+          "keywords": ["loading screen", "progress screen", "percent", "joining screen", "world loading"],
+          "docs": ["docs/53-premium-ui-pattern-reference.md", "docs/54-visual-fit-and-reference-discipline.md"],
+          "references": ["references/verified-samples/bedrock-samples-ui/progress_screen.json"],
+          "patchTargets": ["RP/ui/progress_screen.json"],
+          "checks": ["percent label binding tested", "bar polarity correct", "background texture path exists"]
+        }
+      ]
+    }
+  ]
+}
