@@ -8,26 +8,26 @@ If the request is broad or ambiguous, read `../../../docs/27-token-efficient-rou
 
 Do not load every docs file by default.
 
-For any task involving local packs, restricted local mirrors, community snippets, community chat notes, sample archives, or reference-derived design work, read `reference-governance.md` before summarizing source usage or adapting code.
+For any task involving local packs, private mirrors, community snippets, community chat notes, sample archives, or reference-derived design work, read `reference-governance.md` before summarizing source usage or adapting code.
 
-For visual tasks involving layout, alignment, spacing, text fit, HUD composition, server-form design, or screenshot matching, read `visual-fit-discipline.md` in this skill first. If a repository checkout exists, also prefer `project-root/docs/54-visual-fit-and-reference-discipline.md` as the fuller project copy.
+For visual tasks involving layout, alignment, spacing, text fit, HUD composition, server-form design, or screenshot matching, read `visual-fit-discipline.md` in this skill first. If a repository checkout exists, also prefer `mcbejsonuimasterAI/docs/54-visual-fit-and-reference-discipline.md` as the fuller project copy.
 
 For visual design direction, read `design-reference-atlas.md` and `diagrammatic-workflows.md` in this skill first. If a repository checkout exists, also prefer:
 
-- `project-root/docs/58-design-reference-atlas.md`
-- `project-root/docs/59-diagrammatic-workflows.md`
-- `project-root/data/design-reference-index.json`
+- `mcbejsonuimasterAI/docs/58-design-reference-atlas.md`
+- `mcbejsonuimasterAI/docs/59-diagrammatic-workflows.md`
+- `mcbejsonuimasterAI/data/design-reference-index.json`
 
 For broad "which reference should I use?" tasks, read `reference-task-taxonomy.md` and `hierarchical-task-router.md` in this skill first. If a repository checkout exists, also prefer:
 
-- `project-root/docs/55-reference-task-taxonomy.md`
-- `project-root/docs/57-hierarchical-task-router.md`
-- `project-root/data/reference-task-index.json`
-- `project-root/data/reference-hierarchy.json`
+- `mcbejsonuimasterAI/docs/55-reference-task-taxonomy.md`
+- `mcbejsonuimasterAI/docs/57-hierarchical-task-router.md`
+- `mcbejsonuimasterAI/data/reference-task-index.json`
+- `mcbejsonuimasterAI/data/reference-hierarchy.json`
 
-For local restricted reference packs, read `local-json-ui-reference-packs.md` first. Open raw restricted files only when the matching neutral reference ID is selected, and keep public output at the neutral family/role level.
+For local private reference packs, read `local-json-ui-reference-packs.md` first. Open raw private files only when the matching neutral reference ID is selected, and keep public output at the neutral family/role level.
 
-For `advanced-ui-set` restricted special-form references, read `advanced-ui-set-special-ui.md` first. If the task is a phone/PDA/device form, also read `special-device-form-patterns.md`. If the task is a polished shop/store, auction, crate, reward, or product-card form, also read `../../../docs/63-premium-form-gallery.md`.
+For `advanced-ui-set` private special-form references, read `advanced-ui-set-special-ui.md` first. If the task is a phone/PDA/device form, also read `special-device-form-patterns.md`. If the task is a polished shop/store, auction, crate, reward, or product-card form, also read `../../../docs/63-premium-form-gallery.md`.
 
 ## Route by request type
 
@@ -105,11 +105,13 @@ For server form visual direction, NPC dialogue style, chest/furnace form look, R
 
 For feature-labeled server form examples such as quest window, shop window, stat window, skill window, NPC dialogue, settings panel, chest form, or furnace/process form, prefer `../../../docs/40-server-form-example-index.md`.
 
+For server form search bars that filter `form_buttons` by button text, use `topics/server-forms/search-bar.md`.
+
 For premium multi-route form dispatch, icon rows with loading placeholders, and chest/menu-style form bridges, prefer `../../../docs/53-premium-ui-pattern-reference.md`.
 
 For polished shop/store, auction/listing, crate/reward, city/claim, generic long form, and modal form skins from the restricted neutral design gallery, prefer `../../../docs/63-premium-form-gallery.md`.
 
-For phone/PDA/device special forms, compact routed form suites, reusable button templates, polished shop/store forms, auction/crate/reward forms, battle command panels, database/storage UIs, HUD renderer relocation, and advanced title-flag routers from the `advanced-ui-set` restricted reference set, prefer `../../../docs/60-advanced-ui-set-special-ui-reference.md`, `../../../docs/61-advanced-ui-set-file-pattern-routes.md`, `../../../docs/62-special-form-device-ui-patterns.md`, and `../../../docs/63-premium-form-gallery.md`.
+For phone/PDA/device special forms, compact routed form suites, reusable button templates, polished shop/store forms, auction/crate/reward forms, battle command panels, database/storage UIs, HUD renderer relocation, and advanced title-flag routers from the `advanced-ui-set` private reference set, prefer `../../../docs/60-advanced-ui-set-special-ui-reference.md`, `../../../docs/61-advanced-ui-set-file-pattern-routes.md`, `../../../docs/62-special-form-device-ui-patterns.md`, and `../../../docs/63-premium-form-gallery.md`.
 
 If a server form request is visual but the user did not choose a style, present 2-3 design directions from `../../../docs/39-design-recommendation-catalog.md` or `../../../docs/40-server-form-example-index.md` before making final visual edits.
 
@@ -133,9 +135,9 @@ For combined patterns such as animated tabs, searchable forms, item icon rows, p
 
 For world loading screens, indeterminate loading strips, HUD progress clipping, boss-bar collection rendering, pocket-safe progress layout, and container/cooking station screens, prefer `../../../docs/53-premium-ui-pattern-reference.md`.
 
-For animated hover text, vertical or circular hotbar, chat command palette, minimap-style interactive HUDs, and restricted local reference pack patterns, prefer `../../../docs/56-local-json-ui-reference-pack-analysis.md`.
+For animated hover text, vertical or circular hotbar, chat command palette, minimap-style interactive HUDs, and private local reference pack patterns, prefer `../../../docs/56-local-json-ui-reference-pack-analysis.md`.
 
-For protocol HUD suites using one title/actionbar payload to feed many components, prefer `../../../docs/60-advanced-ui-set-special-ui-reference.md` and open `references/restricted/advanced-ui-set-ui/restricted-suite/ui/phud/phud.json` only if the mirror exists. For vanilla HUD renderer relocation or actionbar fade, use `references/restricted/advanced-ui-set-ui/restricted-suite/ui/hud_screen.json` instead.
+For protocol HUD suites using one title/actionbar payload to feed many components, prefer `../../../docs/60-advanced-ui-set-special-ui-reference.md` and open `references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/phud/phud.json` only if the mirror exists. For vanilla HUD renderer relocation or actionbar fade, use `references/restricted/advanced-ui-set-ui/restricted-suite-c-rp/ui/hud_screen.json` instead.
 
 ### bug or rendering failure
 
@@ -197,7 +199,7 @@ Then load:
 - `topics/tooling/index.md`
 - and only the exact needed subtopic under `topics/tooling/`
 
-For bedrock-auxgen, JSON-UI-Dumper, or dynamic-form-library, prefer `topics/tooling/aux-dumper-dynamic form library.md`.
+For bedrock-auxgen, JSON-UI-Dumper, or StarLibV2, prefer `topics/tooling/aux-dumper-starlib.md`.
 
 For Dumper animation values, use `../../../docs/33-animation-patterns-and-dumper-values.md` after the tooling note.
 
@@ -211,20 +213,20 @@ Then load only one matching mirror under `references/local-examples/`, or one ex
 ### broad JSON UI example archive
 
 Use `../../../docs/29-mcbe-json-ui-resource-upstream.md`.
-Then search `references/reference-mirrors/mcbe-json-ui-resource/` with `rg` and open only one exact tutorial or sample screen.
+Then search `references/upstreams/mcbe-json-ui-resource/` with `rg` and open only one exact tutorial or sample screen.
 
 For focused tutorial files under `Json ui tutorial`, use `../../../docs/49-json-ui-tutorial-index.md` before opening files.
 
-For the restricted advanced UI reference, use `../../../docs/50-advanced-ui-reference-analysis.md`. Open raw restricted files only if `references/restricted/advanced-ui-reference/` exists locally.
+For the private advanced adventure UI reference, use `../../../docs/50-advanced-ui-reference-analysis.md`. Open raw private files only if `references/restricted/advanced-ui-reference/` exists locally.
 
-For the restricted compact UI reference, use `../../../docs/51-compact-crafting-pocket-ui-reference.md`. Open raw restricted files only if `references/restricted/compact-crafting-pocket-ui-reference/` exists locally.
+For the private compact crafting and pocket UI reference, use `../../../docs/51-compact-crafting-pocket-ui-reference.md`. Open raw private files only if `references/restricted/compact-crafting-pocket-ui-reference/` exists locally.
 
-For the restricted special UI reference, use `../../../docs/60-advanced-ui-set-special-ui-reference.md`, `../../../docs/61-advanced-ui-set-file-pattern-routes.md`, and `../../../docs/63-premium-form-gallery.md`. Open raw restricted files only under neutral `references/restricted/advanced-ui-set-ui/restricted-suite*` or `references/restricted/advanced-ui-set-ui/premium-form-gallery/` paths.
+For the private `advanced-ui-set` special UI reference, use `../../../docs/60-advanced-ui-set-special-ui-reference.md`, `../../../docs/61-advanced-ui-set-file-pattern-routes.md`, and `../../../docs/63-premium-form-gallery.md`. Open raw private files only under neutral `references/restricted/advanced-ui-set-ui/monster-rpg-*` or `references/restricted/advanced-ui-set-ui/premium-form-gallery-a/` paths.
 
 ### minecraft-bedrock-json-ui-sample archive
 
 Use `../../../docs/32-minecraft-bedrock-json-ui-sample-upstream.md`.
-Then search `references/reference-mirrors/minecraft-bedrock-json-ui-sample/` with `rg` and open only one exact sample UI suite, dynamic form library, NPC, binding, HUD, or scroll file.
+Then search `references/upstreams/minecraft-bedrock-json-ui-sample/` with `rg` and open only one exact RainbowPie, StarLib, NPC, binding, HUD, or scroll file.
 
 ### file or code fragment adaptation
 
