@@ -75,6 +75,8 @@ Then load:
 
 For community string splitting, fixed-width slicing, or Unicode byte-width payloads, prefer `topics/logic/string-splitting-and-slicing.md`.
 
+For `%.s` string formatting, fixed-width padding, first-line extraction, hover-text trimming, or section-sign encoding hazards, prefer `topics/logic/text-formatting-and-slicing.md`.
+
 For hardcoded value discovery and binding value limits, prefer `../../../docs/19-bindings-and-hardcoded-values.md`.
 
 For binding dumps, search/filter bindings, form collections, or value-source examples, prefer `../../../docs/34-binding-patterns-value-index.md`.
@@ -88,6 +90,8 @@ Then load:
 - and only the exact needed subtopic under `topics/hud-chat/`
 
 For individual scoreboard HUD or interactable HUD menus, prefer `topics/hud-chat/personal-score-and-interactable-hud.md`.
+
+For hiding protocol/control messages from chat, prefer `topics/hud-chat/chat-message-filtering.md`.
 
 For PMMP-driven title/actionbar/chat bridges, prefer `../../../docs/25-pmmp-json-ui-bridge.md`.
 
@@ -106,6 +110,8 @@ For server form visual direction, NPC dialogue style, chest/furnace form look, R
 For feature-labeled server form examples such as quest window, shop window, stat window, skill window, NPC dialogue, settings panel, chest form, or furnace/process form, prefer `../../../docs/40-server-form-example-index.md`.
 
 For server form search bars that filter `form_buttons` by button text, case-sensitive contains checks, or generated lowercase/character-map input normalization, use `topics/server-forms/search-bar.md`.
+
+For custom server-form button grids, image rows, polished header forms, or form designs derived from local visual references, use `topics/server-forms/visual-form-patterns.md`.
 
 For premium multi-route form dispatch, icon rows with loading placeholders, and chest/menu-style form bridges, prefer `../../../docs/53-premium-ui-pattern-reference.md`.
 
@@ -132,6 +138,8 @@ For Dumper-derived values such as `factory`, `collection_name`, `grid_dimensions
 For screen-specific vanilla recipes from HUD, chat, chest, inventory, UI common, or server form, prefer `../../../docs/37-vanilla-dumper-screen-recipes.md`.
 
 For combined patterns such as animated tabs, searchable forms, item icon rows, polished long lists, interactive HUD overlays, or clipped carousels, prefer `../../../docs/38-advanced-json-ui-recipes.md`.
+
+For static start-screen or panorama replacement with a fixed image, prefer `topics/patterns/start-screen-static-background.md`.
 
 For world loading screens, indeterminate loading strips, HUD progress clipping, boss-bar collection rendering, pocket-safe progress layout, and container/cooking station screens, prefer `../../../docs/53-premium-ui-pattern-reference.md`.
 

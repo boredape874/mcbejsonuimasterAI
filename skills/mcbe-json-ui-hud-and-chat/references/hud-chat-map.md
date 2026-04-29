@@ -24,6 +24,7 @@
 - Modern Cloud UI Reference: custom chat panel, scoreboard split, title-driven HP bar
 - RPG Server UI Reference: hp/xp/mp/lv/gold HUD, levelup actionbar image
 - Farm UI variants: alternate HUD and chat pairings
+- Chat protocol filtering: hide rendered chat rows whose `#text` contains a server-owned marker while preserving `#chat_visible`; see `mcbe-json-ui-master/references/topics/hud-chat/chat-message-filtering.md`.
 - advanced-ui-set neutral reference: title-payload HUD router with separate actionbar, phone, sidebar, currency, loading, and wait widgets. Use `../../../docs/60-advanced-ui-set-special-ui-reference.md` before opening raw restricted files.
 - advanced-ui-set compact renderer reference: vanilla renderer relocation and actionbar fade without fully replacing hotbar or gameplay HUD. Use `../../../docs/61-advanced-ui-set-file-pattern-routes.md` to route this separately from protocol HUD work.
 - advanced-ui-set maze reference: status HUD, effect duration bars, cooldown overlays, reward overlays, and flip-book animation values. Use `../../../docs/64-motion-form-hud-reference.md` before opening raw restricted files.

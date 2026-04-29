@@ -1,6 +1,6 @@
 ---
 name: mcbe-json-ui-logic
-description: Explain and implement Bedrock JSON UI logic rules. Use when Codex must analyze bindings, preserved text, string slicing, actionbar or title driven protocols, visibility expressions, value extraction, and condition-based UI behavior in Minecraft Bedrock JSON UI.
+description: Explain and implement Bedrock JSON UI logic rules. Use when Codex must analyze bindings, preserved text, string slicing, printf-style `%.s` text formatting, fixed-width payloads, first-line extraction, actionbar or title driven protocols, visibility expressions, value extraction, and condition-based UI behavior in Minecraft Bedrock JSON UI.
 ---
 
 # MCBE JSON UI Logic

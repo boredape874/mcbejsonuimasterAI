@@ -7,6 +7,7 @@ Subtopics:
 - `sliders-and-toggles.md`
 - `topbar-and-utility-patterns.md`
 - `community-snippets.md`
+- `start-screen-static-background.md`
 
 External docs:
 

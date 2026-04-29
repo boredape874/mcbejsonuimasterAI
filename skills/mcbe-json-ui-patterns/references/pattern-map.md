@@ -158,3 +158,13 @@
 - verified HEAD on 2026-04-29: `62bb2a8ae10b7c44d34206d337bc3998498b095a`
 - useful pattern: route a special server form by title token, render a custom dialog shell, use `collection_panel` over `form_buttons` for payload fields, and gate a skip/visibility state with a toggle binding.
 - note: reference project license/readme disallows copying or redistributing code; use it only for structural study.
+
+## static start background
+
+- `mcbe-json-ui-master/references/topics/patterns/start-screen-static-background.md`
+- pattern: patch `start.start_screen` to use a custom `start.background` image for `$screen_bg_content`.
+
+## binding text slicing
+
+- `mcbe-json-ui-master/references/topics/logic/text-formatting-and-slicing.md`
+- pattern: use `%.s`, `%m.ns`, and `%-m.ns` expressions to trim, pad, split, or first-line-extract text payloads without scripts.

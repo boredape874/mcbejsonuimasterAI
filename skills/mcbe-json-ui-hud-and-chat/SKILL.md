@@ -1,6 +1,6 @@
 ---
 name: mcbe-json-ui-hud-and-chat
-description: Build, analyze, and debug Bedrock HUD and chat driven UI. Use when Codex must work on `hud_screen.json`, `chat_screen.json`, scoreboard injection, title overlays, actionbar driven UI, bottom chat panels, or message-protocol-based HUD behavior in Minecraft Bedrock JSON UI.
+description: Build, analyze, and debug Bedrock HUD and chat driven UI. Use when Codex must work on `hud_screen.json`, `chat_screen.json`, scoreboard injection, title overlays, actionbar driven UI, bottom chat panels, hidden chat protocol messages, or message-protocol-based HUD behavior in Minecraft Bedrock JSON UI.
 ---
 
 # MCBE JSON UI HUD And Chat

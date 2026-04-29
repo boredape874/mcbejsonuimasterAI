@@ -6,3 +6,4 @@ Subtopics:
 - `scoreboards-and-chat-panels.md`
 - `topbar-and-tablist.md`
 - `personal-score-and-interactable-hud.md`
+- `chat-message-filtering.md`

@@ -29,6 +29,9 @@
 - Community server-form search-bar pattern: `common.text_edit_box` plus button visibility binding against `#form_button_text`.
 - Case-normalized search-bar extension: generated text helper with `property_bag` character mapping; normalize both the typed query and the server-provided searchable key when case-insensitive behavior matters.
 - Dialogue-style server form shell reference: title-token routed form, `common_dialogs.main_panel_no_buttons` shell, `collection_panel` payload extraction, and skip/visibility toggle state. Use as structure only; do not copy restricted reference code.
+- Custom button grid pattern: manually placed `form_buttons` indexes, custom default/hover/pressed textures, item renderer or texture rendering from `#form_button_texture`, and optional hover text marker.
+- Image row form pattern: server encodes image marker, padding payload, and texture suffix into a form button/label string; JSON UI hides normal text and derives the image texture path.
+- Polished header form pattern: fixed form shell, header content factory, close button, state buttons, and marker-based button sizing/state. Rewrite external helper namespaces into local templates unless the helper library is intentionally included.
 - Modern Cloud UI Reference: `customUI_` plus typed suffix routing
 - RPG Server UI Reference: chest or furnace token routing
 - `farm-ui-variants/GfE8ULhgL4I`: lightweight server form skin override

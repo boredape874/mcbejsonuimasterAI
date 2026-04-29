@@ -8,6 +8,7 @@ Subtopics:
 - `string-protocols.md`
 - `utility-string-routing.md`
 - `string-splitting-and-slicing.md`
+- `text-formatting-and-slicing.md`
 
 External docs:
 

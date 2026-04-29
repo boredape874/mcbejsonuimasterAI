@@ -5,6 +5,7 @@ Subtopics:
 - `title-routing.md`
 - `container-substitution.md`
 - `search-bar.md`
+- `visual-form-patterns.md`
 
 Design routing:
 

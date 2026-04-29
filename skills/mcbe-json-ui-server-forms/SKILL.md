@@ -1,6 +1,6 @@
 ---
 name: mcbe-json-ui-server-forms
-description: Analyze and implement Bedrock JSON UI server form customization. Use when Codex must modify `server_form.json`, long or custom form routing, chest or furnace form substitution, title-prefix based form detection, or multi-form factory patterns in Minecraft Bedrock JSON UI.
+description: Analyze and implement Bedrock JSON UI server form customization. Use when Codex must modify `server_form.json`, long or custom form routing, chest or furnace form substitution, title-prefix based form detection, custom server form button grids, image rows inside forms, polished form shells, or multi-form factory patterns in Minecraft Bedrock JSON UI.
 ---
 
 # MCBE JSON UI Server Forms
