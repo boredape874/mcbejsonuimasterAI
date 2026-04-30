@@ -5,6 +5,7 @@
 //   1) compile-all-examples: run pipeline on every examples/ir/*.yaml under workspace/_test_<n>/
 //   2) validator-negative:   feed a deliberately broken ui.json and expect ok=false
 //   3) solver-edge:          inline IR using equal_gap_y, edge_offset, same_size
+//   4) layout-audit:          group centering + solved-geometry warnings
 
 import { mkdir, writeFile, rm, readFile } from "node:fs/promises";
 import { resolve, basename, extname } from "node:path";
@@ -158,10 +159,81 @@ constraints:
   }
 }
 
+async function category4() {
+  console.log("[4] layout-audit");
+  const wsDir = resolve(REPO, "workspace", "_test_layout_audit");
+  await rm(wsDir, { recursive: true, force: true });
+  await mkdir(wsDir, { recursive: true });
+  const ir = `screen: layout_audit
+base_resolution: [640, 360]
+elements:
+  - id: panel
+    kind: panel
+    anchor: center
+    pos: [0, 0]
+    size: [300, 120]
+  - id: left
+    parent: panel
+    kind: button
+    anchor: top_left
+    pos: [12, 20]
+    size: [70, 28]
+  - id: middle
+    parent: panel
+    kind: button
+    anchor: top_left
+    pos: [96, 20]
+    size: [70, 28]
+  - id: right
+    parent: panel
+    kind: button
+    anchor: top_left
+    pos: [180, 20]
+    size: [70, 28]
+  - id: risky_label
+    parent: panel
+    kind: label
+    anchor: top_left
+    pos: [260, 96]
+    size: [60, 10]
+    props:
+      text: "Very Long Label"
+      localize: false
+      font_size: large
+constraints:
+  - { op: same_size, ids: [left, middle, right] }
+  - { op: align_y, ids: [left, middle, right], edge: start }
+  - { op: equal_gap_x, ids: [left, middle, right], gap: 14 }
+  - { op: center_group_x, ids: [left, middle, right] }
+`;
+  await writeFile(resolve(wsDir, "ir.yaml"), ir, "utf8");
+  const r = await run(node, ["tools/run.mjs", "workspace/_test_layout_audit/ir.yaml"]);
+  const report = await readJsonSafe(resolve(wsDir, "report.json"));
+  const solved = await readJsonSafe(resolve(wsDir, "solved.json"));
+  record("audit:pipeline-ok-with-warnings", r.code === 0 && report && report.ok === true && report.warnings.length >= 2,
+    report ? { warnings: report.warnings.length } : { report: "missing" });
+  if (solved) {
+    const p = solved.rects.panel;
+    const a = solved.rects.left;
+    const b = solved.rects.middle;
+    const c = solved.rects.right;
+    const left = Math.min(a.x, b.x, c.x);
+    const right = Math.max(a.x + a.w, b.x + b.w, c.x + c.w);
+    record("audit:center_group_x", ((left + right) / 2) === (p.x + p.w / 2), { group: [left, right], panel: p });
+  } else {
+    record("audit:solved.json-present", false);
+  }
+  const sawBounds = !!(report && report.warnings.find((w) => /outside parent/.test(w.message)));
+  const sawLabel = !!(report && report.warnings.find((w) => /label height/.test(w.message)));
+  record("audit:flags-parent-overflow", sawBounds);
+  record("audit:flags-label-height", sawLabel);
+}
+
 (async () => {
   await category1();
   await category2();
   await category3();
+  await category4();
   console.log("");
   console.log(`Total: ${PASS.length} passed, ${FAIL.length} failed`);
   if (FAIL.length) {

@@ -168,13 +168,13 @@
       "properties": {
         "op": {
           "type": "string",
-          "enum": ["align_x", "align_y", "same_size", "same_width", "same_height"]
+          "enum": ["align_x", "align_y", "center_group_x", "center_group_y", "same_size", "same_width", "same_height"]
         },
         "edge": {
           "type": "string",
           "enum": ["start", "center", "end"],
           "default": "start",
-          "description": "Used by align_x/align_y."
+          "description": "Used by align_x/align_y. Ignored by center_group_x/center_group_y and same_* constraints."
         },
         "ids": {
           "type": "array",

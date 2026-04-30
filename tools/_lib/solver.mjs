@@ -67,6 +67,39 @@ function applyConstraint(c, rects, parents, log) {
     return changed;
   }
 
+  if (c.op === "center_group_x" || c.op === "center_group_y") {
+    const group = c.ids.map((id) => ({ id, r: rects.get(id), p: parents.get(id) }));
+    const parentId = group[0] && group[0].p;
+    if (!parentId || group.some((g) => g.p !== parentId)) {
+      log.push({ op: c.op, ids: c.ids, error: "elements have different parents" });
+      return false;
+    }
+    const parent = rects.get(parentId);
+    if (!parent) {
+      log.push({ op: c.op, ids: c.ids, error: "unknown parent" });
+      return false;
+    }
+    if (c.op === "center_group_x") {
+      const left = Math.min(...group.map((g) => g.r.x));
+      const right = Math.max(...group.map((g) => g.r.x + g.r.w));
+      const delta = Math.round((parent.x + parent.w / 2) - ((left + right) / 2));
+      if (delta !== 0) {
+        for (const g of group) g.r.x += delta;
+        changed = true;
+      }
+    } else {
+      const top = Math.min(...group.map((g) => g.r.y));
+      const bottom = Math.max(...group.map((g) => g.r.y + g.r.h));
+      const delta = Math.round((parent.y + parent.h / 2) - ((top + bottom) / 2));
+      if (delta !== 0) {
+        for (const g of group) g.r.y += delta;
+        changed = true;
+      }
+    }
+    if (changed) log.push({ op: c.op, ids: c.ids });
+    return changed;
+  }
+
   if (c.op === "symmetric_x" || c.op === "symmetric_y") {
     const [aId, bId] = c.ids;
     const a = rects.get(aId), b = rects.get(bId);

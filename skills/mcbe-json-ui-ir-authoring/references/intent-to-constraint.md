@@ -12,9 +12,11 @@ Use this when translating user wording (Korean or English) into IR constraints.
 | "왼쪽 정렬 / align left" | `{op: align_x, edge: start, ids: [...]}` |
 | "오른쪽 정렬 / align right" | `{op: align_x, edge: end, ids: [...]}` |
 | "수평 중앙 정렬 / center horizontally" | `{op: align_x, edge: center, ids: [...]}` |
+| "이 버튼 줄/카드 묶음 전체를 가운데 / center the whole row/group" | `{op: center_group_x, ids: [...]}` |
 | "위쪽 정렬 / align top" | `{op: align_y, edge: start, ids: [...]}` |
 | "아래쪽 정렬 / align bottom" | `{op: align_y, edge: end, ids: [...]}` |
 | "수직 중앙 정렬 / center vertically" | `{op: align_y, edge: center, ids: [...]}` |
+| "이 열 전체를 세로 가운데 / center the whole column/group vertically" | `{op: center_group_y, ids: [...]}` |
 | "균등 간격 가로 / equal horizontal spacing" | `{op: equal_gap_x, ids: [...]}` |
 | "정확히 8px 간격으로 / 8px gap exactly" | `{op: equal_gap_x, ids: [...], gap: 8}` |
 | "균등 간격 세로 / equal vertical spacing" | `{op: equal_gap_y, ids: [...]}` |
@@ -26,7 +28,7 @@ Use this when translating user wording (Korean or English) into IR constraints.
 - Two buttons centered side-by-side at the bottom of a modal:
   `same_size` + `symmetric_x` + `align_y(edge: center)` (or `edge: end`)
 - Tab row at top:
-  `same_size` + `align_y(edge: start)` + `equal_gap_x`
+  `same_size` + `align_y(edge: start)` + `equal_gap_x` + `center_group_x` when the row should be centered
 - Sidebar list of cards:
   `same_width` + `align_x(edge: start)` + `equal_gap_y`
 - Header label centered above body:

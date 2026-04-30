@@ -61,6 +61,8 @@ All constraints are evaluated to a fixed point (max 32 iterations). Conflicts ar
 ```yaml
 - { op: align_x,    ids: [a, b, c], edge: start | center | end }   # default start
 - { op: align_y,    ids: [a, b, c], edge: start | center | end }
+- { op: center_group_x, ids: [a, b, c] }   # center the whole group in the common parent
+- { op: center_group_y, ids: [a, b, c] }
 - { op: same_size,  ids: [a, b, c] }
 - { op: same_width, ids: [a, b, c] }
 - { op: same_height,ids: [a, b, c] }
@@ -85,7 +87,8 @@ Allowed edges: `left`, `right`, `top`, `bottom`, `center_x`, `center_y`.
 
 ## Authoring rules
 
-- Always declare a constraint when the user expressed (or the image clearly shows) symmetry, alignment, equal spacing, or equal sizing. Do **not** rely on hand-tuned `pos` values to "look symmetric" — declare it.
+- Always declare a constraint when the user expressed (or the image clearly shows) symmetry, alignment, equal spacing, group centering, or equal sizing. Do **not** rely on hand-tuned `pos` values to "look symmetric" — declare it.
+- For button rows, card rows, tab rows, and slot clusters that should sit in the middle of a parent, use `center_group_x` or `center_group_y` in addition to `same_size` and `equal_gap_*`.
 - Pixels by default. Strings (`%`, `%c`, `fill`, `default`) require `units.allowPercent: true`.
 - Constraint ids must reference existing elements. Cross-parent symmetry is not allowed.
 
@@ -99,3 +102,14 @@ Allowed edges: `left`, `right`, `top`, `bottom`, `center_x`, `center_y`.
 - `controls` arrays representing the parent → child tree
 
 Bindings, animations, and `$variable` plumbing are added afterward by editing the compiled file using the knowledge layer.
+
+## Solved geometry audit
+
+When `tools/validate.mjs` receives both `ui.json` and `solved.json`, it also checks layout-risk warnings:
+
+- non-positive solved sizes
+- elements outside their parent rect
+- static labels whose estimated text height is larger than the solved label rect
+- constraint errors logged by the solver
+
+These warnings are not a substitute for in-game testing, but they catch the common AI failure modes before the JSON is hand-finished.

@@ -30,6 +30,7 @@ If unsure, ask the user one short question.
 5. Add **constraints** for every intent the user expressed or that is visually obvious:
    - left/right or top/bottom pair → `symmetric_x` / `symmetric_y`
    - row/column of repeating items → `same_size` + `equal_gap_x` / `equal_gap_y`
+   - centered row/cluster → `center_group_x` / `center_group_y` after equal-gap and same-size constraints
    - any "aligned with" intent → `align_x` / `align_y`
    - exact edge match → `edge_eq`
    - exact offset between edges → `edge_offset` with `delta`
@@ -40,10 +41,12 @@ If unsure, ask the user one short question.
 
 - Pixels by default. Never use `%`, `%c`, `%cm`, `fill`, `default` unless the user explicitly asked.
 - Every visible pair/row/group with implied symmetry or alignment **must** declare a constraint. Do not rely on hand-tuned `pos` values.
+- Every centered row or card cluster **must** declare `center_group_x` or `center_group_y`; do not eyeball the group's first `pos`.
 - Constraint ids must reference existing `elements`. No floating ids.
 - Do not edit the compiled `ui.json` to fix layout. Edit `ir.yaml` and recompile.
 - Bindings, animations, and Script API are out of scope for IR. Add them to the compiled `ui.json` afterward as a separate patch.
 - The solved layout from `solved.json` or compiled `ui.json` is the geometry source of truth. Do not reinterpret or approximate positions/sizes during the hand-finish phase.
+- Treat `report.json` geometry warnings as layout failures unless the IR intentionally defines a clipped viewport.
 
 ## Output expectations
 

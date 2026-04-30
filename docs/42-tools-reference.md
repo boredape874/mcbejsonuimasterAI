@@ -48,7 +48,7 @@ Exit codes: `5` schema error, `6` cross-ref error, `64` usage.
 
 ## tools/solve.mjs `<ir.yaml> <solved.json>`
 
-Computes absolute pixel rects per element, then iterates declared constraints to a fixed point (≤ 32 iterations). Emits `solved.json` with:
+Computes absolute pixel rects per element, then iterates declared constraints to a fixed point (≤ 32 iterations). Supported constraints include alignment, equal sizing, equal gaps, pair symmetry, whole-group centering (`center_group_x/y`), and edge equality/offset. Emits `solved.json` with:
 
 ```json
 {
@@ -73,7 +73,7 @@ Exit code `8` if input is not a solved IR file.
 
 ## tools/validate.mjs `<ui.json> [<solved.json>]`
 
-Structural sanity checks on the compiled JSON UI: namespace, root_panel, types, anchor enums, control reference shapes. Writes a sibling `report.json`.
+Structural sanity checks on the compiled JSON UI: namespace, root_panel, types, anchor enums, control reference shapes. When a `solved.json` path is provided, it also audits geometry risk: parent overflow, non-positive sizes, static label height, and solver constraint errors. Writes a sibling `report.json`.
 
 Exit code `9` on validation failure.
 

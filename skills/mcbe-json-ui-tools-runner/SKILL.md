@@ -19,6 +19,8 @@ This runs ir-validate → solve → compile → validate and writes:
 - `workspace/<name>/ui.json`     — compiled Bedrock JSON UI
 - `workspace/<name>/report.json` — validator output
 
+The validator uses both `ui.json` and `solved.json`. Warnings about parent overflow, static label clipping, or solver constraint errors must be reviewed before hand-finishing the JSON UI.
+
 ## Step-by-step (for debugging)
 
 ```
@@ -53,7 +55,7 @@ node tools/diff.mjs   target.png workspace/<name>/preview.png
 
 - Never edit `ui.json` to fix layout. Edit `ir.yaml` and recompile.
 - Never bypass `tools/run.mjs` to "save time" when the user expects a validated result.
-- Always report `report.json` warnings to the user, even if `ok=true`.
+- Always report `report.json` warnings to the user, even if `ok=true`; geometry warnings are treated as layout defects unless intentionally documented.
 - For non-layout work (bindings, animations, Script API), hand off to the knowledge layer skills and only then patch `ui.json` as a separate, surgical edit.
 
 ## References
