@@ -15,7 +15,7 @@ function flattenSolvedRects(solved) {
   const baseH = (solved.base_resolution && solved.base_resolution[1]) || 1080;
   const out = [];
   for (const [id, r] of Object.entries(solved.rects)) {
-    if (id === "__root__") continue;
+    if (id === "__root__" || id === "__screen__") continue;
     out.push({ id, x: r.x, y: r.y, w: r.w, h: r.h });
   }
   return { baseW, baseH, rects: out };

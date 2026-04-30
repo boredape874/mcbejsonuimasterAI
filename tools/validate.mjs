@@ -70,7 +70,6 @@ function geometryIssues(solved) {
   if (!solved || !solved.rects || !Array.isArray(solved.elements)) return issues;
   const rects = solved.rects;
   const elements = solved.elements;
-  const byId = new Map(elements.map((e) => [e.id, e]));
   const tolerance = 0;
 
   for (const el of elements) {
@@ -115,7 +114,7 @@ function geometryIssues(solved) {
           suggestion: `Estimated minimum height is ${needH + 2}px for font_size=${fontSize}, font_scale_factor=${scale}.`,
         });
       }
-      if (r.w < needW && el.props.text_alignment !== "center") {
+      if (r.w < needW) {
         issues.push({
           severity: "info",
           path,
@@ -137,8 +136,6 @@ function geometryIssues(solved) {
     }
   }
 
-  // Use byId so future geometry checks can inspect element metadata without re-indexing.
-  void byId;
   return issues;
 }
 

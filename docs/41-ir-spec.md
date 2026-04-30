@@ -14,8 +14,8 @@ The canonical schema is `schemas/ir.schema.json`.
 | `namespace` | snake_case string | `screen` | Override JSON UI namespace if needed. |
 | `base_resolution` | `[w, h]` ints | `[1920, 1080]` | Reference resolution. |
 | `gui_scale` | int 1–8 | `3` | Renderer hint only. |
-| `units.allowPercent` | bool | `false` | Set true only when the user explicitly wants `%`/`%c`/`fill`. |
-| `root.size` / `root.anchor` | optional | full screen | Overrides the default root panel. |
+| `units.allowPercent` | bool | `false` | Records that the final hand-finished JSON may use dynamic Bedrock units. The solve/run pipeline still requires numeric pixel sizes. |
+| `root.size` / `root.anchor` / `root.pos` | optional | full screen at `top_left`, `[0,0]` | Overrides the default root panel. The solver and compiler both honor this root rect. |
 | `elements` | list of `element` | required | The layout. |
 | `constraints` | list of `constraint` | `[]` | Declared layout intents (symmetry, alignment, etc.). |
 
@@ -89,7 +89,7 @@ Allowed edges: `left`, `right`, `top`, `bottom`, `center_x`, `center_y`.
 
 - Always declare a constraint when the user expressed (or the image clearly shows) symmetry, alignment, equal spacing, group centering, or equal sizing. Do **not** rely on hand-tuned `pos` values to "look symmetric" — declare it.
 - For button rows, card rows, tab rows, and slot clusters that should sit in the middle of a parent, use `center_group_x` or `center_group_y` in addition to `same_size` and `equal_gap_*`.
-- Pixels by default. Strings (`%`, `%c`, `fill`, `default`) require `units.allowPercent: true`.
+- Pixels by default. The deterministic solve/run pipeline currently requires numeric pixel `size` values for `root` and every element. If a final Bedrock control must use `%`, `%c`, `fill`, or `default`, solve the layout with equivalent pixel sizes first, then add the dynamic unit during the hand-finish JSON patch.
 - Constraint ids must reference existing elements. Cross-parent symmetry is not allowed.
 
 ## Compile output
@@ -97,7 +97,7 @@ Allowed edges: `left`, `right`, `top`, `bottom`, `center_x`, `center_y`.
 `tools/compile.mjs` produces a JSON UI file with:
 
 - `namespace`
-- `root_panel` (full-screen `panel`)
+- `root_panel` (`["100%","100%"]` by default, or the solved `root` rect when `root.size`/`root.anchor`/`root.pos` is provided)
 - one entry per element, with computed `anchor_from`, `anchor_to`, `offset`, `size`, and any `props` merged in
 - `controls` arrays representing the parent → child tree
 
@@ -110,6 +110,7 @@ When `tools/validate.mjs` receives both `ui.json` and `solved.json`, it also che
 - non-positive solved sizes
 - elements outside their parent rect
 - static labels whose estimated text height is larger than the solved label rect
+- static labels whose estimated single-line width is larger than the solved label rect
 - constraint errors logged by the solver
 
 These warnings are not a substitute for in-game testing, but they catch the common AI failure modes before the JSON is hand-finished.

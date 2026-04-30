@@ -12,14 +12,28 @@ function buildParents(ird) {
   return map;
 }
 
+function numericSize(size, id) {
+  if (!Array.isArray(size) || size.length !== 2) {
+    throw new Error(`element "${id}" must define size as [w, h]`);
+  }
+  const [w, h] = size;
+  if (typeof w !== "number" || typeof h !== "number") {
+    throw new Error(`element "${id}" uses non-pixel size ${JSON.stringify(size)}; solve layout with numeric pixel sizes first`);
+  }
+  return [w, h];
+}
+
 function initialRects(ird) {
   // Compute absolute rects for elements in topological order (parents first).
   const rects = new Map();
   const [bw, bh] = ird.base_resolution;
-  rects.set("__root__", { x: 0, y: 0, w: bw, h: bh });
+  const screenRect = { x: 0, y: 0, w: bw, h: bh };
+  const rootSize = numericSize(ird.root.size, "__root__");
+  rects.set("__screen__", screenRect);
+  rects.set("__root__", placeFrom(screenRect, ird.root.anchor || "top_left", ird.root.pos || [0, 0], rootSize));
 
   const byId = new Map(ird.elements.map((e) => [e.id, e]));
-  const visited = new Set(["__root__"]);
+  const visited = new Set(["__screen__", "__root__"]);
 
   function visit(id) {
     if (visited.has(id)) return;
@@ -27,7 +41,7 @@ function initialRects(ird) {
     if (!el) throw new Error(`unknown element id ${id}`);
     visit(el.parent || "__root__");
     const parentRect = rects.get(el.parent || "__root__");
-    const [w, h] = el.size.map((s) => (typeof s === "number" ? s : 0));
+    const [w, h] = numericSize(el.size, el.id);
     const r = placeFrom(parentRect, el.anchor, el.pos, [w, h]);
     rects.set(id, r);
     visited.add(id);

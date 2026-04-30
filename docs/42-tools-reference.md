@@ -42,13 +42,13 @@ Creates `workspace/<name>/ir.yaml` from a starter template. Refuses to overwrite
 
 - JSON Schema validation against `schemas/ir.schema.json`.
 - Cross-reference checks (parent ids, constraint ids).
-- Unit policy enforcement (rejects non-pixel values when `units.allowPercent=false`).
+- Solver-stage unit policy enforcement. `root.size` and element `size` values must be numeric pixels for `tools/run.mjs`; dynamic Bedrock units are added after solving.
 
 Exit codes: `5` schema error, `6` cross-ref error, `64` usage.
 
 ## tools/solve.mjs `<ir.yaml> <solved.json>`
 
-Computes absolute pixel rects per element, then iterates declared constraints to a fixed point (≤ 32 iterations). Supported constraints include alignment, equal sizing, equal gaps, pair symmetry, whole-group centering (`center_group_x/y`), and edge equality/offset. Emits `solved.json` with:
+Computes the absolute pixel root rect, computes child rects relative to that root, then iterates declared constraints to a fixed point (≤ 32 iterations). Supported constraints include alignment, equal sizing, equal gaps, pair symmetry, whole-group centering (`center_group_x/y`), and edge equality/offset. Emits `solved.json` with:
 
 ```json
 {
@@ -67,13 +67,13 @@ Exit codes: `7` non-converged (still writes file), other shared codes as above.
 
 ## tools/compile.mjs `<solved.json> <ui.json>`
 
-Converts solved IR back into a Bedrock JSON UI file. Each element becomes one named control with `anchor_from = anchor_to = <element.anchor>` and `offset` derived from the solved rect. Children are wired via `controls: [{ "name@ns.name": {} }]` arrays.
+Converts solved IR back into a Bedrock JSON UI file. `root_panel` is full screen by default, or uses the solved `root` rect when the IR overrides root size/anchor/pos. Each element becomes one named control with `anchor_from = anchor_to = <element.anchor>` and `offset` derived from the solved rect. Children are wired via `controls: [{ "name@ns.name": {} }]` arrays.
 
 Exit code `8` if input is not a solved IR file.
 
 ## tools/validate.mjs `<ui.json> [<solved.json>]`
 
-Structural sanity checks on the compiled JSON UI: namespace, root_panel, types, anchor enums, control reference shapes. When a `solved.json` path is provided, it also audits geometry risk: parent overflow, non-positive sizes, static label height, and solver constraint errors. Writes a sibling `report.json`.
+Structural sanity checks on the compiled JSON UI: namespace, root_panel, types, anchor enums, control reference shapes. When a `solved.json` path is provided, it also audits geometry risk: parent overflow, non-positive sizes, static label height/width, and solver constraint errors. Writes a sibling `report.json`.
 
 Exit code `9` on validation failure.
 
@@ -90,9 +90,9 @@ Walks `references/upstreams/MCBVanillaResourcePack/ui/` and `references/official
 
 Both are gitignored.
 
-## tools/render.mjs (optional) `<ui.json> <preview.png>`
+## tools/render.mjs (optional) `<ui.json> [<solved.json>] [--no-image]`
 
-Requires `@napi-rs/canvas` + the vanilla index. Approximate raster rendering plus a sibling `coords.json` mapping control name → final pixel rect. **Not** a substitute for in-game testing.
+Always writes a sibling `coords.json` mapping control name to final pixel rect from `solved.json`. With `@napi-rs/canvas` installed, also writes sibling `preview.png`. **Not** a substitute for in-game testing.
 
 ## tools/diff.mjs (optional) `<a.png> <b.png>`
 

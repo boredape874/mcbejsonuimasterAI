@@ -36,7 +36,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "allowPercent": { "type": "boolean", "default": false, "description": "Set true only if the user explicitly requested parent-relative units." }
+        "allowPercent": { "type": "boolean", "default": false, "description": "Documents intent for parent-relative units. The deterministic solver still requires numeric pixel sizes; add dynamic units after solving." }
       }
     },
     "root": {
@@ -45,7 +45,8 @@
       "additionalProperties": false,
       "properties": {
         "size": { "$ref": "#/$defs/size" },
-        "anchor": { "$ref": "#/$defs/anchor" }
+        "anchor": { "$ref": "#/$defs/anchor" },
+        "pos": { "$ref": "#/$defs/pos" }
       }
     },
     "elements": {
@@ -78,7 +79,7 @@
           { "type": "string", "pattern": "^(default|fill|\\d+%c?m?|\\d+%(x|y|sm)?|\\d+px)$" }
         ]
       },
-      "description": "Size as [w, h]. Numbers are pixels. Strings allow vanilla unit syntax only when units.allowPercent=true."
+      "description": "Size as [w, h]. Numbers are solver-ready pixels. Strings document vanilla unit intent but are rejected by the deterministic solve/run pipeline."
     },
     "pos": {
       "type": "array",

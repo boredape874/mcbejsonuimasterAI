@@ -19,7 +19,7 @@ This runs ir-validate → solve → compile → validate and writes:
 - `workspace/<name>/ui.json`     — compiled Bedrock JSON UI
 - `workspace/<name>/report.json` — validator output
 
-The validator uses both `ui.json` and `solved.json`. Warnings about parent overflow, static label clipping, or solver constraint errors must be reviewed before hand-finishing the JSON UI.
+The validator uses both `ui.json` and `solved.json`. Warnings about parent overflow, static label clipping/width risk, or solver constraint errors must be reviewed before hand-finishing the JSON UI.
 
 ## Step-by-step (for debugging)
 
@@ -45,11 +45,11 @@ node tools/validate.mjs     workspace/<name>/ui.json    workspace/<name>/solved.
 ## Optional render + diff (image input loop)
 
 ```
-node tools/render.mjs workspace/<name>/ui.json workspace/<name>/preview.png
+node tools/render.mjs workspace/<name>/ui.json workspace/<name>/solved.json
 node tools/diff.mjs   target.png workspace/<name>/preview.png
 ```
 
-`render.mjs` and `diff.mjs` require the optional native dependencies (`@napi-rs/canvas`, `pixelmatch`, `pngjs`). If missing, fall back to numeric review of `solved.json` instead of raster comparison.
+`render.mjs` writes `coords.json` and, when optional canvas dependencies are installed, `preview.png` next to `ui.json`. `render.mjs` and `diff.mjs` require the optional native dependencies (`@napi-rs/canvas`, `pixelmatch`, `pngjs`) for raster output/comparison. If missing, fall back to numeric review of `solved.json` and `coords.json`.
 
 ## Hard rules
 

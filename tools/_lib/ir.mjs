@@ -44,6 +44,7 @@ export function applyDefaults(ir) {
   out.root = {
     size: [out.base_resolution[0], out.base_resolution[1]],
     anchor: "top_left",
+    pos: [0, 0],
     ...(out.root || {}),
   };
   out.elements = (out.elements || []).map((el) => ({

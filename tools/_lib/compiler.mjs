@@ -41,6 +41,27 @@ function buildLayoutProps(el, rects) {
   };
 }
 
+function buildRootLayout(solved) {
+  const rects = solved.rects || {};
+  const root = solved.root || {};
+  const base = solved.base_resolution || [1920, 1080];
+  const screenRect = rects.__screen__ || { x: 0, y: 0, w: base[0], h: base[1] };
+  const rootRect = rects.__root__ || screenRect;
+  if (
+    rootRect.x === 0 && rootRect.y === 0 &&
+    rootRect.w === screenRect.w && rootRect.h === screenRect.h
+  ) {
+    return { size: ["100%", "100%"] };
+  }
+  const anchor = root.anchor || "top_left";
+  return {
+    size: [rootRect.w, rootRect.h],
+    anchor_from: anchor,
+    anchor_to: anchor,
+    offset: offsetFrom(screenRect, anchor, rootRect),
+  };
+}
+
 function commonExtras(el) {
   const extras = {};
   if (el.variables && Object.keys(el.variables).length) extras.variables = el.variables;
@@ -83,7 +104,7 @@ export function compile(solved) {
 
   out.root_panel = {
     type: "panel",
-    size: ["100%", "100%"],
+    ...buildRootLayout(solved),
     controls: (childrenOf.get("__root__") || []).map(childRef),
   };
 

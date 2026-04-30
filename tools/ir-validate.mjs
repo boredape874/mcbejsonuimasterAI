@@ -36,15 +36,18 @@ async function main() {
     }
   }
 
-  // Unit policy
-  if (!ird.units.allowPercent) {
-    for (const e of ird.elements) {
-      for (const dim of e.size) {
-        if (typeof dim === "string") {
-          errs.push(
-            `element "${e.id}" uses non-pixel size "${dim}" while units.allowPercent=false`,
-          );
-        }
+  // Solver-stage unit policy. The schema knows Bedrock dynamic units so the IR
+  // can document intent, but the deterministic geometry solver needs numbers.
+  const sizeOwners = [
+    { id: "__root__", size: ird.root.size },
+    ...ird.elements.map((e) => ({ id: e.id, size: e.size })),
+  ];
+  for (const owner of sizeOwners) {
+    for (const dim of owner.size) {
+      if (typeof dim === "string") {
+        errs.push(
+          `element "${owner.id}" uses non-pixel size "${dim}"; solve with numeric pixel sizes first, then add Bedrock dynamic units during hand-finish`,
+        );
       }
     }
   }

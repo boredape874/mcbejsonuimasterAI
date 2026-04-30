@@ -26,7 +26,7 @@ If unsure, ask the user one short question.
 1. Identify the **target screen** name (snake_case).
 2. Decompose the requested layout into **elements** (panel/image/label/button/stack_h/stack_v/scroll).
 3. Choose `base_resolution` (default `[1920, 1080]`) and `gui_scale` (default `3`).
-4. For each element, declare **px-only** `pos` and `size`. Use `%`/`%c`/`fill` only when the user explicitly asked for parent-relative behavior (then set `units.allowPercent: true`).
+4. For `root` and each element, declare **px-only** `pos` and `size`. If the final Bedrock JSON must use `%`/`%c`/`fill`, solve with equivalent pixels first and add those dynamic units during the hand-finish JSON patch.
 5. Add **constraints** for every intent the user expressed or that is visually obvious:
    - left/right or top/bottom pair → `symmetric_x` / `symmetric_y`
    - row/column of repeating items → `same_size` + `equal_gap_x` / `equal_gap_y`
@@ -39,7 +39,7 @@ If unsure, ask the user one short question.
 
 ## Hard rules
 
-- Pixels by default. Never use `%`, `%c`, `%cm`, `fill`, `default` unless the user explicitly asked.
+- Pixels in IR. Never put `%`, `%c`, `%cm`, `fill`, or `default` into solver-stage `size` values; add dynamic Bedrock units only after `solved.json` is stable.
 - Every visible pair/row/group with implied symmetry or alignment **must** declare a constraint. Do not rely on hand-tuned `pos` values.
 - Every centered row or card cluster **must** declare `center_group_x` or `center_group_y`; do not eyeball the group's first `pos`.
 - Constraint ids must reference existing `elements`. No floating ids.

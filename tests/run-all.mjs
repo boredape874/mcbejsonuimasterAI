@@ -6,6 +6,7 @@
 //   2) validator-negative:   feed a deliberately broken ui.json and expect ok=false
 //   3) solver-edge:          inline IR using equal_gap_y, edge_offset, same_size
 //   4) layout-audit:          group centering + solved-geometry warnings
+//   5) root-and-units:        root rect compilation + solver-stage unit guard
 
 import { mkdir, writeFile, rm, readFile } from "node:fs/promises";
 import { resolve, basename, extname } from "node:path";
@@ -229,11 +230,63 @@ constraints:
   record("audit:flags-label-height", sawLabel);
 }
 
+async function category5() {
+  console.log("[5] root-and-units");
+  const wsDir = resolve(REPO, "workspace", "_test_root_units");
+  await rm(wsDir, { recursive: true, force: true });
+  await mkdir(wsDir, { recursive: true });
+  const ir = `screen: root_units
+base_resolution: [640, 360]
+root:
+  size: [320, 180]
+  anchor: center
+  pos: [0, 0]
+elements:
+  - id: child
+    kind: panel
+    anchor: top_left
+    pos: [20, 20]
+    size: [80, 40]
+`;
+  await writeFile(resolve(wsDir, "ir.yaml"), ir, "utf8");
+  const r = await run(node, ["tools/run.mjs", "workspace/_test_root_units/ir.yaml"]);
+  const solved = await readJsonSafe(resolve(wsDir, "solved.json"));
+  const ui = await readJsonSafe(resolve(wsDir, "ui.json"));
+  const root = solved && solved.rects.__root__;
+  const child = solved && solved.rects.child;
+  record("root:pipeline-ok", r.code === 0 && !!solved && !!ui);
+  record("root:rect-centered", root && root.x === 160 && root.y === 90 && root.w === 320 && root.h === 180, { root });
+  record("root:child-relative", child && child.x === 180 && child.y === 110 && child.w === 80 && child.h === 40, { child });
+  record("root:compiled-layout", ui && ui.root_panel && ui.root_panel.size[0] === 320 && ui.root_panel.size[1] === 180
+    && ui.root_panel.anchor_from === "center" && ui.root_panel.anchor_to === "center",
+    ui && ui.root_panel ? ui.root_panel : null);
+  const render = await run(node, ["tools/render.mjs", "workspace/_test_root_units/ui.json", "workspace/_test_root_units/solved.json", "--no-image"]);
+  const coords = await readJsonSafe(resolve(wsDir, "coords.json"));
+  record("render:coords-exclude-internal-rects", render.code === 0 && coords && coords.rects.length === 1 && coords.rects[0].id === "child",
+    coords ? { rects: coords.rects.map((r) => r.id) } : { coords: "missing" });
+
+  const badDir = resolve(REPO, "workspace", "_test_nonpixel");
+  await rm(badDir, { recursive: true, force: true });
+  await mkdir(badDir, { recursive: true });
+  const badIr = `screen: nonpixel
+units:
+  allowPercent: true
+elements:
+  - id: panel
+    size: ["100%", 40]
+`;
+  await writeFile(resolve(badDir, "ir.yaml"), badIr, "utf8");
+  const bad = await run(node, ["tools/ir-validate.mjs", "workspace/_test_nonpixel/ir.yaml"]);
+  record("units:rejects-nonpixel-solver-size", bad.code === 6 && /numeric pixel sizes/.test(bad.stderr + bad.stdout),
+    { code: bad.code });
+}
+
 (async () => {
   await category1();
   await category2();
   await category3();
   await category4();
+  await category5();
   console.log("");
   console.log(`Total: ${PASS.length} passed, ${FAIL.length} failed`);
   if (FAIL.length) {
