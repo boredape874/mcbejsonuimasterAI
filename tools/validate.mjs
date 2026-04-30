@@ -65,6 +65,18 @@ function estimateTextHeight(text, fontSize = "normal", scale = 1) {
   return Math.ceil(lines * base * scale * 1.25);
 }
 
+function expectedCollectionSize(el) {
+  const c = el.collection;
+  if (!c || !c.item_size) return null;
+  const dims = c.dimensions || c.grid_dimensions;
+  if (!dims) return null;
+  const gap = c.gap || [0, 0];
+  return [
+    dims[0] * c.item_size[0] + Math.max(0, dims[0] - 1) * gap[0],
+    dims[1] * c.item_size[1] + Math.max(0, dims[1] - 1) * gap[1],
+  ];
+}
+
 function geometryIssues(solved) {
   const issues = [];
   if (!solved || !solved.rects || !Array.isArray(solved.elements)) return issues;
@@ -122,6 +134,15 @@ function geometryIssues(solved) {
           suggestion: `Estimated single-line width is ${needW}px. Increase size or intentionally truncate/wrap the text.`,
         });
       }
+    }
+    const collectionSize = expectedCollectionSize(el);
+    if (collectionSize && (r.w < collectionSize[0] || r.h < collectionSize[1])) {
+      issues.push({
+        severity: "warning",
+        path,
+        message: `collection grid ${r.w}x${r.h}px may clip its declared items`,
+        suggestion: `Expected at least ${collectionSize[0]}x${collectionSize[1]}px from dimensions/item_size/gap.`,
+      });
     }
   }
 

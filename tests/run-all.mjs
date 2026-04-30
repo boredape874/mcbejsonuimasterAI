@@ -7,6 +7,8 @@
 //   3) solver-edge:          inline IR using equal_gap_y, edge_offset, same_size
 //   4) layout-audit:          group centering + solved-geometry warnings
 //   5) root-and-units:        root rect compilation + solver-stage unit guard
+//   6) measured-controls:     auto text/image/collection sizing and form grid props
+//   7) go-solver-parity:      Go solver output parity with Node solver
 
 import { mkdir, writeFile, rm, readFile } from "node:fs/promises";
 import { resolve, basename, extname } from "node:path";
@@ -44,6 +46,18 @@ function run(cmd, args, opts = {}) {
 async function readJsonSafe(p) {
   try { return JSON.parse(await readFile(p, "utf8")); }
   catch { return null; }
+}
+
+function stable(value) {
+  if (Array.isArray(value)) return value.map(stable);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(Object.keys(value).sort().map((k) => [k, stable(value[k])]));
+  }
+  return value;
+}
+
+function stableJson(value) {
+  return JSON.stringify(stable(value));
 }
 
 async function category1() {
@@ -281,12 +295,150 @@ elements:
     { code: bad.code });
 }
 
+async function category6() {
+  console.log("[6] measured-controls");
+  const wsDir = resolve(REPO, "workspace", "_test_measured_controls");
+  await rm(wsDir, { recursive: true, force: true });
+  await mkdir(wsDir, { recursive: true });
+  const ir = `screen: measured_controls
+base_resolution: [800, 450]
+elements:
+  - id: form_grid
+    kind: collection_grid
+    anchor: center
+    pos: [0, 20]
+    size: [0, 0]
+    auto_size: { mode: collection_grid }
+    collection:
+      name: form_buttons
+      dimensions: [3, 2]
+      maximum_items: 6
+      item_template: measured_controls.form_button
+      item_size: [40, 40]
+      gap: [6, 8]
+      length_binding: "#form_button_contents"
+  - id: title
+    kind: label
+    anchor: top_middle
+    pos: [0, 24]
+    size: [0, 0]
+    auto_size:
+      mode: text
+      padding: [6, 2]
+    props:
+      text: "SHOP MENU"
+      localize: false
+      font_size: large
+      font_scale_factor: 1.5
+  - id: icon
+    kind: image
+    anchor: top_left
+    pos: [40, 40]
+    size: [64, 0]
+    auto_size:
+      mode: image_aspect
+      aspect: [2, 1]
+    props:
+      texture: textures/ui/icon_recipe_book
+`;
+  await writeFile(resolve(wsDir, "ir.yaml"), ir, "utf8");
+  const r = await run(node, ["tools/run.mjs", "workspace/_test_measured_controls/ir.yaml"]);
+  const report = await readJsonSafe(resolve(wsDir, "report.json"));
+  const solved = await readJsonSafe(resolve(wsDir, "solved.json"));
+  const ui = await readJsonSafe(resolve(wsDir, "ui.json"));
+  record("measure:pipeline-ok", r.code === 0 && report && report.ok === true);
+  if (solved && ui) {
+    const grid = solved.rects.form_grid;
+    const title = solved.rects.title;
+    const icon = solved.rects.icon;
+    record("measure:collection-size", grid && grid.w === 132 && grid.h === 88, { grid });
+    record("measure:text-size", title && title.w > 120 && title.h > 25, { title });
+    record("measure:image-aspect", icon && icon.w === 64 && icon.h === 32, { icon });
+    record("measure:compiled-grid-props", ui.form_grid && ui.form_grid.type === "grid"
+      && ui.form_grid.collection_name === "form_buttons"
+      && ui.form_grid.grid_dimensions[0] === 3
+      && ui.form_grid.grid_dimensions[1] === 2
+      && ui.form_grid.maximum_grid_items === 6
+      && ui.form_grid.grid_item_template === "measured_controls.form_button"
+      && Array.isArray(ui.form_grid.bindings),
+      ui.form_grid);
+  } else {
+    record("measure:outputs-present", false);
+  }
+}
+
+async function category7() {
+  console.log("[7] go-solver-parity");
+  const goCheck = await run("go", ["version"]);
+  if (goCheck.code !== 0) {
+    record("go:available-or-skipped", true, { skipped: true });
+    return;
+  }
+  const wsDir = resolve(REPO, "workspace", "_test_go_parity");
+  await rm(wsDir, { recursive: true, force: true });
+  await mkdir(wsDir, { recursive: true });
+  const ir = `screen: go_parity
+base_resolution: [800, 600]
+root:
+  size: [500, 320]
+  anchor: center
+  pos: [0, 0]
+elements:
+  - id: panel
+    kind: panel
+    anchor: center
+    pos: [0, 0]
+    size: [320, 180]
+  - id: left
+    parent: panel
+    anchor: top_left
+    pos: [12, 20]
+    size: [64, 24]
+  - id: mid
+    parent: panel
+    anchor: top_left
+    pos: [96, 20]
+    size: [64, 24]
+  - id: right
+    parent: panel
+    anchor: top_left
+    pos: [180, 20]
+    size: [64, 24]
+  - id: shadow
+    parent: panel
+    anchor: top_left
+    pos: [0, 0]
+    size: [20, 20]
+constraints:
+  - { op: same_size, ids: [left, mid, right] }
+  - { op: align_y, ids: [left, mid, right], edge: start }
+  - { op: equal_gap_x, ids: [left, mid, right], gap: 12 }
+  - { op: center_group_x, ids: [left, mid, right] }
+  - { op: edge_offset, a: "shadow.right", b: "right.right", delta: 4 }
+  - { op: edge_eq, a: "shadow.bottom", b: "right.bottom" }
+`;
+  await writeFile(resolve(wsDir, "ir.yaml"), ir, "utf8");
+  const nodeRun = await run(node, ["tools/solve.mjs", "workspace/_test_go_parity/ir.yaml", "workspace/_test_go_parity/node.json"], {
+    env: { ...process.env, MCBEKIT_SOLVER: "node" },
+  });
+  const goRun = await run(node, ["tools/solve.mjs", "workspace/_test_go_parity/ir.yaml", "workspace/_test_go_parity/go.json"], {
+    env: { ...process.env, MCBEKIT_SOLVER: "go" },
+  });
+  const nodeSolved = await readJsonSafe(resolve(wsDir, "node.json"));
+  const goSolved = await readJsonSafe(resolve(wsDir, "go.json"));
+  record("go:both-solvers-run", nodeRun.code === 0 && goRun.code === 0, { node: nodeRun.code, go: goRun.code });
+  record("go:rect-parity", !!nodeSolved && !!goSolved && stableJson(nodeSolved.rects) === stableJson(goSolved.rects));
+  record("go:log-parity", !!nodeSolved && !!goSolved && stableJson(nodeSolved.log) === stableJson(goSolved.log));
+}
+
 (async () => {
   await category1();
   await category2();
   await category3();
   await category4();
   await category5();
+  await category6();
+  await category7();
   console.log("");
   console.log(`Total: ${PASS.length} passed, ${FAIL.length} failed`);
   if (FAIL.length) {

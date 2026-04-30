@@ -100,7 +100,7 @@
           "enum": [
             "panel", "image", "label", "button",
             "stack_h", "stack_v",
-            "stack_panel", "grid", "scroll_view",
+            "stack_panel", "grid", "collection_grid", "collection_panel", "scroll_view",
             "toggle", "edit_box", "dropdown", "custom"
           ],
           "default": "panel",
@@ -109,6 +109,8 @@
         "anchor": { "$ref": "#/$defs/anchor", "default": "top_left" },
         "pos": { "$ref": "#/$defs/pos", "default": [0, 0] },
         "size": { "$ref": "#/$defs/size" },
+        "auto_size": { "$ref": "#/$defs/auto_size" },
+        "collection": { "$ref": "#/$defs/collection" },
         "z": { "type": "integer", "default": 0, "description": "Higher draws on top." },
         "extends": {
           "type": "string",
@@ -131,6 +133,126 @@
           "additionalProperties": true
         }
       }
+    },
+    "auto_size": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["text", "image_aspect", "collection_grid"],
+          "description": "Measure and replace size before solving. Use size [0,0] or one fixed axis when the solver should calculate the dimension."
+        },
+        "axis": {
+          "type": "string",
+          "enum": ["both", "width", "height"],
+          "default": "both"
+        },
+        "text": {
+          "type": "string",
+          "description": "Static text to measure. Defaults to props.text when omitted."
+        },
+        "font_size": {
+          "type": "string",
+          "enum": ["small", "normal", "large"],
+          "description": "Text measurement hint. Defaults to props.font_size or normal."
+        },
+        "font_scale_factor": {
+          "type": "number",
+          "minimum": 0.1,
+          "description": "Text measurement hint. Defaults to props.font_scale_factor or 1."
+        },
+        "padding": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0 },
+          "minItems": 2,
+          "maxItems": 2,
+          "default": [0, 0],
+          "description": "Extra x/y padding added to measured text."
+        },
+        "aspect": {
+          "oneOf": [
+            { "type": "number", "exclusiveMinimum": 0 },
+            {
+              "type": "array",
+              "items": { "type": "integer", "minimum": 1 },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          ],
+          "description": "Image width / height ratio, or [source_w, source_h]."
+        },
+        "source_size": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1 },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "Natural image size used when both axes are zero."
+        },
+        "scale": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "default": 1
+        },
+        "min": { "$ref": "#/$defs/size_px" },
+        "max": { "$ref": "#/$defs/size_px" }
+      }
+    },
+    "collection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Bedrock collection_name, for example form_buttons."
+        },
+        "dimensions": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1 },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "Compiled to grid_dimensions."
+        },
+        "grid_dimensions": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1 },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "Alias for dimensions."
+        },
+        "maximum_items": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Compiled to maximum_grid_items."
+        },
+        "item_template": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*\\.[a-z][a-z0-9_]*$",
+          "description": "Compiled to grid_item_template."
+        },
+        "item_size": {
+          "$ref": "#/$defs/size_px",
+          "description": "Solver-only item footprint used by auto_size.mode=collection_grid."
+        },
+        "gap": {
+          "$ref": "#/$defs/pos",
+          "description": "Solver-only x/y gap used by auto_size.mode=collection_grid."
+        },
+        "length_binding": {
+          "type": "string",
+          "pattern": "^#[A-Za-z0-9_]+$",
+          "description": "Optional collection-length binding source, for example #form_button_contents."
+        },
+        "fill_direction": { "type": "string" },
+        "rescaling_type": { "type": "string" }
+      }
+    },
+    "size_px": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "type": "integer", "minimum": 0 }
     },
     "constraint": {
       "oneOf": [

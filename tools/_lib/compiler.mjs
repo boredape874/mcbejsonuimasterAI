@@ -13,6 +13,8 @@ const KIND_TYPE = {
   stack_v: "stack_panel",
   stack_panel: "stack_panel",
   grid: "grid",
+  collection_grid: "grid",
+  collection_panel: "grid",
   scroll_view: "scroll_view",
   scroll: "scroll_view",
   toggle: "toggle",
@@ -67,6 +69,24 @@ function commonExtras(el) {
   if (el.variables && Object.keys(el.variables).length) extras.variables = el.variables;
   if (Array.isArray(el.bindings) && el.bindings.length) extras.bindings = el.bindings;
   if (el.props && typeof el.props === "object") Object.assign(extras, el.props);
+  if (el.collection && typeof el.collection === "object") {
+    const c = el.collection;
+    if (c.name) extras.collection_name = c.name;
+    if (c.dimensions || c.grid_dimensions) extras.grid_dimensions = c.dimensions || c.grid_dimensions;
+    if (c.maximum_items != null) extras.maximum_grid_items = c.maximum_items;
+    if (c.item_template) extras.grid_item_template = c.item_template;
+    if (c.fill_direction) extras.grid_fill_direction = c.fill_direction;
+    if (c.rescaling_type) extras.grid_rescaling_type = c.rescaling_type;
+    if (c.length_binding) {
+      extras.bindings = [
+        ...(extras.bindings || []),
+        {
+          binding_name: c.length_binding,
+          binding_name_override: "#collection_length",
+        },
+      ];
+    }
+  }
   return extras;
 }
 

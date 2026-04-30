@@ -52,6 +52,18 @@ async function main() {
     }
   }
 
+  for (const e of ird.elements) {
+    if (e.auto_size?.mode === "collection_grid") {
+      if (!e.collection?.item_size) errs.push(`element "${e.id}" auto_size collection_grid requires collection.item_size`);
+      if (!(e.collection?.dimensions || e.collection?.grid_dimensions)) {
+        errs.push(`element "${e.id}" auto_size collection_grid requires collection.dimensions`);
+      }
+    }
+    if ((e.kind === "collection_grid" || e.kind === "collection_panel") && !e.collection) {
+      errs.push(`element "${e.id}" kind ${e.kind} requires collection settings`);
+    }
+  }
+
   if (errs.length) {
     log.error("IR cross-reference errors", { errors: errs });
     process.exit(6);

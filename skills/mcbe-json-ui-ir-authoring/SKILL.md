@@ -24,9 +24,12 @@ If unsure, ask the user one short question.
 ## Workflow
 
 1. Identify the **target screen** name (snake_case).
-2. Decompose the requested layout into **elements** (panel/image/label/button/stack_h/stack_v/scroll).
+2. Decompose the requested layout into **elements** (panel/image/label/button/stack_h/stack_v/grid/collection_grid or collection_panel/scroll).
 3. Choose `base_resolution` (default `[1920, 1080]`) and `gui_scale` (default `3`).
 4. For `root` and each element, declare **px-only** `pos` and `size`. If the final Bedrock JSON must use `%`/`%c`/`fill`, solve with equivalent pixels first and add those dynamic units during the hand-finish JSON patch.
+   - For labels whose size depends on visible text, use `auto_size.mode: text`.
+   - For images with one unknown axis, use `auto_size.mode: image_aspect`.
+   - For server-form/HUD repeated data grids, use `kind: collection_grid` with `collection.dimensions`, `collection.item_size`, and `auto_size.mode: collection_grid`.
 5. Add **constraints** for every intent the user expressed or that is visually obvious:
    - left/right or top/bottom pair → `symmetric_x` / `symmetric_y`
    - row/column of repeating items → `same_size` + `equal_gap_x` / `equal_gap_y`
@@ -42,6 +45,7 @@ If unsure, ask the user one short question.
 - Pixels in IR. Never put `%`, `%c`, `%cm`, `fill`, or `default` into solver-stage `size` values; add dynamic Bedrock units only after `solved.json` is stable.
 - Every visible pair/row/group with implied symmetry or alignment **must** declare a constraint. Do not rely on hand-tuned `pos` values.
 - Every centered row or card cluster **must** declare `center_group_x` or `center_group_y`; do not eyeball the group's first `pos`.
+- For server form button grids, HUD lists, score rows, and item slots, model the repeated area as `collection_grid` first, then hand-finish the item template and bindings.
 - Constraint ids must reference existing `elements`. No floating ids.
 - Do not edit the compiled `ui.json` to fix layout. Edit `ir.yaml` and recompile.
 - Bindings, animations, and Script API are out of scope for IR. Add them to the compiled `ui.json` afterward as a separate patch.

@@ -48,13 +48,16 @@ Exit codes: `5` schema error, `6` cross-ref error, `64` usage.
 
 ## tools/solve.mjs `<ir.yaml> <solved.json>`
 
-Computes the absolute pixel root rect, computes child rects relative to that root, then iterates declared constraints to a fixed point (≤ 32 iterations). Supported constraints include alignment, equal sizing, equal gaps, pair symmetry, whole-group centering (`center_group_x/y`), and edge equality/offset. Emits `solved.json` with:
+Computes the absolute pixel root rect, computes child rects relative to that root, then iterates declared constraints to a fixed point (≤ 32 iterations). The default solver mode is `auto`: use the Go solver when `go` is available, otherwise fall back to the Node solver. Force a backend with `MCBEKIT_SOLVER=go` or `MCBEKIT_SOLVER=node`.
+
+Supported constraints include alignment, equal sizing, equal gaps, pair symmetry, whole-group centering (`center_group_x/y`), and edge equality/offset. Emits `solved.json` with:
 
 ```json
 {
   "schema": "mcbe-jsonui-ai-kit/solved@1",
   "namespace": "...", "screen": "...",
   "base_resolution": [w, h],
+  "solver": "go",
   "converged": true,
   "iterations": 3,
   "rects": { "id": { "x": …, "y": …, "w": …, "h": … } },
@@ -64,6 +67,10 @@ Computes the absolute pixel root rect, computes child rects relative to that roo
 ```
 
 Exit codes: `7` non-converged (still writes file), other shared codes as above.
+
+## tools/go/solver
+
+Go implementation of the deterministic layout solver. It receives the normalized IR JSON on stdin and writes the solve result JSON on stdout. It is intentionally limited to geometry: YAML parsing, schema validation, auto-sizing, compilation, and report generation remain in Node.
 
 ## tools/compile.mjs `<solved.json> <ui.json>`
 

@@ -1,12 +1,14 @@
 # 66 — Layout Solver Go Migration Plan
 
-The current solver is implemented in Node:
+The solver is now split between Node orchestration and a Go geometry core:
 
 - `tools/_lib/solver.mjs`
+- `tools/go/solver`
+- `tools/_lib/go-solver.mjs`
 - `tools/solve.mjs`
 - `tools/run.mjs`
 
-It is already the required path for layout-heavy JSON UI work. The next step is not to let the AI hand-write more JSON; the next step is to make the solver stricter and eventually move the deterministic core to Go.
+Node still owns YAML loading, schema validation, auto-sizing, compilation, validation reports, and fallback behavior. Go owns the deterministic fixed-point geometry solve when available.
 
 ## Why not rewrite everything at once?
 
@@ -21,17 +23,19 @@ Stage 1: strengthen Node solver + validator
   static label fit audit
   solver log warnings in report.json
 
-Stage 2: implement Go solver with identical input/output
+Stage 2: implement Go solver with identical input/output [done]
   read applied IR JSON
-  emit solved.json schema mcbe-jsonui-ai-kit/solved@1
+  emit solve result JSON
   pass all existing Node solver tests
 
-Stage 3: dual-run mode
-  node tools/solve.mjs --engine=node
-  node tools/solve.mjs --engine=go
+Stage 3: dual-run mode [done]
+  MCBEKIT_SOLVER=node node tools/solve.mjs ...
+  MCBEKIT_SOLVER=go node tools/solve.mjs ...
   compare rects and logs
 
-Stage 4: make Go the default when parity is proven
+Stage 4: make Go the default when parity is proven [done as auto mode]
+  MCBEKIT_SOLVER=auto is the default
+  Go is used when available, Node is used as fallback
 ```
 
 ## Accuracy rule for AI agents
@@ -52,14 +56,28 @@ If `report.json` contains a geometry warning, fix `ir.yaml` and rerun the tools 
 
 ## Go target behavior
 
-The Go solver must preserve these contracts:
+The Go solver preserves these contracts:
 
 - same `schemas/ir.schema.json` semantics
 - same `solved.json` output schema
 - no Bedrock-specific behavior guessed inside the solver
 - no bindings, animations, or server form logic in the solver
-- deterministic integer pixel rects
-- exact tests for alignment, same size, equal gaps, group centering, symmetry, edge offsets, parent overflow, and label fit warnings
+- deterministic pixel rects matching Node output
+- exact tests for alignment, same size, equal gaps, group centering, symmetry, edge offsets, root rects, auto-sized controls, and Go/Node parity
 
 The Go implementation should focus on geometry only. JSON UI authoring remains a two-stage process: computed geometry first, Bedrock-specific hand finish second.
 
+## Current backend selection
+
+```powershell
+# default: Go when available, Node fallback
+node tools/solve.mjs workspace/example/ir.yaml workspace/example/solved.json
+
+# force Go
+$env:MCBEKIT_SOLVER='go'; node tools/solve.mjs workspace/example/ir.yaml workspace/example/solved.json
+
+# force Node fallback solver
+$env:MCBEKIT_SOLVER='node'; node tools/solve.mjs workspace/example/ir.yaml workspace/example/solved.json
+```
+
+`solved.json` includes `"solver": "go"` or `"solver": "node"` so downstream tooling and debugging can see which backend produced the geometry.

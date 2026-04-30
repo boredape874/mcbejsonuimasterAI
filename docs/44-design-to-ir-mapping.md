@@ -14,6 +14,9 @@ This document is **additive** to `docs/39`. It does not change the design choice
 | Side navigation column | `anchor: left_middle` on the column, `align_x(edge: start)` on its child buttons |
 | Body text scroll region | `kind: scroll`, full width inside the body |
 | Form button row | child of body, `anchor: bottom_middle`, `same_size + equal_gap_x + align_y(edge: end)` for the children |
+| Server-form button grid or HUD list backed by a collection | `kind: collection_grid` with `collection.name`, `dimensions`, `item_template`, `item_size`, and `auto_size.mode: collection_grid` |
+| Text title sized by its visible label | `kind: label`, `size: [0,0]`, `auto_size.mode: text`, then align normally |
+| Image with known aspect ratio | `kind: image`, one fixed axis, zero on the derived axis, `auto_size.mode: image_aspect` |
 | Icon button square (16–24 px) | `kind: button`, `same_size` across the row |
 | List item / card row | `kind: panel`, `same_height` + `equal_gap_y` |
 | Outer padding 4–10 px | encoded by `pos` insets, not by a separate "padding" property |
@@ -64,12 +67,31 @@ constraints:
   - { op: align_y, ids: [icon_left, icon_right], edge: center }
 ```
 
+### F. Collection-backed server form grid
+```yaml
+elements:
+  - id: button_grid
+    kind: collection_grid
+    anchor: center
+    pos: [0, 16]
+    size: [0, 0]
+    auto_size: { mode: collection_grid }
+    collection:
+      name: form_buttons
+      dimensions: [3, 2]
+      maximum_items: 6
+      item_template: server_form.form_button
+      item_size: [64, 32]
+      gap: [6, 6]
+      length_binding: "#form_button_contents"
+```
+
 ## When NOT to use IR
 
 If the design choice from `docs/39` includes:
 
 - inventory-style hardcoded slot positions (Bedrock hardcodes some) — leave as raw JSON, see `docs/19`
 - vanilla-derived templates that already use `%c`/`inherit_max_sibling_*` — keep raw, see `docs/15`/`docs/24`
-- screens whose layout is dominated by a single dynamic binding/collection — start raw, then refactor only the static skeleton into IR if useful
+- screens whose layout is dominated by complex dynamic bindings rather than visible geometry — start raw, then refactor only the static skeleton into IR if useful
 
 For these, prefer the knowledge-layer skills directly.

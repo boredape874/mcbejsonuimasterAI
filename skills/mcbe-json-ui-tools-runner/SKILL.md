@@ -21,6 +21,8 @@ This runs ir-validate → solve → compile → validate and writes:
 
 The validator uses both `ui.json` and `solved.json`. Warnings about parent overflow, static label clipping/width risk, or solver constraint errors must be reviewed before hand-finishing the JSON UI.
 
+`tools/solve.mjs` uses `MCBEKIT_SOLVER=auto` by default: Go solver when `go` is available, Node fallback otherwise. Force a backend with `MCBEKIT_SOLVER=go` or `MCBEKIT_SOLVER=node` when debugging parity.
+
 ## Step-by-step (for debugging)
 
 ```

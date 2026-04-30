@@ -28,6 +28,8 @@ The canonical schema is `schemas/ir.schema.json`.
   anchor: <one of 9 anchors>
   pos: [dx, dy]             # pixels from the chosen anchor on the parent
   size: [w, h]              # pixels (numbers) by default
+  auto_size: { ... }        # optional pre-solve measurement for text/image/grid
+  collection: { ... }       # optional grid collection metadata
   z: 0                      # higher draws on top
   props: { ... }            # raw JSON UI props merged at compile time
 ```
@@ -44,6 +46,62 @@ The canonical schema is `schemas/ir.schema.json`.
 - Same on y for `top` / `bottom` / `middle`.
 
 This matches Bedrock JSON UI behavior with `anchor_from = anchor_to = <anchor>` and `offset = pos`.
+
+## Pre-solve Sizing
+
+Use `auto_size` when the AI needs a deterministic size before solving but the user described the control by content rather than pixels.
+
+### Text labels
+
+```yaml
+- id: title
+  kind: label
+  size: [0, 0]
+  auto_size:
+    mode: text
+    padding: [6, 2]
+  props:
+    text: "SHOP MENU"
+    localize: false
+    font_size: large
+    font_scale_factor: 1.5
+```
+
+The tool estimates a single-line width and line height from `props.text`, `font_size`, and `font_scale_factor`, then adds x/y padding. This is an estimate for layout safety, not a Bedrock font renderer.
+
+### Image aspect ratio
+
+```yaml
+- id: icon
+  kind: image
+  size: [64, 0]
+  auto_size:
+    mode: image_aspect
+    aspect: [2, 1]
+  props:
+    texture: textures/ui/example
+```
+
+If one axis is zero, the tool derives it from the declared aspect ratio. If both axes are zero, provide `source_size` and optional `scale`.
+
+### Server-form/HUD collection grids
+
+```yaml
+- id: button_grid
+  kind: collection_grid
+  size: [0, 0]
+  auto_size: { mode: collection_grid }
+  collection:
+    name: form_buttons
+    dimensions: [3, 2]
+    maximum_items: 6
+    item_template: server_form.form_button
+    item_size: [40, 40]
+    gap: [6, 8]
+    length_binding: "#form_button_contents"
+```
+
+`collection_grid` (or the alias `collection_panel`) compiles to a Bedrock `grid` with `collection_name`, `grid_dimensions`, `maximum_grid_items`, and `grid_item_template`. `item_size` and `gap` are solver-only footprint hints so the parent panel and surrounding HUD/form controls can be aligned accurately.
 
 ## Constraints
 
@@ -89,7 +147,7 @@ Allowed edges: `left`, `right`, `top`, `bottom`, `center_x`, `center_y`.
 
 - Always declare a constraint when the user expressed (or the image clearly shows) symmetry, alignment, equal spacing, group centering, or equal sizing. Do **not** rely on hand-tuned `pos` values to "look symmetric" — declare it.
 - For button rows, card rows, tab rows, and slot clusters that should sit in the middle of a parent, use `center_group_x` or `center_group_y` in addition to `same_size` and `equal_gap_*`.
-- Pixels by default. The deterministic solve/run pipeline currently requires numeric pixel `size` values for `root` and every element. If a final Bedrock control must use `%`, `%c`, `fill`, or `default`, solve the layout with equivalent pixel sizes first, then add the dynamic unit during the hand-finish JSON patch.
+- Pixels by default. The deterministic solve/run pipeline requires numeric pixel `size` values for `root` and every element after `auto_size` is applied. If a final Bedrock control must use `%`, `%c`, `fill`, or `default`, solve the layout with equivalent pixel sizes first, then add the dynamic unit during the hand-finish JSON patch.
 - Constraint ids must reference existing elements. Cross-parent symmetry is not allowed.
 
 ## Compile output

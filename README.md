@@ -230,6 +230,8 @@ node tools/init-project.mjs my_screen
 node tools/run.mjs workspace/my_screen/ir.yaml
 ```
 
+The solve step uses the Go geometry solver when `go` is installed and falls back to the Node solver otherwise. For server-form or HUD repeated rows, model the area as `collection_grid`; for labels and images whose footprint is content-driven, use IR `auto_size` before hand-finishing bindings and textures.
+
 See [AGENTS.md](AGENTS.md), [docs/41-ir-spec.md](docs/41-ir-spec.md), [docs/42-tools-reference.md](docs/42-tools-reference.md).
 
 ## How to use it with Codex

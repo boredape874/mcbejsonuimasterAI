@@ -19,7 +19,7 @@ Given a target image, converge the IR until the rendered preview is visually clo
 1. Ask the user (only if not provided): base resolution, gui_scale, where on the screen the layout sits, whether parent-relative units (`%`/`%c`) are required.
 2. Author a first-cut `workspace/<name>/ir.yaml`. For every visually obvious symmetry / alignment / equal spacing in the target image, declare a constraint.
 3. Run `node tools/run.mjs workspace/<name>/ir.yaml`.
-4. (Optional) `node tools/render.mjs workspace/<name>/ui.json workspace/<name>/preview.png`.
+4. (Optional) `node tools/render.mjs workspace/<name>/ui.json workspace/<name>/solved.json`.
 5. (Optional) `node tools/diff.mjs <target> workspace/<name>/preview.png` and read the region report.
 6. Propose a delta plan (which IR fields and constraints will change). Show it to the user before editing.
 7. Apply the delta, rerun, repeat until: user accepts, or per-region difference < 4 px.
