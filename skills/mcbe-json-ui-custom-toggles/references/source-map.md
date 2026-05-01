@@ -12,6 +12,7 @@ Inspect only the pattern family relevant to the current issue. Public answers sh
 | focus or hover border color | vanilla/common toggle visuals | `patterns.md#focus-and-hover-visuals` |
 | server-form arrow should not submit form | button event animation, then server-form fallback | `patterns.md#press-event-animation` |
 | hidden state should swap views | animated toggle factory templates | `patterns.md#toggle-state-animated-illusion` |
+| settings-style HUD feature list | large toolkit common controls | `../../../references/topics/patterns/deesse-ui-toolkit.md` |
 
 ## Button Hover And Pulse Templates
 
@@ -36,6 +37,13 @@ Use vanilla/common references to verify exact base controls and property names.
 
 - common UI controls reference
 - common toggle template reference
+
+## Large Toolkit Common Controls
+
+Use this family only as a local private structural reference for settings-style toggle rows, reusable dialog shells, dropdowns, sliders, and animation presets.
+
+- `../../../references/topics/patterns/deesse-ui-toolkit.md`
+- local-only private mirror: `C:/Users/champ/.codex/references/private/deesse-ui-toolkit/ui/déesse_ui/common/`
 
 ## Public Naming
 

@@ -1,6 +1,6 @@
 ---
 name: mcbe-json-ui-master
-description: Comprehensive Minecraft Bedrock JSON UI master skill. Use when Codex must handle Bedrock JSON UI end to end across basics and mental models, pack structure, HUD, chat, title or actionbar driven UI, server form customization, bindings and string parsing logic, reusable patterns, addon integration, debugging, vanilla texture path lookup, source selection across local sample packs, local utility mirrors, official sample screens, community reference docs, and vanilla resource mirror, or schema and tooling workflows such as JSON UI editors, builders, and schema-based validation.
+description: Comprehensive Minecraft Bedrock JSON UI master skill. Use when Codex must handle Bedrock JSON UI end to end across basics and mental models, pack structure, HUD, chat, chat command helpers such as Java-style locate parsing, title or actionbar driven UI, server form customization, bindings and string parsing logic, reusable patterns, large UI toolkit architecture, desktop/touch HUD splits, quick-container utilities, addon integration, debugging, vanilla texture path lookup, source selection across local sample packs, local utility mirrors, official sample screens, community reference docs, and vanilla resource mirror, or schema and tooling workflows such as JSON UI editors, builders, and schema-based validation.
 ---
 
 # MCBE JSON UI Master
@@ -18,6 +18,7 @@ Use this as the top-level skill for Bedrock JSON UI work.
    - If the task is broad or the right reference is unclear, also read `references/reference-task-taxonomy.md` and `references/hierarchical-task-router.md` before opening examples.
    - If local restricted JSON UI references are relevant and present, read `references/local-json-ui-reference-packs.md` before opening raw restricted files.
    - If the task mentions phone/PDA/device forms, compact routed form suites, reusable button templates, polished shop/store forms, auction/crate/reward forms, battle command panels, database/storage UIs, routed special forms, HUD renderer relocation, or the `advanced-ui-set` reference set, read `references/advanced-ui-set-special-ui.md` before opening raw restricted files.
+   - If the task mentions a large utility UI pack, Déesse-style toolkit, desktop/touch HUD menu, quick container helpers, chunk/minimap/debug overlays, or reusable common control libraries, read `../../references/topics/patterns/deesse-ui-toolkit.md` before opening any local private source.
 2. Classify the request by primary need:
    - planning or intake for a new UI
    - basics or mental model

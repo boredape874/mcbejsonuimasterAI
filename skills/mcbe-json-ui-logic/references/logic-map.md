@@ -23,5 +23,6 @@
 - fixed-width substring extraction is a common Bedrock UI pattern
 - `%.s` string formatting can trim and pad payload fields without scripts; see `mcbe-json-ui-master/references/topics/logic/text-formatting-and-slicing.md`
 - first-line extraction and hover-text trimming are marker protocols and must be tested with UTF-8 section-sign markers
+- Java Locate Command parsing shows how `chat_screen.json` can parse `The nearest ... is at block ...` locate messages into coordinates and a `/tp @s` edit-box command; see `../../../references/topics/logic/java-locate-command-bindings.md`
 - progress bars often depend on preserved text panels
 - binding dumps and dynamic form library examples are useful for discovering names and reusable search/slice expressions

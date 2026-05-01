@@ -1,6 +1,6 @@
 ---
 name: mcbe-json-ui-patterns
-description: Reuse proven Bedrock JSON UI patterns from included sample packs and local utility mirrors. Use when Codex must build or adapt animated progress bars, topbar notifications, scoreboards, chest or pocket containers, reusable presets, custom chat panels, static start-screen backgrounds, tablist overlays, text-slicing snippets, or similar recurring Minecraft Bedrock JSON UI patterns.
+description: Reuse proven Bedrock JSON UI patterns from included sample packs and local utility mirrors. Use when Codex must build or adapt animated progress bars, topbar notifications, scoreboards, chest or pocket containers, quick-container utilities, desktop/touch HUD menus, reusable presets, custom chat panels, static start-screen backgrounds, tablist overlays, text-slicing snippets, or similar recurring Minecraft Bedrock JSON UI patterns.
 ---
 
 # MCBE JSON UI Patterns
@@ -24,3 +24,4 @@ Prefer adapting proven included patterns over inventing a new one.
 4. server form shell
 5. custom chest or container
 6. custom chat panel
+7. large toolkit architecture

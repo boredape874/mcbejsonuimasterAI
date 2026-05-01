@@ -168,3 +168,20 @@
 
 - `mcbe-json-ui-master/references/topics/logic/text-formatting-and-slicing.md`
 - pattern: use `%.s`, `%m.ns`, and `%-m.ns` expressions to trim, pad, split, or first-line-extract text payloads without scripts.
+
+## large utility UI toolkit
+
+- `mcbe-json-ui-master/references/topics/patterns/deesse-ui-toolkit.md`
+- local-only private mirror when present: `C:/Users/champ/.codex/references/private/deesse-ui-toolkit/`
+- pattern: keep vanilla screen files thin, register many focused modules through `_ui_defs.json`, split common controls, HUD modules, quick-container helpers, and tool overlays into separate folders.
+- note: raw source includes an explicit no-copy notice. Use the structure as a study reference, not as public code to paste.
+
+## desktop and touch HUD menu
+
+- `mcbe-json-ui-master/references/topics/hud-chat/deesse-style-hud-menu.md`
+- pattern: use separate desktop/touch HUD menu files, shared toggle state names, max-size constrained dialogs, and scrollable option stacks.
+
+## quick container utility
+
+- `mcbe-json-ui-master/references/topics/patterns/quick-container-utility.md`
+- pattern: attach search, tooltip, instant move, and helper buttons around chest/inventory roots without replacing the whole container.
