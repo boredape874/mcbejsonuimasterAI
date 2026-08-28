@@ -323,6 +323,18 @@ npm run prompt:lint -- <prompt-or-envelope>
 - [ ] 콘텐츠 로그 오류 확인
 - [ ] gold 또는 gold-candidate 확정
 
+### 단계 3.6 — 외부 저장소·배포 팩 연구 코퍼스
+
+- [x] GitHub의 편집기·LSP·생성기·렌더러와 실제 애드온을 역할별 분리
+- [x] CurseForge 공식 파일 8개 다운로드, SHA-256 기록과 안전 압축 해제
+- [x] GitHub 17개, 배포 패키지 8개를 local-only 인벤토리 및 레시피 후보로 변환
+- [x] 재배포 금지·라이선스 불명 자료를 quarantine으로 고정
+- [x] 유출·재업로드·JSON UI 미포함 자료 제외 규칙 기록
+- [x] BOM 정상 처리 및 `__MACOSX`·AppleDouble 제외로 실제 손상 JSON과 구분
+- [ ] 새 후보를 기존 전체 코퍼스와 교차 집계해 2개 이상 출처 반복 규칙 적용
+
+상세 출처, 해시와 측정 결과는 `docs/71-external-json-ui-research.md` 및 `config/research-sources.public.json`을 따른다. 외부 도구 여러 개를 제작 파이프라인으로 채택하지 않으며, 기능 연구 결과만 단일 내부 엔진의 테스트와 계약으로 옮긴다.
+
 ### 단계 3.5 — 로컬 자료 창고 전수 지식화
 
 - [x] 로컬 JSON UI 예제 창고를 중립 소스 단위로 자동 발견

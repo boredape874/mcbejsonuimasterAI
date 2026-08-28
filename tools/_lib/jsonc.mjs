@@ -86,6 +86,6 @@ export function stripJsonTrailingCommas(source) {
 }
 
 export async function readJsonc(path) {
-  const source = await readFile(path, "utf8");
+  const source = (await readFile(path, "utf8")).replace(/^\uFEFF/, "");
   return JSON.parse(stripJsonTrailingCommas(stripJsonComments(source)));
 }

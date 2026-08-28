@@ -4,10 +4,10 @@ import { basename, extname, relative, resolve, sep } from "node:path";
 import { PNG } from "pngjs";
 import { readJsonc } from "./jsonc.mjs";
 
-const SKIP_DIRS = new Set([".git", ".cache", "cache", "caches", "node_modules", "dist", "build", "generated", "workspace", "archives", "archive", "backup", "backups"]);
+const SKIP_DIRS = new Set([".git", ".cache", "cache", "caches", "node_modules", "dist", "build", "generated", "workspace", "archives", "archive", "backup", "backups", "__macosx"]);
 const TEXT_EXTENSIONS = new Set([".json", ".jsonc", ".js", ".ts", ".mcfunction"]);
 const UI_NAMES = new Set(["_ui_defs.json", "_global_variables.json", "hud_screen.json", "chat_screen.json", "server_form.json"]);
-const ANALYZER_VERSION = 3;
+const ANALYZER_VERSION = 4;
 const slash = (value) => value.split(sep).join("/");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const neutralId = (index) => `local-source-${String(index + 1).padStart(3, "0")}`;
@@ -33,7 +33,7 @@ async function* walk(root, current = root) {
     const absolute = resolve(current, item.name);
     if (item.isDirectory()) {
       if (!excludedDirectory(item.name, "__never__")) yield* walk(root, absolute);
-    } else if (item.isFile()) yield { absolute, path: slash(relative(root, absolute)) };
+    } else if (item.isFile() && !item.name.startsWith("._")) yield { absolute, path: slash(relative(root, absolute)) };
   }
 }
 

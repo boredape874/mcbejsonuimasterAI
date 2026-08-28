@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Reproducible discovery metadata for external MCBE JSON UI research. Downloaded files and extracted contents stay under ignored workspace/corpus-local.",
+  "policy": {
+    "defaultTier": "quarantine",
+    "executeDownloadedCode": false,
+    "publishRawAssets": false,
+    "promoteOnlyWhenLicenseAllows": true,
+    "reject": ["leaks", "reuploads", "pirated game data", "non-Bedrock UI", "missing JSON UI evidence"]
+  },
+  "sources": [
+    {"id":"bedrock-core-ui","provider":"github","url":"https://github.com/bedrock-core/ui","kind":"runtime-and-reference-pack","license":"MIT","tier":"pattern","revision":"3c9f62b309a7d5a76797efb9415ebc4050af51f4"},
+    {"id":"bedrock-schemas","provider":"github","url":"https://github.com/Mojang/bedrock-schemas","kind":"official-schema","license":"MIT","tier":"authority","revision":"36ef10fcf700e60901f29972e9515f9e88000fef"},
+    {"id":"collect-everything","provider":"github","url":"https://github.com/world-class-engineers/collect-everything-bedrock","kind":"addon","license":"MIT","tier":"pattern","revision":"25776436ef4823fd0f06e29dc419c8a21e8744e9"},
+    {"id":"texture-debug","provider":"github","url":"https://github.com/world-class-engineers/mcbe-texture-debug","kind":"addon","license":"MIT","tier":"pattern","revision":"dd5f26c1f3bbdb20855e56b3b8db5ff89ee7d9a5"},
+    {"id":"geyser-integrated-pack","provider":"github","url":"https://github.com/GeyserMC/GeyserIntegratedPack","kind":"compatibility-pack","license":"MIT code; Mojang-owned textures excluded","tier":"pattern","revision":"205e3f7bd7828fcc71641c1b2ddbf58ef3511714"},
+    {"id":"jsonforge","provider":"github","url":"https://github.com/xRookieFight/jsonforge","kind":"editor","license":"MIT","tier":"research-only","revision":"2e225e5541ecfc3024efee444ae4b4e6309f0682"},
+    {"id":"json-ui-builder-web","provider":"github","url":"https://github.com/UnknownMaker-dev/json-ui-builder-web","kind":"editor","license":"MIT for original code; third-party portions require separate review","tier":"research-only","revision":"eea29af405c3ffb07378671cc08ad7136b33da62"},
+    {"id":"jsonui-lsp","provider":"github","url":"https://github.com/CoolLoong/jsonui-lsp","kind":"language-server","license":"MIT","tier":"research-only","revision":"12a67fddbe0a9f553d1c2ec1f7ebf8e1fdf57f45"},
+    {"id":"mcbe-ts-ui","provider":"github","url":"https://github.com/smell-of-curry/mcbe-ts-ui","kind":"generator","license":"MIT","tier":"research-only","revision":"48dc51582cb3e8f4aaafb50876c4c06f3cfa9dc2"},
+    {"id":"ui-research","provider":"github","url":"https://github.com/Hawariii/minecraft-bedrock-ui-research","kind":"research","license":"MIT","tier":"research-only","revision":"d0f4bf05850b9ddc5714bc01779bfceddf25be33"},
+    {"id":"render-mcp","provider":"github","url":"https://github.com/Deichor/jsonui-render-mcp","kind":"renderer-study","license":"unverified","tier":"quarantine","revision":"08944fd552686087bcce1022e099f2c8d0d6e394"},
+    {"id":"live-preview","provider":"github","url":"https://github.com/EmirhanOlgn/bedrock-jsonui-live-preview","kind":"preview-study","license":"MIT","tier":"research-only","revision":"926abd3402fce3442e805b643a69d120fd3baeb2"},
+    {"id":"avatar-addon","provider":"github","url":"https://github.com/GlitchyTurtle/avatar-addon","kind":"addon","license":"GPL-3.0","tier":"pattern","revision":"c43001f1c11003e211432f4bce275f25c38e317d"},
+    {"id":"player-model-renderer","provider":"github","url":"https://github.com/KawEduh-dv/Player-Model-Renderer-JSON-UI","kind":"addon","license":"MIT","tier":"pattern","revision":"cc98c016003d64e76d4a955aff76ba56160a824f"},
+    {"id":"touhou-little-maid","provider":"github","url":"https://github.com/ENIACJushi/TouHouLittleMaidBE","kind":"addon","license":"MIT","tier":"pattern","revision":"1a67b6a13af87beefcd3121fced0a66c2c354f93"},
+    {"id":"fazbears-restocked","provider":"github","url":"https://github.com/Hirxs-Workshop/Fazbears-Restocked-Bedrock","kind":"map-addon","license":"unverified","tier":"quarantine","revision":"e60ef1efa1bd1439ef01dbb668ae4d7b2215a763"},
+    {"id":"water-ui-next","provider":"github","url":"https://github.com/kkkzheli/Water-UI-NEXT","kind":"ui-pack","license":"unverified","tier":"quarantine","revision":"79be6a1d927c824706368d22315099c8182b475f"},
+    {"id":"collapse-ui","provider":"curseforge","url":"https://www.curseforge.com/minecraft-bedrock/texture-packs/collapse-ui","kind":"ui-pack","license":"GPL-3.0","tier":"pattern","fileId":7997207,"sha256":"c288ad875e84ca3cc90a7e97c29d70c5c37248e0156ca7f65360443bb685d38e"},
+    {"id":"custom-backgrounds","provider":"curseforge","url":"https://www.curseforge.com/minecraft-bedrock/texture-packs/custom-backgrounds-entire-ui","kind":"ui-pack","license":"Public Domain","tier":"pattern","fileId":8469220,"sha256":"da949812bc48cae5bbb2b506943fcf3bfa478495dc36e95b9632312b7c806f2c"},
+    {"id":"task-system","provider":"curseforge","url":"https://www.curseforge.com/minecraft-bedrock/addons/task-system","kind":"addon","license":"All Rights Reserved","tier":"quarantine","fileId":8429718,"sha256":"269ad7205c069c4de8fa648beeccd87afe95e59ab4e27c319a8f2bdf56341faf"},
+    {"id":"nova-client","provider":"curseforge","url":"https://www.curseforge.com/minecraft-bedrock/texture-packs/nova-client-mcbe","kind":"ui-pack","license":"All Rights Reserved","tier":"quarantine","fileId":8642447,"sha256":"ddb6bc85b75cd7a9e9026aa0d48324d4ade7ca0e23b128eac17aba99d1de9b79"},
+    {"id":"debug-screen-pro-pocket","provider":"curseforge","url":"https://www.curseforge.com/minecraft-bedrock/addons/debug-screen-pro","kind":"hud-pack","license":"All Rights Reserved","tier":"quarantine","fileId":8747184,"sha256":"c663eed0e23fa512b60ac4bce5b49ef92096f105d607e5214c195dec02055fd2"},
+    {"id":"bodycam-hud","provider":"curseforge","url":"https://www.curseforge.com/minecraft-bedrock/texture-packs/bodycam-hud-overlay","kind":"hud-pack","license":"All Rights Reserved","tier":"quarantine","fileId":8063706,"sha256":"d2d57b5478f68772e2e954913fa551117ab5146594650981a3f5cf7c23ca7616"},
+    {"id":"knowledge-pocket","provider":"curseforge","url":"https://www.curseforge.com/minecraft-bedrock/addons/pocket-wikipedia-knowledge","kind":"addon","license":"All Rights Reserved","tier":"quarantine","fileId":8707222,"sha256":"107cddaabfe9fb62309c4fa04aacd30aeca3dcaca7fcd8d0a1eca2702272d976"}
+  ]
+}
