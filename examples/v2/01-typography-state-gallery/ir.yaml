@@ -1,0 +1,168 @@
+screen: typography_state_gallery
+base_resolution:
+  - 1920
+  - 1080
+gui_scale: 3
+elements:
+  - id: shell
+    kind: image
+    anchor: center
+    pos:
+      - 0
+      - 0
+    size:
+      - 620
+      - 340
+    props:
+      texture: textures/ui/v2_gallery/panel
+  - id: title
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 30
+      - 18
+    size:
+      - 560
+      - 24
+    props:
+      text: TYPOGRAPHY & STATES
+      localize: false
+      font_size: large
+      font_scale_factor: 1
+      text_alignment: center
+  - id: body
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 30
+      - 54
+    size:
+      - 560
+      - 36
+    props:
+      text: Explicit label regions keep Korean and English text measurable.
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.85
+      text_alignment: left
+  - id: caption_default
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 35
+      - 112
+    size:
+      - 160
+      - 18
+    props:
+      text: DEFAULT
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: default_sample
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 35
+      - 140
+    size:
+      - 160
+      - 48
+    props:
+      texture: textures/ui/v2_gallery/button_default
+  - id: caption_hover
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 230
+      - 112
+    size:
+      - 160
+      - 18
+    props:
+      text: HOVER
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: hover_sample
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 230
+      - 140
+    size:
+      - 160
+      - 48
+    props:
+      texture: textures/ui/v2_gallery/button_hover
+  - id: caption_pressed
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 425
+      - 112
+    size:
+      - 160
+      - 18
+    props:
+      text: PRESSED
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: pressed_sample
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 425
+      - 140
+    size:
+      - 160
+      - 48
+    props:
+      texture: textures/ui/v2_gallery/button_pressed
+  - id: interactive_button
+    kind: button
+    parent: shell
+    anchor: top_left
+    pos:
+      - 200
+      - 244
+    size:
+      - 220
+      - 48
+constraints:
+  - op: same_size
+    ids: &a1
+      - default_sample
+      - hover_sample
+      - pressed_sample
+  - op: equal_gap_x
+    ids: *a1
+    gap: 35
+  - op: align_y
+    ids: *a1
+    edge: center
+  - op: center_group_x
+    ids: *a1
+  - op: same_size
+    ids: &a2
+      - caption_default
+      - caption_hover
+      - caption_pressed
+  - op: equal_gap_x
+    ids: *a2
+    gap: 35
+  - op: align_y
+    ids: *a2
+    edge: center

@@ -1,0 +1,118 @@
+screen: responsive_shell
+base_resolution:
+  - 1920
+  - 1080
+gui_scale: 3
+elements:
+  - id: shell
+    kind: image
+    anchor: center
+    pos:
+      - 0
+      - 0
+    size:
+      - 720
+      - 390
+    props:
+      texture: textures/ui/v2_responsive/panel
+  - id: title
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 32
+      - 20
+    size:
+      - 656
+      - 24
+    props:
+      text: RESPONSIVE SAFE SHELL
+      localize: false
+      font_size: large
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: description
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 32
+      - 62
+    size:
+      - 656
+      - 52
+    props:
+      text: Percentage sizing preserves outer margins while forty-eight unit actions remain touch safe.
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.85
+      text_alignment: left
+  - id: content
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 32
+      - 124
+    size:
+      - 656
+      - 200
+    props:
+      texture: textures/ui/v2_responsive/card
+  - id: content_label
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 56
+      - 154
+    size:
+      - 608
+      - 72
+    props:
+      text: "PC: centered wide shell\\nTOUCH: retained edge padding and large targets"
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: left
+  - id: primary
+    kind: button
+    parent: shell
+    anchor: bottom_middle
+    pos:
+      - -110
+      - -28
+    size:
+      - 200
+      - 48
+  - id: secondary
+    kind: button
+    parent: shell
+    anchor: bottom_middle
+    pos:
+      - 110
+      - -28
+    size:
+      - 200
+      - 48
+constraints:
+  - op: same_size
+    ids:
+      - primary
+      - secondary
+  - op: symmetric_x
+    ids:
+      - primary
+      - secondary
+  - op: align_y
+    ids:
+      - primary
+      - secondary
+    edge: center
+  - op: align_x
+    ids:
+      - title
+      - description
+      - content
+      - content_label
+    edge: center

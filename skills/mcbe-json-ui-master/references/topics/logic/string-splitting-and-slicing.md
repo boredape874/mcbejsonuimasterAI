@@ -12,7 +12,7 @@ Use this subtopic for:
 - fixed-width string slicing
 - Unicode byte-width padding
 - title/actionbar/form payload segmentation
-- deciding whether data should be preprocessed by PMMP or Script API
+- deciding whether data should be preprocessed by Script API or another upstream sender
 
 AI decision rule:
 

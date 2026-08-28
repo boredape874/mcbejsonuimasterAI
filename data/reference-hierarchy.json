@@ -25,7 +25,7 @@
         {
           "id": "rpg_status_bars",
           "keywords": ["rpg hud", "hp", "health", "mana", "stamina", "xp", "exp bar"],
-          "docs": ["docs/25-pmmp-json-ui-bridge.md", "docs/54-visual-fit-and-reference-discipline.md"],
+          "docs": ["docs/34-binding-patterns-value-index.md", "docs/54-visual-fit-and-reference-discipline.md"],
           "references": ["references/local-examples/rpg-hud/ui/rpg_hud.json", "references/local-examples/multi-animated-progress/ui/animated_bar.json"],
           "patchTargets": ["RP/ui/hud_screen.json"],
           "checks": ["preserve vanilla hotbar unless requested", "bars have stable height", "dynamic labels fit"]

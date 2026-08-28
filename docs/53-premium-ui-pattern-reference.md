@@ -28,7 +28,7 @@ Use it as a pattern guide, not as a copy source. Rebuild controls with neutral n
 
 ## Multi-Route Server Form Router
 
-Use this when PMMP or Script API can control the form title and you want one RP to skin many form types.
+Use this when BP Script API or another server sender can control the form title and you want one RP to skin many form types.
 
 Minimal architecture:
 

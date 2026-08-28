@@ -1,0 +1,31 @@
+screen: compact_form_grid
+base_resolution: [1920, 1080]
+elements:
+  - id: panel
+    kind: panel
+    anchor: center
+    pos: [0, 0]
+    size: [360, 120]
+  - id: left_button
+    parent: panel
+    kind: button
+    anchor: top_left
+    pos: [30, 42]
+    size: [80, 32]
+  - id: middle_button
+    parent: panel
+    kind: button
+    anchor: top_left
+    pos: [140, 42]
+    size: [80, 32]
+  - id: right_button
+    parent: panel
+    kind: button
+    anchor: top_left
+    pos: [250, 42]
+    size: [80, 32]
+constraints:
+  - { op: same_size, ids: [left_button, middle_button, right_button] }
+  - { op: align_y, ids: [left_button, middle_button, right_button], edge: start }
+  - { op: equal_gap_x, ids: [left_button, middle_button, right_button], gap: 30 }
+  - { op: center_group_x, ids: [left_button, middle_button, right_button] }

@@ -109,7 +109,7 @@
       "id": "hud_status_cluster",
       "keywords": ["hud", "hp", "mana", "stamina", "xp", "status bars"],
       "skeleton": "portrait/icon plus compact bars and optional numeric labels",
-      "docs": ["docs/25-pmmp-json-ui-bridge.md", "docs/58-design-reference-atlas.md", "docs/67-production-rpg-ui-architecture.md"],
+      "docs": ["docs/34-binding-patterns-value-index.md", "docs/58-design-reference-atlas.md", "docs/67-production-rpg-ui-architecture.md"],
       "references": ["templates/ir/rpg_hud.yaml", "references/local-examples/rpg-hud/ui/rpg_hud.json", "references/local-examples/multi-animated-progress/ui/animated_bar.json"],
       "dimensions": {
         "root": "260x104px production baseline",

@@ -3,7 +3,7 @@
 This document is a practical reference for major Bedrock vanilla UI screen files.
 
 It is not meant to list every vanilla UI file in existence.  
-It focuses on the screens that are most useful for PMMP, JSON UI, server-form, HUD, and addon-driven customization work.
+It focuses on the screens most useful for JSON UI, server-form, HUD, Script API, and addon-driven customization work.
 
 Primary basis:
 
@@ -25,7 +25,7 @@ Use this when the question is:
 | --- | --- | --- | --- |
 | `ui/hud_screen.json` | Main gameplay HUD | You need always-visible gameplay overlays | Hotbar-adjacent HUDs, scoreboards, title/actionbar overlays, progress bars |
 | `ui/chat_screen.json` | Chat screen and chat panel behavior | Chat rendering or chat-driven protocols are involved | Notification parsing, filtered chat lines, custom chat panels |
-| `ui/server_form.json` | Server form rendering | PMMP or Script API forms need custom UI | Action form replacement, chest-like form layout, title-routed forms |
+| `ui/server_form.json` | Server form rendering | Script API or server-sent forms need custom UI | Action form replacement, chest-like form layout, title-routed forms |
 | `ui/inventory_screen.json` | Classic inventory screen | Non-pocket inventory needs layout or binding changes | Inventory shell edits, classic inventory widgets |
 | `ui/inventory_screen_pocket.json` | Pocket or touch inventory screen | Issue happens on touch/mobile layout | Mobile inventory adjustments, touch-specific layout fixes |
 | `ui/anvil_screen.json` | Anvil screen | A project customizes anvil presentation | Cost text, naming flow, anvil overlays |
@@ -110,7 +110,7 @@ Typical customizations:
 - replacing simple action forms with custom layouts
 - chest or furnace style server forms
 
-This is usually the first screen to inspect for PMMP custom menu projects.
+This is usually the first screen to inspect for server-driven custom menu projects.
 
 ## `ui/inventory_screen.json`
 

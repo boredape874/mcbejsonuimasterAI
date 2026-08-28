@@ -12,7 +12,7 @@ If the local repository checkout exists, prefer:
 1. Major topic: HUD, chat, server form, special form, battle UI, database/storage, container, loading, tooltip, pause/settings, addon integration.
 2. Mid topic: bars, hotbar, command palette, menu design, renderer overlay, scroll list, etc.
 3. Subtopic: the exact job such as vertical hotbar, RPG status bars, chat command palette, animated hover tooltip.
-4. Data source: static RP, title/actionbar/chat payload, server form collection, scoreboard collection, Script API, PMMP, addon renderer.
+4. Data source: static RP, title/actionbar/chat payload, server form collection, scoreboard collection, Script API, external server payload, addon renderer.
 5. Closest reference: one file or one restricted neutral mirror.
 6. Patch target: exact `RP/ui/*.json` plus addon files if needed.
 

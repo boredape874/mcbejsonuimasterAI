@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "id": "server_form_grid",
+  "status": "static-structure-ready",
+  "runtimeStatus": "not-verified-in-bedrock",
+  "redistribution": {
+    "code": "MIT",
+    "codeSpdx": "MIT",
+    "assets": "CC0-1.0",
+    "assetSpdx": "CC0-1.0",
+    "origin": "first-party deterministic generator",
+    "licenseEvidence": "../LICENSE.md"
+  },
+  "profiles": [
+    "pc_1920x1080_gui3",
+    "touch_1280x720_gui2"
+  ],
+  "design": {
+    "family": "server_form_grid",
+    "rootSize": [
+      600,
+      300
+    ],
+    "alignmentToleranceUiUnits": 1,
+    "repeatedGapPolicy": "one size and one gap per repeated group",
+    "labelPolicy": "every label has explicit size"
+  },
+  "protocol": {
+    "token": "v2:grid",
+    "sender": "BP/scripts/main.js",
+    "uiEntry": "RP/ui/server_form.json"
+  },
+  "requiredFiles": [
+    "RP/manifest.json",
+    "RP/ui/_ui_defs.json",
+    "RP/ui/server_form.json",
+    "RP/ui/features/server_form_grid/screen.json",
+    "BP/manifest.json",
+    "BP/scripts/main.js",
+    "ir.yaml",
+    "preview/preview.png",
+    "preview/measurement-overlay.png"
+  ],
+  "stringCases": {
+    "baseline": "A measured three by two server-form button grid.",
+    "koreanLong": "오늘의 보상 목록은 화면 폭이 좁아져도 카드 간격과 버튼 정렬을 유지하며, 긴 한국어 설명이 지정된 영역을 벗어나지 않아야 합니다.",
+    "englishLong": "This deliberately extended English validation sentence checks that labels remain inside their measured regions without shifting adjacent controls or button states."
+  },
+  "checks": {
+    "jsonParse": "passed",
+    "javascriptSyntax": "passed",
+    "textureReferences": "passed",
+    "ninesliceSidecars": "passed",
+    "normalizedColorComponents": "passed",
+    "bedrockRuntime": "not-run",
+    "contentLog": "not-run"
+  }
+}

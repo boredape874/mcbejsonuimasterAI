@@ -1,0 +1,35 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "V2 Server Form Grid RP",
+    "description": "A measured three by two server-form button grid. First-party v2 public example.",
+    "uuid": "30000000-0000-4000-8000-000000000301",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      80
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "30000000-0000-4000-8000-000000000302",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "metadata": {
+    "authors": [
+      "mcbejsonuimasterAI contributors"
+    ],
+    "license": "CC0-1.0"
+  }
+}

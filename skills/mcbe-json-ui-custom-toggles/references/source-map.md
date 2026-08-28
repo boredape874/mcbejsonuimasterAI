@@ -43,7 +43,7 @@ Use vanilla/common references to verify exact base controls and property names.
 Use this family only as a local private structural reference for settings-style toggle rows, reusable dialog shells, dropdowns, sliders, and animation presets.
 
 - `references/topics/patterns/deesse-ui-toolkit.md`
-- local-only private mirror: `C:/Users/champ/.codex/references/private/deesse-ui-toolkit/ui/déesse_ui/common/`
+- local-only source catalog entry `deesse-ui-toolkit` when explicitly configured
 
 ## Public Naming
 

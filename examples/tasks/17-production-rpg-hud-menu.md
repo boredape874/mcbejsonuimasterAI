@@ -55,7 +55,7 @@ Target RP:
 - <resource pack path>
 
 Target BP or server integration:
-- <behavior pack, Script API, or PMMP path>
+- <behavior pack, Script API, or external server integration path>
 
 Build a production RPG UI suite using docs/67-production-rpg-ui-architecture.md.
 Start the HUD from templates/ir/rpg_hud.yaml and the routed menu from

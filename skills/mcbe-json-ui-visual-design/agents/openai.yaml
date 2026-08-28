@@ -1,0 +1,4 @@
+interface:
+  display_name: "MCBE JSON UI Visual Design"
+  short_description: "Measure and validate Bedrock UI layout and visual states"
+  default_prompt: "Use $mcbe-json-ui-visual-design to derive measured layout constraints and validation evidence for this Bedrock JSON UI."

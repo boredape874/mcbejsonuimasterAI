@@ -12,3 +12,9 @@ vanilla-index/screens.json
 vanilla-index/textures.json
 _ext/
 *.log
+
+# Local source configuration and transient reports
+config/sources.local.json
+workspace/corpus-local/
+/.tmp-*.json
+/--out

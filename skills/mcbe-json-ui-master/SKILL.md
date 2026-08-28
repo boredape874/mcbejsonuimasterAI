@@ -1,60 +1,46 @@
 ---
 name: mcbe-json-ui-master
-description: Comprehensive Minecraft Bedrock JSON UI master skill. Use when Codex must handle Bedrock JSON UI end to end across basics and mental models, pack structure, HUD, chat, chat command helpers such as Java-style locate parsing, title or actionbar driven UI, server form customization, bindings and string parsing logic, reusable patterns, large UI toolkit architecture, desktop/touch HUD splits, quick-container utilities, addon integration, debugging, vanilla texture path lookup, source selection across local sample packs, local utility mirrors, official sample screens, community reference docs, and vanilla resource mirror, or schema and tooling workflows such as JSON UI editors, builders, and schema-based validation.
+description: Route broad or end-to-end Minecraft Bedrock JSON UI work to the smallest applicable specialist skill. Use when a request crosses layout, data flow, forms, HUD, assets, pack integration, and validation, or when ownership is unclear.
 ---
 
 # MCBE JSON UI Master
 
-Use this as the top-level skill for Bedrock JSON UI work.
+Use this skill as a short router. Once the request is classified, read only the selected specialist skill and the references it explicitly requires.
 
-## Workflow
+## Route by primary need
 
-1. Read `references/master-routing.md`.
-   - If local packs, restricted local mirrors, community snippets, community chat notes, or sample archives are involved, also read `references/reference-governance.md` before reporting sources or copying patterns.
-   - If layout, visual polish, size, text scale, alignment, or "make it look like this" is involved, also read `references/visual-fit-discipline.md` before editing.
-   - If the task involves reorganizing UI files, naming modules, splitting large JSON UI files, planning nested folders, defining routers, or designing a clean RP folder layout, also read `references/ui-folder-architecture.md`.
-   - If visual design direction is involved, also read `references/design-reference-atlas.md` and `references/diagrammatic-workflows.md`.
-   - If the user wants a high-quality RPG/game UI, skill screen, HUD status cluster, custom hotbar, or polished texture-backed form, also read `references/high-polish-game-ui-reference.md`.
-   - If the task is broad or the right reference is unclear, also read `references/reference-task-taxonomy.md` and `references/hierarchical-task-router.md` before opening examples.
-   - If local restricted JSON UI references are relevant and present, read `references/local-json-ui-reference-packs.md` before opening raw restricted files.
-   - If the task mentions phone/PDA/device forms, compact routed form suites, reusable button templates, polished shop/store forms, auction/crate/reward forms, battle command panels, database/storage UIs, routed special forms, HUD renderer relocation, or the `advanced-ui-set` reference set, read `references/advanced-ui-set-special-ui.md` before opening raw restricted files.
-   - If the task mentions a large utility UI pack, Déesse-style toolkit, desktop/touch HUD menu, quick container helpers, chunk/minimap/debug overlays, or reusable common control libraries, read `references/topics/patterns/deesse-ui-toolkit.md` before opening any local private source.
-2. Classify the request by primary need:
-   - planning or intake for a new UI
-   - basics or mental model
-   - structure
-   - logic
-   - HUD or chat
-   - server form
-   - reusable pattern
-   - debugging
-   - addon integration
-   - vanilla asset lookup
-   - external research routing
-   - schema validation
-   - tooling and editor workflow
-3. Read only the matching specialized skill reference.
-   - For planning or intake, read `docs/52-json-ui-intake-questionnaire.md`.
-   - For layout-heavy planning, route geometry through `mcbe-json-ui-ir-authoring` and `mcbe-json-ui-tools-runner`.
-4. Answer with file-level changes, exact JSON locations, and exact texture paths.
-5. State whether a path, practice, or rule is:
-   - confirmed from source
-   - inferred from working samples
-   - not verified
+| Need | Skill |
+| --- | --- |
+| proportions, position, size, spacing, typography, visual states | `mcbe-json-ui-visual-design` |
+| pixel geometry and IR constraints | `mcbe-json-ui-ir-authoring` |
+| solve, compile, render, diff, validate | `mcbe-json-ui-tools-runner` |
+| `_ui_defs`, namespaces, insertion, factories | `mcbe-json-ui-foundations` |
+| bindings, expressions, string protocols | `mcbe-json-ui-logic` |
+| HUD, chat, title, actionbar, scoreboard | `mcbe-json-ui-hud-and-chat` |
+| `server_form.json`, title routing, button collections | `mcbe-json-ui-server-forms` |
+| known reusable implementations | `mcbe-json-ui-patterns` |
+| exact property, binding, catalog, or vanilla evidence | `mcbe-json-ui-reference` |
+| mine working packs with source and redistribution evidence | `mcbe-json-ui-samples` |
+| vanilla textures, atlases, screen names | `mcbe-json-ui-vanilla-assets` |
+| RP/BP, scripts, fonts, textures, addon dependencies | `mcbe-json-ui-addon-integration` |
+| non-rendering or incorrect runtime behavior | `mcbe-json-ui-debugging` |
+| source authority or external evidence | `mcbe-json-ui-research` |
+| schema coverage or editor validation | `mcbe-json-ui-schemas` |
 
-## Hard rules
+Use `mcbe-json-ui-basics` for teaching and `mcbe-json-ui-tooling` only when the editor or authoring workflow itself is the subject.
 
-- Never invent Bedrock texture paths.
-- Never guess undocumented binding or property names if exact lookup is needed.
-- Treat JSON UI as part of the full resource pack, not as isolated JSON files.
-- Keep entry files thin: `_ui_defs.json` registers files, `server_form.json` routes forms, and `hud_screen.json` inserts HUD widgets.
-- For non-trivial packs, use the planned nested architecture: `routes/<entry>/index.json`, `forms/<feature>/index.json`, `hud/<feature>/index.json`, and categorized `common/controls`, `common/visuals`, `common/motion`, `common/data`, `common/text`.
-- Prefer included sample packs over abstract explanation for implementation patterns.
-- Use `vanilla resource mirror` as the upstream vanilla asset authority.
-- For layout-heavy UI work, treat IR/tools output as the geometry source of truth, then hand-finish Bedrock-specific bindings, factories, collections, animations, and screen modifications.
-- For visual UI work, name the internal reference family and the target file role opened. Do not expose raw local reference paths, original archive names, author handles, or restricted source labels in public output.
-- For broad UI work, classify by target screen, feature family, data source, and closest reference before opening source files.
-- For visual design work, record design family, layout skeleton, state pattern, data source, closest reference, and patch target before editing.
-- For `advanced-ui-set`-derived work, use only neutral paths and never expose original pack names, credits, comments, hidden marker text, or restricted texture paths in public output.
-- Every edited label must have explicit `size`, and its `font_size` / `font_scale_factor` must fit the available height.
-- For repeated buttons, slots, bars, or rows, keep one item size and one gap value unless a reference shows a deliberate exception.
+## Contract
+
+- Input: target pack or files, requested behavior, reference material, and runtime constraints that are actually available.
+- Output: selected specialist skill or skills, owned file layer, intended evidence, and validation boundary.
+- Success: the work names exact RP/BP files, does not invent properties or assets, and distinguishes static validation from Bedrock runtime proof.
+
+If `data/skill-tool-profiles.json` exists, inspect the `mcbe-json-ui-master` entry only to discover registered orchestration commands. Never assume a listed command exists: confirm its path or package script before invoking it. The router itself does not require a tool call.
+
+## Boundaries
+
+- This repository's core router is Minecraft Bedrock Edition only.
+- Keep `_ui_defs.json`, `server_form.json`, and `hud_screen.json` focused on registration or insertion; place feature bodies in dedicated files.
+- For layout, treat solved IR as geometry source of truth and fix geometry in IR rather than compiled JSON.
+- Verify exact binding, property, and texture names from repository evidence; mark unresolved values instead of guessing.
+- Preserve restricted local source names and paths outside public output.

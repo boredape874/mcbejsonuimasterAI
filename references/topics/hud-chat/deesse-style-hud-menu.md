@@ -4,7 +4,7 @@ This local private reference family shows how to build a feature-rich HUD menu w
 
 Private local mirror:
 
-- `C:/Users/champ/.codex/references/private/deesse-ui-toolkit/ui/`
+- local-only source catalog entry `deesse-ui-toolkit` when explicitly configured
 
 ## Pattern Summary
 

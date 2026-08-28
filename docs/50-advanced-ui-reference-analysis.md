@@ -99,7 +99,7 @@ Reusable pattern:
 title flag -> visibility condition -> collection length -> factory control id -> feature form panel
 ```
 
-Use this when a PMMP plugin needs many custom form pages but should keep a vanilla fallback.
+Use this when a server-driven addon needs many custom form pages but should keep a vanilla fallback.
 
 ### Template System
 
@@ -164,7 +164,7 @@ The router demonstrates three important JSON UI survival techniques:
 - add a non-numeric sentinel before parsing title/body text so numeric-only payload chunks do not break expression logic
 - keep `#form_text` in a holder control before deriving sliced or routed values, because it behaves like a global binding
 
-For PMMP, prefer a clear route convention:
+For server-driven forms, prefer a clear route convention:
 
 ```text
 <route-prefix><payload>
@@ -407,7 +407,7 @@ Use it for:
 - equipment/inventory modal UI
 - map/navigation UI
 - reward toast notifications
-- large multi-form PMMP routing systems
+- large multi-form server routing systems
 
 Do not use it for:
 
@@ -422,5 +422,5 @@ Do not use it for:
 2. Do not paste large original JSON blocks into public docs or generated output.
 3. Extract architecture and dimensions, then rewrite in the target namespace.
 4. Preserve target pack paths and `_ui_defs.json` style.
-5. Replace source-specific flags with project-owned prefixes such as `menu.quest`, `shop:`, `customUI_`, or another PMMP-controlled protocol.
+5. Replace source-specific flags with project-owned prefixes such as `menu.quest`, `shop:`, `customUI_`, or another sender-controlled protocol.
 6. Verify every texture path against the target pack, not the private reference.

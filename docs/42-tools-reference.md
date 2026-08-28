@@ -1,132 +1,169 @@
 # 42 — Tools Reference
 
-Authoritative input/output for every Node CLI under `tools/`.
+The v2 tool layer is registry-first. This document explains the workflow; it does not duplicate every argument, output, exit code, and recovery rule.
 
-All tools:
+## Source of truth
 
-- read inputs only from inside the repository
-- write outputs only inside the repository
-- never call sudo, never modify global state
-- emit human-readable logs, or JSON logs when `MCBEKIT_LOG=json` is set
+- `data/ai-tool-registry.json` — versioned contract for every AI-callable tool
+- `schemas/ai-tool.schema.json` — registry schema
+- `data/skill-tool-profiles.json` — minimal ordered tools for each skill
+- `schemas/task-envelope.schema.json` — structured prompt input
+- `prompts/task-envelope.yaml` — copyable task-envelope template
 
-## tools/setup.mjs
+Use the registry commands before guessing a CLI:
 
-Idempotent self-bootstrap. Used by AI on first open of the repo.
-
-| Step | Effect |
-| --- | --- |
-| Node check | exits 2 if `< 18.17` |
-| `npm install` | retries with `--omit=optional` on failure |
-| `workspace/`, `vanilla-index/cache/`, `.agent/state/` | created |
-| `tools/build-vanilla-index.mjs` | run if upstream mirror is present |
-| `.agent/state/setup-state.json` | written |
-
-Exit codes: `0` ok, `1` unexpected, `2` Node too old, `3` npm install failed.
-
-## tools/doctor.mjs `[--quick] [--fix] [--verbose]`
-
-Health checks. `--quick` is intended for the start of any non-trivial AI task.
-
-| Mode | Behavior |
-| --- | --- |
-| default | full check, exit 4 on failures |
-| `--quick` | fewer checks, always exit 0 |
-| `--fix` | runs whitelisted remediation (`npm install`, `tools/setup.mjs`, `tools/build-vanilla-index.mjs`) |
-| `--verbose` | prints full result list |
-
-## tools/init-project.mjs `<name> [--template <id>]`
-
-Creates `workspace/<name>/ir.yaml` from a starter template. Refuses to overwrite an existing IR. Use `--list-templates` to list the bundled `minimal`, `rpg_hud`, and `rpg_menu` profiles. The default is `minimal`; `--template=<id>` is also accepted.
-
-## tools/ir-validate.mjs `<ir.yaml>`
-
-- JSON Schema validation against `schemas/ir.schema.json`.
-- Cross-reference checks (parent ids, constraint ids).
-- Solver-stage unit policy enforcement. `root.size` and element `size` values must be numeric pixels for `tools/run.mjs`; dynamic Bedrock units are added after solving.
-
-Exit codes: `5` schema error, `6` cross-ref error, `64` usage.
-
-## tools/solve.mjs `<ir.yaml> <solved.json>`
-
-Computes the absolute pixel root rect, computes child rects relative to that root, then iterates declared constraints to a fixed point (≤ 32 iterations). The default solver mode is `auto`: use the Go solver when `go` is available, otherwise fall back to the Node solver. Force a backend with `MCBEKIT_SOLVER=go` or `MCBEKIT_SOLVER=node`.
-
-Supported constraints include alignment, equal sizing, equal gaps, pair symmetry, whole-group centering (`center_group_x/y`), and edge equality/offset. Emits `solved.json` with:
-
-```json
-{
-  "schema": "mcbe-jsonui-ai-kit/solved@1",
-  "namespace": "...", "screen": "...",
-  "base_resolution": [w, h],
-  "solver": "go",
-  "converged": true,
-  "iterations": 3,
-  "rects": { "id": { "x": …, "y": …, "w": …, "h": … } },
-  "log":   [ { "op": "symmetric_x", "ids": ["a","b"] }, … ],
-  "elements": [...], "root": {...}
-}
+```powershell
+npm run skill:doctor -- --all --probe
+npm run tools:list -- --skill mcbe-json-ui-visual-design
+npm run tools:describe -- asset.search
+npm run skill:context -- mcbe-json-ui-server-forms
 ```
 
-Exit codes: `7` non-converged (still writes file), other shared codes as above.
+`status: implemented` plus an existing script means a tool is available. `skill:doctor` reports a missing implemented script as an error and a newly created planned script as a promotion candidate. A file existing by itself is not enough to claim a stable tool contract.
 
-## tools/go/solver
+## Recommended workflow
 
-Go implementation of the deterministic layout solver. It receives the normalized IR JSON on stdin and writes the solve result JSON on stdout. It is intentionally limited to geometry: YAML parsing, schema validation, auto-sizing, compilation, and report generation remain in Node. The launcher sets `GOCACHE` to `.agent/cache/go-build`, keeping builds inside the repository in restricted environments.
+```text
+environment check
+  -> source validation and UI-only scan
+  -> recipe or asset search
+  -> IR solve and compile
+  -> texture-aware preview
+  -> pack validation
+  -> offline evaluation
+  -> later, real Bedrock evidence check
+```
 
-## tools/compile.mjs `<solved.json> <ui.json>`
+Use only the stages needed by the task. `skill:context` returns the smaller skill-specific sequence.
 
-Converts solved IR back into a Bedrock JSON UI file. `root_panel` is full screen by default, or uses the solved `root` rect when the IR overrides root size/anchor/pos. Each element becomes one named control with `anchor_from = anchor_to = <element.anchor>` and `offset` derived from the solved rect. Children are wired via `controls: [{ "name@ns.name": {} }]` arrays.
+## Implemented command groups
 
-Exit code `8` if input is not a solved IR file.
+| Task | npm command | Main evidence |
+| --- | --- | --- |
+| Environment | `npm run doctor:quick` | repository-local dependency and state checks |
+| Source boundary | `npm run validate:sources -- [config]` | source schema, path, license-evidence, and redistribution findings |
+| UI corpus | `npm run source:scan -- [options]` | normalized screen, control, texture, nine-slice, and protocol records |
+| Recipe catalog | `npm run catalog:build -- [options]` | measured recipes linked to source evidence |
+| Recipe lookup | `npm run design:search -- [query] [filters]` | matching recipe ids, tiers, roles, and evidence |
+| Asset lookup | `npm run asset:search -- [query] [filters]` | UI-first asset metadata, dimensions, hash, source, and duplicate state |
+| Layout pipeline | `npm run run -- <ir.yaml>` | `solved.json`, `ui.json`, and `report.json` |
+| Visual preview | `npm run preview -- <ui.json> [<solved.json>] [options]` | coordinates, unsupported-property report, state previews, and contact sheet |
+| Pack validation | `npm run validate:pack -- <pack-root> [options]` | `_ui_defs`, namespace, control, JSONC, and texture report |
+| Public-release audit | `npm run audit:public -- [options]` | local path, private source, credential, framework, and redistribution leak findings |
+| Offline evaluation | `npm run eval:offline -- [options]` | deterministic fixed-task and golden-image report |
+| Runtime evidence gate | `npm run eval:live -- [options]` | status of real PC/touch screenshots and Bedrock content logs |
+| Tool discovery | `npm run tools:list -- [options]` | current registered tools and availability |
+| Tool contract | `npm run tools:describe -- <tool-id>` | inputs, outputs, mutations, failures, recovery, and evidence |
+| Skill context | `npm run skill:context -- <skill>` | ordered minimal tool set and boundaries |
+| Skill health | `npm run skill:doctor -- <skill>` | registry, profile, script, and optional help-probe checks |
+| Prompt build | `npm run prompt:build -- <task-envelope>` | canonical Markdown task prompt |
+| Prompt lint | `npm run prompt:lint -- <prompt-or-envelope>` | missing sections, schema errors, and unavailable required tools |
 
-## tools/validate.mjs `<ui.json> [<solved.json>]`
+Run `npm run tools:describe -- <tool-id>` for exact options and failure behavior. The table above is navigation, not a second contract.
 
-Structural sanity checks on the compiled JSON UI: namespace, root_panel, types, anchor enums, control reference shapes. When a `solved.json` path is provided, it also audits geometry risk: parent overflow, non-positive sizes, static label height/width, and solver constraint errors. Writes a sibling `report.json`.
+## Source and catalog pipeline
 
-Exit code `9` on validation failure.
+The source tools treat development packs and asset libraries as read-only inputs.
 
-## tools/run.mjs `<ir.yaml> [--out <dir>]`
+```powershell
+npm run validate:sources
+npm run source:scan -- --out workspace/corpus-local
+npm run catalog:build -- --corpus workspace/corpus-local/index.json
+npm run design:search -- button --role button --json
+```
 
-Runs ir-validate → solve → compile → validate. Default output directory is the IR's directory. Writes `solved.json`, `ui.json`, `report.json`. Exits with the failing step's code; treats `7` (non-converged) as a warning and continues.
+`design:search` prefers the generated local catalog when present and otherwise uses the checked-in `data/design-recipes.public.json`. Maintainers rebuild that public fallback only with `catalog:build -- --public`; this mode rejects local-only or prohibited evidence and writes deterministic content.
 
-## tools/build-vanilla-index.mjs `[--force]`
+- Public configuration contains only redistributable or metadata-only sources.
+- Local paths belong in the Git-ignored local source configuration.
+- The scanner follows configured UI entry points and linked RP/BP evidence; it does not promote unresolved dynamic values.
+- The catalog preserves source tier and redistribution status.
+- Search results are evidence candidates, not permission to copy source assets.
 
-Walks `references/upstreams/MCBVanillaResourcePack/ui/` and the root-form `references/official/bedrock-samples-ui/` mirror (if present) and builds:
+## Asset search
 
-- `vanilla-index/screens.json` — screen name → list of `{source, path}`
-- `vanilla-index/textures.json` — texture key → evidence list from image files, texture metadata/atlases, and vanilla UI declarations
+`asset:search` queries the local visual asset index without copying files.
 
-Both are gitignored.
+Defaults are deliberately narrow:
 
-## tools/render.mjs (optional) `<ui.json> [<solved.json>] [--no-image]`
+- UI categories only
+- records with `duplicateOf` excluded
+- no resolved local path in output
+- a redistribution warning in every JSON report
 
-Always writes a sibling `coords.json` mapping control name to final pixel rect from `solved.json`. With `@napi-rs/canvas` installed, also writes sibling `preview.png`. **Not** a substitute for in-game testing.
+Use `--include-duplicates`, `--all-categories`, or `--absolute` only when the task explicitly needs them. Even with `--absolute`, verify the source license before copying an asset.
 
-## tools/diff.mjs (optional) `<a.png> <b.png>`
+## IR, compile, and validation
 
-Requires `pixelmatch` + `pngjs`. Region-aware diff with `--ignore-aa`, `--scale`, `--regions` flags. Writes a sibling `diff.png` and prints summary stats.
+The normal geometry command remains:
 
-## tools/validate-pack.mjs `<pack-path> [options]`
+```powershell
+npm run run -- workspace/<project>/ir.yaml
+```
 
-Validates a complete resource pack rather than one compiled screen. It parses JSON and JSONC under `ui/`, validates each control file, traverses `_ui_defs.json`, checks namespace declarations, verifies local and indexed vanilla texture keys, and reports risky cross-namespace controls inserted inside `modifications[].value`.
+It runs `ir-validate -> solve -> compile -> validate` and writes `solved.json`, `ui.json`, and `report.json`. Fix geometry in `ir.yaml` and regenerate; do not hand-tune generated offsets.
 
-| Option | Behavior |
-| --- | --- |
-| `--allow-missing-textures` | skip unresolved texture warnings for partial or external mirrors |
-| `--allow-partial-ui-defs` | allow registered files that are absent from a partial mirror |
-| `--strict-warnings` | exit `10` when warnings remain |
-| `--report <path>` | write the `pack-report@1` JSON report |
+Low-level commands remain available for diagnosis:
 
-Exit codes: `9` validation failure, `10` warnings in strict mode, `64` usage.
+| Tool id | Direct command | Role |
+| --- | --- | --- |
+| `project.init` | `node tools/init-project.mjs <name> [--template <id>]` | create a non-overwriting starter IR |
+| `ir.validate` | `node tools/ir-validate.mjs <ir.yaml>` | schema, reference, and solver-unit checks |
+| `layout.solve` | `node tools/solve.mjs <ir.yaml> <solved.json>` | absolute pixel geometry |
+| `ui.compile` | `node tools/compile.mjs <solved.json> <ui.json>` | Bedrock JSON UI skeleton |
+| `ui.validate` | `node tools/validate.mjs <ui.json> [<solved.json>]` | structural and geometry-risk report |
+| `preview.diff` | `node tools/diff.mjs <target> <preview>` | coordinate or raster difference evidence |
+| `repository.audit` | `node tools/audit.mjs [--report <path>]` | repository links, JSON, skill, and script integrity |
+| `vanilla.index` | `node tools/build-vanilla-index.mjs [--force]` | local vanilla screen and texture evidence |
 
-## tools/audit.mjs `[--report <path>]`
+The Go solver remains geometry-only. YAML parsing, auto-sizing, compilation, validation, preview, and reports stay in Node.
 
-Audits repository health: exact-case local Markdown links, JSON syntax, skill frontmatter, npm script targets, and retired reference roots. Writes an optional `audit-report@1` JSON report and exits `11` on errors.
+## Single preview engine
 
-## npm scripts
+`tools/preview.mjs` is the primary preview entry point. `tools/render.mjs` delegates to the same engine for backward compatibility.
 
-| Command | Effect |
-| --- | --- |
-| `npm run init -- <name> --template rpg_hud` | initialize a workspace through the npm entry point |
-| `npm run validate:pack -- <pack-path>` | validate a full resource pack |
-| `npm run audit` | run repository integrity checks |
-| `npm run check` | run the audit, then the complete test suite |
+```powershell
+npm run preview -- workspace/<project>/ui.json workspace/<project>/solved.json `
+  --profiles pc,touch `
+  --states default,hover,pressed `
+  --report workspace/<project>/preview-report.json
+```
+
+The engine writes deterministic coordinates and unsupported-property evidence even when raster support is unavailable. With the optional canvas dependency it renders selected profiles and states, textures and nine-slices, a contact sheet, and a compatibility `preview.png`.
+
+Unsupported properties are reported rather than silently accepted. The preview is still not a complete Bedrock client emulator.
+
+## Prompt contract
+
+Copy `prompts/task-envelope.yaml` into a workspace and keep its paths repository-relative. The envelope separates:
+
+`goal -> profiles -> materials -> measured evidence -> constraints -> recipes/tools -> output files -> validation -> unverified items`
+
+```powershell
+npm run prompt:build -- workspace/<task>/task.yaml --output workspace/<task>/prompt.md
+npm run prompt:lint -- workspace/<task>/prompt.md --json
+```
+
+Prompt building fails if a required tool is unregistered or unavailable. It does not invent evidence, execute the task, or mark runtime work complete.
+
+## Offline and Bedrock runtime gates
+
+`eval:offline` checks fixed public tasks using parse, reference, geometry, text, asset, protocol, preview, leak, and golden-image evidence. Golden images change only with the explicit `--update-goldens` option; never use that option merely to hide a regression.
+
+`eval:live` does not launch or emulate Minecraft. It checks whether real PC and touch screenshots and a Bedrock content log were supplied for each task, and whether the log contains JSON UI errors.
+
+Therefore:
+
+- clean IR, preview, pack, and offline reports mean **static and visual validation complete**;
+- real in-game screenshots plus clean content logs mean **runtime evidence present**;
+- no tool result alone proves bindings, collection data, input dispatch, animation timing, or device interaction.
+
+Actual Bedrock verification is performed only when the user requests that stage.
+
+## Repository safety
+
+- Tools do not install system software, elevate privileges, or modify global configuration.
+- Public outputs must not contain absolute local paths, private source names, or restricted assets.
+- Run `npm run audit:public` before public release. It checks public candidates while excluding ignored local data and designated external/private reference areas.
+- Local corpus and preview data stay under ignored workspace paths.
+- Setup, tool availability, and content correctness are separate checks: use `doctor`, `skill:doctor`, and the appropriate validator for each layer.

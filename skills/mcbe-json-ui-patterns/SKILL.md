@@ -7,6 +7,14 @@ description: Reuse proven Bedrock JSON UI patterns from included sample packs an
 
 Prefer adapting proven included patterns over inventing a new one.
 
+## Contract
+
+- Input: target feature, screen family, data source, and allowed source tiers.
+- Output: selected pattern and evidence, minimum structure to adapt, and target-specific substitutions.
+- Success: namespace, assets, bindings, protocol, and dependencies are adapted rather than copied blindly.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-patterns` entry. Search the catalog with a registered command only when the command exists; otherwise use the maintained pattern map and label the evidence tier.
+
 ## Workflow
 
 1. Read `references/pattern-map.md`.

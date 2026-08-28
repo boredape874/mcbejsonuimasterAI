@@ -30,7 +30,7 @@ Stage B — handcrafted finish (this doc)
 | Buttons | Provide `default_control` / `hover_control` / `pressed_control`. Set `sound_name: ui.click`. Reuse `common.button` / `common.cancel_button` via `@` extends when shape allows. |
 | Backgrounds | Prefer vanilla nineslice textures (`dialog_background_opaque_dark`, `panel_top_dark`, `Black`, `White`) with `alpha`. Do not invent texture paths. (`docs/14` "verified vanilla assets") |
 | Bindings | Only use names confirmed in `docs/19` / `docs/34`. Minimize binding count. |
-| Variables | Expose tunables as `$variable` so PMMP / ScriptAPI / future themes can override without editing the screen file. |
+| Variables | Expose tunables as `$variable` so Script API, server payload adapters, or future themes can override without editing the screen file. |
 | Entry point | Expose a single root `main_screen_content` (or similarly-named) panel. The router file inserts only that one node. |
 | Reference cross-check | **Before declaring done**, open the closest matching file in `references/source-packs/*` and confirm your structure matches its conventions. If it does not, either change yours to match or document why in this doc. |
 

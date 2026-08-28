@@ -1,0 +1,6 @@
+{
+  "ui_defs": [
+    "ui/hud_screen.json",
+    "ui/features/hud_minimap/screen.json"
+  ]
+}

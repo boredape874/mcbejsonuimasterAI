@@ -7,6 +7,14 @@ description: Explain the fundamentals of Minecraft Bedrock JSON UI in practical 
 
 Use this skill when the task first needs the Bedrock mental model.
 
+## Contract
+
+- Input: the user's current understanding and the concrete pack or screen question.
+- Output: a Bedrock-specific explanation tied to actual RP files and a clear next specialist when implementation begins.
+- Success: requirements, common patterns, and runtime-dependent behavior are not conflated.
+
+If `data/skill-tool-profiles.json` exists, the `mcbe-json-ui-basics` entry may identify read-only lookup helpers. Explanation does not require a tool; do not invoke commands that are absent from the checkout.
+
 ## Workflow
 
 1. Read `references/basics-map.md`.

@@ -31,7 +31,7 @@ The UI then:
 - derives a `textures/...` path from the suffix
 - uses fixed-width or padded text to influence image sizing/offset
 
-Use this when Script API or PMMP form APIs do not expose a first-class image row, but the UI needs image separators or visual previews inside a form.
+Use this when the available server form API does not expose a first-class image row, but the UI needs image separators or visual previews inside a form.
 
 Rules:
 

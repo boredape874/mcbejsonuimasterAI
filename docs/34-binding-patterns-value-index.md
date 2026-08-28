@@ -39,7 +39,7 @@ This document maps useful binding patterns to real sample files.
 
 ### Title/actionbar protocol parsing
 
-Use when a PMMP plugin sends compact data through title/actionbar/subtitle.
+Use when BP Script API or another server sender sends compact data through title/actionbar/subtitle.
 
 Source:
 

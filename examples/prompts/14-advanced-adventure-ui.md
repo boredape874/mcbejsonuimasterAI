@@ -12,7 +12,7 @@ Target pack:
 Feature:
 - <battle pass / store / quest board / NPC vendor / equipment window / map navigation / reward toast>
 
-PMMP data source:
+Server data source:
 - <form title prefix, form body payload, buttons, icons, prices, progress, quest state, etc.>
 
 Reference:
@@ -41,5 +41,5 @@ Turn my quest form into a 3x3 quest-board layout with detail modal routing.
 ```
 
 ```text
-Build a battle-pass reward track using my PMMP button payloads and keep the vanilla form fallback.
+Build a battle-pass reward track using my server button payloads and keep the vanilla form fallback.
 ```

@@ -25,7 +25,7 @@ Recommended response shape:
 
 ```text
 I can base this on one of these styles:
-1. Compact quest/shop panel: RPG server UI quest/shop style, small RPG menu, good for dense PMMP menus.
+1. Compact quest/shop panel: RPG server UI quest/shop style, small RPG menu, good for dense server-driven menus.
 2. Framed NPC panel: header + side choices + large text body, good for quest/NPC/story screens.
 3. Vanilla-safe form skin: safer and simpler, good when compatibility matters.
 
@@ -44,7 +44,7 @@ Only proceed without asking when:
 | Need | Recommended style | Open first |
 | --- | --- | --- |
 | Safe modal form that still feels close to vanilla | vanilla server form shell | `references/official/bedrock-samples-ui/server_form.json` |
-| PMMP menu with custom form routing | token-routed server form | `references/source-packs/rpg-server-ui-reference/ui/server_form.json` |
+| Server-driven menu with custom form routing | token-routed server form | `references/source-packs/rpg-server-ui-reference/ui/server_form.json` |
 | NPC dialogue, quest text, story message | bottom dialogue box | `references/local-examples/npc-dialogue/ui/server_form.json` |
 | NPC or shop panel with side buttons and large body text | framed NPC panel | `references/upstreams/minecraft-bedrock-json-ui-sample/CNPC.UI.RP/CNPC UI [RP]/ui/npc_interact_screen.json` |
 | RPG stats, skills, profile, currency, shop categories | dark stat/card menu | `references/source-packs/rpg-server-ui-reference/ui/stat.json` |
@@ -130,7 +130,7 @@ Design notes:
 
 - anchor the panel to bottom center
 - keep choices as short buttons below or beside the text
-- let PMMP send a title prefix such as `npc:` or `dialogue:` so the UI can route safely
+- let BP Script API or the server sender emit a title prefix such as `npc:` or `dialogue:` so the UI can route safely
 - do not overload this style with inventory grids or many categories
 
 ### Framed NPC Or Shop Panel
@@ -179,7 +179,7 @@ Design notes:
 - use repeated rows for values instead of huge paragraphs
 - reserve one side or header area for currency/level/progress
 - use verified item or UI textures for icons
-- if PMMP drives values, prefer prepared text slices or scoreboard/title data instead of complex JSON UI parsing loops
+- if a server sender drives values, prefer prepared text slices or scoreboard/title data instead of complex JSON UI parsing loops
 
 ### Chest-Like Inventory Form
 
@@ -265,14 +265,14 @@ Recommended use:
 - NPC vendor and quest dialogue
 - map/navigation pages
 - reward toasts
-- large PMMP form routers
+- large server-form routers
 
 Design notes:
 
 - start with the architecture in the analysis doc, not with raw source copying
 - keep templates, router, feature forms, and textures as separate layers
 - use restricted reference files only for local analysis unless redistribution rights are clear
-- translate source-specific route flags into target-owned PMMP prefixes
+- translate source-specific route flags into target-owned server protocol prefixes
 
 ### Compact Crafting And Pocket UI System
 
@@ -298,9 +298,9 @@ Design notes:
 - separate inventory slot collections from decorative panels
 - use the restricted reference only for local analysis, not as public source material
 
-## Choosing A Style For PMMP Menus
+## Choosing A Style For Server-Driven Menus
 
-| PMMP feature | Best starting style | Why |
+| Server feature | Best starting style | Why |
 | --- | --- | --- |
 | `/menu` main server menu | vanilla shell or framed panel | readable, stable, easy to route |
 | NPC conversation | bottom NPC dialogue | natural in-game placement |
@@ -335,7 +335,7 @@ Use docs/39-design-recommendation-catalog.md.
 Preferred style: <one design family>.
 Target pack: <path>.
 Route prefix: <prefix in form title, if any>.
-Required data: <button names, values, icons, PMMP payload fields>.
+Required data: <button names, values, icons, server payload fields>.
 Do not invent texture paths; verify vanilla or bundled texture paths first.
 Keep the layout safe on small screens.
 ```

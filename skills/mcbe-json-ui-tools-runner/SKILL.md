@@ -7,6 +7,14 @@ description: Use to execute the kit's deterministic Node CLI under tools/* (ir-v
 
 Use this skill when the IR is ready (or being iterated) and you need to compile it and validate the result.
 
+## Contract
+
+- Input: repository root and IR path, plus target image only when visual diff is requested.
+- Output: solved geometry, compiled JSON UI, validation report, and available preview/diff artifacts.
+- Success: the deterministic pipeline exits successfully, warnings are reviewed, and optional raster dependencies or unsupported stages are reported explicitly.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-tools-runner` entry and prefer its registered command IDs. Before execution, confirm the referenced script or package script exists; the checked-in commands below remain the fallback source of truth.
+
 ## Pipeline (default)
 
 ```

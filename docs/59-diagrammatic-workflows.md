@@ -57,7 +57,7 @@ flowchart TD
   E --> G
   F --> G
   G --> H[Check hotbar hearts hunger XP chat crosshair]
-  H --> I{Needs BP/PMMP data?}
+  H --> I{Needs BP or server data?}
   I -- yes --> J[Define payload protocol]
   I -- no --> K[Static RP layout]
   J --> L[Patch UI + sender code]

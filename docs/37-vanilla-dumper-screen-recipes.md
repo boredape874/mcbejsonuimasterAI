@@ -14,7 +14,7 @@ High-value recipes:
 
 | Recipe | Vanilla objects to inspect | Use |
 | --- | --- | --- |
-| actionbar fade | `hud_actionbar_text`, `anim_actionbar_text_alpha_out` | PMMP actionbar notification UI |
+| actionbar fade | `hud_actionbar_text`, `anim_actionbar_text_alpha_out` | server-driven actionbar notification UI |
 | title/subtitle chain | `anim_title_text_alpha_in`, `anim_title_text_alpha_stay`, `anim_title_text_alpha_out` | custom title overlays |
 | auto-save sprite sheet | `auto_save_animation`, `auto_save` | `flip_book` and `uv` animation |
 | hotbar item icon | `hotbar_hud_item_icon@common.item_renderer` | item renderer binding pattern |

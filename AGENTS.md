@@ -26,13 +26,14 @@ Pick the layer **based on what the user asked for**, not by default.
 
 | User intent | Use |
 | --- | --- |
-| "make this layout/positions/alignment/symmetry correct", "build a HUD/panel/form from this image or spec" | **Tools layer** (IR + `tools/`) |
+| "make this layout/positions/alignment/symmetry correct", "build a HUD/panel/form from this image or spec" | `mcbe-json-ui-visual-design` + design recipe search, then **Tools layer** (IR + `tools/`) |
 | "I want to make a JSON UI", "plan a JSON UI", "help me decide the UI spec" | `docs/52-json-ui-intake-questionnaire.md` first, then route to Tools layer for geometry and Knowledge layer for Bedrock behavior |
 | "use the vanilla dialog/form/button frame", "extend `common_dialogs.*` / `common_buttons.*` / `server_form.*`" | **Tools layer** with `extends:` (skill `mcbe-json-ui-vanilla-presets`, catalog `data/presets-catalog.json`) |
 | "fix this binding", "add this animation", "wire this to a server form / Script API event" | **Knowledge layer** (`skills/`, `docs/17, 19, 33, 34, 35, 36`) editing raw JSON UI directly |
 | Beginner explanation, source lookup, vanilla path verification, schema setup | **Knowledge layer** |
 | "what properties / anchors / binding types are valid?" | `data/jsonui-spec.json` (single source of truth used by `tools/validate.mjs`) |
 | Mixed (layout + bindings + animation) | Tools layer for layout, then patch the compiled JSON UI with raw edits for bindings/animation |
+| "scan these packs/assets", "learn spacing/button/text patterns" | `config/sources.*.json` -> `source:scan` -> `catalog:build`; never copy local-only material into public output |
 | "실제 RP로 완성", "production-ready", "skills 기반으로 마감" | **Two-stage**: tools for coords, then hand-finish the JSON UI per `docs/46-tools-output-to-handcrafted-ui.md` (3-state buttons, vanilla nineslice, modification-only routing). **MD docs and `references/source-packs/*` are authoritative; tool `ok=true` is not sufficient — see `docs/26` and `docs/46` Authority order.** |
 
 If unsure, ask the user one short question to disambiguate. Do not silently switch layers.
@@ -41,17 +42,18 @@ If unsure, ask the user one short question to disambiguate. Do not silently swit
 
 Workflow:
 
-1. Initialize or update `workspace/<project>/ir.yaml`. Use `node tools/init-project.mjs --list-templates`, then select `minimal`, `rpg_hud`, or `rpg_menu` when a starter fits.
-2. `node tools/run.mjs workspace/<project>/ir.yaml`
+1. Search measured evidence with `npm run design:search -- <role-or-family>`. If no catalog exists, scan configured sources and build it first.
+2. Initialize or update `workspace/<project>/ir.yaml`. Use `node tools/init-project.mjs --list-templates`, then select `minimal`, `rpg_hud`, or `rpg_menu` when a starter fits.
+3. `node tools/run.mjs workspace/<project>/ir.yaml`
    - This runs: ir-validate → solve → compile → validate, and writes:
      - `workspace/<project>/solved.json`
      - `workspace/<project>/ui.json`
      - `workspace/<project>/report.json`
-3. Read `report.json`. If `ok=false`, fix `ir.yaml` (not `ui.json`) and rerun.
-4. (Optional) `node tools/render.mjs workspace/<project>/ui.json` for `preview.png` + `coords.json`.
-5. (Optional) `node tools/diff.mjs <target.png> workspace/<project>/preview.png` to get region-level differences and feed those back into `ir.yaml`.
-6. After hand-finishing a resource pack, run `node tools/validate-pack.mjs <pack-path> --report workspace/pack-report.json`.
-7. Before closing repository work, run `npm run check`.
+4. Read `report.json`. If `ok=false`, fix `ir.yaml` (not `ui.json`) and rerun.
+5. Run `npm run preview -- workspace/<project>/ui.json workspace/<project>/solved.json` for PC/touch state PNGs, contact sheet, coordinates, and unsupported-property evidence.
+6. (Optional) `node tools/diff.mjs <target.png> workspace/<project>/preview.png` to get region-level differences and feed those back into `ir.yaml`.
+7. After hand-finishing a resource pack, run `node tools/validate-pack.mjs <pack-path> --report workspace/pack-report.json`.
+8. Before closing repository work, run `npm run check` and the relevant offline evaluation task.
 
 IR rules (hard):
 
@@ -62,12 +64,14 @@ IR rules (hard):
 - Do **not** edit `ui.json` by hand in the tools workflow. Edit `ir.yaml` and recompile.
 - For layout-heavy work, Tools/IR output is the geometry source of truth. The AI may hand-finish the final Bedrock JSON UI, but it must preserve solved positions and sizes from `solved.json` or compiled `ui.json`. If geometry is wrong, update `ir.yaml` and rerun tools instead of hand-tuning offsets.
 - For dynamic size/value behavior, use tools for the static safe outer skeleton and hand-finish the inner dynamic behavior (`"100%c"`, clipping, `clip_ratio`, bindings, collections, animations) in raw JSON UI.
+- Record the recipe ID and evidence file behind size, gap, alignment, text, and state decisions. If evidence is unresolved, say so instead of guessing.
 
 ## 3. Knowledge layer — when chosen
 
 Use the existing routing already in this repo. Suggested entry points:
 
 - `skills/mcbe-json-ui-master/SKILL.md` — top-level router for arbitrary JSON UI work
+- `skills/mcbe-json-ui-visual-design/SKILL.md` — measured size, ratio, spacing, alignment, typography, and button-state decisions
 - `docs/03-skill-map.md`, `docs/27-token-efficient-routing.md` — pick which skill to read
 - `docs/17-community-patterns-string-score-hud.md`, `docs/19-bindings-and-hardcoded-values.md` — bindings, score HUD, hardcoded values
 - `docs/33-animation-patterns-and-dumper-values.md`, `docs/35-scroll-and-carousel-patterns.md`, `docs/36-dumper-value-cookbook.md` — animations / scroll / dumper values

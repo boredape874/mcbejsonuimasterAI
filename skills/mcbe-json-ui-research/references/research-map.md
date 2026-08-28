@@ -4,7 +4,7 @@
 
 - the question is about how packs are actually assembled
 - the user wants a working pattern to copy
-- the answer depends on PMMP or server driven text protocols
+- the answer depends on Script API or server-driven text protocols
 
 Primary included sources:
 

@@ -611,7 +611,7 @@ Ownership:
 - `arrow_buttons.json`: non-submitting arrow controls and hover/pressed visuals.
 - `state_bridge.json`: cycler/toggle/factory bridge, route state, repeatable event bridge.
 - `orbit_animations.json`: center-from-left/right, side shrink/grow, hover pulse.
-- `protocol.json`: title/body/button text assumptions from PMMP/Script API form creation.
+- `protocol.json`: title/body/button text assumptions from Script API or upstream form creation.
 
 For repeated card animation, state and motion must be separate:
 

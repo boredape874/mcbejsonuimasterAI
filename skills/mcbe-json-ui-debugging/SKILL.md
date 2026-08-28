@@ -7,6 +7,14 @@ description: Diagnose Bedrock JSON UI failures. Use when Codex must find why a s
 
 Treat failures as layered diagnosis.
 
+## Contract
+
+- Input: failing screen, entry files, relevant UI/BP files, reproduction steps, and logs when available.
+- Output: evidence-ranked root cause, minimal owning-layer fix, and the exact checks run.
+- Success: registration, references, data flow, assets, and runtime logs are separated; static success is not presented as runtime proof.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-debugging` entry. Confirm each diagnostic command exists before running it and record unavailable checks instead of inventing results.
+
 ## Workflow
 
 1. Read `references/debugging-map.md`.

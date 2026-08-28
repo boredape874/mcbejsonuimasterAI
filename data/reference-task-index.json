@@ -14,7 +14,7 @@
     {
       "id": "hud_overlay",
       "keywords": ["hud", "rpg hud", "health bar", "mana", "stamina", "actionbar ui", "overlay"],
-      "docs": ["docs/16-screen-by-screen-reference.md", "docs/25-pmmp-json-ui-bridge.md", "docs/54-visual-fit-and-reference-discipline.md", "docs/57-hierarchical-task-router.md"],
+      "docs": ["docs/16-screen-by-screen-reference.md", "docs/34-binding-patterns-value-index.md", "docs/54-visual-fit-and-reference-discipline.md", "docs/57-hierarchical-task-router.md"],
       "references": ["references/official/bedrock-samples-ui/hud_screen.json", "references/local-examples/rpg-hud/ui/rpg_hud.json", "references/local-examples/multi-animated-progress/ui/animated_bar.json"],
       "patchTargets": ["RP/ui/hud_screen.json", "RP/ui/*.json"]
     },
@@ -36,7 +36,7 @@
     {
       "id": "chat_ui",
       "keywords": ["chat", "chat panel", "chat position", "notification", "topbar"],
-      "docs": ["docs/25-pmmp-json-ui-bridge.md", "docs/37-vanilla-dumper-screen-recipes.md"],
+      "docs": ["docs/34-binding-patterns-value-index.md", "docs/37-vanilla-dumper-screen-recipes.md"],
       "references": ["references/official/bedrock-samples-ui/chat_screen.json", "references/local-utils/json-ui-utils/topbar_chat_notification_utils.json"],
       "patchTargets": ["RP/ui/chat_screen.json", "RP/ui/hud_screen.json"]
     },
@@ -66,7 +66,7 @@
     {
       "id": "maze_hud_overlay",
       "keywords": ["maze hud", "cooldown hud", "effect hud", "reward hud", "status progress hud", "ability cooldown"],
-      "docs": ["docs/25-pmmp-json-ui-bridge.md", "docs/33-animation-patterns-and-dumper-values.md", "docs/64-motion-form-hud-reference.md"],
+      "docs": ["docs/34-binding-patterns-value-index.md", "docs/33-animation-patterns-and-dumper-values.md", "docs/64-motion-form-hud-reference.md"],
       "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_hud/maze.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_hud/reward.json", "references/restricted/advanced-ui-set-ui/motion-form-gallery-a/ui/mai/custom_hud.json"],
       "patchTargets": ["RP/ui/hud_screen.json", "RP/ui/*.json"]
     },
@@ -284,13 +284,13 @@
     {
       "id": "title_packet",
       "keywords": ["title", "preserved title", "hud_title_text_string"],
-      "docs": ["docs/25-pmmp-json-ui-bridge.md"],
+      "docs": ["docs/34-binding-patterns-value-index.md"],
       "requiredNote": "Document exact prefix, delimiter, and sender code."
     },
     {
       "id": "actionbar_packet",
       "keywords": ["actionbar", "setActionBar", "hud_actionbar_text"],
-      "docs": ["docs/25-pmmp-json-ui-bridge.md"],
+      "docs": ["docs/34-binding-patterns-value-index.md"],
       "requiredNote": "Reserve enough width for long dynamic text."
     },
     {

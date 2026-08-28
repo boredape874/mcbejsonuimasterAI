@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/boredape874/mcbejsonuimasterAI/schemas/source.schema.json",
+  "title": "MCBE JSON UI source configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "scope", "sources"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "scope": { "enum": ["public", "local"] },
+    "sources": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/source" }
+    }
+  },
+  "$defs": {
+    "pathList": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "tier", "redistribution", "license", "licenseEvidence", "revision", "rpRoot", "include", "exclude", "overrides"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+        "kind": { "enum": ["resource-pack", "addon", "sample", "tooling-pattern"] },
+        "tier": { "enum": ["gold", "gold-candidate", "pattern", "quarantine"] },
+        "redistribution": { "enum": ["public", "metadata-only", "local-only", "prohibited"] },
+        "license": { "type": "string", "minLength": 1 },
+        "licenseEvidence": { "$ref": "#/$defs/pathList" },
+        "revision": { "type": "string", "minLength": 1 },
+        "rpRoot": { "type": "string", "minLength": 1 },
+        "bpRoot": { "type": "string", "minLength": 1 },
+        "include": { "$ref": "#/$defs/pathList" },
+        "exclude": { "$ref": "#/$defs/pathList" },
+        "overrides": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "entryFiles": { "$ref": "#/$defs/pathList" },
+            "protocolFiles": { "$ref": "#/$defs/pathList" },
+            "runtimeEvidence": { "$ref": "#/$defs/pathList" },
+            "visualEvidence": { "$ref": "#/$defs/pathList" }
+          }
+        }
+      }
+    }
+  }
+}

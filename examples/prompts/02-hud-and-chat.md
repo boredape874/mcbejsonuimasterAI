@@ -13,7 +13,7 @@ Show the exact file, namespace, insertion point, and any _ui_defs.json change re
 ```text
 Use mcbe-json-ui-logic, mcbe-json-ui-hud-and-chat, and mcbe-json-ui-patterns.
 Build a title-driven HP bar for this pack.
-Prefer a proven local or mirrored pattern and explain the expected PMMP title payload format.
+Prefer a proven local or mirrored pattern and explain the title payload format expected from BP Script API or the server sender.
 ```
 
 ## 3. Topbar notification

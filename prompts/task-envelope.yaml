@@ -1,0 +1,56 @@
+# Copy this file into workspace/<task>/task.yaml and replace the example values.
+# Paths stored in an envelope must remain repository-relative.
+schemaVersion: 1.0.0
+id: example_json_ui_task
+goal: Build a measured Minecraft Bedrock JSON UI screen from explicit geometry and asset evidence.
+screenProfiles:
+  - id: pc_16_9
+    device: desktop
+    resolution: [1920, 1080]
+    guiScale: 3
+    required: true
+    notes: Primary static layout profile.
+providedMaterials:
+  - id: source_ir
+    kind: ir
+    path: workspace/example_json_ui_task/ir.yaml
+    usage: Geometry source of truth.
+    redistribution: local-only
+measuredEvidence: []
+constraints:
+  - id: geometry_source
+    category: geometry
+    requirement: Express alignment, symmetry, and repeated spacing in IR constraints instead of hand-tuning compiled offsets.
+    priority: must
+    verifiable: true
+recipes: []
+tools:
+  - id: pipeline.run
+    reason: Solve, compile, and validate the source IR.
+    required: true
+  - id: pack.validate
+    reason: Check the completed resource-pack registration and texture references.
+    required: true
+outputFiles:
+  - path: workspace/example_json_ui_task/ui.json
+    role: Compiled Bedrock JSON UI skeleton.
+    required: true
+    generated: true
+  - path: workspace/example_json_ui_task/report.json
+    role: Static validation evidence.
+    required: true
+    generated: true
+validation:
+  - id: geometry_pipeline
+    toolId: pipeline.run
+    criterion: The pipeline exits successfully and report.json contains no errors.
+    required: true
+    evidencePath: workspace/example_json_ui_task/report.json
+  - id: resource_pack
+    toolId: pack.validate
+    criterion: The target RP has no JSON, _ui_defs, namespace, control-reference, or texture errors.
+    required: true
+unverified:
+  - Bedrock runtime rendering, input, bindings, and content-log status remain unverified until an in-game check is supplied.
+notes:
+  - Fix geometry in ir.yaml and regenerate; do not hand-tune generated ui.json offsets.

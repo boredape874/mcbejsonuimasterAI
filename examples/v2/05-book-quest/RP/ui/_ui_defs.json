@@ -1,0 +1,6 @@
+{
+  "ui_defs": [
+    "ui/server_form.json",
+    "ui/features/book_quest/screen.json"
+  ]
+}

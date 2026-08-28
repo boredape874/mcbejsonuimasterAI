@@ -1,0 +1,4 @@
+interface:
+  display_name: "MCBE JSON UI Reference"
+  short_description: "Verify exact Bedrock UI names, paths, and catalog evidence"
+  default_prompt: "Use $mcbe-json-ui-reference to verify this exact Bedrock JSON UI property, binding, recipe, or vanilla path from repository evidence."

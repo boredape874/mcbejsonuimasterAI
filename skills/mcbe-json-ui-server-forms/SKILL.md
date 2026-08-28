@@ -7,6 +7,14 @@ description: Analyze and implement Bedrock JSON UI server form customization. Us
 
 Use this when the UI is driven by Bedrock server form screens.
 
+## Contract
+
+- Input: `server_form.json`, custom route and body files, form title/body/buttons, and sender code when available.
+- Output: title-token-to-factory trace, button/collection index contract, changed files, and interaction checks.
+- Success: routing is unique, button order agrees with the sender, collection ownership is valid, and cancel/input behavior is tested or marked pending.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-server-forms` entry. Run only present validators and do not treat static collection checks as proof that clicks reach the server.
+
 ## Workflow
 
 1. Read `references/server-form-map.md`.

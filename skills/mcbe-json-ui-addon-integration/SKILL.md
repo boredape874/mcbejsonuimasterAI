@@ -7,6 +7,14 @@ description: Analyze Minecraft Bedrock JSON UI as part of a full addon or resour
 
 Use this when the UI depends on the wider pack.
 
+## Contract
+
+- Input: target UI file, RP/BP roots, referenced assets, and the state or protocol owner.
+- Output: a UI-to-asset-or-script dependency trace and the smallest owned file set to change.
+- Success: every changed reference resolves, static data stays in RP, dynamic authority stays in BP or Script API, and runtime-only behavior is labeled unverified.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-addon-integration` entry. Run a registered checker only after confirming its command exists; otherwise trace the pack directly and report the missing check.
+
 ## Workflow
 
 1. Read `references/addon-map.md`.

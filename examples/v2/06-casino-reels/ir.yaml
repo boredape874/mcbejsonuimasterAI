@@ -1,0 +1,605 @@
+screen: casino_reels
+base_resolution:
+  - 1920
+  - 1080
+gui_scale: 3
+elements:
+  - id: shell
+    kind: image
+    anchor: center
+    pos:
+      - 0
+      - 0
+    size:
+      - 720
+      - 440
+    props:
+      texture: textures/ui/v2_casino/panel
+  - id: title
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 30
+      - 16
+    size:
+      - 660
+      - 24
+    props:
+      text: FIVE REEL CASINO
+      localize: false
+      font_size: large
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: cell_0_0
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 34
+      - 66
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_0_0
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 49
+      - 81
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_1
+  - id: cell_0_1
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 34
+      - 146
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_0_1
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 49
+      - 161
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_2
+  - id: cell_0_2
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 34
+      - 226
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_0_2
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 49
+      - 241
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_3
+  - id: cell_1_0
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 114
+      - 66
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_1_0
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 129
+      - 81
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_2
+  - id: cell_1_1
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 114
+      - 146
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_1_1
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 129
+      - 161
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_3
+  - id: cell_1_2
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 114
+      - 226
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_1_2
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 129
+      - 241
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_4
+  - id: cell_2_0
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 194
+      - 66
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_2_0
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 209
+      - 81
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_3
+  - id: cell_2_1
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 194
+      - 146
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_2_1
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 209
+      - 161
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_4
+  - id: cell_2_2
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 194
+      - 226
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_2_2
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 209
+      - 241
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_5
+  - id: cell_3_0
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 274
+      - 66
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_3_0
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 289
+      - 81
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_4
+  - id: cell_3_1
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 274
+      - 146
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_3_1
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 289
+      - 161
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_5
+  - id: cell_3_2
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 274
+      - 226
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_3_2
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 289
+      - 241
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_1
+  - id: cell_4_0
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 354
+      - 66
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_4_0
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 369
+      - 81
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_5
+  - id: cell_4_1
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 354
+      - 146
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_4_1
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 369
+      - 161
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_1
+  - id: cell_4_2
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 354
+      - 226
+    size:
+      - 72
+      - 72
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: symbol_4_2
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 369
+      - 241
+    size:
+      - 42
+      - 42
+    props:
+      texture: textures/ui/v2_casino/symbol_2
+  - id: bet_panel
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 454
+      - 66
+    size:
+      - 222
+      - 232
+    props:
+      texture: textures/ui/v2_casino/card
+  - id: balance
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 470
+      - 88
+    size:
+      - 190
+      - 20
+    props:
+      text: BALANCE  12,500
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: bet
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 470
+      - 126
+    size:
+      - 190
+      - 20
+    props:
+      text: BET  100
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: bet_down
+    kind: button
+    parent: shell
+    anchor: top_left
+    pos:
+      - 470
+      - 170
+    size:
+      - 90
+      - 44
+  - id: bet_up
+    kind: button
+    parent: shell
+    anchor: top_left
+    pos:
+      - 570
+      - 170
+    size:
+      - 90
+      - 44
+  - id: spin
+    kind: button
+    parent: shell
+    anchor: top_left
+    pos:
+      - 470
+      - 230
+    size:
+      - 190
+      - 54
+  - id: payline
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 36
+      - 326
+    size:
+      - 360
+      - 18
+    props:
+      text: WILD x5  |  SCATTER x3
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+constraints:
+  - op: same_size
+    ids:
+      - cell_0_0
+      - cell_0_1
+      - cell_0_2
+      - cell_1_0
+      - cell_1_1
+      - cell_1_2
+      - cell_2_0
+      - cell_2_1
+      - cell_2_2
+      - cell_3_0
+      - cell_3_1
+      - cell_3_2
+      - cell_4_0
+      - cell_4_1
+      - cell_4_2
+  - op: same_size
+    ids:
+      - symbol_0_0
+      - symbol_0_1
+      - symbol_0_2
+      - symbol_1_0
+      - symbol_1_1
+      - symbol_1_2
+      - symbol_2_0
+      - symbol_2_1
+      - symbol_2_2
+      - symbol_3_0
+      - symbol_3_1
+      - symbol_3_2
+      - symbol_4_0
+      - symbol_4_1
+      - symbol_4_2
+  - op: equal_gap_x
+    ids: &a1
+      - cell_0_0
+      - cell_1_0
+      - cell_2_0
+      - cell_3_0
+      - cell_4_0
+    gap: 8
+  - op: align_y
+    ids: *a1
+    edge: center
+  - op: equal_gap_x
+    ids: &a2
+      - cell_0_1
+      - cell_1_1
+      - cell_2_1
+      - cell_3_1
+      - cell_4_1
+    gap: 8
+  - op: align_y
+    ids: *a2
+    edge: center
+  - op: equal_gap_x
+    ids: &a3
+      - cell_0_2
+      - cell_1_2
+      - cell_2_2
+      - cell_3_2
+      - cell_4_2
+    gap: 8
+  - op: align_y
+    ids: *a3
+    edge: center
+  - op: equal_gap_y
+    ids: &a4
+      - cell_0_0
+      - cell_0_1
+      - cell_0_2
+    gap: 8
+  - op: align_x
+    ids: *a4
+    edge: center
+  - op: equal_gap_y
+    ids: &a5
+      - cell_1_0
+      - cell_1_1
+      - cell_1_2
+    gap: 8
+  - op: align_x
+    ids: *a5
+    edge: center
+  - op: equal_gap_y
+    ids: &a6
+      - cell_2_0
+      - cell_2_1
+      - cell_2_2
+    gap: 8
+  - op: align_x
+    ids: *a6
+    edge: center
+  - op: equal_gap_y
+    ids: &a7
+      - cell_3_0
+      - cell_3_1
+      - cell_3_2
+    gap: 8
+  - op: align_x
+    ids: *a7
+    edge: center
+  - op: equal_gap_y
+    ids: &a8
+      - cell_4_0
+      - cell_4_1
+      - cell_4_2
+    gap: 8
+  - op: align_x
+    ids: *a8
+    edge: center
+  - op: same_size
+    ids:
+      - bet_down
+      - bet_up
+  - op: align_y
+    ids:
+      - bet_down
+      - bet_up
+    edge: center

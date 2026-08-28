@@ -7,6 +7,14 @@ description: Use tools and tool-generated references for Minecraft Bedrock JSON 
 
 Use this when the main need is understanding or borrowing a tool workflow.
 
+## Contract
+
+- Input: authoring task, candidate tool, expected artifact, and the target pack constraints.
+- Output: the useful workflow or generated structure, translated into direct JSON UI terms with limitations.
+- Success: external tooling remains a research aid, generated output is inspected, and runtime validity is not inferred from editor rendering.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-tooling` entry. A registry entry is not installation proof; confirm the executable or script before invoking it.
+
 ## Workflow
 
 1. Read `references/tooling-map.md`.

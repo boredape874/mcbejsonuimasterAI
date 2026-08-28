@@ -22,7 +22,7 @@ Core ideas:
 
 ## Searchable form list
 
-Use when a PMMP form has many buttons and needs filtering.
+Use when a server form has many buttons and needs filtering.
 
 Sources:
 
@@ -50,7 +50,7 @@ Core ideas:
 
 - use a `stack_panel`
 - use `factory` when an engine collection exists
-- otherwise use PMMP title/actionbar/chat markers and controlled fixed slots
+- otherwise use BP Script API or server-sender title/actionbar/chat markers and controlled fixed slots
 - use fade/offset animation for entry and exit
 
 ## Item icon row

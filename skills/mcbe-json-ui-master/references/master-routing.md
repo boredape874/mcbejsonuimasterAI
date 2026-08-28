@@ -93,7 +93,7 @@ For individual scoreboard HUD or interactable HUD menus, prefer `topics/hud-chat
 
 For hiding protocol/control messages from chat, prefer `topics/hud-chat/chat-message-filtering.md`.
 
-For PMMP-driven title/actionbar/chat bridges, prefer `docs/25-pmmp-json-ui-bridge.md`.
+For Script API-driven title/actionbar/chat bridges, prefer the HUD/chat protocol references.
 
 For local RPG HUD or multi-bar examples, prefer `docs/28-local-example-mining.md`.
 

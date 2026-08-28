@@ -1,0 +1,74 @@
+{
+  "$schema": "../schemas/source.schema.json",
+  "schemaVersion": 1,
+  "scope": "local",
+  "sources": [
+    {
+      "id": "example-local-gold-candidate-addon",
+      "kind": "addon",
+      "tier": "gold-candidate",
+      "redistribution": "local-only",
+      "license": "replace-with-local-license",
+      "licenseEvidence": ["<LOCAL_LICENSE_EVIDENCE_FILE>"],
+      "revision": "working-tree",
+      "rpRoot": "<LOCAL_GOLD_CANDIDATE_RP_ROOT>",
+      "bpRoot": "<LOCAL_GOLD_CANDIDATE_BP_ROOT>",
+      "include": ["ui/_ui_defs.json", "ui/_global_variables.json", "ui/server_form.json", "ui/hud_screen.json", "ui/chat_screen.json", "ui/**/*.json", "ui/**/*.jsonc"],
+      "exclude": ["node_modules/**", "dist/**", "build/**", "cache/**", ".cache/**", "workspace/**", "preview/**", "**/*.log"],
+      "overrides": {
+        "entryFiles": ["ui/server_form.json", "ui/hud_screen.json", "ui/chat_screen.json"],
+        "protocolFiles": ["scripts/main.js"],
+        "runtimeEvidence": ["evidence/pc-runtime.png", "evidence/content-log.txt"]
+      }
+    },
+    {
+      "id": "example-local-pattern-addon",
+      "kind": "addon",
+      "tier": "pattern",
+      "redistribution": "local-only",
+      "license": "replace-with-local-license-or-unknown",
+      "licenseEvidence": ["<LOCAL_LICENSE_EVIDENCE_FILE_IF_AVAILABLE>"],
+      "revision": "working-tree",
+      "rpRoot": "<LOCAL_PATTERN_RP_ROOT>",
+      "bpRoot": "<LOCAL_PATTERN_BP_ROOT>",
+      "include": ["ui/_ui_defs.json", "ui/_global_variables.json", "ui/server_form.json", "ui/hud_screen.json", "ui/chat_screen.json", "ui/**/*.json", "ui/**/*.jsonc"],
+      "exclude": ["node_modules/**", "dist/**", "build/**", "cache/**", ".cache/**", "workspace/**", "preview/**", "**/*.log"],
+      "overrides": {
+        "entryFiles": ["ui/server_form.json", "ui/hud_screen.json", "ui/chat_screen.json"],
+        "protocolFiles": ["scripts/main.js"]
+      }
+    },
+    {
+      "id": "example-local-quarantine-addon",
+      "kind": "addon",
+      "tier": "quarantine",
+      "redistribution": "local-only",
+      "license": "unknown",
+      "licenseEvidence": [],
+      "revision": "unverified-snapshot",
+      "rpRoot": "<LOCAL_QUARANTINE_RP_ROOT>",
+      "bpRoot": "<LOCAL_QUARANTINE_BP_ROOT>",
+      "include": ["ui/_ui_defs.json", "ui/_global_variables.json", "ui/server_form.json", "ui/hud_screen.json", "ui/chat_screen.json", "ui/**/*.json", "ui/**/*.jsonc"],
+      "exclude": ["node_modules/**", "dist/**", "build/**", "cache/**", ".cache/**", "workspace/**", "preview/**", "**/*.log"],
+      "overrides": {
+        "visualEvidence": [
+          "../path/to/preview-contact-sheet.png",
+          "../path/to/validation.json"
+        ]
+      }
+    },
+    {
+      "id": "json-ui-asset-library",
+      "kind": "tooling-pattern",
+      "tier": "quarantine",
+      "redistribution": "local-only",
+      "license": "mixed-and-source-specific",
+      "licenseEvidence": [],
+      "revision": "replace-with-index-revision",
+      "rpRoot": "<LOCAL_JSON_UI_ASSET_LIBRARY_ROOT>",
+      "include": ["indexes/assets.json", "indexes/summary.json"],
+      "exclude": ["_sources/**", "node_modules/**", "dist/**", "cache/**"],
+      "overrides": {}
+    }
+  ]
+}

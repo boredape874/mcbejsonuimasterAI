@@ -40,17 +40,16 @@ Inspect only:
 - files directly referenced by those files
 ```
 
-## PMMP bridge design
+## Server protocol design
 
 ```text
-Use mcbe-json-ui-master. Use docs/25-pmmp-json-ui-bridge.md and only the relevant HUD/form topic files.
+Use mcbe-json-ui-master. Use `skills/mcbe-json-ui-logic/SKILL.md`, `skills/mcbe-json-ui-addon-integration/SKILL.md`, or `skills/mcbe-json-ui-server-forms/SKILL.md` according to the target screen, and open only the relevant references.
 
 Task:
-Design a PMMP-driven JSON UI protocol for <HP/MP/dialog/shop/etc>.
+Design a BP Script API or server-driven JSON UI protocol for <HP/MP/dialog/shop/etc>.
 
 Constraints:
 - actionbar/title payload should be short
 - JSON UI must parse only needed values
-- include PMMP send flow and JSON UI target files
+- include the sender flow and JSON UI target files
 ```
-

@@ -158,7 +158,7 @@ Observed behavior:
 Use when:
 
 - the target pack needs many custom form types
-- PMMP can control the title prefix reliably
+- BP Script API or the server sender can control the title prefix reliably
 - one shared `server_form.json` must dispatch to several visual designs
 
 Implementation advice:
@@ -359,11 +359,11 @@ Use when:
 
 - replacing vanilla NPC interaction
 - NPC needs a visible model area, text, and response buttons
-- the design is closer to Bedrock vanilla NPC screen than PMMP server_form
+- the design is closer to the Bedrock vanilla NPC screen than a normal `server_form`
 
 Implementation advice:
 
-- use this for true NPC interaction screens, not normal PMMP forms
+- use this for true NPC interaction screens, not normal server forms
 - keep response count modest because each button is 26px tall
 - put long dialogue in the scroll area
 
@@ -678,7 +678,7 @@ Design reference:
 - source: references/source-packs/rpg-server-ui-reference/ui/quest.json
 - role: quest list window
 - reused: 220x220 compact panel, 200x171 scroll viewport, 175x40 list buttons
-- changed: namespace, route prefix, textures, PMMP button payload
+- changed: namespace, route prefix, textures, server button payload
 ```
 
 This makes it clear whether the AI copied structure, copied dimensions, or only used the example as visual inspiration.

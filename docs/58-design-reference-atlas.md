@@ -21,7 +21,7 @@ Do not jump from a screenshot directly to JSON. First choose the design family a
 
 | User Wants | Design Family | Layout Skeleton | Open First | Use When | Avoid When |
 | --- | --- | --- | --- | --- | --- |
-| RPG HUD | compact RPG HUD | bottom-left portrait/status cluster + bottom bars + optional right stat rail | `docs/25-pmmp-json-ui-bridge.md`, `references/local-examples/rpg-hud/ui/rpg_hud.json` | HP/MP/ST/XP, PMMP or BP-driven values | user wants vanilla HUD unchanged except one small bar |
+| RPG HUD | compact RPG HUD | bottom-left portrait/status cluster + bottom bars + optional right stat rail | `docs/34-binding-patterns-value-index.md`, `references/local-examples/rpg-hud/ui/rpg_hud.json` | HP/MP/ST/XP, BP or server-driven values | user wants vanilla HUD unchanged except one small bar |
 | Skill/stat window | compact RPG panel | fixed modal, header, stat cards, icon rows | `docs/40-server-form-example-index.md`, RPG stat/skill rows | dense server RPG menus | long story text or inbox-like content |
 | Quest/NPC dialogue | dialogue/readable panel | bottom dialogue or framed NPC panel | `docs/39-design-recommendation-catalog.md`, `docs/40-server-form-example-index.md` | story text, options, NPC interaction | shop grids or item picking |
 | Shop/inventory menu | item grid panel | header, category tabs, item grid, detail/action strip | `docs/40-server-form-example-index.md` | prices, items, rewards, kits | text-heavy pages |
@@ -214,8 +214,8 @@ Use for ability upgrades, skill trees, battlepass-like tracks, shop purchase flo
 | actionbar payload | compact summaries | multi-value parsing with long text |
 | chat payload | notifications, protocol-driven message UI | very frequent updates |
 | scoreboard collection | personal score, sidebar, list-driven HUD | many players/offline rows without cleanup |
-| Script API BP | local prototypes, addon demos | PMMP production assumptions |
-| PMMP | production server menus/HUD | unsupported client-only assumptions |
+| Script API BP | addon-owned state and local prototypes | external server assumptions |
+| External server sender | production server menus/HUD | unsupported client-only assumptions |
 
 ## Design Reference Evidence
 

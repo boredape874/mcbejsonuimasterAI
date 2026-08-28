@@ -27,6 +27,6 @@ Design a title, actionbar, chat, or form-text payload that JSON UI can consume s
 ## Expected result
 
 - payload format
-- PMMP or Script API formatting rule
+- Script API or server-sender formatting rule
 - JSON UI binding strategy
 - limitations and failure modes

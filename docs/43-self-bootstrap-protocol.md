@@ -22,6 +22,9 @@ The kit is designed so that any AI agent — Cursor, Claude Code, Codex, Copilot
 | `tools/setup.mjs` | shell | Executes the bootstrap idempotently |
 | `tools/doctor.mjs` | shell | Diagnoses and (with `--fix`) applies whitelisted remedies |
 | `skills/mcbe-json-ui-self-bootstrap/SKILL.md` | AI agents | Skill that wraps the protocol |
+| `data/ai-tool-registry.json` | AI agents and tools | Versioned command, input, output, failure, mutation, and evidence contracts |
+| `data/skill-tool-profiles.json` | AI agents and tools | Minimal ordered tool set for each JSON UI skill |
+| `tools/skill-doctor.mjs` | shell | Verifies registry, profiles, implemented scripts, and declared help support |
 
 ## Boot sequence (logical)
 
@@ -35,6 +38,17 @@ AI opens repo
        └─ else:
             └─ runs node tools/doctor.mjs --quick
 ```
+
+After the environment check, select tools from the registry rather than guessing commands:
+
+```text
+node tools/skill-doctor.mjs <selected-skill> --probe
+  -> node tools/skill-context.mjs <selected-skill>
+  -> node tools/tool-describe.mjs <selected-tool-id>
+  -> invoke only implemented, available tools required by the task
+```
+
+`tools/doctor.mjs` checks the local Node environment. `tools/skill-doctor.mjs` checks AI tool contracts and skill profiles. Neither validates a resource pack or proves Bedrock runtime behavior.
 
 ## Safety boundaries (what AI must NOT do)
 

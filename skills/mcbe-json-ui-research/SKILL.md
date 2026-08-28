@@ -7,6 +7,14 @@ description: Research and route Minecraft Bedrock JSON UI questions to the right
 
 Use this skill when the main problem is selecting or combining sources correctly.
 
+## Contract
+
+- Input: the exact claim or implementation question, required recency, and redistribution boundary.
+- Output: selected source class, evidence location, confidence label, and license/use limits.
+- Success: authoritative facts, working-sample evidence, inference, and unknowns remain distinguishable.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-research` entry. Invoke a registered search/index command only when present; missing local indexes must be reported rather than silently replaced by guesses.
+
 ## Workflow
 
 1. Read `references/research-map.md`.

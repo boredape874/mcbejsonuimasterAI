@@ -80,11 +80,11 @@ Likely causes:
 - title-prefix routing does not match
 - form type differs from expected
 - factory points to the wrong control
-- PMMP sends a different title/body/button layout
+- the BP or server sender sends a different title/body/button layout
 
 Check:
 
-- raw PMMP form title/body/buttons
+- raw server form title/body/buttons
 - `server_form.json` factory controls
 - `#form_title`, `#form_text`, button collection bindings
 

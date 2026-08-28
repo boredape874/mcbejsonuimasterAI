@@ -1,0 +1,35 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "V2 Daily Rewards RP",
+    "description": "Seven equal reward cards with claim states and fixed spacing. First-party v2 public example.",
+    "uuid": "20000000-0000-4000-8000-000000000201",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      80
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "20000000-0000-4000-8000-000000000202",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "metadata": {
+    "authors": [
+      "mcbejsonuimasterAI contributors"
+    ],
+    "license": "CC0-1.0"
+  }
+}

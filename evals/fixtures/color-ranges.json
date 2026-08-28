@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "scope": "JSON UI control properties",
+  "properties": [
+    "color",
+    "shadow_color",
+    "outline_color",
+    "locked_color"
+  ],
+  "componentRange": {
+    "minimum": 0,
+    "maximum": 1,
+    "inclusive": true
+  },
+  "expectedFailures": [
+    {
+      "value": [
+        172,
+        181,
+        197,
+        255
+      ],
+      "reason": "PNG-style byte components are invalid in JSON UI color properties"
+    }
+  ],
+  "exclusions": [
+    "PNG raster pixels",
+    "image-generation source colors"
+  ]
+}

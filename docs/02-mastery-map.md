@@ -162,10 +162,11 @@ Learn last:
 
 - how UI depends on textures, fonts, blocks, items, and addon data
 - where UI changes stop and addon asset changes begin
-- how PMMP drives title, actionbar, chat, scoreboard, and form UI
+- how BP Script API or another server sender drives title, actionbar, chat, scoreboard, and form UI
 
 Primary source:
 
 - `references/source-packs/rpg-server-ui-reference/`
-- `docs/25-pmmp-json-ui-bridge.md`
+- `docs/34-binding-patterns-value-index.md`
+- `docs/40-server-form-example-index.md`
 - `docs/28-local-example-mining.md`

@@ -33,7 +33,7 @@ Why it matters for JSON UI:
 Use it when:
 
 - a UI or plugin needs stable item AUX values
-- a PMMP/Nukkit/Geyser-like integration needs item ID mapping
+- a server or proxy integration needs item ID mapping
 - custom resource-pack item icons must be mapped in a reproducible way
 
 Do not use it for:

@@ -172,7 +172,7 @@
 ## large utility UI toolkit
 
 - `mcbe-json-ui-master/references/topics/patterns/deesse-ui-toolkit.md`
-- local-only private mirror when present: `C:/Users/champ/.codex/references/private/deesse-ui-toolkit/`
+- local-only source catalog entry `deesse-ui-toolkit` when explicitly configured
 - pattern: keep vanilla screen files thin, register many focused modules through `_ui_defs.json`, split common controls, HUD modules, quick-container helpers, and tool overlays into separate folders.
 - note: raw source includes an explicit no-copy notice. Use the structure as a study reference, not as public code to paste.
 

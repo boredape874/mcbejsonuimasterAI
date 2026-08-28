@@ -7,7 +7,7 @@ Use this table to choose the smallest file or code fragment for a task.
 | Need | Open first | Extract |
 | --- | --- | --- |
 | Add overlay to HUD | target `ui/hud_screen.json` | `root_panel.modifications` insertion |
-| Preserve title payload | `docs/25-pmmp-json-ui-bridge.md` | binding source for `#hud_title_text_string` |
+| Preserve title payload | `docs/34-binding-patterns-value-index.md` | binding source for `#hud_title_text_string` |
 | Add RPG bars | `references/local-examples/rpg-hud/ui/rpg_hud.json` | preserved panels and bar layout |
 | Add multi progress bars | `references/local-examples/multi-animated-progress/ui/hud_screen.json` | data source panel and bar control calls |
 | Hide raw title text | example `ui/hud_screen.json` | `hud_title_text` visibility binding |
@@ -71,7 +71,7 @@ Use this table to choose the smallest file or code fragment for a task.
 
 | Need | Open first | Extract |
 | --- | --- | --- |
-| UI plus BP script | `docs/25-pmmp-json-ui-bridge.md` or local BP example | payload/form shape, not whole gameplay logic |
+| UI plus BP script | `skills/mcbe-json-ui-addon-integration/SKILL.md` or a local BP example | payload/form shape, not whole gameplay logic |
 | UI plus item/entity assets | `docs/23-bedrock-resource-pack-basics.md` | referenced BP/RP identifiers and texture paths |
 | Waypoint-like system | `docs/28-local-example-mining.md` | architecture only unless license is verified |
 

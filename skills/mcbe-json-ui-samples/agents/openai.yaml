@@ -1,0 +1,4 @@
+interface:
+  display_name: "MCBE JSON UI Samples"
+  short_description: "Mine source-tiered Bedrock UI patterns with evidence"
+  default_prompt: "Use $mcbe-json-ui-samples to extract a reusable Bedrock JSON UI pattern while preserving source and redistribution evidence."

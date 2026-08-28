@@ -21,10 +21,10 @@ Do not start by opening every document. Use the smallest matching row.
 
 | Target | User wording | First docs | First references | Patch target |
 | --- | --- | --- | --- | --- |
-| HUD overlay | HUD, RPG HUD, health bar, mana, stamina, actionbar UI, top/bottom overlay | `docs/16-screen-by-screen-reference.md`, `docs/25-pmmp-json-ui-bridge.md`, `docs/54-visual-fit-and-reference-discipline.md` | `references/official/bedrock-samples-ui/hud_screen.json`, `references/local-examples/rpg-hud/ui/hud_screen.json`, `references/local-examples/multi-animated-progress/ui/animated_bar.json` | `RP/ui/hud_screen.json`, optional utility file |
+| HUD overlay | HUD, RPG HUD, health bar, mana, stamina, actionbar UI, top/bottom overlay | `docs/16-screen-by-screen-reference.md`, `docs/34-binding-patterns-value-index.md`, `docs/54-visual-fit-and-reference-discipline.md` | `references/official/bedrock-samples-ui/hud_screen.json`, `references/local-examples/rpg-hud/ui/hud_screen.json`, `references/local-examples/multi-animated-progress/ui/animated_bar.json` | `RP/ui/hud_screen.json`, optional utility file |
 | Hotbar relayout | vertical hotbar, circular hotbar, radial hotbar, numbered slot labels | `docs/16-screen-by-screen-reference.md`, `docs/56-local-json-ui-reference-pack-analysis.md`, `docs/57-hierarchical-task-router.md` | vanilla `hud_screen.json`, optional restricted `vertical-hotbar-left-right` or `circular-hotbar` mirror | `RP/ui/hud_screen.json`, optional `_global_variables.json` |
 | Interactable HUD tools | minimap, 3D renderer, HUD settings, live sliders, input overlay | `docs/38-advanced-json-ui-recipes.md`, `docs/56-local-json-ui-reference-pack-analysis.md`, `docs/57-hierarchical-task-router.md` | optional restricted `minimap-overlay` mirror | `RP/ui/hud_screen.json`, optional addon renderer files |
-| Chat UI | chat position, chat panel, chat notification, hide protocol message | `docs/25-pmmp-json-ui-bridge.md`, `docs/37-vanilla-dumper-screen-recipes.md` | `references/official/bedrock-samples-ui/chat_screen.json`, `references/local-utils/json-ui-utils/topbar_chat_notification_utils.json` | `RP/ui/chat_screen.json`, sometimes `hud_screen.json` |
+| Chat UI | chat position, chat panel, chat notification, hide protocol message | `docs/34-binding-patterns-value-index.md`, `docs/37-vanilla-dumper-screen-recipes.md` | `references/official/bedrock-samples-ui/chat_screen.json`, `references/local-utils/json-ui-utils/topbar_chat_notification_utils.json` | `RP/ui/chat_screen.json`, sometimes `hud_screen.json` |
 | Chat command palette | quick commands, command sidebar, chat formatting panel | `docs/37-vanilla-dumper-screen-recipes.md`, `docs/56-local-json-ui-reference-pack-analysis.md` | vanilla `chat_screen.json`, optional restricted `fast-commands` mirror | `RP/ui/chat_screen.json`, `RP/ui/ui_common.json` |
 | Server form | action form, custom form, menu, quest, shop, skill, stat, NPC dialogue | `docs/39-design-recommendation-catalog.md`, `docs/40-server-form-example-index.md`, `docs/53-premium-ui-pattern-reference.md` | `references/source-packs/rpg-server-ui-reference/ui/server_form.json`, `references/source-packs/modern-cloud-ui-reference/ui/server_form.json` | `RP/ui/server_form.json` plus feature UI files |
 | Animation-heavy progression form | ability form, skill tree, battlepass, upgrade nodes, shop popup, quest tab | `docs/64-motion-form-hud-reference.md`, `docs/61-advanced-ui-set-file-pattern-routes.md` | optional restricted `advanced-ui-set-ui/motion-form-gallery-a/ui/mai/components/ability/ability_upgrades_tab.json` or matching component | `RP/ui/server_form.json` plus feature UI files |
@@ -49,7 +49,7 @@ Do not start by opening every document. Use the smallest matching row.
 | Chat command palette | `docs/56-local-json-ui-reference-pack-analysis.md` plus vanilla `chat_screen.json` | `edit_box`, hidden send button, expandable command categories | preserve chat fallback and touch keyboard mappings |
 | Minimap/settings overlay | `docs/56-local-json-ui-reference-pack-analysis.md` | HUD input flags, slider-bound offsets, `3d_structure_renderer` | addon dependencies and input capture |
 | Actionbar summary | vanilla `hud_screen.json` actionbar text | factory target and label sizing | long dynamic text width; avoid `MinecraftTen` |
-| Title protocol parsing | `docs/25-pmmp-json-ui-bridge.md` | exact payload prefix and preserved binding | hide raw title only after preserving source |
+| Title protocol parsing | `docs/34-binding-patterns-value-index.md` | exact payload prefix and preserved binding | hide raw title only after preserving source |
 | Form router | modern cloud or RPG `server_form.json` | title prefix routing, factory split | fallback form must still work |
 | Device form shell | `docs/62-special-form-device-ui-patterns.md` | shell image, region panels, per-region factories | hidden markers must not be visible |
 | Battle move selector | `docs/61-advanced-ui-set-file-pattern-routes.md` | actor cards, move buttons, PP/dynamic bars | labels and button states must stay same size |
@@ -71,14 +71,14 @@ Do not start by opening every document. Use the smallest matching row.
 
 | Data source | Use when | Required docs | Required implementation note |
 | --- | --- | --- | --- |
-| Static RP only | decorative UI, fixed text, layout mockup | layout and visual-fit docs | no BP/PMMP dependency |
-| Title packet | bars, preserved values, high-frequency HUD data | `docs/25-pmmp-json-ui-bridge.md` | exact prefix, delimiter, and sender code |
+| Static RP only | decorative UI, fixed text, layout mockup | layout and visual-fit docs | no BP or server dependency |
+| Title packet | bars, preserved values, high-frequency HUD data | `docs/34-binding-patterns-value-index.md` | exact prefix, delimiter, and sender code |
 | Actionbar packet | compact status text, visible summaries | vanilla `hud_screen.json` actionbar reference | dynamic text must fit a wide label |
-| Chat packet | notifications, hidden protocol lines | `docs/25-pmmp-json-ui-bridge.md`, chat references | suppression rule for protocol lines |
+| Chat packet | notifications, hidden protocol lines | `docs/34-binding-patterns-value-index.md`, chat references | suppression rule for protocol lines |
 | Server form collections | action form buttons, custom form fields | server form docs and examples | uses `form_buttons`, `#form_text`, `#title_text` |
 | Scoreboard collections | personal score or sidebar | scoreboard docs | collection-heavy patterns may lag |
 | Script API BP | local addon prototype | addon integration docs | manifest module version and payload format |
-| PMMP plugin | production server UI | PMMP bridge docs | packet/form sender code must match UI parser |
+| External server sender | production server UI | logic, addon-integration, and server-form docs | packet/form sender code must match UI parser |
 | Addon renderer files | 3D renderer, minimap, model-backed UI | addon integration docs and `docs/56-local-json-ui-reference-pack-analysis.md` | copy or recreate entity/model/render-controller dependencies |
 | advanced-ui-set restricted mirror | top-tier special form and HUD references | `docs/60-advanced-ui-set-special-ui-reference.md` | use neutral restricted paths only; never publish original names or restricted textures |
 

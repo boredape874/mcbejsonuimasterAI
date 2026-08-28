@@ -1,0 +1,441 @@
+{
+  "namespace": "v2_gallery",
+  "screen": {
+    "type": "panel",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "layer": 100,
+    "bindings": [
+      {
+        "binding_name": "#title_text"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not ((#title_text - 'v2:gallery') = #title_text))",
+        "target_property_name": "#visible"
+      }
+    ],
+    "controls": [
+      {
+        "shell": {
+          "type": "panel",
+          "size": [
+            620,
+            340
+          ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "offset": [
+            0,
+            0
+          ],
+          "controls": [
+            {
+              "background": {
+                "type": "image",
+                "texture": "textures/ui/v2_gallery/panel",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "offset": [
+                  0,
+                  0
+                ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "layer": 1
+              }
+            },
+            {
+              "title": {
+                "type": "label",
+                "text": "TYPOGRAPHY & STATES",
+                "localize": false,
+                "size": [
+                  560,
+                  24
+                ],
+                "offset": [
+                  30,
+                  18
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "text_alignment": "center",
+                "font_size": "large",
+                "font_scale_factor": 1,
+                "color": [
+                  0.95,
+                  0.96,
+                  0.98
+                ],
+                "shadow": true,
+                "layer": 8
+              }
+            },
+            {
+              "body": {
+                "type": "label",
+                "text": "Explicit label regions keep Korean and English text measurable.",
+                "localize": false,
+                "size": [
+                  560,
+                  36
+                ],
+                "offset": [
+                  30,
+                  54
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "text_alignment": "left",
+                "font_size": "normal",
+                "font_scale_factor": 0.85,
+                "color": [
+                  0.675,
+                  0.71,
+                  0.773
+                ],
+                "shadow": true,
+                "layer": 8
+              }
+            },
+            {
+              "caption_default": {
+                "type": "label",
+                "text": "DEFAULT",
+                "localize": false,
+                "size": [
+                  160,
+                  18
+                ],
+                "offset": [
+                  35,
+                  112
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "text_alignment": "center",
+                "font_size": "normal",
+                "font_scale_factor": 0.9,
+                "color": [
+                  0.95,
+                  0.96,
+                  0.98
+                ],
+                "shadow": true,
+                "layer": 8
+              }
+            },
+            {
+              "caption_hover": {
+                "type": "label",
+                "text": "HOVER",
+                "localize": false,
+                "size": [
+                  160,
+                  18
+                ],
+                "offset": [
+                  230,
+                  112
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "text_alignment": "center",
+                "font_size": "normal",
+                "font_scale_factor": 0.9,
+                "color": [
+                  0.95,
+                  0.96,
+                  0.98
+                ],
+                "shadow": true,
+                "layer": 8
+              }
+            },
+            {
+              "caption_pressed": {
+                "type": "label",
+                "text": "PRESSED",
+                "localize": false,
+                "size": [
+                  160,
+                  18
+                ],
+                "offset": [
+                  425,
+                  112
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "text_alignment": "center",
+                "font_size": "normal",
+                "font_scale_factor": 0.9,
+                "color": [
+                  0.95,
+                  0.96,
+                  0.98
+                ],
+                "shadow": true,
+                "layer": 8
+              }
+            },
+            {
+              "default_sample": {
+                "type": "image",
+                "texture": "textures/ui/v2_gallery/button_default",
+                "size": [
+                  160,
+                  48
+                ],
+                "offset": [
+                  35,
+                  140
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "hover_sample": {
+                "type": "image",
+                "texture": "textures/ui/v2_gallery/button_hover",
+                "size": [
+                  160,
+                  48
+                ],
+                "offset": [
+                  230,
+                  140
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "pressed_sample": {
+                "type": "image",
+                "texture": "textures/ui/v2_gallery/button_pressed",
+                "size": [
+                  160,
+                  48
+                ],
+                "offset": [
+                  425,
+                  140
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "interactive_button": {
+                "type": "button",
+                "size": [
+                  220,
+                  48
+                ],
+                "offset": [
+                  200,
+                  244
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 10,
+                "default_control": "default",
+                "hover_control": "hover",
+                "pressed_control": "pressed",
+                "button_mappings": [
+                  {
+                    "from_button_id": "button.menu_select",
+                    "to_button_id": "button.form_button_click",
+                    "mapping_type": "pressed"
+                  },
+                  {
+                    "from_button_id": "button.menu_ok",
+                    "to_button_id": "button.form_button_click",
+                    "mapping_type": "focused"
+                  }
+                ],
+                "controls": [
+                  {
+                    "default": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_gallery/button_default",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "INTERACTIVE SAMPLE",
+                            "localize": false,
+                            "size": [
+                              204,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "hover": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_gallery/button_hover",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "INTERACTIVE SAMPLE",
+                            "localize": false,
+                            "size": [
+                              204,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "pressed": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_gallery/button_pressed",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "INTERACTIVE SAMPLE",
+                            "localize": false,
+                            "size": [
+                              204,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
