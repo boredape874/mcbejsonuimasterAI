@@ -9,6 +9,9 @@
 //   5) root-and-units:        root rect compilation + solver-stage unit guard
 //   6) measured-controls:     auto text/image/collection sizing and form grid props
 //   7) go-solver-parity:      Go solver output parity with Node solver
+//   8) project-templates:      initialize and compile every bundled IR template
+//   9) pack-validator:         JSONC, texture, _ui_defs, and failure behavior
+//  10) vanilla-index:          root-form official samples and texture evidence
 
 import { mkdir, writeFile, rm, readFile } from "node:fs/promises";
 import { resolve, basename, extname } from "node:path";
@@ -431,6 +434,82 @@ constraints:
   record("go:log-parity", !!nodeSolved && !!goSolved && stableJson(nodeSolved.log) === stableJson(goSolved.log));
 }
 
+async function category8() {
+  console.log("[8] project-templates");
+  const listed = await run(node, ["tools/init-project.mjs", "--list-templates"]);
+  record("template:list", listed.code === 0 && ["minimal", "rpg_hud", "rpg_menu"].every((id) => listed.stdout.includes(id)));
+
+  for (const template of ["minimal", "rpg_hud", "rpg_menu"]) {
+    const name = `test_template_${template}`;
+    const wsDir = resolve(REPO, "workspace", name);
+    await rm(wsDir, { recursive: true, force: true });
+    const initialized = await run(node, ["tools/init-project.mjs", name, "--template", template]);
+    record(`template:${template}:init`, initialized.code === 0, { code: initialized.code });
+    const compiled = await run(node, ["tools/run.mjs", `workspace/${name}/ir.yaml`]);
+    const report = await readJsonSafe(resolve(wsDir, "report.json"));
+    record(`template:${template}:clean`, compiled.code === 0 && report?.ok === true && report.warnings.length === 0,
+      report ? { errors: report.errors.length, warnings: report.warnings.length } : { code: compiled.code, report: "missing" });
+  }
+
+  const invalid = await run(node, ["tools/init-project.mjs", "test_invalid_template", "--template", "missing"]);
+  record("template:invalid-is-usage-error", invalid.code === 64, { code: invalid.code });
+}
+
+async function category9() {
+  console.log("[9] pack-validator");
+  const validDir = resolve(REPO, "workspace", "_test_pack_valid");
+  const validUi = resolve(validDir, "ui");
+  await rm(validDir, { recursive: true, force: true });
+  await mkdir(validUi, { recursive: true });
+  await writeFile(resolve(validUi, "_ui_defs.json"), JSON.stringify({ ui_defs: ["ui/main.json", "ui/extra.jsonc"] }, null, 2));
+  await writeFile(resolve(validUi, "main.json"), JSON.stringify({
+    namespace: "pack_test",
+    root_panel: {
+      type: "panel",
+      size: ["100%", "100%"],
+      controls: [{ icon: { type: "image", size: [20, 20], texture: "textures/ui/Black" } }],
+    },
+  }, null, 2));
+  await writeFile(resolve(validUi, "extra.jsonc"), `{
+  // JSONC comments and trailing commas are accepted.
+  "namespace": "pack_extra",
+  "extra": {
+    "type": "panel",
+    "size": [20, 20],
+  },
+}
+`, "utf8");
+  const valid = await run(node, ["tools/validate-pack.mjs", "workspace/_test_pack_valid", "--strict-warnings", "--report", "workspace/_test_pack_valid/report.json"]);
+  const validReport = await readJsonSafe(resolve(validDir, "report.json"));
+  record("pack:clean-jsonc-pack", valid.code === 0 && validReport?.clean === true && validReport.files === 3,
+    validReport ? { files: validReport.files, errors: validReport.errors.length, warnings: validReport.warnings.length } : { code: valid.code });
+
+  const brokenDir = resolve(REPO, "workspace", "_test_pack_broken");
+  const brokenUi = resolve(brokenDir, "ui");
+  await rm(brokenDir, { recursive: true, force: true });
+  await mkdir(brokenUi, { recursive: true });
+  await writeFile(resolve(brokenUi, "_ui_defs.json"), JSON.stringify({ ui_defs: ["ui/main.json", "ui/missing.json"] }, null, 2));
+  await writeFile(resolve(brokenUi, "main.json"), JSON.stringify({ namespace: "pack_broken", root_panel: { type: "panel" } }, null, 2));
+  const broken = await run(node, ["tools/validate-pack.mjs", "workspace/_test_pack_broken", "--report", "workspace/_test_pack_broken/report.json"]);
+  const brokenReport = await readJsonSafe(resolve(brokenDir, "report.json"));
+  record("pack:missing-def-entry-exits-9", broken.code === 9 && brokenReport?.ok === false, { code: broken.code });
+  record("pack:flags-missing-def-entry", !!brokenReport?.errors.find((error) => error.path === "ui/missing.json"));
+  const invalidArgs = await run(node, ["tools/validate-pack.mjs", "workspace/_test_pack_valid", "--unknown"]);
+  record("pack:invalid-option-is-usage-error", invalidArgs.code === 64, { code: invalidArgs.code });
+}
+
+async function category10() {
+  console.log("[10] vanilla-index");
+  const built = await run(node, ["tools/build-vanilla-index.mjs", "--force"]);
+  const screens = await readJsonSafe(resolve(REPO, "vanilla-index", "screens.json"));
+  const textures = await readJsonSafe(resolve(REPO, "vanilla-index", "textures.json"));
+  record("index:builds", built.code === 0 && screens?.schema?.endsWith("@2") && textures?.schema?.endsWith("@2"),
+    { code: built.code, screens: screens?.count, textures: textures?.count });
+  record("index:official-root-screen", !!screens?.screens?.hud_screen?.find((entry) =>
+    entry.source === "bedrock-samples-ui" && entry.path.endsWith("references/official/bedrock-samples-ui/hud_screen.json")));
+  record("index:texture-evidence", Array.isArray(textures?.textures?.["textures/ui/Black"]));
+}
+
 (async () => {
   await category1();
   await category2();
@@ -439,6 +518,9 @@ constraints:
   await category5();
   await category6();
   await category7();
+  await category8();
+  await category9();
+  await category10();
   console.log("");
   console.log(`Total: ${PASS.length} passed, ${FAIL.length} failed`);
   if (FAIL.length) {

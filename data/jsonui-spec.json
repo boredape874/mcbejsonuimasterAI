@@ -5,11 +5,15 @@
     "license": "MIT",
     "upstream": "https://github.com/gamezaSRC/JSON-UI-Web-Editor"
   },
+  "_confirmed_extensions": {
+    "source": "docs/48-json-ui-field-catalogue.md and working JSON UI pattern references",
+    "control_types": ["scroll_box", "slider_box", "scroll_track", "grid_page_indicator", "label_cycler", "image_cycler", "collection_panel"]
+  },
   "control_types": [
     "panel", "stack_panel", "grid", "label", "image", "button", "toggle",
-    "slider", "edit_box", "dropdown", "scroll_view", "scrollbar_box",
+    "slider", "slider_box", "edit_box", "dropdown", "scroll_view", "scroll_box", "scrollbar_box", "scroll_track",
     "factory", "screen", "custom", "selection_wheel", "tab", "carousel_label",
-    "grid_item", "input_panel"
+    "grid_item", "grid_page_indicator", "label_cycler", "image_cycler", "collection_panel", "input_panel"
   ],
   "anchors": [
     "top_left", "top_middle", "top_right",

@@ -2,8 +2,8 @@
 
 Read:
 
-- `../../../../../docs/11-basics-and-mental-model.md`
-- `../../../../../references/mirrors/bedrock-wiki-json-ui/json-ui-documentation.md`
+- `docs/11-basics-and-mental-model.md`
+- `references/external/bedrock-wiki-json-ui/json-ui-documentation.md`
 
 Use this subtopic for:
 
@@ -14,5 +14,5 @@ Use this subtopic for:
 
 Local examples:
 
-- `../../../../../references/local-utils/json-ui-utils/tablist_hud_screen.json`
-- `../../../../../references/local-utils/integrated-sample/ui/hud_screen.json`
+- `references/local-utils/json-ui-utils/tablist_hud_screen.json`
+- `references/local-utils/integrated-sample/ui/hud_screen.json`

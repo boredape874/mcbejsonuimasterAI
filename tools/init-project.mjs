@@ -1,72 +1,65 @@
-// tools/init-project.mjs
-// Create a workspace/<name>/ scaffold with a starter ir.yaml.
-// Usage: node tools/init-project.mjs <name>
-
 import { join } from "node:path";
 import { log } from "./_lib/log.mjs";
 import { PATHS } from "./_lib/paths.mjs";
 import { ensureDir, exists, writeText } from "./_lib/fsx.mjs";
+import { listProjectTemplates, renderProjectTemplate } from "./_lib/project-templates.mjs";
 
-const TEMPLATE = (name) => `# Workspace: ${name}
-# IR (Intermediate Representation) for layout-only authoring.
-# Compile with:  node tools/run.mjs workspace/${name}/ir.yaml
+function printTemplates() {
+  for (const template of listProjectTemplates()) {
+    log.info(template.id, { description: template.description });
+  }
+}
 
-screen: ${name}
-base_resolution: [1920, 1080]
-gui_scale: 3
-
-elements:
-  - id: panel_main
-    kind: panel
-    anchor: center
-    pos: [0, 0]
-    size: [320, 200]
-
-  - id: title
-    parent: panel_main
-    kind: label
-    anchor: top_middle
-    pos: [0, 8]
-    size: [200, 20]
-
-  - id: btn_left
-    parent: panel_main
-    kind: button
-    anchor: bottom_middle
-    pos: [-70, -16]
-    size: [120, 32]
-
-  - id: btn_right
-    parent: panel_main
-    kind: button
-    anchor: bottom_middle
-    pos: [70, -16]
-    size: [120, 32]
-
-constraints:
-  - { op: same_size,    ids: [btn_left, btn_right] }
-  - { op: symmetric_x,  ids: [btn_left, btn_right] }
-  - { op: align_y,      ids: [btn_left, btn_right] }
-`;
+function parseArgs(argv) {
+  let name = null;
+  let template = "minimal";
+  for (let index = 0; index < argv.length; index++) {
+    const arg = argv[index];
+    if (arg === "--list-templates") continue;
+    if (arg.startsWith("--template=")) {
+      template = arg.slice("--template=".length);
+      continue;
+    }
+    if (arg === "--template") {
+      template = argv[++index];
+      if (!template || template.startsWith("--")) return null;
+      continue;
+    }
+    if (arg.startsWith("--") || name !== null) return null;
+    name = arg;
+  }
+  return { name, template };
+}
 
 async function main() {
-  const name = process.argv[2];
-  if (!name || !/^[a-z][a-z0-9_]*$/.test(name)) {
-    log.error("usage: node tools/init-project.mjs <name>  (snake_case)");
+  const argv = process.argv.slice(2);
+  if (argv.includes("--list-templates")) {
+    printTemplates();
+    return;
+  }
+
+  const options = parseArgs(argv);
+  const validTemplates = new Set(listProjectTemplates().map((template) => template.id));
+  if (!options || !options.name || !/^[a-z][a-z0-9_]*$/.test(options.name) || !validTemplates.has(options.template)) {
+    log.error("usage: node tools/init-project.mjs <name> [--template <minimal|rpg_hud|rpg_menu>]");
     process.exit(64);
   }
+  const { name, template } = options;
+
   const dir = join(PATHS.workspace, name);
-  await ensureDir(dir);
   const ir = join(dir, "ir.yaml");
   if (await exists(ir)) {
     log.warn("ir.yaml already exists; not overwriting", { path: ir });
-    process.exit(0);
+    return;
   }
-  await writeText(ir, TEMPLATE(name));
-  log.ok("project initialized", { dir, ir });
+
+  const source = await renderProjectTemplate(template, name);
+  await ensureDir(dir);
+  await writeText(ir, source);
+  log.ok("project initialized", { dir, ir, template });
 }
 
-main().catch((e) => {
-  log.error("init-project crashed", { error: String(e && e.message || e) });
+main().catch((error) => {
+  log.error("init-project crashed", { error: String(error && error.message || error) });
   process.exit(1);
 });

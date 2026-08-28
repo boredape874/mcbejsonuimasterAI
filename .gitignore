@@ -6,6 +6,7 @@ references/restricted/
 node_modules/
 workspace/
 .agent/state/
+.agent/cache/
 vanilla-index/cache/
 vanilla-index/screens.json
 vanilla-index/textures.json

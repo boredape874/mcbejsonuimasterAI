@@ -1,0 +1,225 @@
+screen: {{name}}
+base_resolution: [1920, 1080]
+gui_scale: 3
+
+elements:
+  - id: status_panel
+    kind: image
+    anchor: top_left
+    pos: [5, 5]
+    size: [260, 104]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.82
+
+  - id: portrait_frame
+    parent: status_panel
+    kind: image
+    anchor: top_left
+    pos: [7, 9]
+    size: [58, 58]
+    props:
+      texture: textures/ui/white
+      color: [0.3, 0.25, 0.18]
+      alpha: 0.9
+
+  - id: player_model
+    parent: portrait_frame
+    kind: custom
+    anchor: center
+    pos: [0, -4]
+    size: [46, 46]
+    props:
+      renderer: live_player_renderer
+      property_bag:
+        "#look_at_cursor": true
+
+  - id: player_name
+    parent: status_panel
+    kind: label
+    anchor: top_left
+    pos: [76, 9]
+    size: [105, 14]
+    props:
+      text: "ADVENTURER"
+      localize: false
+      font_type: MinecraftTen
+      font_size: small
+      font_scale_factor: 0.8
+
+  - id: level
+    parent: status_panel
+    kind: label
+    anchor: top_right
+    pos: [-14, 9]
+    size: [58, 14]
+    props:
+      text: "Lv. 12"
+      localize: false
+      font_type: MinecraftTen
+      font_size: small
+      font_scale_factor: 0.75
+      text_alignment: right
+
+  - id: hp_bar
+    parent: status_panel
+    kind: panel
+    anchor: top_left
+    pos: [76, 27]
+    size: [150, 18]
+
+  - id: hp_bg
+    parent: hp_bar
+    kind: image
+    anchor: top_left
+    pos: [0, 0]
+    size: [150, 14]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.92
+
+  - id: hp_fill
+    parent: hp_bar
+    kind: image
+    anchor: top_left
+    pos: [3, 3]
+    size: [112, 8]
+    props:
+      texture: textures/ui/white
+      color: [0.86, 0.16, 0.18]
+
+  - id: hp_text
+    parent: hp_bar
+    kind: label
+    anchor: center
+    pos: [0, -2]
+    size: [140, 12]
+    props:
+      text: "HP 75/100"
+      localize: false
+      font_type: MinecraftTen
+      font_size: small
+      font_scale_factor: 0.62
+      text_alignment: center
+
+  - id: mana_bar
+    parent: status_panel
+    kind: panel
+    anchor: top_left
+    pos: [76, 47]
+    size: [150, 18]
+
+  - id: mana_bg
+    parent: mana_bar
+    kind: image
+    anchor: top_left
+    pos: [0, 0]
+    size: [150, 14]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.92
+
+  - id: mana_fill
+    parent: mana_bar
+    kind: image
+    anchor: top_left
+    pos: [3, 3]
+    size: [96, 8]
+    props:
+      texture: textures/ui/white
+      color: [0.12, 0.42, 0.94]
+
+  - id: mana_text
+    parent: mana_bar
+    kind: label
+    anchor: center
+    pos: [0, -2]
+    size: [140, 12]
+    props:
+      text: "MP 64/100"
+      localize: false
+      font_type: MinecraftTen
+      font_size: small
+      font_scale_factor: 0.62
+      text_alignment: center
+
+  - id: armor_bar
+    parent: status_panel
+    kind: panel
+    anchor: top_left
+    pos: [76, 67]
+    size: [150, 18]
+
+  - id: armor_bg
+    parent: armor_bar
+    kind: image
+    anchor: top_left
+    pos: [0, 0]
+    size: [150, 14]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.92
+
+  - id: armor_fill
+    parent: armor_bar
+    kind: image
+    anchor: top_left
+    pos: [3, 3]
+    size: [74, 8]
+    props:
+      texture: textures/ui/white
+      color: [0.62, 0.74, 0.86]
+
+  - id: armor_text
+    parent: armor_bar
+    kind: label
+    anchor: center
+    pos: [0, -2]
+    size: [140, 12]
+    props:
+      text: "DEF 42"
+      localize: false
+      font_type: MinecraftTen
+      font_size: small
+      font_scale_factor: 0.62
+      text_alignment: center
+
+  - id: exp_bg
+    parent: status_panel
+    kind: image
+    anchor: top_left
+    pos: [76, 87]
+    size: [150, 10]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.92
+
+  - id: exp_fill
+    parent: status_panel
+    kind: image
+    anchor: top_left
+    pos: [79, 90]
+    size: [86, 4]
+    props:
+      texture: textures/ui/white
+      color: [0.92, 0.66, 0.16]
+
+  - id: gold
+    parent: status_panel
+    kind: label
+    anchor: bottom_left
+    pos: [8, -7]
+    size: [58, 10]
+    props:
+      text: "G 1250"
+      localize: false
+      font_type: MinecraftTen
+      font_size: small
+      font_scale_factor: 0.62
+
+constraints:
+  - { op: same_size, ids: [hp_bar, mana_bar, armor_bar] }
+  - { op: align_x, ids: [hp_bar, mana_bar, armor_bar], edge: start }
+  - { op: equal_gap_y, ids: [hp_bar, mana_bar, armor_bar], gap: 2 }
+  - { op: same_size, ids: [hp_bg, mana_bg, armor_bg] }
+  - { op: same_size, ids: [hp_text, mana_text, armor_text] }

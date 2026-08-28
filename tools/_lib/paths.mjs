@@ -6,9 +6,15 @@ import { dirname, resolve } from "node:path";
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = resolve(here, "..", "..");
+export const VANILLA_INDEX_SCHEMAS = Object.freeze({
+  screens: "mcbe-jsonui-ai-kit/vanilla-index/screens@2",
+  textures: "mcbe-jsonui-ai-kit/vanilla-index/textures@2",
+});
 
 export const PATHS = {
   root: REPO_ROOT,
+  agentCache: resolve(REPO_ROOT, ".agent", "cache"),
+  goCache: resolve(REPO_ROOT, ".agent", "cache", "go-build"),
   agentState: resolve(REPO_ROOT, ".agent", "state"),
   setupState: resolve(REPO_ROOT, ".agent", "state", "setup-state.json"),
   envCheck: resolve(REPO_ROOT, ".agent", "env-check.json"),
@@ -22,6 +28,8 @@ export const PATHS = {
   schemas: resolve(REPO_ROOT, "schemas"),
   irSchema: resolve(REPO_ROOT, "schemas", "ir.schema.json"),
   data: resolve(REPO_ROOT, "data"),
+  templates: resolve(REPO_ROOT, "templates"),
+  irTemplates: resolve(REPO_ROOT, "templates", "ir"),
   jsonuiSpec: resolve(REPO_ROOT, "data", "jsonui-spec.json"),
   presetsCatalog: resolve(REPO_ROOT, "data", "presets-catalog.json"),
   packageJson: resolve(REPO_ROOT, "package.json"),

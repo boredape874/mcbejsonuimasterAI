@@ -63,4 +63,4 @@ node tools/diff.mjs   target.png workspace/<name>/preview.png
 ## References
 
 - `references/cli-reference.md`
-- `../../docs/42-tools-reference.md`
+- `docs/42-tools-reference.md`

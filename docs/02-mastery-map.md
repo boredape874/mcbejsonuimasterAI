@@ -21,9 +21,9 @@ Primary files:
 - `docs/11-basics-and-mental-model.md`
 - `docs/23-bedrock-resource-pack-basics.md`
 - `docs/24-json-ui-layout-units.md`
-- `references/mirrors/bedrock-wiki-json-ui/json-ui-intro.md`
-- `references/mirrors/bedrock-wiki-json-ui/add-hud-elements.md`
-- `references/verified-samples/bedrock-samples-ui/_ui_defs.json`
+- `references/external/bedrock-wiki-json-ui/json-ui-intro.md`
+- `references/external/bedrock-wiki-json-ui/add-hud-elements.md`
+- `references/official/bedrock-samples-ui/_ui_defs.json`
 
 ## 2. Entry points and structure
 
@@ -37,9 +37,9 @@ Learn first:
 
 Primary files:
 
-- `references/sample-packs/modern-cloud-ui-reference/ui/_ui_defs.json`
-- `references/sample-packs/rpg-server-ui-reference/ui/_ui_defs.json`
-- `references/sample-packs/farm-ui-variants/GfE8ULhgL4I/ui/_ui_defs.json`
+- `references/source-packs/modern-cloud-ui-reference/ui/_ui_defs.json`
+- `references/source-packs/rpg-server-ui-reference/ui/_ui_defs.json`
+- `references/source-packs/farm-ui-variants/GfE8ULhgL4I/ui/_ui_defs.json`
 - `references/local-utils/integrated-sample/ui/_ui_defs.json`
 
 ## 3. HUD and chat
@@ -53,10 +53,10 @@ Learn next:
 
 Primary files:
 
-- `references/sample-packs/modern-cloud-ui-reference/ui/hud_screen.json`
-- `references/sample-packs/modern-cloud-ui-reference/ui/chat_screen.json`
-- `references/sample-packs/rpg-server-ui-reference/ui/hud_screen.json`
-- `references/sample-packs/farm-ui-variants/z65tCLQRo0Q/ui/hud_screen.json`
+- `references/source-packs/modern-cloud-ui-reference/ui/hud_screen.json`
+- `references/source-packs/modern-cloud-ui-reference/ui/chat_screen.json`
+- `references/source-packs/rpg-server-ui-reference/ui/hud_screen.json`
+- `references/source-packs/farm-ui-variants/z65tCLQRo0Q/ui/hud_screen.json`
 - `references/local-utils/json-ui-utils/topbar_chat_notification_utils.json`
 - `references/local-utils/json-ui-utils/tablist_hud_screen.json`
 
@@ -71,9 +71,9 @@ Learn next:
 
 Primary files:
 
-- `references/sample-packs/modern-cloud-ui-reference/ui/server_form.json`
-- `references/sample-packs/rpg-server-ui-reference/ui/server_form.json`
-- `references/sample-packs/farm-ui-variants/GfE8ULhgL4I/ui/server_form.json`
+- `references/source-packs/modern-cloud-ui-reference/ui/server_form.json`
+- `references/source-packs/rpg-server-ui-reference/ui/server_form.json`
+- `references/source-packs/farm-ui-variants/GfE8ULhgL4I/ui/server_form.json`
 
 ## 5. Reusable patterns
 
@@ -109,12 +109,12 @@ Primary files:
 - `docs/38-advanced-json-ui-recipes.md`
 - `docs/39-design-recommendation-catalog.md`
 - `docs/40-server-form-example-index.md`
-- `references/sample-packs/rpg-server-ui-reference/ui/animated_bar.json`
-- `references/sample-packs/farm-ui-variants/tDAp1yJMUYo/ui/animated_bar.json`
-- `references/verified-samples/bedrock-samples-ui/hud_screen.json`
-- `references/verified-samples/bedrock-samples-ui/ui_common.json`
-- `references/sample-packs/modern-cloud-ui-reference/ui/scoreboards.json`
-- `references/sample-packs/farm-ui-variants/Y5dOnRAM7js/ui/custom_pocket_containers.json`
+- `references/source-packs/rpg-server-ui-reference/ui/animated_bar.json`
+- `references/source-packs/farm-ui-variants/tDAp1yJMUYo/ui/animated_bar.json`
+- `references/official/bedrock-samples-ui/hud_screen.json`
+- `references/official/bedrock-samples-ui/ui_common.json`
+- `references/source-packs/modern-cloud-ui-reference/ui/scoreboards.json`
+- `references/source-packs/farm-ui-variants/Y5dOnRAM7js/ui/custom_pocket_containers.json`
 - `references/local-utils/json-ui-utils/progress_bar_utils.json`
 - `references/local-utils/json-ui-utils/title_progress_utils.json`
 - `references/local-utils/json-ui-utils/prefix_router_utils.json`
@@ -153,8 +153,8 @@ Primary files:
 - `docs/31-fragment-routing-table.md`
 - `docs/32-minecraft-bedrock-json-ui-sample-upstream.md`
 - `scripts/validate-json-ui-pack.ps1`
-- `references/verified-samples/bedrock-samples-ui/hud_screen.json`
-- `references/verified-samples/bedrock-samples-ui/server_form.json`
+- `references/official/bedrock-samples-ui/hud_screen.json`
+- `references/official/bedrock-samples-ui/server_form.json`
 
 ## 7. Full addon integration
 
@@ -166,6 +166,6 @@ Learn last:
 
 Primary source:
 
-- `references/sample-packs/rpg-server-ui-reference/`
+- `references/source-packs/rpg-server-ui-reference/`
 - `docs/25-pmmp-json-ui-bridge.md`
 - `docs/28-local-example-mining.md`

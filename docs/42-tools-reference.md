@@ -34,9 +34,9 @@ Health checks. `--quick` is intended for the start of any non-trivial AI task.
 | `--fix` | runs whitelisted remediation (`npm install`, `tools/setup.mjs`, `tools/build-vanilla-index.mjs`) |
 | `--verbose` | prints full result list |
 
-## tools/init-project.mjs `<name>`
+## tools/init-project.mjs `<name> [--template <id>]`
 
-Creates `workspace/<name>/ir.yaml` from a starter template. Refuses to overwrite an existing IR.
+Creates `workspace/<name>/ir.yaml` from a starter template. Refuses to overwrite an existing IR. Use `--list-templates` to list the bundled `minimal`, `rpg_hud`, and `rpg_menu` profiles. The default is `minimal`; `--template=<id>` is also accepted.
 
 ## tools/ir-validate.mjs `<ir.yaml>`
 
@@ -70,7 +70,7 @@ Exit codes: `7` non-converged (still writes file), other shared codes as above.
 
 ## tools/go/solver
 
-Go implementation of the deterministic layout solver. It receives the normalized IR JSON on stdin and writes the solve result JSON on stdout. It is intentionally limited to geometry: YAML parsing, schema validation, auto-sizing, compilation, and report generation remain in Node.
+Go implementation of the deterministic layout solver. It receives the normalized IR JSON on stdin and writes the solve result JSON on stdout. It is intentionally limited to geometry: YAML parsing, schema validation, auto-sizing, compilation, and report generation remain in Node. The launcher sets `GOCACHE` to `.agent/cache/go-build`, keeping builds inside the repository in restricted environments.
 
 ## tools/compile.mjs `<solved.json> <ui.json>`
 
@@ -90,10 +90,10 @@ Runs ir-validate → solve → compile → validate. Default output directory is
 
 ## tools/build-vanilla-index.mjs `[--force]`
 
-Walks `references/upstreams/MCBVanillaResourcePack/ui/` and `references/official/bedrock-samples-ui/ui/` (if present) and builds:
+Walks `references/upstreams/MCBVanillaResourcePack/ui/` and the root-form `references/official/bedrock-samples-ui/` mirror (if present) and builds:
 
 - `vanilla-index/screens.json` — screen name → list of `{source, path}`
-- `vanilla-index/textures.json` — texture key → list of `{source, path}`
+- `vanilla-index/textures.json` — texture key → evidence list from image files, texture metadata/atlases, and vanilla UI declarations
 
 Both are gitignored.
 
@@ -104,3 +104,29 @@ Always writes a sibling `coords.json` mapping control name to final pixel rect f
 ## tools/diff.mjs (optional) `<a.png> <b.png>`
 
 Requires `pixelmatch` + `pngjs`. Region-aware diff with `--ignore-aa`, `--scale`, `--regions` flags. Writes a sibling `diff.png` and prints summary stats.
+
+## tools/validate-pack.mjs `<pack-path> [options]`
+
+Validates a complete resource pack rather than one compiled screen. It parses JSON and JSONC under `ui/`, validates each control file, traverses `_ui_defs.json`, checks namespace declarations, verifies local and indexed vanilla texture keys, and reports risky cross-namespace controls inserted inside `modifications[].value`.
+
+| Option | Behavior |
+| --- | --- |
+| `--allow-missing-textures` | skip unresolved texture warnings for partial or external mirrors |
+| `--allow-partial-ui-defs` | allow registered files that are absent from a partial mirror |
+| `--strict-warnings` | exit `10` when warnings remain |
+| `--report <path>` | write the `pack-report@1` JSON report |
+
+Exit codes: `9` validation failure, `10` warnings in strict mode, `64` usage.
+
+## tools/audit.mjs `[--report <path>]`
+
+Audits repository health: exact-case local Markdown links, JSON syntax, skill frontmatter, npm script targets, and retired reference roots. Writes an optional `audit-report@1` JSON report and exits `11` on errors.
+
+## npm scripts
+
+| Command | Effect |
+| --- | --- |
+| `npm run init -- <name> --template rpg_hud` | initialize a workspace through the npm entry point |
+| `npm run validate:pack -- <pack-path>` | validate a full resource pack |
+| `npm run audit` | run repository integrity checks |
+| `npm run check` | run the audit, then the complete test suite |

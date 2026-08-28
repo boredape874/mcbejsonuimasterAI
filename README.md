@@ -45,9 +45,9 @@ It is written in Bedrock addon and PMMP terms, not generic web UI terms.
 
 ### Local pack references
 
-- `references/sample-packs/modern-cloud-ui-reference/`
-- `references/sample-packs/farm-ui-variants/`
-- `references/sample-packs/rpg-server-ui-reference/`
+- `references/source-packs/modern-cloud-ui-reference/`
+- `references/source-packs/farm-ui-variants/`
+- `references/source-packs/rpg-server-ui-reference/`
 
 ### Local utility mirrors
 
@@ -56,11 +56,11 @@ It is written in Bedrock addon and PMMP terms, not generic web UI terms.
 
 ### External mirrored references
 
-- `references/mirrors/bedrock-wiki-json-ui/`
-- `references/mirrors/json-ui-examples/`
-- `references/mirrors/EasyUIBuilder/`
-- `references/mirrors/Chest-UI/`
-- `references/mirrors/bedrock-json-ui-editor/`
+- `references/external/bedrock-wiki-json-ui/`
+- `references/external/json-ui-examples/`
+- `references/external/EasyUIBuilder/`
+- `references/external/Chest-UI/`
+- `references/external/bedrock-json-ui-editor/`
 
 ### Schema references
 
@@ -71,14 +71,14 @@ It is written in Bedrock addon and PMMP terms, not generic web UI terms.
 
 This repository uses a strict source priority model:
 
-1. included local working packs in `references/sample-packs/`
+1. included local working packs in `references/source-packs/`
 2. official verified sample source `bedrock-samples`
 3. community reference docs JSON UI pages
 4. `vanilla resource mirror` for vanilla asset truth
 
 For vanilla texture validation, the canonical upstream authority is:
 
-- <https://github.com/vanilla resource mirror>
+- <https://github.com/ZtechNetwork/MCBVanillaResourcePack>
 
 See:
 
@@ -96,7 +96,7 @@ See:
 - [JSON UI File Role Catalog](docs/15-json-ui-file-role-catalog.md)
 - [Screen-By-Screen Reference](docs/16-screen-by-screen-reference.md)
 - [Community Patterns: String, Score, And HUD Input](docs/17-community-patterns-string-score-hud.md)
-- [Tooling: AUX, Dumper, And Dynamic Form Library](docs/18-tooling-auxgen-dumper-dynamic form library.md)
+- [Tooling: AUX, Dumper, And StarLib](docs/18-tooling-auxgen-dumper-starlib.md)
 - [Bindings And Hardcoded Values](docs/19-bindings-and-hardcoded-values.md)
 - [Pack Merge Playbook](docs/20-pack-merge-playbook.md)
 - [Update Policy](docs/21-update-policy.md)
@@ -135,6 +135,10 @@ See:
 - [advanced-ui-set Special UI Reference](docs/60-advanced-ui-set-special-ui-reference.md)
 - [advanced-ui-set File Pattern Routes](docs/61-advanced-ui-set-file-pattern-routes.md)
 - [Special Form Device UI Patterns](docs/62-special-form-device-ui-patterns.md)
+- [Premium Form Gallery](docs/63-premium-form-gallery.md)
+- [Motion Form And HUD Reference](docs/64-motion-form-hud-reference.md)
+- [Layout Solver Go Migration](docs/66-layout-solver-go-migration.md)
+- [Production RPG UI Architecture](docs/67-production-rpg-ui-architecture.md)
 - [IR Spec](docs/41-ir-spec.md) (tools layer)
 - [Tools Reference](docs/42-tools-reference.md) (tools layer)
 - [Self-Bootstrap Protocol](docs/43-self-bootstrap-protocol.md) (tools layer)
@@ -171,7 +175,7 @@ This copies every directory under `skills/` into:
 That creates:
 
 ```text
-references/reference-mirrors/vanilla resource mirror/
+references/upstreams/MCBVanillaResourcePack/
 ```
 
 This mirror is intentionally not committed to Git because it is large and reproducible.
@@ -185,7 +189,7 @@ This mirror is intentionally not committed to Git because it is large and reprod
 This updates:
 
 ```text
-references/verified-samples/bedrock-samples-ui/
+references/official/bedrock-samples-ui/
 ```
 
 ### 5. Optional: sync the MCBE JSON UI resource archive
@@ -197,7 +201,7 @@ references/verified-samples/bedrock-samples-ui/
 That creates:
 
 ```text
-references/reference-mirrors/mcbe-json-ui-resource/
+references/upstreams/mcbe-json-ui-resource/
 ```
 
 This mirror is intentionally not committed because it is large and searchable.
@@ -205,7 +209,7 @@ This mirror is intentionally not committed because it is large and searchable.
 ### 6. Optional: validate a JSON UI pack or reference mirror
 
 ```powershell
-.\scripts\validate-json-ui-pack.ps1 -PackPath references\sample-packs\modern-cloud-ui-reference
+.\scripts\validate-json-ui-pack.ps1 -PackPath references\source-packs\modern-cloud-ui-reference
 ```
 
 For partial reference mirrors:
@@ -226,11 +230,16 @@ node tools/setup.mjs
 Then, for any layout work:
 
 ```powershell
-node tools/init-project.mjs my_screen
-node tools/run.mjs workspace/my_screen/ir.yaml
+node tools/init-project.mjs --list-templates
+node tools/init-project.mjs rpg_status --template rpg_hud
+node tools/run.mjs workspace/rpg_status/ir.yaml
+node tools/validate-pack.mjs <resource-pack> --report workspace/pack-report.json
+npm run check
 ```
 
-The solve step uses the Go geometry solver when `go` is installed and falls back to the Node solver otherwise. For server-form or HUD repeated rows, model the area as `collection_grid`; for labels and images whose footprint is content-driven, use IR `auto_size` before hand-finishing bindings and textures.
+Available project templates are `minimal`, `rpg_hud`, and `rpg_menu`. The solve step uses the Go geometry solver when `go` is installed and falls back to the Node solver otherwise. Its build cache stays under `.agent/cache/`, so restricted environments do not need access to the user profile cache. For server-form or HUD repeated rows, model the area as `collection_grid`; for labels and images whose footprint is content-driven, use IR `auto_size` before hand-finishing bindings and textures.
+
+`validate-pack.mjs` parses JSON and JSONC UI files, checks `_ui_defs.json`, namespaces, control structure, collection bindings, and local or indexed vanilla texture references. `npm run check` combines the repository audit with the complete test suite.
 
 See [AGENTS.md](AGENTS.md), [docs/41-ir-spec.md](docs/41-ir-spec.md), [docs/42-tools-reference.md](docs/42-tools-reference.md).
 
@@ -361,7 +370,9 @@ For layout-only work the kit is deterministic: same IR ??same JSON UI.
 - `docs/`
   - concept maps, source priority, usage and research guides
 - `references/`
-  - sample packs, mirrored external references, schema files
+  - `source-packs/`, `official/`, `external/`, `local-utils/`, `schemas/`, and optional `upstreams/`
+- `templates/ir/`
+  - deterministic `minimal`, compact RPG HUD, and asymmetric RPG menu layout starters
 - `examples/prompts/`
   - copy-paste prompt examples for Codex
 - `examples/tasks/`
@@ -411,7 +422,7 @@ Then read as needed:
 - [JSON UI File Role Catalog](docs/15-json-ui-file-role-catalog.md)
 - [Screen-By-Screen Reference](docs/16-screen-by-screen-reference.md)
 - [Community Patterns: String, Score, And HUD Input](docs/17-community-patterns-string-score-hud.md)
-- [Tooling: AUX, Dumper, And Dynamic Form Library](docs/18-tooling-auxgen-dumper-dynamic form library.md)
+- [Tooling: AUX, Dumper, And StarLib](docs/18-tooling-auxgen-dumper-starlib.md)
 - [Bindings And Hardcoded Values](docs/19-bindings-and-hardcoded-values.md)
 - [Pack Merge Playbook](docs/20-pack-merge-playbook.md)
 - [Update Policy](docs/21-update-policy.md)
@@ -439,6 +450,10 @@ Then read as needed:
 - [advanced-ui-set Special UI Reference](docs/60-advanced-ui-set-special-ui-reference.md)
 - [advanced-ui-set File Pattern Routes](docs/61-advanced-ui-set-file-pattern-routes.md)
 - [Special Form Device UI Patterns](docs/62-special-form-device-ui-patterns.md)
+- [Premium Form Gallery](docs/63-premium-form-gallery.md)
+- [Motion Form And HUD Reference](docs/64-motion-form-hud-reference.md)
+- [Layout Solver Go Migration](docs/66-layout-solver-go-migration.md)
+- [Production RPG UI Architecture](docs/67-production-rpg-ui-architecture.md)
 
 ## Is this enough to become a "JSON UI Master AI" in one shot?
 

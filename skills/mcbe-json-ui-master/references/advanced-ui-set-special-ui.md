@@ -4,21 +4,21 @@ Use this for the restricted `advanced-ui-set` reference set.
 
 Project docs:
 
-- `../../../docs/60-advanced-ui-set-special-ui-reference.md`
-- `../../../docs/61-advanced-ui-set-file-pattern-routes.md`
-- `../../../docs/62-special-form-device-ui-patterns.md`
-- `../../../docs/63-premium-form-gallery.md`
-- `../../../docs/64-motion-form-hud-reference.md`
-- `../../../data/advanced-ui-set-ui-file-index.json`
+- `docs/60-advanced-ui-set-special-ui-reference.md`
+- `docs/61-advanced-ui-set-file-pattern-routes.md`
+- `docs/62-special-form-device-ui-patterns.md`
+- `docs/63-premium-form-gallery.md`
+- `docs/64-motion-form-hud-reference.md`
+- `data/advanced-ui-set-file-index.json`
 
 restricted neutral mirror:
 
-- `../../../references/restricted/advanced-ui-set-ui/restricted-suite/`
-- `../../../references/restricted/advanced-ui-set-ui/restricted-suite/`
-- `../../../references/restricted/advanced-ui-set-ui/restricted-suite/`
-- `../../../references/restricted/advanced-ui-set-ui/restricted-suite/`
-- `../../../references/restricted/advanced-ui-set-ui/premium-form-gallery/`
-- `../../../references/restricted/advanced-ui-set-ui/motion-form-gallery/`
+- `references/restricted/advanced-ui-set-ui/restricted-suite/`
+- `references/restricted/advanced-ui-set-ui/restricted-suite/`
+- `references/restricted/advanced-ui-set-ui/restricted-suite/`
+- `references/restricted/advanced-ui-set-ui/restricted-suite/`
+- `references/restricted/advanced-ui-set-ui/premium-form-gallery/`
+- `references/restricted/advanced-ui-set-ui/motion-form-gallery/`
 
 ## Route
 

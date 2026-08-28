@@ -15,14 +15,14 @@
       "id": "hud_overlay",
       "keywords": ["hud", "rpg hud", "health bar", "mana", "stamina", "actionbar ui", "overlay"],
       "docs": ["docs/16-screen-by-screen-reference.md", "docs/25-pmmp-json-ui-bridge.md", "docs/54-visual-fit-and-reference-discipline.md", "docs/57-hierarchical-task-router.md"],
-      "references": ["references/verified-samples/bedrock-samples-ui/hud_screen.json", "references/local-examples/rpg-hud/ui/rpg_hud.json", "references/local-examples/multi-animated-progress/ui/animated_bar.json"],
+      "references": ["references/official/bedrock-samples-ui/hud_screen.json", "references/local-examples/rpg-hud/ui/rpg_hud.json", "references/local-examples/multi-animated-progress/ui/animated_bar.json"],
       "patchTargets": ["RP/ui/hud_screen.json", "RP/ui/*.json"]
     },
     {
       "id": "hotbar_relayout",
       "keywords": ["hotbar", "vertical hotbar", "left hotbar", "right hotbar", "circular hotbar", "radial hotbar", "numbered hotbar"],
       "docs": ["docs/16-screen-by-screen-reference.md", "docs/54-visual-fit-and-reference-discipline.md", "docs/56-local-json-ui-reference-pack-analysis.md", "docs/57-hierarchical-task-router.md"],
-      "references": ["references/verified-samples/bedrock-samples-ui/hud_screen.json"],
+      "references": ["references/official/bedrock-samples-ui/hud_screen.json"],
       "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/vertical-hotbar-left-right/VerticalHotbarLeft/ui/hud_screen.json", "references/restricted/json-ui-reference-packs/vertical-hotbar-left-right/VerticalHotbarRight/ui/hud_screen.json", "references/restricted/json-ui-reference-packs/circular-hotbar/ui/hud_screen.json"],
       "patchTargets": ["RP/ui/hud_screen.json", "RP/ui/_global_variables.json"]
     },
@@ -37,14 +37,14 @@
       "id": "chat_ui",
       "keywords": ["chat", "chat panel", "chat position", "notification", "topbar"],
       "docs": ["docs/25-pmmp-json-ui-bridge.md", "docs/37-vanilla-dumper-screen-recipes.md"],
-      "references": ["references/verified-samples/bedrock-samples-ui/chat_screen.json", "references/local-utils/json-ui-utils/topbar_chat_notification_utils.json"],
+      "references": ["references/official/bedrock-samples-ui/chat_screen.json", "references/local-utils/json-ui-utils/topbar_chat_notification_utils.json"],
       "patchTargets": ["RP/ui/chat_screen.json", "RP/ui/hud_screen.json"]
     },
     {
       "id": "chat_command_palette",
       "keywords": ["command palette", "quick command", "fast command", "chat sidebar", "chat formatting", "formatting codes"],
       "docs": ["docs/37-vanilla-dumper-screen-recipes.md", "docs/56-local-json-ui-reference-pack-analysis.md", "docs/57-hierarchical-task-router.md"],
-      "references": ["references/verified-samples/bedrock-samples-ui/chat_screen.json"],
+      "references": ["references/official/bedrock-samples-ui/chat_screen.json"],
       "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/fast-commands/ui/chat_screen.json", "references/restricted/json-ui-reference-packs/fast-commands/ui/ui_common.json"],
       "patchTargets": ["RP/ui/chat_screen.json", "RP/ui/ui_common.json"]
     },
@@ -52,7 +52,7 @@
       "id": "server_form",
       "keywords": ["server form", "action form", "custom form", "quest", "shop", "skill", "stat", "npc", "menu"],
       "docs": ["docs/39-design-recommendation-catalog.md", "docs/40-server-form-example-index.md", "docs/53-premium-ui-pattern-reference.md", "docs/57-hierarchical-task-router.md", "docs/63-premium-form-gallery.md"],
-      "references": ["references/sample-packs/rpg-server-ui-reference/ui/server_form.json", "references/sample-packs/modern-cloud-ui-reference/ui/server_form.json"],
+      "references": ["references/source-packs/rpg-server-ui-reference/ui/server_form.json", "references/source-packs/modern-cloud-ui-reference/ui/server_form.json"],
       "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/server_form.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/common/common.json", "references/restricted/advanced-ui-set-ui/premium-form-gallery-a/ui/menus/other/store.json"],
       "patchTargets": ["RP/ui/server_form.json", "RP/ui/form/*.json"]
     },
@@ -94,8 +94,8 @@
     {
       "id": "container_chest",
       "keywords": ["chest ui", "container", "inventory menu", "slot menu"],
-      "docs": ["docs/18-tooling-auxgen-dumper-dynamic form library.md", "docs/47-custom-auxid-and-form-progress.md", "docs/60-advanced-ui-set-special-ui-reference.md"],
-      "references": ["references/sample-packs/rpg-server-ui-reference/ui/chest_server_form.json", "references/sample-packs/rpg-server-ui-reference/ui/chest_inventory_system.json"],
+      "docs": ["docs/18-tooling-auxgen-dumper-starlib.md", "docs/47-custom-auxid-and-form-progress.md", "docs/60-advanced-ui-set-special-ui-reference.md"],
+      "references": ["references/source-packs/rpg-server-ui-reference/ui/chest_server_form.json", "references/source-packs/rpg-server-ui-reference/ui/chest_inventory_system.json"],
       "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/chest_server_form.json"],
       "patchTargets": ["RP/ui/chest_screen.json", "RP/ui/server_form.json"]
     },
@@ -103,14 +103,15 @@
       "id": "loading_screen",
       "keywords": ["loading", "progress screen", "joining screen", "world loading", "percent"],
       "docs": ["docs/53-premium-ui-pattern-reference.md", "docs/54-visual-fit-and-reference-discipline.md", "docs/57-hierarchical-task-router.md"],
-      "references": ["references/verified-samples/bedrock-samples-ui/progress_screen.json"],
+      "references": [],
+      "optionalrestrictedReferences": ["references/restricted/advanced-ui-set-ui/restricted-suite-b/ui/phud/loadingScreen.json"],
       "patchTargets": ["RP/ui/progress_screen.json"]
     },
     {
       "id": "scoreboard_sidebar",
       "keywords": ["scoreboard", "sidebar", "personal score", "player score"],
       "docs": ["docs/17-community-patterns-string-score-hud.md", "docs/34-binding-patterns-value-index.md"],
-      "references": ["references/sample-packs/modern-cloud-ui-reference/ui/scoreboards.json"],
+      "references": ["references/source-packs/modern-cloud-ui-reference/ui/scoreboards.json"],
       "patchTargets": ["RP/ui/scoreboards.json", "RP/ui/hud_screen.json"]
     },
     {
@@ -139,7 +140,7 @@
     {
       "id": "vertical_hotbar",
       "keywords": ["vertical hotbar", "left hotbar", "right hotbar", "numbered hotbar"],
-      "openFirst": ["docs/56-local-json-ui-reference-pack-analysis.md", "references/verified-samples/bedrock-samples-ui/hud_screen.json"],
+      "openFirst": ["docs/56-local-json-ui-reference-pack-analysis.md", "references/official/bedrock-samples-ui/hud_screen.json"],
       "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/vertical-hotbar-left-right/VerticalHotbarLeft/ui/hud_screen.json", "references/restricted/json-ui-reference-packs/vertical-hotbar-left-right/VerticalHotbarRight/ui/hud_screen.json"],
       "extract": ["grid_dimensions [1, 9]", "custom hotbar stack", "slot label variables"],
       "checks": ["hotbar renderer side effects", "XP/hunger/hotbar visibility", "mobile safe zone"]
@@ -147,7 +148,7 @@
     {
       "id": "circular_hotbar",
       "keywords": ["circular hotbar", "radial hotbar", "round hotbar"],
-      "openFirst": ["docs/56-local-json-ui-reference-pack-analysis.md", "references/verified-samples/bedrock-samples-ui/hud_screen.json"],
+      "openFirst": ["docs/56-local-json-ui-reference-pack-analysis.md", "references/official/bedrock-samples-ui/hud_screen.json"],
       "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/circular-hotbar/ui/hud_screen.json"],
       "extract": ["manual slot offset list", "selected slot binding", "hotbar collection reuse"],
       "checks": ["vanilla hotbar fallback", "do not mix with unrelated HUD changes"]
@@ -163,7 +164,7 @@
     {
       "id": "command_palette_chat_ui",
       "keywords": ["command palette", "quick command", "chat sidebar", "formatting panel"],
-      "openFirst": ["docs/56-local-json-ui-reference-pack-analysis.md", "references/verified-samples/bedrock-samples-ui/chat_screen.json"],
+      "openFirst": ["docs/56-local-json-ui-reference-pack-analysis.md", "references/official/bedrock-samples-ui/chat_screen.json"],
       "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/fast-commands/ui/chat_screen.json"],
       "extract": ["edit_box #message_text_box", "hidden send button", "expandable category", "button texture states"],
       "checks": ["remove restricted text", "keep chat fallback", "touch keyboard mapping"]
@@ -179,7 +180,7 @@
     {
       "id": "form_router",
       "keywords": ["form router", "title routing", "customUI", "menu.quest", "menu.shop"],
-      "openFirst": ["references/sample-packs/modern-cloud-ui-reference/ui/server_form.json", "references/sample-packs/rpg-server-ui-reference/ui/server_form.json"],
+      "openFirst": ["references/source-packs/modern-cloud-ui-reference/ui/server_form.json", "references/source-packs/rpg-server-ui-reference/ui/server_form.json"],
       "extract": ["factory dispatch", "title prefix checks", "vanilla fallback"],
       "checks": ["long_form fallback", "custom_form fallback"]
     },
@@ -218,14 +219,14 @@
     {
       "id": "scroll_list",
       "keywords": ["scroll", "scrollbar", "list", "rows", "carousel"],
-      "openFirst": ["docs/35-scroll-and-carousel-patterns.md", "references/verified-samples/bedrock-samples-ui/chat_screen.json"],
+      "openFirst": ["docs/35-scroll-and-carousel-patterns.md", "references/official/bedrock-samples-ui/chat_screen.json"],
       "extract": ["common.scrolling_panel", "viewport/content separation", "row template"],
       "checks": ["scrollbar width", "content padding", "equal row height"]
     },
     {
       "id": "button_states",
       "keywords": ["button", "hover", "pressed", "locked", "selected", "toggle"],
-      "openFirst": ["docs/49-json-ui-tutorial-index.md", "references/verified-samples/bedrock-samples-ui/ui_common.json"],
+      "openFirst": ["docs/49-json-ui-tutorial-index.md", "references/official/bedrock-samples-ui/ui_common.json"],
       "optionalrestrictedReferences": ["references/restricted/json-ui-reference-packs/fast-commands/ui/chat_screen.json"],
       "extract": ["default/hover/pressed controls", "button_mappings", "texture state family"],
       "checks": ["same size across states", "text padding"]
@@ -321,19 +322,19 @@
     {
       "id": "vanilla_safe",
       "keywords": ["vanilla", "simple", "compatible"],
-      "references": ["references/verified-samples/bedrock-samples-ui"],
+      "references": ["references/official/bedrock-samples-ui"],
       "avoid": ["invented texture paths", "restricted assets"]
     },
     {
       "id": "compact_rpg",
       "keywords": ["rpg", "quest", "skill", "stat", "compact"],
-      "references": ["references/sample-packs/rpg-server-ui-reference/ui"],
+      "references": ["references/source-packs/rpg-server-ui-reference/ui"],
       "avoid": ["large paragraphs in small panels"]
     },
     {
       "id": "modern_cloud",
       "keywords": ["modern", "cloud", "polished", "large form"],
-      "references": ["references/sample-packs/modern-cloud-ui-reference/ui"],
+      "references": ["references/source-packs/modern-cloud-ui-reference/ui"],
       "avoid": ["copying one file without dependencies"]
     },
     {

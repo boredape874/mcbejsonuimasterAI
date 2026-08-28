@@ -8,9 +8,9 @@
 
 Primary included sources:
 
-- `../../references/sample-packs/form-router-sample/`
-- `../../references/sample-packs/ui-variant-samples/`
-- `../../references/sample-packs/game-hud-sample/`
+- `references/source-packs/modern-cloud-ui-reference/`
+- `references/source-packs/farm-ui-variants/`
+- `references/source-packs/rpg-server-ui-reference/`
 
 ## Use official sample screens when
 
@@ -55,8 +55,8 @@ Primary upstream:
 
 Primary sources:
 
-- `../../references/mirrors/json-ui-examples/`
-- `../../references/mirrors/builder-sample/`
-- `../../references/mirrors/container-form-sample/`
-- `../../references/mirrors/bedrock-json-ui-editor/`
-- `../../references/mirrors/bedrock-wiki-json-ui/`
+- `references/external/json-ui-examples/`
+- `references/external/EasyUIBuilder/`
+- `references/external/Chest-UI/`
+- `references/external/bedrock-json-ui-editor/`
+- `references/external/bedrock-wiki-json-ui/`

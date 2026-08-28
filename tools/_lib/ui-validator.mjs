@@ -36,7 +36,7 @@ function validateBindings(bindings, path, out, spec) {
     if (b.binding_type !== undefined && !isVar(b.binding_type) && !okTypes.has(b.binding_type)) {
       pushErr(out, p, `Invalid binding_type "${b.binding_type}"`, `Valid: ${[...okTypes].join(", ")}`);
     }
-    if (b.binding_type === "collection" && !b.binding_collection_name) {
+    if ((b.binding_type === "collection" || b.binding_type === "collection_details") && !b.binding_collection_name) {
       pushWarn(out, p, "Collection binding missing binding_collection_name");
     }
     if (b.binding_type === "view") {
@@ -79,6 +79,9 @@ function validateNode(name, node, path, out, spec) {
     }
     if (node.type === "scroll_view" && !node.scrollbar_track_button && !node.scrollbar_touch_button) {
       pushInfo(out, here, "scroll_view has no scrollbar configuration");
+    }
+    if (node.type === "label" && node.size === undefined) {
+      pushWarn(out, here, "Label should define an explicit size", "Size labels for the longest expected text and selected font scale.");
     }
   }
 

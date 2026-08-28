@@ -1,9 +1,12 @@
 import { spawnSync } from "node:child_process";
+import { mkdirSync } from "node:fs";
 import { PATHS } from "./paths.mjs";
 
 export function solveWithGo(ird) {
+  mkdirSync(PATHS.goCache, { recursive: true });
   const res = spawnSync("go", ["run", "./tools/go/solver"], {
     cwd: PATHS.root,
+    env: { ...process.env, GOCACHE: PATHS.goCache },
     input: JSON.stringify(ird),
     encoding: "utf8",
     timeout: 30000,

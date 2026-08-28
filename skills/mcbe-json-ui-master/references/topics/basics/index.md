@@ -10,5 +10,5 @@ Subtopics:
 
 External docs to load only when the question needs them:
 
-- `../../../../../docs/23-bedrock-resource-pack-basics.md`
-- `../../../../../docs/24-json-ui-layout-units.md`
+- `docs/23-bedrock-resource-pack-basics.md`
+- `docs/24-json-ui-layout-units.md`

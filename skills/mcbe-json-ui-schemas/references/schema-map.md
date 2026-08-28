@@ -2,19 +2,19 @@
 
 ## Primary sources
 
-- `../../../references/schemas/Blockception/README.md`
-- `../../../references/schemas/Blockception/vscode-settings.json`
-- `../../../references/schemas/Blockception/resource/ui/ui.json`
-- `../../../references/schemas/Blockception/resource/ui/_ui_defs.json`
-- `../../../references/schemas/Blockception/resource/ui/_global_variables.json`
-- `../../../references/schemas/DJStompZone/README.md`
-- `../../../references/schemas/DJStompZone/ui.schema.json`
-- `../../../references/schemas/DJStompZone/ui_defs.schema.json`
-- `../../../references/schemas/DJStompZone/global_variables.schema.json`
+- `references/schemas/Blockception/README.md`
+- `references/schemas/Blockception/vscode-settings.json`
+- `references/schemas/Blockception/resource/ui/ui.json`
+- `references/schemas/Blockception/resource/ui/_ui_defs.json`
+- `references/schemas/Blockception/resource/ui/_global_variables.json`
+- `references/schemas/DJStompZone/README.md`
+- `references/schemas/DJStompZone/ui.schema.json`
+- `references/schemas/DJStompZone/ui_defs.schema.json`
+- `references/schemas/DJStompZone/global_variables.schema.json`
 - Bugrock JSON UI Schemas: `https://github.com/KalmeMarq/Bugrock-JSON-UI-Schemas`
   - verified HEAD on 2026-04-29: `de118a327453c3b4ed3c671fa5ea98d9b31d0238`
   - hosted schema files include `ui.schema.json`, `ui.sprite.schema.json`, `ui_defs.schema.json`, and `global_variables.schema.json`
-- `../../../docs/09-schema-and-tooling.md`
+- `docs/09-schema-and-tooling.md`
 
 ## Use DJStompZone when
 

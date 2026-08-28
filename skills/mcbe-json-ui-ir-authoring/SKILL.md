@@ -7,7 +7,7 @@ description: Use when the user asks for layout, positioning, alignment, symmetry
 
 Use this skill when **the user's primary need is correct layout** — positions, sizes, alignment, symmetry, gaps. For dynamic bindings, animations, or Script API wiring, use the knowledge layer skills (`mcbe-json-ui-logic`, `mcbe-json-ui-hud-and-chat`, etc.) instead, then patch the compiled `ui.json` directly.
 
-For new UI planning where the user has not supplied a complete spec, read `../../docs/52-json-ui-intake-questionnaire.md` first, then translate the chosen layout constraints into IR.
+For new UI planning where the user has not supplied a complete spec, read `docs/52-json-ui-intake-questionnaire.md` first, then translate the chosen layout constraints into IR.
 
 ## When to choose IR vs raw JSON
 
@@ -63,5 +63,5 @@ Hand back:
 ## References
 
 - `references/intent-to-constraint.md`
-- `../../docs/41-ir-spec.md`
-- `../../schemas/ir.schema.json`
+- `docs/41-ir-spec.md`
+- `schemas/ir.schema.json`

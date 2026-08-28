@@ -7,8 +7,8 @@
 
 ## Local repo notes
 
-- `../../../references/vanilla/ztech-vanilla-authority.md`
-- `../../../references/vanilla/vanilla-search-guide.md`
+- `references/vanilla/ztech-vanilla-authority.md`
+- `references/vanilla/vanilla-search-guide.md`
 
 ## Search targets
 

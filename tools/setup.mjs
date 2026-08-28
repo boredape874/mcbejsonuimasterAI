@@ -3,7 +3,7 @@
 // Safe to re-run. Never installs Node, never elevates, never modifies system.
 
 import { spawnSync } from "node:child_process";
-import { PATHS } from "./_lib/paths.mjs";
+import { PATHS, VANILLA_INDEX_SCHEMAS } from "./_lib/paths.mjs";
 import { log } from "./_lib/log.mjs";
 import { exists, ensureDir, writeJson, readJson } from "./_lib/fsx.mjs";
 
@@ -57,9 +57,15 @@ async function ensureWorkspace() {
 
 async function maybeBuildVanillaIndex() {
   const screensExists = await exists(PATHS.vanillaIndexScreens);
-  if (screensExists) {
-    log.ok("vanilla-index already built");
-    return "ok";
+  const texturesExists = await exists(PATHS.vanillaIndexTextures);
+  if (screensExists && texturesExists) {
+    const screens = await readJson(PATHS.vanillaIndexScreens).catch(() => null);
+    const textures = await readJson(PATHS.vanillaIndexTextures).catch(() => null);
+    if (screens?.schema === VANILLA_INDEX_SCHEMAS.screens && textures?.schema === VANILLA_INDEX_SCHEMAS.textures) {
+      log.ok("vanilla-index already built");
+      return "ok";
+    }
+    log.info("vanilla-index schema changed; rebuilding");
   }
   const ztech = await exists(PATHS.ztechMirror);
   const samples = await exists(PATHS.bedrockSamplesUi);

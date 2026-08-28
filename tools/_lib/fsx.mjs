@@ -17,6 +17,10 @@ export async function readJson(path) {
   return JSON.parse(raw);
 }
 
+export async function readText(path) {
+  return readFile(path, "utf8");
+}
+
 export async function writeJson(path, obj) {
   await ensureDir(dirname(path));
   await writeFile(path, JSON.stringify(obj, null, 2) + "\n", "utf8");

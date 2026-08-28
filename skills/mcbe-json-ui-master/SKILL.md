@@ -18,7 +18,7 @@ Use this as the top-level skill for Bedrock JSON UI work.
    - If the task is broad or the right reference is unclear, also read `references/reference-task-taxonomy.md` and `references/hierarchical-task-router.md` before opening examples.
    - If local restricted JSON UI references are relevant and present, read `references/local-json-ui-reference-packs.md` before opening raw restricted files.
    - If the task mentions phone/PDA/device forms, compact routed form suites, reusable button templates, polished shop/store forms, auction/crate/reward forms, battle command panels, database/storage UIs, routed special forms, HUD renderer relocation, or the `advanced-ui-set` reference set, read `references/advanced-ui-set-special-ui.md` before opening raw restricted files.
-   - If the task mentions a large utility UI pack, Déesse-style toolkit, desktop/touch HUD menu, quick container helpers, chunk/minimap/debug overlays, or reusable common control libraries, read `../../references/topics/patterns/deesse-ui-toolkit.md` before opening any local private source.
+   - If the task mentions a large utility UI pack, Déesse-style toolkit, desktop/touch HUD menu, quick container helpers, chunk/minimap/debug overlays, or reusable common control libraries, read `references/topics/patterns/deesse-ui-toolkit.md` before opening any local private source.
 2. Classify the request by primary need:
    - planning or intake for a new UI
    - basics or mental model
@@ -34,7 +34,7 @@ Use this as the top-level skill for Bedrock JSON UI work.
    - schema validation
    - tooling and editor workflow
 3. Read only the matching specialized skill reference.
-   - For planning or intake, read `../../docs/52-json-ui-intake-questionnaire.md`.
+   - For planning or intake, read `docs/52-json-ui-intake-questionnaire.md`.
    - For layout-heavy planning, route geometry through `mcbe-json-ui-ir-authoring` and `mcbe-json-ui-tools-runner`.
 4. Answer with file-level changes, exact JSON locations, and exact texture paths.
 5. State whether a path, practice, or rule is:

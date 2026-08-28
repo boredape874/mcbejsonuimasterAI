@@ -8,10 +8,10 @@ Use for long forms, quest lists, shop lists, and settings panels.
 
 Sources:
 
-- `references/mirrors/json-ui-examples/scroll_panel_template.json`
-- `references/sample-packs/rpg-server-ui-reference/ui/shop.json`
-- `references/sample-packs/rpg-server-ui-reference/ui/quest.json`
-- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/server_form_controls.json`
+- `references/external/json-ui-examples/scroll_panel_template.json`
+- `references/source-packs/rpg-server-ui-reference/ui/shop.json`
+- `references/source-packs/rpg-server-ui-reference/ui/quest.json`
+- `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/server_form_controls.json`
 
 Important fields:
 
@@ -33,10 +33,10 @@ Use for rows of buttons, tab bars, quick slots, and horizontal item groups.
 
 Sources:
 
-- `references/sample-packs/rpg-server-ui-reference/ui/stat.json`
-- `references/sample-packs/rpg-server-ui-reference/ui/skill.json`
-- `references/sample-packs/rpg-server-ui-reference/ui/menu.json`
-- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/settings_sections/general_section_controls.json`
+- `references/source-packs/rpg-server-ui-reference/ui/stat.json`
+- `references/source-packs/rpg-server-ui-reference/ui/skill.json`
+- `references/source-packs/rpg-server-ui-reference/ui/menu.json`
+- `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/settings_sections/general_section_controls.json`
 
 Pattern:
 
@@ -56,12 +56,12 @@ Bedrock's common vanilla helper is mostly vertical-scroll oriented. For horizont
 
 Practical source for raw scroll components:
 
-- `references/mirrors/json-ui-examples/scroll_panel_template.json`
+- `references/external/json-ui-examples/scroll_panel_template.json`
 
 Practical source for offset animation:
 
-- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/settings_sections/general_section_controls.json`
-- `references/reference-mirrors/minecraft-bedrock-json-ui-sample/json ui 개발/ui/sample UI suiteUI/ui_extras/start_screen_controls.json`
+- `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/settings_sections/general_section_controls.json`
+- `references/upstreams/minecraft-bedrock-json-ui-sample/json ui 개발/ui/RainbowPieUI/ui_extras/start_screen_controls.json`
 
 ## Horizontal scroll animation recipe
 

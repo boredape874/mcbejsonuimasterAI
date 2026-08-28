@@ -6,13 +6,14 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join, relative, sep } from "node:path";
 import { log } from "./_lib/log.mjs";
-import { PATHS } from "./_lib/paths.mjs";
-import { exists, writeJson, ensureDir } from "./_lib/fsx.mjs";
+import { PATHS, VANILLA_INDEX_SCHEMAS } from "./_lib/paths.mjs";
+import { exists, writeJson, ensureDir, readJson } from "./_lib/fsx.mjs";
 
 async function walk(dir, filter, out = []) {
   let ents;
   try { ents = await readdir(dir, { withFileTypes: true }); }
   catch { return out; }
+  ents.sort((left, right) => left.name.localeCompare(right.name));
   for (const ent of ents) {
     const p = join(dir, ent.name);
     if (ent.isDirectory()) await walk(p, filter, out);
@@ -21,14 +22,41 @@ async function walk(dir, filter, out = []) {
   return out;
 }
 
+function normalizeTextureKey(value) {
+  if (!value.startsWith("textures/") || /[$#%]/.test(value)) return null;
+  return value.replace(/\\/g, "/").replace(/\.(?:png|tga|jpe?g)$/i, "");
+}
+
+function addTexture(textures, key, source, path) {
+  const normalized = normalizeTextureKey(key);
+  if (!normalized) return;
+  if (!textures[normalized]) textures[normalized] = [];
+  if (!textures[normalized].some((entry) => entry.source === source && entry.path === path)) {
+    textures[normalized].push({ source, path });
+  }
+}
+
+async function indexDeclaredTextures(files, source, textures) {
+  for (const file of files) {
+    const path = relative(PATHS.root, file).split(sep).join("/");
+    const text = await readFile(file, "utf8");
+    const pattern = /["'](textures\/[A-Za-z0-9_./-]+)["']/g;
+    let match;
+    while ((match = pattern.exec(text))) addTexture(textures, match[1], source, path);
+  }
+}
+
 async function main() {
   const force = process.argv.includes("--force");
   await ensureDir(PATHS.vanillaIndex);
-
-  const sources = [
-    { label: "ztech", path: PATHS.ztechMirror },
-    { label: "bedrock-samples-ui", path: PATHS.bedrockSamplesUi },
-  ].filter(async (s) => await exists(s.path));
+  if (!force && await exists(PATHS.vanillaIndexScreens) && await exists(PATHS.vanillaIndexTextures)) {
+    const screens = await readJson(PATHS.vanillaIndexScreens).catch(() => null);
+    const textures = await readJson(PATHS.vanillaIndexTextures).catch(() => null);
+    if (screens?.schema === VANILLA_INDEX_SCHEMAS.screens && textures?.schema === VANILLA_INDEX_SCHEMAS.textures) {
+      log.info("vanilla-index already exists", { hint: "pass --force to rebuild" });
+      return;
+    }
+  }
 
   const screens = {};
   const textures = {};
@@ -40,28 +68,35 @@ async function main() {
   ]) {
     if (!(await exists(src.path))) continue;
 
-    const uiDir = join(src.path, "ui");
-    if (await exists(uiDir)) {
-      const files = await walk(uiDir, (p) => p.endsWith(".json") || p.endsWith(".jsonc"));
-      for (const f of files) {
-        const rel = relative(PATHS.root, f).split(sep).join("/");
-        const name = f.split(sep).pop().replace(/\.(json|jsonc)$/, "");
-        if (!screens[name]) screens[name] = [];
-        screens[name].push({ source: src.label, path: rel });
-        scanned++;
-      }
+    const nestedUi = join(src.path, "ui");
+    const uiDir = await exists(nestedUi) ? nestedUi : src.path;
+    const uiFiles = await walk(uiDir, (p) => p.endsWith(".json") || p.endsWith(".jsonc"));
+    for (const f of uiFiles) {
+      const rel = relative(PATHS.root, f).split(sep).join("/");
+      const name = f.split(sep).pop().replace(/\.(json|jsonc)$/, "");
+      if (!screens[name]) screens[name] = [];
+      screens[name].push({ source: src.label, path: rel });
+      scanned++;
     }
 
     const texDir = join(src.path, "textures");
     if (await exists(texDir)) {
-      const files = await walk(texDir, (p) => /\.(png|tga)$/i.test(p));
-      for (const f of files) {
+      const imageFiles = await walk(texDir, (p) => /\.(png|tga|jpe?g)$/i.test(p));
+      for (const f of imageFiles) {
         const rel = relative(PATHS.root, f).split(sep).join("/");
-        const key = relative(src.path, f).split(sep).join("/").replace(/\.(png|tga)$/i, "");
-        if (!textures[key]) textures[key] = [];
-        textures[key].push({ source: src.label, path: rel });
+        const key = relative(src.path, f).split(sep).join("/");
+        addTexture(textures, key, src.label, rel);
       }
+
+      const textureJsonFiles = await walk(texDir, (p) => /\.jsonc?$/i.test(p));
+      for (const f of textureJsonFiles) {
+        const rel = relative(PATHS.root, f).split(sep).join("/");
+        const key = relative(src.path, f).split(sep).join("/").replace(/\.jsonc?$/i, "");
+        if (key.startsWith("textures/ui/")) addTexture(textures, key, src.label, rel);
+      }
+      await indexDeclaredTextures(textureJsonFiles, src.label, textures);
     }
+    await indexDeclaredTextures(uiFiles, src.label, textures);
   }
 
   if (scanned === 0) {
@@ -69,13 +104,13 @@ async function main() {
   }
 
   await writeJson(PATHS.vanillaIndexScreens, {
-    schema: "mcbe-jsonui-ai-kit/vanilla-index/screens@1",
+    schema: VANILLA_INDEX_SCHEMAS.screens,
     builtAt: new Date().toISOString(),
     count: Object.keys(screens).length,
     screens,
   });
   await writeJson(PATHS.vanillaIndexTextures, {
-    schema: "mcbe-jsonui-ai-kit/vanilla-index/textures@1",
+    schema: VANILLA_INDEX_SCHEMAS.textures,
     builtAt: new Date().toISOString(),
     count: Object.keys(textures).length,
     textures,

@@ -2,9 +2,9 @@
 
 Read:
 
-- `../../../../../docs/17-community-patterns-string-score-hud.md`
-- `../../../../../references/community-patterns/string-splitting-notes.md`
-- `../../../../../references/mirrors/bedrock-wiki-json-ui/json-ui-intro.md`
+- `docs/17-community-patterns-string-score-hud.md`
+- `references/community-patterns/string-splitting-notes.md`
+- `references/external/bedrock-wiki-json-ui/json-ui-intro.md`
 
 Use this subtopic for:
 

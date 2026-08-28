@@ -18,13 +18,13 @@ Load in this order:
 
 | User request | Load first | Then load only if needed |
 | --- | --- | --- |
-| "what is JSON UI?" | `topics/basics/index.md` | `resource-pack-basics.md`, `docs/23-bedrock-resource-pack-basics.md` |
-| layout, anchors, screen size | `topics/basics/index.md` | `screen-size-and-layout.md`, `docs/24-json-ui-layout-units.md` |
-| `_ui_defs` or load issue | `topics/foundations/index.md` | `entry-points.md`, target `_ui_defs.json` |
-| HUD/actionbar UI | `topics/hud-chat/index.md` | `title-and-actionbar.md`, target `hud_screen.json` |
+| "what is JSON UI?" | `skills/mcbe-json-ui-master/references/topics/basics/index.md` | `resource-pack-basics.md`, `docs/23-bedrock-resource-pack-basics.md` |
+| layout, anchors, screen size | `skills/mcbe-json-ui-master/references/topics/basics/index.md` | `screen-size-and-layout.md`, `docs/24-json-ui-layout-units.md` |
+| `_ui_defs` or load issue | `skills/mcbe-json-ui-master/references/topics/foundations/index.md` | `entry-points.md`, target `_ui_defs.json` |
+| HUD/actionbar UI | `skills/mcbe-json-ui-master/references/topics/hud-chat/index.md` | `title-and-actionbar.md`, target `hud_screen.json` |
 | PMMP title/actionbar/form UI | `docs/25-pmmp-json-ui-bridge.md` | target `hud_screen.json` or `server_form.json` |
-| string split/slice | `topics/logic/index.md` | `string-splitting-and-slicing.md` |
-| vanilla texture path | `topics/vanilla/index.md` | `ztech-lookups.md` |
+| string split/slice | `skills/mcbe-json-ui-master/references/topics/logic/index.md` | `string-splitting-and-slicing.md` |
+| vanilla texture path | `skills/mcbe-json-ui-master/references/topics/vanilla/index.md` | `ztech-lookups.md` |
 | missing texture or invisible UI | `docs/26-common-failure-modes.md` | exact debugging subtopic |
 | merge two packs | `docs/20-pack-merge-playbook.md` | only changed files from both packs |
 | broad audit | `docs/08-reference-hierarchy.md` | exact docs selected from the audit finding |
