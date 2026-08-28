@@ -12,6 +12,7 @@ Use this skill as a short router. Once the request is classified, read only the 
 | Need | Skill |
 | --- | --- |
 | proportions, position, size, spacing, typography, visual states | `mcbe-json-ui-visual-design` |
+| texture appearance, semantic role, state sets, palettes, nine-slice briefs | `mcbe-json-ui-texture-design` |
 | pixel geometry and IR constraints | `mcbe-json-ui-ir-authoring` |
 | solve, compile, render, diff, validate | `mcbe-json-ui-tools-runner` |
 | `_ui_defs`, namespaces, insertion, factories | `mcbe-json-ui-foundations` |

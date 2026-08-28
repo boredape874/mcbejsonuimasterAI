@@ -1,0 +1,65 @@
+# Copy into workspace/<task>/texture-asset-brief.yaml and replace example values.
+schemaVersion: 1.0.0
+id: example_primary_button
+target:
+  family: button
+  role: primary_action
+  intendedDisplaySize: [120, 24]
+  style: restrained_pixel_casino
+redistribution: original-output
+evidence:
+  - claim: Resizable action buttons preserve a one-pixel outer outline and a distinct inner highlight.
+    basis: aggregate_catalog_pattern
+    sourcesObserved: 3
+    status: inferred
+designDecisions:
+  sourcePixelSize: [60, 12]
+  palette:
+    dominant: ["#241B2E", "#6E3E78"]
+    accent: ["#E4B85B"]
+    outline: "#130F18"
+  pixelDensity: 1x_source_to_2x_display
+  lighting: top_left
+  transparency: transparent_outside_silhouette
+stateSet:
+  - state: default
+    visualDelta: neutral fill and one-pixel top highlight
+  - state: hover
+    visualDelta: brighter inner border and accent lifted in value
+  - state: pressed
+    visualDelta: top highlight removed and inner shadow increased
+  - state: locked
+    visualDelta: reduced saturation and contrast while retaining outline
+files:
+  - state: default
+    path: textures/ui/example_primary_button.png
+    size: [60, 12]
+  - state: hover
+    path: textures/ui/example_primary_button_hover.png
+    size: [60, 12]
+  - state: pressed
+    path: textures/ui/example_primary_button_pressed.png
+    size: [60, 12]
+  - state: locked
+    path: textures/ui/example_primary_button_locked.png
+    size: [60, 12]
+nineSlice:
+  enabled: true
+  sidecarStemMatchesPng: true
+  margins: { left: 4, top: 4, right: 4, bottom: 4 }
+  minimumRenderedSize: [8, 8]
+  centerMode: stretch
+  contentPadding: { left: 6, top: 3, right: 6, bottom: 3 }
+generationPrompt:
+  subject: Original compact pixel-art primary action button texture set for Minecraft Bedrock JSON UI.
+  constraints:
+    - Four isolated state textures in the declared file order and exact source dimensions.
+    - Crisp hard pixel edges, transparent exterior, stable silhouette and protected corners.
+    - No text, logos, watermark, signature, perspective, or unrelated UI.
+validation:
+  - All PNG dimensions and alpha bounds match the brief.
+  - Default, hover, pressed, and locked files are present.
+  - Every scalable PNG has a valid same-stem nine-slice JSON sidecar.
+  - Opposing slice margins do not exceed the source dimensions.
+unverified:
+  - Bedrock runtime scaling, focus behavior, and final contrast over the target screen.

@@ -43,9 +43,12 @@ Use only the stages needed by the task. `skill:context` returns the smaller skil
 | Environment | `npm run doctor:quick` | repository-local dependency and state checks |
 | Source boundary | `npm run validate:sources -- [config]` | source schema, path, license-evidence, and redistribution findings |
 | UI corpus | `npm run source:scan -- [options]` | normalized screen, control, texture, nine-slice, and protocol records |
+| Broad local archive | `npm run corpus:inventory -- --root <path>` | neutral sources, measured controls/assets/protocols, exclusions, unresolved records, and local recipe candidates |
 | Recipe catalog | `npm run catalog:build -- [options]` | measured recipes linked to source evidence |
 | Recipe lookup | `npm run design:search -- [query] [filters]` | matching recipe ids, tiers, roles, and evidence |
 | Asset lookup | `npm run asset:search -- [query] [filters]` | UI-first asset metadata, dimensions, hash, source, and duplicate state |
+| Asset semantics | `npm run asset:catalog -- [options]` | observed control usage, semantic roles/states, visual measurements, state families, and nine-slice evidence |
+| Texture context | `npm run asset:context -- <role> [--state <state>]` | source-redacted measured constraints and original-art generation brief |
 | Layout pipeline | `npm run run -- <ir.yaml>` | `solved.json`, `ui.json`, and `report.json` |
 | Visual preview | `npm run preview -- <ui.json> [<solved.json>] [options]` | coordinates, unsupported-property report, state previews, and contact sheet |
 | Pack validation | `npm run validate:pack -- <pack-root> [options]` | `_ui_defs`, namespace, control, JSONC, and texture report |
@@ -67,6 +70,7 @@ The source tools treat development packs and asset libraries as read-only inputs
 
 ```powershell
 npm run validate:sources
+npm run corpus:inventory -- --root <local-json-ui-archive> --out workspace/corpus-local/archive
 npm run source:scan -- --out workspace/corpus-local
 npm run catalog:build -- --corpus workspace/corpus-local/index.json
 npm run design:search -- button --role button --json
@@ -80,7 +84,16 @@ npm run design:search -- button --role button --json
 - The catalog preserves source tier and redistribution status.
 - Search results are evidence candidates, not permission to copy source assets.
 
-## Asset search
+## Asset semantics and search
+
+Build semantic evidence before writing a texture prompt:
+
+```powershell
+npm run asset:catalog
+npm run asset:context -- button --state hover --json
+```
+
+The semantic catalog joins actual JSON UI texture references to owning controls and screen families, then records observed versus inferred roles, visual measurements, state siblings, and same-stem nine-slice values. A context query with insufficient cross-source evidence must remain unresolved instead of inventing a measured rule.
 
 `asset:search` queries the local visual asset index without copying files.
 

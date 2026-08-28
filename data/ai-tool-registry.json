@@ -600,9 +600,83 @@
       "supports": { "help": true, "json": true, "report": true }
     },
     {
+      "id": "corpus.inventory",
+      "status": "implemented",
+      "purpose": "Inventory a broad local JSON UI archive into neutral local-only sources, measured controls, assets, protocols, unresolved evidence, and recipe candidates.",
+      "command": { "executable": "node", "script": "tools/corpus-inventory.mjs", "display": "node tools/corpus-inventory.mjs --root <archive> [--out workspace/corpus-local/archive] [--concurrency 12] [--json]" },
+      "arguments": [
+        { "name": "root", "kind": "option", "flag": "--root", "required": true, "valueType": "path", "description": "Local archive root to inventory." },
+        { "name": "out", "kind": "option", "flag": "--out", "required": false, "valueType": "path", "description": "Output directory under workspace/corpus-local." },
+        { "name": "concurrency", "kind": "option", "flag": "--concurrency", "required": false, "valueType": "integer", "description": "Bounded file-processing concurrency." },
+        { "name": "limit", "kind": "option", "flag": "--limit", "required": false, "valueType": "integer", "description": "Optional diagnostic file limit." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print the summary as JSON." }
+      ],
+      "inputs": [{ "name": "local_archive", "kind": "directory", "required": true, "description": "Local JSON UI examples and assets; originals remain read-only." }],
+      "outputs": [{ "name": "local_corpus", "kind": "directory", "required": true, "format": "JSON", "pathPattern": "workspace/corpus-local/**", "description": "Neutral source inventory, evidence, caches, unresolved records, and schema-valid local design recipes searchable by design.search." }],
+      "preconditions": ["The archive root exists and is not the repository output directory."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/corpus-local"], "description": "Writes ignored local inventory and incremental cache files; never modifies source archives." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "The archive could not be read or an output could not be written.", "recovery": "Check the root and keep output inside workspace/corpus-local." },
+        { "exitCode": 64, "meaning": "Arguments are invalid.", "recovery": "Use --help and provide --root." }
+      ],
+      "evidenceProduced": ["Neutral source counts, file hashes, UI controls, geometry, texture references, protocols, recipe candidates, exclusions, and unresolved records."],
+      "unsupportedBehavior": ["Does not scan excluded archives, ZIP contents, generated trees, symlinks, or unsupported file types.", "Does not grant redistribution permission or runtime validity."],
+      "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "asset.catalog",
+      "status": "implemented",
+      "purpose": "Build a local semantic texture catalog by joining the curated asset index with observed JSON UI usage, visual measurements, states, and nine-slice evidence.",
+      "command": { "executable": "node", "script": "tools/asset-catalog-build.mjs", "display": "node tools/asset-catalog-build.mjs [--root <asset-library>] [--out workspace/corpus-local/assets.semantic.json] [--json]" },
+      "arguments": [
+        { "name": "root", "kind": "option", "flag": "--root", "required": false, "valueType": "path", "description": "Explicit local asset-library root." },
+        { "name": "config", "kind": "option", "flag": "--config", "required": false, "valueType": "path", "description": "Ignored local source config." },
+        { "name": "source-id", "kind": "option", "flag": "--source-id", "required": false, "valueType": "string", "description": "Configured asset-library source id." },
+        { "name": "out", "kind": "option", "flag": "--out", "required": false, "valueType": "path", "description": "Semantic catalog path under workspace/corpus-local." },
+        { "name": "cache", "kind": "option", "flag": "--cache", "required": false, "valueType": "path", "description": "Incremental cache path under workspace/corpus-local." },
+        { "name": "no-palette", "kind": "flag", "flag": "--no-palette", "required": false, "valueType": "boolean", "description": "Skip PNG palette decoding." },
+        { "name": "refresh", "kind": "flag", "flag": "--refresh", "required": false, "valueType": "boolean", "description": "Ignore existing semantic caches." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print the summary as JSON." }
+      ],
+      "inputs": [{ "name": "asset_index", "kind": "file", "required": true, "format": "JSON", "pathPattern": "indexes/assets.json", "description": "Local curated asset index and referenced UI JSON files." }],
+      "outputs": [{ "name": "semantic_catalog", "kind": "file", "required": true, "format": "JSON", "pathPattern": "workspace/corpus-local/assets.semantic.json", "description": "Source-redacted roles, states, visual measurements, usage evidence, and unresolved records." }],
+      "preconditions": ["The local asset library and its index exist.", "The output and cache remain inside workspace/corpus-local."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/corpus-local/assets.semantic.json", "workspace/corpus-local/asset-semantics-cache.json"], "description": "Writes ignored analysis and cache files; never copies or edits source assets." },
+      "successExitCodes": [0],
+      "failures": [{ "exitCode": 1, "meaning": "Config, index, image decoding, or output processing failed.", "recovery": "Check the local source root and review unresolved evidence; do not promote incomplete records." }],
+      "evidenceProduced": ["Semantic role and state, dimensions, alpha, palette, JSON UI usage, confidence, duplicate state, nine-slice pairing, and unresolved evidence."],
+      "unsupportedBehavior": ["Does not grant redistribution rights or prove runtime rendering.", "Inferred roles remain distinct from observed control usage."],
+      "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "asset.context",
+      "status": "implemented",
+      "purpose": "Create a compact source-redacted texture-generation context from measured semantic asset evidence for one role and optional state.",
+      "command": { "executable": "node", "script": "tools/asset-design-context.mjs", "display": "node tools/asset-design-context.mjs <role> [--state <state>] [--catalog <path>] [--json]" },
+      "arguments": [
+        { "name": "role", "kind": "positional", "required": true, "valueType": "string", "description": "Semantic UI role such as button, panel, slot, icon, bar, map, or book." },
+        { "name": "state", "kind": "option", "flag": "--state", "required": false, "valueType": "string", "description": "Optional interaction state." },
+        { "name": "catalog", "kind": "option", "flag": "--catalog", "required": false, "valueType": "path", "description": "Semantic catalog inside the repository." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print structured context JSON." }
+      ],
+      "inputs": [{ "name": "semantic_catalog", "kind": "file", "required": true, "format": "JSON", "pathPattern": "workspace/corpus-local/assets.semantic.json", "description": "Catalog produced by asset.catalog." }],
+      "outputs": [{ "name": "texture_context", "kind": "report", "required": true, "format": "text or JSON", "description": "Measured size, palette, alpha, states, nine-slice tendencies, evidence counts, generation prompt, and privacy policy." }],
+      "preconditions": ["asset.catalog completed and enough evidence matches the requested role/state."],
+      "mutates": { "mode": "none", "paths": [], "description": "Context generation is read-only." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "The catalog is unavailable, outside the repository, or invalid.", "recovery": "Build the catalog and keep the catalog path inside the repository." },
+        { "exitCode": 2, "meaning": "The requested role/state has insufficient unique or cross-source evidence.", "recovery": "Broaden the query or label the texture as a new design decision without claiming measured support." }
+      ],
+      "evidenceProduced": ["Source-redacted distribution summary and original-art generation constraints."],
+      "unsupportedBehavior": ["Does not expose source paths or copy catalog artwork.", "Does not invoke image generation or claim Bedrock runtime support."],
+      "supports": { "help": true, "json": true, "report": false }
+    },
+    {
       "id": "asset.search",
       "status": "implemented",
-      "purpose": "Search the local MCBE JSON UI asset catalog without copying assets or exposing absolute paths by default.",
+      "purpose": "Search the local MCBE JSON UI asset catalog by metadata terms such as function, state, shape, style, and size without copying assets or exposing absolute paths by default.",
       "command": { "executable": "node", "script": "tools/asset-search.mjs", "display": "node tools/asset-search.mjs [query] [options]" },
       "arguments": [
         { "name": "query", "kind": "positional", "required": false, "repeatable": true, "valueType": "string", "description": "Free-text terms matched against asset metadata." },
@@ -634,7 +708,7 @@
         { "exitCode": 1, "meaning": "Config, source, index, or report processing failed.", "recovery": "Check the local source id/root and asset index before retrying." },
         { "exitCode": 64, "meaning": "An option or numeric range is invalid.", "recovery": "Use --help and keep --limit between 1 and 500." }
       ],
-      "evidenceProduced": ["UI-first, unique-by-default asset matches with sourceId, source-relative path, category, size, alpha, hash, and duplicate state."],
+      "evidenceProduced": ["UI-first, unique-by-default asset matches with sourceId, source-relative path, category, size, alpha, hash, and duplicate state; query matches can support a texture brief but do not prove semantic classification."],
       "unsupportedBehavior": ["Does not copy assets or grant redistribution permission.", "Does not include non-UI categories or duplicates unless explicitly requested.", "Does not expose resolved local paths unless --absolute is explicitly supplied."],
       "supports": { "help": true, "json": true, "report": true }
     },

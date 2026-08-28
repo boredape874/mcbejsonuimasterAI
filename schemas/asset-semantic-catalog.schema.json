@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/mcbe-jsonui/asset-semantic-catalog.schema.json",
+  "type": "object",
+  "required": ["schema", "source", "summary", "assets", "unresolved"],
+  "properties": {
+    "schema": { "const": "mcbe-jsonui-ai-kit/asset-semantic-catalog@1" },
+    "source": { "type": "object" },
+    "summary": { "type": "object" },
+    "assets": { "type": "array" },
+    "unresolved": { "type": "array" }
+  },
+  "additionalProperties": true
+}

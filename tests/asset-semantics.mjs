@@ -1,0 +1,34 @@
+import assert from "node:assert/strict";
+import { mkdtemp, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { PNG } from "pngjs";
+import { analyzePalette, buildTextureLookup, classifyAsset, collectTextureRefs, isUiTexture, resolveTextureRef } from "../tools/_lib/asset-semantics.mjs";
+import taxonomy from "../data/asset-taxonomy.json" with { type: "json" };
+
+const button = { id: "a", sourceId: "pack", sourceRelativePath: "RP/textures/ui/primary_button_hover.png", category: "textures/buttons", extension: ".png" };
+const classified = classifyAsset(button, taxonomy);
+assert(classified.roles.includes("button"));
+assert.equal(classified.state, "hover");
+const lookup = buildTextureLookup([button]);
+assert.deepEqual(resolveTextureRef("pack", "textures/ui/primary_button_hover", lookup), ["a"]);
+const refs = collectTextureRefs({ a: { type: "image", texture: "textures/ui/a" }, b: [{ "button@common.button": { $x_texture: "textures/ui/b.png" } }, { texture: "$dynamic" }] });
+assert.deepEqual(refs.map((item) => item.texture), ["textures/ui/a", "textures/ui/b"]);
+assert.deepEqual(refs.map((item) => [item.controlId, item.controlType]), [["a", "image"], ["button@common.button", "inherited"]]);
+assert(refs.every((item) => item.propertyPath === item.jsonPath));
+assert.equal(isUiTexture(button), true);
+assert.equal(isUiTexture({ ...button, category: "textures/icons", sourceRelativePath: "textures/blocks/stone.png" }), false);
+assert.equal(isUiTexture({ ...button, category: "textures/icons", sourceRelativePath: "textures/flipbook_textures/fire.png" }), false);
+assert.equal(typeof analyzePalette, "function");
+const dir = await mkdtemp(join(tmpdir(), "asset-semantics-"));
+const png = new PNG({ width: 3, height: 3 });
+for (let i = 0; i < png.data.length; i += 4) { png.data[i] = 255; png.data[i + 3] = i === 0 ? 0 : 255; }
+const pngPath = join(dir, "metric.png");
+await writeFile(pngPath, PNG.sync.write(png));
+const metrics = await analyzePalette(pngPath);
+assert.deepEqual(metrics.opaqueBounds, { x: 0, y: 0, width: 3, height: 3 });
+assert(metrics.transparentRatio > 0);
+assert.equal(metrics.cornerAlpha.length, 4);
+assert.deepEqual(Object.keys(metrics.borderRunEstimate), ["top", "right", "bottom", "left"]);
+assert(Number.isFinite(metrics.colorTransitionDensity));
+console.log("asset semantic tests passed");

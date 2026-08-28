@@ -241,6 +241,9 @@ npm run source:scan
 npm run catalog:build
 npm run design:search -- button
 npm run asset:search -- button --category textures/buttons
+npm run asset:catalog
+npm run asset:context -- button --state hover --json
+npm run corpus:inventory -- --root "<local-json-ui-archive>" --out workspace/corpus-local/archive
 node tools/init-project.mjs --list-templates
 node tools/init-project.mjs rpg_status --template rpg_hud
 node tools/run.mjs workspace/rpg_status/ir.yaml
@@ -254,7 +257,7 @@ For private development packs or a local asset library, copy `config/sources.loc
 
 Available project templates are `minimal`, `rpg_hud`, and `rpg_menu`. The solve step uses the Go geometry solver when `go` is installed and falls back to the Node solver otherwise. Its build cache stays under `.agent/cache/`, so restricted environments do not need access to the user profile cache. For server-form or HUD repeated rows, model the area as `collection_grid`; for labels and images whose footprint is content-driven, use IR `auto_size` before hand-finishing bindings and textures.
 
-`source:scan` reads only registered UI entry files and their directly referenced assets. `catalog:build` turns measured controls into traceable recipes, while `design:search` and `asset:search` let an AI select geometry and local asset candidates without copying unknown-license material. `preview` writes deterministic PC/touch state images, a contact sheet, coordinates, and unsupported-property evidence.
+`corpus:inventory` discovers a broad local example archive as neutral local-only sources and extracts UI controls, geometry, texture references, protocols, and recipe candidates without copying originals. `source:scan` reads registered UI entry files and directly referenced assets. `asset:catalog` connects the local asset index to observed JSON UI usage, roles, states, dimensions, alpha, palettes, and same-stem nine-slice evidence; `asset:context` converts that evidence into a source-redacted texture-generation brief. `catalog:build`, `design:search`, and `asset:search` provide the narrower recipe and fallback lookup paths. `preview` writes deterministic PC/touch state images, a contact sheet, coordinates, and unsupported-property evidence.
 
 `validate-pack.mjs` parses JSON and JSONC UI files, checks `_ui_defs.json`, namespaces, control structure, collection bindings, and local or indexed vanilla texture references. `eval:offline` runs the fixed seven-example structural and visual suite. `eval:live` deliberately remains incomplete until real Bedrock screenshots and content-log evidence are supplied. `npm run check` combines the repository audit with the complete test suite.
 

@@ -33,6 +33,22 @@
       "boundaries": ["The texture preview is not a Bedrock emulator.", "Do not infer unresolved bindings or collection sizes."]
     },
     {
+      "skill": "mcbe-json-ui-texture-design",
+      "skillStatus": "implemented",
+      "purpose": "Turn catalog evidence into original state-complete Bedrock UI texture briefs, generation prompts, and nine-slice contracts.",
+      "toolSelections": [
+        { "id": "asset.catalog", "phase": "index", "required": true, "reason": "Build the local evidence-backed semantic catalog from indexed textures and their JSON UI usage sites." },
+        { "id": "asset.context", "phase": "evidence", "required": true, "reason": "Summarize measured roles, states, sizes, palettes, alpha, and nine-slice patterns into a source-redacted generation context." },
+        { "id": "asset.search", "phase": "fallback", "required": false, "reason": "Fall back to metadata search when the semantic catalog is unavailable or a concrete local candidate must be inspected." },
+        { "id": "preview.texture", "phase": "integration", "required": false, "reason": "Check the resulting texture states and nine-slice behavior in a deterministic static preview after the files exist." },
+        { "id": "pack.validate", "phase": "validate", "required": false, "reason": "Check RP texture references and adjacent metadata after integration." },
+        { "id": "public.audit", "phase": "release", "required": false, "reason": "Reject local paths, private source identifiers, and restricted source details from public briefs and prompts." }
+      ],
+      "workflow": ["asset.catalog", "asset.context", "asset.search", "preview.texture", "pack.validate", "public.audit"],
+      "successCriteria": ["The brief separates measured evidence from new design decisions.", "Required interaction states and output files are explicit.", "Every scalable PNG has a same-stem nine-slice contract or a documented unresolved status."],
+      "boundaries": ["Catalog assets are analysis evidence, not automatically redistributable inputs.", "Image generation runs only after an explicit user request to create or edit an image.", "Public outputs omit absolute paths and source-specific identities."]
+    },
+    {
       "skill": "mcbe-json-ui-ir-authoring",
       "skillStatus": "implemented",
       "purpose": "Translate measured layout intent into solver-ready IR constraints.",
@@ -82,12 +98,13 @@
       "purpose": "Mine working sample packs into traceable, source-tiered patterns.",
       "toolSelections": [
         { "id": "sources.validate", "phase": "preflight", "required": true, "reason": "Confirm source and redistribution boundaries." },
+        { "id": "corpus.inventory", "phase": "discover", "required": false, "reason": "Inventory a broad local example archive into neutral local-only sources and recipe candidates before selecting packs." },
         { "id": "source.scan", "phase": "collect", "required": true, "reason": "Extract UI-only evidence from the chosen source." },
         { "id": "catalog.build", "phase": "index", "required": true, "reason": "Build recipe and evidence relationships." },
         { "id": "design.search", "phase": "query", "required": true, "reason": "Return concrete patterns rather than general prose." },
         { "id": "asset.search", "phase": "assets", "required": false, "reason": "Find adjacent UI textures by category, size, source, hash, and duplicate state." }
       ],
-      "workflow": ["sources.validate", "source.scan", "catalog.build", "design.search", "asset.search"],
+      "workflow": ["sources.validate", "corpus.inventory", "source.scan", "catalog.build", "design.search", "asset.search"],
       "successCriteria": ["Every extracted pattern retains source tier and evidence paths.", "Private or restricted inputs remain local-only."],
       "boundaries": ["Quarantine sources are searchable only locally and are never automatic recommendations."]
     },

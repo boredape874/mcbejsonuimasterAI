@@ -1,0 +1,4 @@
+interface:
+  display_name: "MCBE JSON UI Texture Design"
+  short_description: "Specify original Bedrock UI texture sets from evidence"
+  default_prompt: "Use $mcbe-json-ui-texture-design to create an evidence-based asset brief and state-set prompt for this Bedrock JSON UI texture."

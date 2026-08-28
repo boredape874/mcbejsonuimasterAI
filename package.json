@@ -27,6 +27,9 @@
     "catalog:build": "node tools/catalog-build.mjs",
     "design:search": "node tools/design-search.mjs",
     "asset:search": "node tools/asset-search.mjs",
+    "asset:catalog": "node tools/asset-catalog-build.mjs",
+    "asset:context": "node tools/asset-design-context.mjs",
+    "corpus:inventory": "node tools/corpus-inventory.mjs",
     "preview": "node tools/preview.mjs",
     "validate:sources": "node tools/validate-sources.mjs",
     "eval:offline": "node tools/eval-offline.mjs",
@@ -39,7 +42,7 @@
     "prompt:lint": "node tools/prompt-lint.mjs",
     "render": "node tools/render.mjs",
     "diff": "node tools/diff.mjs",
-    "test": "node tests/run-all.mjs && node tests/source-catalog.mjs && node tests/preview-engine.mjs && node tests/asset-search.mjs && node tests/ai-tool-contracts.mjs && node evals/validate-examples.mjs && node tests/offline-eval.mjs && node tests/public-audit.mjs"
+    "test": "node tests/run-all.mjs && node tests/source-catalog.mjs && node tests/corpus-inventory.mjs && node tests/preview-engine.mjs && node tests/asset-search.mjs && node tests/asset-semantics.mjs && node tests/ai-tool-contracts.mjs && node tests/texture-design-contract.mjs && node evals/validate-examples.mjs && node tests/offline-eval.mjs && node tests/public-audit.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",

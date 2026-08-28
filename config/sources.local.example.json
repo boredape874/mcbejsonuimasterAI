@@ -4,6 +4,19 @@
   "scope": "local",
   "sources": [
     {
+      "id": "local-json-ui-archive",
+      "kind": "sample",
+      "tier": "quarantine",
+      "redistribution": "local-only",
+      "license": "mixed-and-source-specific",
+      "licenseEvidence": [],
+      "revision": "working-tree",
+      "rpRoot": "<LOCAL_JSON_UI_ARCHIVE_ROOT>",
+      "include": ["**/ui/**/*.json", "**/ui/**/*.jsonc", "**/_ui_defs.json", "**/_global_variables.json"],
+      "exclude": ["mcbejsonuimasterAI/**", "archives/**", "node_modules/**", "dist/**", "build/**", "generated/**", "cache/**", "workspace/**", "**/*.zip"],
+      "overrides": {}
+    },
+    {
       "id": "example-local-gold-candidate-addon",
       "kind": "addon",
       "tier": "gold-candidate",

@@ -34,6 +34,8 @@ Pick the layer **based on what the user asked for**, not by default.
 | "what properties / anchors / binding types are valid?" | `data/jsonui-spec.json` (single source of truth used by `tools/validate.mjs`) |
 | Mixed (layout + bindings + animation) | Tools layer for layout, then patch the compiled JSON UI with raw edits for bindings/animation |
 | "scan these packs/assets", "learn spacing/button/text patterns" | `config/sources.*.json` -> `source:scan` -> `catalog:build`; never copy local-only material into public output |
+| "analyze the whole local JSON UI archive" | `corpus:inventory` -> local recipe catalog -> `design:search`; keep raw names and paths in ignored local maps only |
+| "design/generate a button, panel, slot, icon, or nine-slice texture" | `mcbe-json-ui-texture-design` -> `asset:catalog` -> `asset:context`; generate only original art and only when explicitly requested |
 | "실제 RP로 완성", "production-ready", "skills 기반으로 마감" | **Two-stage**: tools for coords, then hand-finish the JSON UI per `docs/46-tools-output-to-handcrafted-ui.md` (3-state buttons, vanilla nineslice, modification-only routing). **MD docs and `references/source-packs/*` are authoritative; tool `ok=true` is not sufficient — see `docs/26` and `docs/46` Authority order.** |
 
 If unsure, ask the user one short question to disambiguate. Do not silently switch layers.
