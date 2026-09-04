@@ -1,0 +1,31 @@
+{
+  "schema": "mcbe-jsonui-ai-kit/test-impact-map@1",
+  "policy": "shadow-only",
+  "promotion": { "minimumRuns": 30, "minimumDays": 14, "gateEnabled": false },
+  "forceFull": [
+    "package.json", "package-lock.json", "tests/**", "evals/**", "schemas/**",
+    "tools/test-impact.mjs", "tools/benchmark-agent-path.mjs", "data/test-impact-map.json", "data/test-manifest.json"
+  ],
+  "rules": [
+    { "paths": ["tools/final-rp-v2-*.mjs", "tools/final-rp-render.mjs", "tools/_lib/final-rp-v2/**", "data/device-profiles.json", "data/vanilla-screen-profiles.json"], "tests": ["final-rp-v2", "final-rp-v2-expression", "final-rp-v2-state-merge", "final-rp-v2-renderer", "final-rp-v2-cache", "final-rp-v2-font", "final-rp-v2-vanilla", "final-rp-v2-device", "final-rp-interaction", "device-profile-provenance", "font-hard-gate", "overlap-detector"] },
+    { "paths": ["tools/_lib/final-rp-engine.mjs", "tools/_lib/final-rp-resolver.mjs", "tools/_lib/final-rp-renderer.mjs", "tools/_lib/screenshot-compare.mjs"], "tests": ["final-rp-v1", "final-rp-renderer", "screenshot", "mcp", "mcp-v2"] },
+    { "paths": ["tools/preview.mjs", "tools/render.mjs", "tools/diff.mjs", "tools/_lib/preview-engine.mjs", "tools/_lib/preview-cli.mjs"], "tests": ["preview-engine", "cli-result-contracts", "screenshot"] },
+    { "paths": ["tools/source-scan.mjs", "tools/catalog-build.mjs", "tools/corpus-inventory.mjs", "tools/_lib/source-corpus.mjs", "tools/_lib/corpus-inventory.mjs", "tools/_lib/source-paths.mjs", "config/sources.*.json"], "tests": ["source-catalog", "corpus-inventory"] },
+    { "paths": ["tools/asset-*.mjs", "tools/card-deck-audit.mjs", "tools/_lib/asset-*.mjs"], "tests": ["asset-search", "asset-semantics", "texture-design", "card-deck", "assets-atlas", "assets-nine-slice", "assets-vanilla-profiles"] },
+    { "paths": ["tools/*skill*.mjs", "tools/route-task.mjs", "tools/prompt-*.mjs", "tools/tool-*.mjs", "tools/_lib/ai-contracts.mjs", "skills/**", "data/ai-tool-registry.json", "data/skill-tool-profiles.json", "data/skill-routing.json", "data/skill-topology.json", "scripts/install-skills.ps1"], "tests": ["ai-tool-contracts", "skill-routing-sync"] },
+    { "paths": ["tools/server-form-contract.mjs", "tools/_lib/server-form-contract.mjs", "references/patterns/server-form-*/**"], "tests": ["server-form-contract", "route-graph", "protocol-marker-leak"] },
+    { "paths": ["tools/trace-ui-route.mjs", "tools/_lib/ui-route-graph.mjs"], "tests": ["route-graph", "dialect-pack-registration"] },
+    { "paths": ["tools/audit-content-log.mjs", "tools/_lib/content-log.mjs"], "tests": ["content-log-signatures"] },
+    { "paths": ["tools/verify-installed-pack.mjs", "tools/_lib/pack-fingerprint.mjs", "tools/_lib/runtime-evidence.mjs", "tools/eval-live.mjs"], "tests": ["installed-pack-fingerprint", "offline-eval"] },
+    { "paths": ["tools/validate.mjs", "tools/validate-pack.mjs", "tools/_lib/json-dialect.mjs", "tools/_lib/pack-validator.mjs", "tools/_lib/ui-validator.mjs"], "tests": ["core-runner", "dialect-matrix", "dialect-pack-registration", "route-graph", "protocol-marker-leak"] },
+    { "paths": ["tools/setup.mjs", "tools/doctor.mjs", "tools/_lib/dependency-revision.mjs", "tools/_lib/result-envelope.mjs", "tools/_lib/report-envelope.mjs", "tools/_lib/fsx.mjs", "tools/_lib/paths.mjs"], "tests": ["run-context", "core-runner", "cli-result-contracts"] },
+    { "paths": ["tools/eval-offline.mjs", "tools/_lib/offline-eval.mjs"], "tests": ["offline-eval"] },
+    { "paths": ["tools/mcp-*.mjs", "tools/_lib/mcp-*.mjs"], "tests": ["mcp", "mcp-v2"] },
+    { "paths": ["tools/inspector-server.mjs", "inspector/**"], "tests": ["inspector", "mcp-v2"] },
+    { "paths": ["AGENTS.md", "README.md", "docs/03-skill-map.md", "docs/27-token-efficient-routing.md", "docs/42-tools-reference.md", "docs/43-self-bootstrap-protocol.md"], "tests": ["run-context", "ai-tool-contracts", "skill-routing-sync"] },
+    { "paths": ["config/research-lock.json", "data/upstream-compat-fixtures.json", "tools/research-sync.mjs", "tools/upstream-compat*.mjs", "tools/_lib/upstream-*.mjs", "docs/69-local-inspector-and-research-mirrors.md"], "tests": ["upstream", "upstream-policy", "upstream-blackbox", "mcp-v2"] },
+    { "paths": ["tools/final-rp-render-legacy.mjs", "tools/_lib/final-rp-validator.mjs", "docs/70-final-rp-renderer-mcp.md"], "tests": ["final-rp-v1", "final-rp-renderer", "mcp", "mcp-v2"] },
+    { "paths": [".gitignore", "NOTICE.md"], "tests": ["public-audit"] }
+  ],
+  "fallback": "full"
+}

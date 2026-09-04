@@ -14,7 +14,7 @@ import {
 
 const REPO = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const NODE = process.execPath;
-const OUT = resolve(REPO, "workspace", "_test_public_audit");
+const OUT = resolve(process.env.MCBEKIT_REPO_TEST_ROOT || resolve(REPO, "workspace"), "public-audit");
 
 function run(args) {
   return new Promise((done) => {

@@ -16,12 +16,13 @@ Turn a screenshot, working screen, or catalog recipe into explicit layout decisi
 ## Workflow
 
 1. Read [references/measured-layout-workflow.md](references/measured-layout-workflow.md).
-2. Inspect the target screen, its inherited controls, referenced textures, and adjacent nine-slice metadata.
+2. Inspect the target screen, its inherited controls, referenced textures, adjacent nine-slice metadata, and available vanilla/font/device profiles.
 3. If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-visual-design` profile. Invoke a tool only when its command or script is present in the current checkout; otherwise perform the measurable parts directly and report the missing capability.
 4. Prefer a measured catalog recipe when its role, source tier, and target profile match. Record `unresolved` instead of filling unknown dynamic values by intuition.
 5. Express alignment, symmetry, repeated sizing, and equal gaps as IR constraints through `mcbe-json-ui-ir-authoring`.
-6. Use `mcbe-json-ui-tools-runner` for the available solve, compile, render, diff, and validation stages. Treat the internal preview as a deterministic approximation, not a Bedrock emulator.
-7. Report the evidence, numeric decisions, generated artifacts, validation results, and remaining Bedrock checks.
+6. Use `mcbe-json-ui-tools-runner` for solve, compile, preview, diff, and validation. For an integrated RP, hand off state rendering, installed-profile checks, screenshot calibration, and evidence-backed patch proposals to `mcbe-json-ui-final-rp-inspection`.
+7. Inspect every generated preview report. Unresolved texture roots, unsupported controls/properties, or diagnostics invalidate the affected visual claim; placeholder rectangles are not acceptable evidence.
+8. Report the evidence, numeric decisions, generated artifacts, validation results, and remaining Bedrock checks.
 
 ## Design rules
 
@@ -29,5 +30,8 @@ Turn a screenshot, working screen, or catalog recipe into explicit layout decisi
 - Use one spacing rule for a repeated row or grid unless the evidence shows a deliberate exception.
 - Size labels from their available region and test the normal string, a 30% longer Korean string, and a long English string.
 - Verify default, hover, pressed, and locked visuals when those states exist.
+- Compare state textures by visual family as well as file existence. Hover and pressed art must preserve the control's intended silhouette, scale, padding, and style unless a deliberate change is documented.
 - Preserve image aspect ratio unless stretching is explicitly intended; use verified nine-slice metadata for resizable frames.
-- Do not call a visual result exact when the source image has unknown crop, GUI scale, or viewport.
+- Do not call a visual result exact or guess coordinates when its Minecraft font/vanilla profile, viewport, GUI scale, safe area, crop, or screenshot calibration is unresolved.
+- Do not claim final server-form placement or state correctness without screenshots from the actual Bedrock screen. Static pack checks and the standalone preview are insufficient for collection-driven and inherited controls.
+- Treat external editor output as fixture evidence, not the visual or runtime authority.

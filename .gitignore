@@ -5,6 +5,8 @@ references/restricted/
 # AI tool layer
 node_modules/
 workspace/
+.playwright-cli/
+output/
 .agent/state/
 .agent/cache/
 vanilla-index/cache/

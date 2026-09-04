@@ -6,7 +6,7 @@ import { createCanvas } from "@napi-rs/canvas";
 import { controlIndex } from "../tools/_lib/preview-engine.mjs";
 
 const repo = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const fixture = resolve(repo, "workspace", "_test_preview_engine");
+const fixture = resolve(process.env.MCBEKIT_TEST_ROOT || resolve(repo, "workspace"), "preview-engine");
 function run(args) { return new Promise((done) => { const child = spawn(process.execPath, args, { cwd: repo }); let output = ""; child.stdout.on("data", (d) => { output += d; }); child.stderr.on("data", (d) => { output += d; }); child.on("close", (code) => done({ code, output })); }); }
 function assert(ok, message) { if (!ok) throw new Error(message); console.log("PASS", message); }
 
@@ -34,9 +34,11 @@ const rects = {
 };
 await writeFile(resolve(fixture, "ui.json"), JSON.stringify(ui, null, 2));
 await writeFile(resolve(fixture, "solved.json"), JSON.stringify({ base_resolution: [320, 180], rects }, null, 2));
-const result = await run(["tools/preview.mjs", "workspace/_test_preview_engine/ui.json", "workspace/_test_preview_engine/solved.json", "--json"]);
+const detailPath = resolve(fixture, "preview-report.json");
+const result = await run(["tools/preview.mjs", resolve(fixture, "ui.json"), resolve(fixture, "solved.json"), "--json", "--diagnostic-ok", "--report", detailPath]);
 assert(result.code === 0, `preview exits 0: ${result.output}`);
-const report = JSON.parse(result.output.trim()), coords = JSON.parse(await readFile(resolve(fixture, "coords.json"), "utf8"));
+const envelope = JSON.parse(result.output.trim()), report = JSON.parse(await readFile(detailPath, "utf8")), coords = JSON.parse(await readFile(resolve(fixture, "coords.json"), "utf8"));
+assert(envelope.status === "incomplete" && envelope.optIn?.diagnosticOk === true, "diagnostic success is explicit in the envelope");
 assert(coords.rects.length === 7, "geometry debugger preserves public solved rects");
 assert(report.imageRenderer.enabled === true, "canvas renderer activates when installed");
 assert(report.outputs.some((path) => path.endsWith("preview-pc-hover.png")), "PC hover output exists");
@@ -44,7 +46,7 @@ assert(report.outputs.some((path) => path.endsWith("preview-touch-pressed.png"))
 assert(report.outputs.some((path) => path.endsWith("preview-contact-sheet.png")), "contact sheet exists");
 assert(report.unsupported.some((item) => item.value === "mystery_property"), "unsupported property is reported");
 assert(report.diagnostics.length === 0, "texture and nine-slice sidecar resolve");
-const legacy = await run(["tools/render.mjs", "workspace/_test_preview_engine/ui.json", "workspace/_test_preview_engine/solved.json", "--no-image", "--report", "workspace/_test_preview_engine/disabled.json"]);
+const legacy = await run(["tools/render.mjs", resolve(fixture, "ui.json"), resolve(fixture, "solved.json"), "--no-image", "--diagnostic-ok", "--report", resolve(fixture, "disabled.json")]);
 const disabled = JSON.parse(await readFile(resolve(fixture, "disabled.json"), "utf8"));
 assert(legacy.code === 0 && disabled.imageRenderer.reason === "disabled_by_flag", "legacy render and explicit disabled report work");
 const help = await run(["tools/preview.mjs", "--help"]);

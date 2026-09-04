@@ -10,7 +10,7 @@ Load in this order:
 
 1. `mcbe-json-ui-master` only when the task is broad or ownership is unclear.
 2. The selected entry in `data/skill-tool-profiles.json`.
-3. The matching contracts in `data/ai-tool-registry.json`, preferably through `skill.doctor` and `skill.context`.
+3. The matching contracts in `data/ai-tool-registry.json`, preferably through `skill.doctor` and compact `skill.context`. Use `--full` only when a field omitted by the compact projection is actually required.
 4. One specialist `SKILL.md` and only its required reference.
 5. Target-pack files, then one external or mirrored source only when local evidence is insufficient.
 

@@ -1,0 +1,32 @@
+import assert from "node:assert/strict";
+import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
+import { FONT_UNAVAILABLE, FontUnavailableError, inspectMinecraftFonts, MinecraftFontEngine } from "../tools/_lib/final-rp-v2/font-engine.mjs";
+import { PNG } from "pngjs";
+import { buildDisplayList } from "../tools/_lib/final-rp-v2/display-list.mjs";
+
+function png(width = 128, height = 128) { const image = new PNG({ width, height }); for (let i=0;i<256;i++){const cw=width/16,ch=height/16,ox=(i%16)*cw,oy=Math.floor(i/16)*ch;for(let y=1;y<ch-1;y++)for(let x=1;x<Math.min(cw-1,6);x++)image.data[((oy+y)*width+ox+x)*4+3]=255;} return PNG.sync.write(image); }
+const root = await mkdtemp(join(tmpdir(), "mcbe-font-v2-")); await mkdir(root, { recursive: true });
+await writeFile(join(root, "font_metadata.json"), JSON.stringify({ version: 1, fonts: [{ font_name: "MinecraftTen", font_format: "ttf", font_file: "font/minecraft-ten" }], font_aliases: [{ alias: "SmoothFontLatin", fonts: [{ font_reference: "MinecraftTen" }, { font_reference: "UnicodeFont", font_ranges: [{ first: 0xac00, last: 0xd7af }] }] }] }));
+await writeFile(join(root, "default8.png"), png()); await writeFile(join(root, "glyph_E0.png"), png(256, 256)); await writeFile(join(root, "glyph_D5.png"), png(256, 256)); await writeFile(join(root, "glyph_AE.png"), png(256, 256));
+const profile = await inspectMinecraftFonts(root);
+assert.deepEqual(profile.defaultAtlas.size, [128, 128]);
+assert.equal(profile.glyphAtlases.find((atlas) => atlas.name === "glyph_E0.png").page, 0xe0);
+const engine = new MinecraftFontEngine(profile);
+assert.equal(engine.resolve("SmoothFontLatin").resolved, "SmoothFontLatin");
+assert.equal(engine.requireGlyphPage(0xe012).name, "glyph_E0.png");
+const run = engine.layoutText({ text: "ABC 123\n한글", fontType: "default", fontScale: 1, rect: { x: 10, y: 20, w: 100, h: 20 }, alignment: "left", shadow: true });
+assert.ok(run.glyphs.some((glyph) => glyph.texture === "font/default8"));
+assert.ok(run.glyphs.some((glyph) => glyph.texture === "font/glyph_D5") && run.glyphs.some((glyph) => glyph.texture === "font/glyph_AE"), "Korean glyphs must use their Unicode pages");
+assert.equal(run.glyphs.some((glyph) => glyph.char === " "), false); assert.ok(run.glyphs.every((glyph) => glyph.uv.length === 2 && glyph.uv_size.length === 2 && glyph.bbox));
+assert.ok(run.glyphs.some((glyph) => glyph.rect.y > 20), "newline must create another baseline");
+const clipped = engine.layoutText({ text: "THIS IS A VERY LONG STRING", rect: { x: 0, y: 0, w: 12, h: 9 } }); assert.equal(clipped.clipped, true);
+const centered = engine.layoutText({ text: "A", rect: { x: 0, y: 10, w: 20, h: 20 }, alignment: "center" }); assert.ok(centered.glyphs[0].rect.y > 10, "single-line labels must be vertically centered inside their declared rect");
+const large = engine.layoutText({ text: "A", fontSize: "large", rect: { x: 0, y: 0, w: 20, h: 20 } }); assert.ok(large.glyphs[0].rect.h > centered.glyphs[0].rect.h, "font_size must affect glyph geometry in addition to font_scale_factor");
+assert.equal(engine.layoutText({ text: "한", fontType: "SmoothFontLatin", rect: { x: 0, y: 0, w: 20, h: 9 } }).glyphs[0].texture, "font/glyph_D5");
+assert.throws(() => engine.layoutText({ text: "A", fontType: "MinecraftTen", rect: { x: 0, y: 0, w: 20, h: 9 } }), (error) => error.code === FONT_UNAVAILABLE, "non-bitmap fonts must not silently fall back to a system font");
+const node = { props: { text: "42", font_type: "default" }, rect: { x: 0, y: 0, w: 20, h: 9 } }; engine.attachGlyphRun(node); assert.equal(node.glyphRun.type, "glyphRun");
+const display = buildDisplayList({ viewport: [20, 9], nodes: [{ ...node, id: "label", qualified: "test.label", visible: true, alpha: 1, props: { ...node.props, type: "label" } }] }); assert.equal(display.commands[0].type, "glyphRun"); assert.equal(display.unresolved.length, 0);
+assert.throws(() => new MinecraftFontEngine({ status: "unavailable" }), (error) => error instanceof FontUnavailableError && error.code === FONT_UNAVAILABLE);
+console.log("final-rp-v2-font-engine: ok");

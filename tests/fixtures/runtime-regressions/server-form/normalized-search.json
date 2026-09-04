@@ -1,0 +1,6 @@
+{
+  "namespace": "server_form",
+  "screen": { "type": "stack_panel", "collection_name": "all_form_buttons", "$search_scope": "all", "bindings": [
+    { "source_property_name": "normalize_lower(#form_button_text - #search)", "target_property_name": "#visible" }
+  ] }
+}

@@ -10,12 +10,17 @@ function parseArgs(argv) {
     allowMissingTextures: false,
     allowPartialUiDefs: false,
     strictWarnings: false,
+    dialect: "bedrock-json@1.21.100",
+    vanillaProfile: "bedrock-1.21.100",
   };
   for (let index = 0; index < argv.length; index++) {
     const arg = argv[index];
     if (arg === "--allow-missing-textures") options.allowMissingTextures = true;
     else if (arg === "--allow-partial-ui-defs") options.allowPartialUiDefs = true;
     else if (arg === "--strict-warnings") options.strictWarnings = true;
+    else if (arg.startsWith("--dialect=")) options.dialect = arg.slice("--dialect=".length);
+    else if (arg === "--dialect") options.dialect = argv[++index];
+    else if (arg.startsWith("--vanilla-profile=")) options.vanillaProfile = arg.slice("--vanilla-profile=".length);
     else if (arg.startsWith("--report=")) options.reportPath = arg.slice("--report=".length);
     else if (arg === "--report") {
       const value = argv[++index];
@@ -37,13 +42,15 @@ function showIssues(report) {
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   if (!options) {
-    log.error("usage: node tools/validate-pack.mjs <pack-path> [--allow-missing-textures] [--allow-partial-ui-defs] [--strict-warnings] [--report <path>]");
+    log.error("usage: node tools/validate-pack.mjs <pack-path> [--dialect <id>] [--vanilla-profile=<id>] [--allow-missing-textures] [--allow-partial-ui-defs] [--strict-warnings] [--report <path>]");
     process.exit(64);
   }
 
   const report = await validatePack(options.packPath, {
     allowMissingTextures: options.allowMissingTextures,
     allowPartialUiDefs: options.allowPartialUiDefs,
+    dialect: options.dialect,
+    vanillaProfile: options.vanillaProfile,
   });
   if (options.reportPath) await writeJson(resolve(options.reportPath), report);
   showIssues(report);

@@ -8,9 +8,13 @@ If the request is broad or ambiguous, read `docs/27-token-efficient-routing.md` 
 
 Do not load every docs file by default.
 
+For pack-wide JSON UI folder ownership or entry/route/feature separation, read `ui-folder-architecture.md` before proposing moves.
+
 For any task involving local packs, private mirrors, community snippets, community chat notes, sample archives, or reference-derived design work, read `reference-governance.md` before summarizing source usage or adapting code.
 
 For visual tasks involving layout, alignment, spacing, text fit, HUD composition, server-form design, or screenshot matching, read `visual-fit-discipline.md` in this skill first. If a repository checkout exists, also prefer `mcbejsonuimasterAI/docs/54-visual-fit-and-reference-discipline.md` as the fuller project copy.
+
+If the target has already been integrated into a resource pack, route final state rendering, Minecraft font metrics, vanilla inheritance, device calibration, screenshot comparison, and patch proposals to `mcbe-json-ui-final-rp-inspection`. Do not guess coordinates or claim pixel accuracy while the vanilla profile, font profile, GUI scale, safe area, or screenshot transform is unresolved.
 
 For visual design direction, read `design-reference-atlas.md` and `diagrammatic-workflows.md` in this skill first. If a repository checkout exists, also prefer:
 
@@ -214,6 +218,8 @@ For bedrock-auxgen, JSON-UI-Dumper, or StarLibV2, prefer `topics/tooling/aux-dum
 For Dumper animation values, use `docs/33-animation-patterns-and-dumper-values.md` after the tooling note.
 
 For broader Dumper value recipes, use `docs/36-dumper-value-cookbook.md` and `docs/37-vanilla-dumper-screen-recipes.md`.
+
+Editor output is fixture evidence for parser and layout compatibility. It is never stronger than the target RP, installed vanilla/font evidence, or an actual Bedrock screenshot and content log.
 
 ### curated example archive
 

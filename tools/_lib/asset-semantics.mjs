@@ -3,6 +3,7 @@ import { extname, resolve } from "node:path";
 import { PNG } from "pngjs";
 
 export const UI_TEXTURE_PREFIX = "textures/";
+export const ASSET_REFERENCE_KINDS = Object.freeze({ RAW_TEXTURE: "raw_texture_path", ITEM_ATLAS: "item_atlas_key", BLOCK_ATLAS: "block_atlas_key" });
 
 function tokens(value) {
   return String(value || "").toLowerCase().replace(/\\/g, "/").split(/[^a-z0-9]+/).filter(Boolean);
@@ -67,6 +68,40 @@ export function buildTextureLookup(assets) {
 export function resolveTextureRef(sourceId, texture, lookup) {
   const key = normalizeTextureRef(texture);
   return lookup.get(`${sourceId}\0${key}`) || lookup.get(key) || [];
+}
+
+function atlasEntries(value) {
+  const entries = value?.texture_data;
+  return entries && typeof entries === "object" && !Array.isArray(entries) ? entries : {};
+}
+
+function atlasTextures(entry) {
+  const textures = entry?.textures;
+  if (typeof textures === "string") return [textures];
+  if (Array.isArray(textures)) return textures.filter((value) => typeof value === "string");
+  if (textures && typeof textures === "object" && typeof textures.path === "string") return [textures.path];
+  return [];
+}
+
+/** Resolve an asset reference without ever converting an unknown atlas key into a guessed file path. */
+export function resolveAssetReference(reference, { sourceId = null, textureLookup = new Map(), itemAtlas = null, blockAtlas = null, kind = null } = {}) {
+  const raw = String(reference ?? "");
+  const requestedKind = kind ?? (raw.startsWith(UI_TEXTURE_PREFIX) ? ASSET_REFERENCE_KINDS.RAW_TEXTURE : null);
+  if (requestedKind === ASSET_REFERENCE_KINDS.RAW_TEXTURE) {
+    const assetIds = resolveTextureRef(sourceId, raw, textureLookup);
+    return { ok: assetIds.length > 0, kind: requestedKind, reference: raw, assetIds, paths: [], code: assetIds.length ? "ASSET_RESOLVED" : "RAW_TEXTURE_NOT_FOUND" };
+  }
+  const candidates = [
+    [ASSET_REFERENCE_KINDS.ITEM_ATLAS, atlasEntries(itemAtlas)],
+    [ASSET_REFERENCE_KINDS.BLOCK_ATLAS, atlasEntries(blockAtlas)],
+  ].filter(([candidateKind]) => !requestedKind || requestedKind === candidateKind);
+  const matches = candidates.flatMap(([candidateKind, entries]) => Object.hasOwn(entries, raw) ? [{ kind: candidateKind, paths: atlasTextures(entries[raw]) }] : []);
+  if (!matches.length) return { ok: false, kind: requestedKind ?? "atlas_key", reference: raw, assetIds: [], paths: [], code: "ATLAS_KEY_NOT_FOUND" };
+  if (matches.length > 1) return { ok: false, kind: "ambiguous_atlas_key", reference: raw, assetIds: [], paths: [], matches, code: "ATLAS_KEY_AMBIGUOUS" };
+  const match = matches[0];
+  const paths = match.paths.map(normalizeTextureRef), assetIds = paths.flatMap((path) => resolveTextureRef(sourceId, path, textureLookup));
+  const allPathsExist = paths.length > 0 && paths.every((path) => resolveTextureRef(sourceId, path, textureLookup).length > 0);
+  return { ok: allPathsExist, kind: match.kind, reference: raw, assetIds, paths, code: !paths.length ? "ATLAS_ENTRY_HAS_NO_TEXTURE" : allPathsExist ? "ASSET_RESOLVED" : "ATLAS_TEXTURE_NOT_FOUND" };
 }
 
 export async function analyzePalette(filePath, maxSamples = 4096) {

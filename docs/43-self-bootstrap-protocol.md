@@ -43,7 +43,7 @@ After the environment check, select tools from the registry rather than guessing
 
 ```text
 node tools/skill-doctor.mjs <selected-skill> --probe
-  -> node tools/skill-context.mjs <selected-skill>
+  -> npm run skill:context -- <selected-skill>
   -> node tools/tool-describe.mjs <selected-tool-id>
   -> invoke only implemented, available tools required by the task
 ```

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-29",
+  "destination": "workspace/upstreams-local",
+  "policy": {
+    "checkoutDefault": "selected-modules-only",
+    "executeDownloadedCode": false,
+    "copyUpstreamFilesIntoRepository": false,
+    "offlineFixture": "data/upstream-compat-fixtures.json"
+  },
+  "sources": [
+    {
+      "id": "jsonforge", "url": "https://github.com/xRookieFight/jsonforge.git", "commit": "2e225e5541ecfc3024efee444ae4b4e6309f0682", "policy": "selected-port-with-notice", "sync": true,
+      "useScope": ["anchor computation compatibility", "nine-slice pixel-resize compatibility", "element preview behavior comparison", "JSON UI import/export roundtrip", "project serialization format comparison"],
+      "license": { "spdx": "MIT", "path": "LICENSE", "sha256": "4ea7aa962bae4ac7c1f13c07903033e9aed176561e3802583d39a2c6bd253331" },
+      "allowlist": [
+        { "path": "src/ui/canvas/anchorMath.ts", "sha256": "6dbf69bdbf75ed1945b9680f98f27e71c4b8d01cfb0bd69fc3a93247cfdbbcb4", "purpose": "9x9 anchor computation compatibility" },
+        { "path": "src/ui/canvas/nineslice.ts", "sha256": "085a40c4583a263af49ba0cb7dcefd1d62fa3623f74f4747d1ce959f44451fc4", "purpose": "asymmetric nine-slice pixel compatibility" },
+        { "path": "src/ui/canvas/ElementRenderer.tsx", "sha256": "272adf75bfb3baa1c103a9dad07594c436da85be1604f2314ea7e4195d37aea0", "purpose": "element preview behavior comparison" },
+        { "path": "src/core/io/JsonUiImporter.ts", "sha256": "ecaa724b6d73a26dbe95e0925b6bcfc089dfec80fa0cf945ac9aa6f43eefdba4", "purpose": "document import and root-selection compatibility" },
+        { "path": "src/core/io/JsonUiExporter.ts", "sha256": "00a9ddf2fd3a5dbe69699f9dca30a2a1f6697e3307d3f2b8535d36fa3a7f105f", "purpose": "unknown-property JSON UI roundtrip compatibility" },
+        { "path": "src/core/io/ProjectSerializer.ts", "sha256": "e0475886efd3fdac654664e7b135dfbd7e950a722e2a1a690e044e72c0f98a8a", "purpose": "versioned project snapshot compatibility" },
+        { "path": "src/core/element/base/ElementType.ts", "sha256": "c214a782547b92f667f43f9eefb7123a81c6e3b0a2630e454de67b5bdfb4ad0b", "purpose": "unknown-property export preservation evidence" },
+        { "path": "src/core/element/ElementNode.ts", "sha256": "b0a0ecd5663214c9aba9a947023fc9670b4f649b26a60048ab28ff27ecd569f8", "purpose": "import/export node data compatibility" },
+        { "path": "src/core/property/CommonProperties.ts", "sha256": "32148a3c841d81c94b1a6e8ed5479499cda19f517066e60c2c2fab406cb79926", "purpose": "common transform-property defaults compatibility" }
+      ]
+    },
+    {
+      "id": "json-ui-web-editor", "url": "https://github.com/gamezaSRC/JSON-UI-Web-Editor.git", "commit": "e9401621622ef74c25e71c2dd28abfc4261e6bca", "policy": "selected-port-with-notice", "sync": true,
+      "license": { "spdx": "MIT", "path": "LICENSE", "sha256": "14083e859cf934e29c029b9b55679afddf003819e8a8758239cd3df2591589ea" },
+      "allowlist": [
+        { "path": "src/types/JsonUITypes.ts", "sha256": "7ff6c835d4d56b01032987edf419d449dd6ae4ca2dca1f420d02cc73a0b85dde", "purpose": "control and anchor vocabulary comparison" },
+        { "path": "src/core/UIValidator.ts", "sha256": "d8a2df56ef20fe91953e58ff6fc9d50dd921cbce5ba3c3a3fa9a08f356044544", "purpose": "validator diagnostic compatibility" },
+        { "path": "src/ui/preview/PreviewRenderer.ts", "sha256": "439c8a58703dd985c6aa7dfc06e2f06912279c8d7875d9dee56ddaa85bdb6d29", "purpose": "anchor and preview-box compatibility" }
+      ]
+    },
+    {
+      "id": "json-ui-builder-web", "url": "https://github.com/UnknownMaker-dev/json-ui-builder-web.git", "commit": "eea29af405c3ffb07378671cc08ad7136b33da62", "policy": "excluded-derived-source", "sync": false,
+      "license": { "spdx": "MIT", "path": "LICENSE", "sha256": "efd56cba41eb53f08e90aba562821050f124476f1251d5400446a57d2df95804" },
+      "notice": { "path": "NOTICE.md", "sha256": "5432514957fab1036ad9739a4580f6f8f24d32ea716aace5ce8a64ac4084b52a" },
+      "allowlist": [],
+      "exclude": [
+        { "path": "src/utils/coordinate-system.ts", "reason": "NOTICE identifies Seb-derived coordinate conversion and calibration constants" },
+        { "path": "src/utils/json-ui-templates.ts", "reason": "NOTICE identifies Seb-derived templates" },
+        { "path": "public/presets/**", "reason": "NOTICE says preset texture provenance is unrecorded" }
+      ]
+    },
+    {
+      "id": "json-ui-maker", "url": "https://github.com/SebTheSigma/JSON-UI-Maker.git", "commit": "2504d8456660db0971aca0445e00a609ca92b61f", "policy": "local-black-box-only", "sync": false,
+      "license": { "spdx": "NOASSERTION" }, "allowlist": [],
+      "constraints": ["do-not-copy-code", "do-not-copy-formulas", "do-not-copy-constants", "do-not-copy-textures", "synthetic-input-only"]
+    },
+    {
+      "id": "bedrock-core-ui", "url": "https://github.com/bedrock-core/ui.git", "commit": "3c9f62b309a7d5a76797efb9415ebc4050af51f4", "policy": "fixture-only", "sync": false,
+      "license": { "spdx": "MIT", "path": "LICENSE", "sha256": "6c89371fe297e756b1258dda1f9a13cfb7d7aa3fcb4621a3090bbb22431c17c5" }, "allowlist": [],
+      "constraints": ["no-runtime-dependency", "no-source-port"]
+    }
+  ]
+}

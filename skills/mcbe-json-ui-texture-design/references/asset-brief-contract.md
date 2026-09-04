@@ -31,6 +31,10 @@ Use `prompts/texture-asset-brief.yaml` as the writable template. Preserve these 
 ## State-set rules
 
 - Keep silhouette, protected borders, and content-safe region stable across states.
+- Measure both the PNG canvas and its non-transparent alpha bounds/visual centroid. Center the alpha content—not merely the canvas—inside a circular slot, card socket, or baked parent frame; the residual must be at most 1 UI unit after scaling.
+- Before drawing a button frame, inspect the final parent shell. If the shell already contains the socket, bezel, or action plate, state assets must contain only the glyph, tint, outline, or glow; rendering a second framed button causes visible nesting and position drift.
+- Do not use an unmasked rectangular `textures/ui/White` or `textures/ui/Black` overlay for a circular, angled, or rounded control. Reuse the verified control silhouette or a same-size alpha mask so hover/pressed cannot expose a foreign rectangle.
+- Default, hover, and pressed files used by one image control must have the same canvas dimensions, aspect ratio, and alpha-content bounds within 1 source pixel. Reject the state set when those invariants differ unless the JSON intentionally uses independent measured rectangles.
 - Express hover with a deliberate contrast, value, border, or highlight change rather than an unrelated redraw.
 - Express pressed state with a readable depression cue; account for any content offset in layout rather than baking text into the texture.
 - Locked/disabled must remain distinguishable without relying on hue alone.

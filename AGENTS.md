@@ -36,6 +36,7 @@ Pick the layer **based on what the user asked for**, not by default.
 | "scan these packs/assets", "learn spacing/button/text patterns" | `config/sources.*.json` -> `source:scan` -> `catalog:build`; never copy local-only material into public output |
 | "analyze the whole local JSON UI archive" | `corpus:inventory` -> local recipe catalog -> `design:search`; keep raw names and paths in ignored local maps only |
 | "design/generate a button, panel, slot, icon, or nine-slice texture" | `mcbe-json-ui-texture-design` -> `asset:catalog` -> `asset:context`; generate only original art and only when explicitly requested |
+| "final RP를 실제 화면처럼 검사", "hover/pressed 위치와 텍스트가 맞는지 확인", "Bedrock screenshot과 비교" | `mcbe-json-ui-final-rp-inspection` -> v2 `final-rp:render`/MCP/Inspector; IR preview만으로 판정하지 않음 |
 | "실제 RP로 완성", "production-ready", "skills 기반으로 마감" | **Two-stage**: tools for coords, then hand-finish the JSON UI per `docs/46-tools-output-to-handcrafted-ui.md` (3-state buttons, vanilla nineslice, modification-only routing). **MD docs and `references/source-packs/*` are authoritative; tool `ok=true` is not sufficient — see `docs/26` and `docs/46` Authority order.** |
 
 If unsure, ask the user one short question to disambiguate. Do not silently switch layers.
@@ -55,7 +56,8 @@ Workflow:
 5. Run `npm run preview -- workspace/<project>/ui.json workspace/<project>/solved.json` for PC/touch state PNGs, contact sheet, coordinates, and unsupported-property evidence.
 6. (Optional) `node tools/diff.mjs <target.png> workspace/<project>/preview.png` to get region-level differences and feed those back into `ir.yaml`.
 7. After hand-finishing a resource pack, run `node tools/validate-pack.mjs <pack-path> --report workspace/pack-report.json`.
-8. Before closing repository work, run `npm run check` and the relevant offline evaluation task.
+8. Resolve and render each final-RP button family with `npm run final-rp:render -- <rp-root> --fixture <fixture.json> --hover <index> --states default,hover,pressed`; inspect unresolved records, Minecraft glyph bounds, alpha bounds, state geometry, and textures.
+9. Before closing repository work, run `npm run check` and the relevant offline evaluation task.
 
 IR rules (hard):
 

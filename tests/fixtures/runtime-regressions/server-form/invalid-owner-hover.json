@@ -1,0 +1,8 @@
+{
+  "namespace": "server_form",
+  "screen": {
+    "type": "panel", "collection_name": "form_buttons", "collection_index": 0, "hover_text": "bad",
+    "default": { "type": "panel", "controls": [{ "name": { "type": "label", "text": "#form_button_text" } }] },
+    "hover": { "type": "panel", "controls": [{ "icon": { "type": "image", "texture": "#form_button_texture" } }] }
+  }
+}

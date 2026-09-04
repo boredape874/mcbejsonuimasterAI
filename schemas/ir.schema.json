@@ -127,6 +127,23 @@
           "description": "JSON UI bindings emitted verbatim. Validated by tools/validate.mjs against data/jsonui-spec.json.",
           "items": { "type": "object" }
         },
+        "validation": {
+          "type": "object",
+          "description": "Design-only declarations for intentional geometry. These flags are consumed by validation and are never emitted into compiled JSON UI.",
+          "additionalProperties": false,
+          "properties": {
+            "allow_parent_overflow": {
+              "type": "boolean",
+              "default": false,
+              "description": "Allow this element to extend beyond its parent, for example a decorative frame shadow or border overhang."
+            },
+            "allow_collection_clip": {
+              "type": "boolean",
+              "default": false,
+              "description": "Allow a collection's declared item extent to exceed the viewport because the collection is intentionally scrollable."
+            }
+          }
+        },
         "props": {
           "type": "object",
           "description": "Pass-through JSON UI properties merged at compile time. Use sparingly.",

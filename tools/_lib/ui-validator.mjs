@@ -46,10 +46,16 @@ function validateBindings(bindings, path, out, spec) {
   }
 }
 
-function validateNode(name, node, path, out, spec) {
+function validateNode(name, node, path, out, spec, allowedProperties) {
   const here = `${path} > ${name}`;
   // @-extends references: skip type-rule checks but still walk children/bindings.
   const isExtends = name.includes("@");
+
+  for (const key of Object.keys(node)) {
+    if (key.startsWith("$") || key.startsWith("#") || allowedProperties.has(key)) continue;
+    pushErr(out, here, `Unknown property "${key}"`,
+      "Remove it or replace it with a property confirmed by data/jsonui-spec.json and a working Bedrock UI sample.");
+  }
 
   if (!isExtends) {
     if (node.type !== undefined && !isVar(node.type) && !spec.control_types.includes(node.type)) {
@@ -85,6 +91,16 @@ function validateNode(name, node, path, out, spec) {
     }
   }
 
+  if (node.factory?.control_ids && typeof node.factory.control_ids === "object") {
+    for (const [factoryId, controlRef] of Object.entries(node.factory.control_ids)) {
+      if (typeof controlRef === "string" && controlRef.startsWith("$")) {
+        pushErr(out, `${here} > factory.control_ids.${factoryId}`,
+          `Factory control reference cannot be a variable: "${controlRef}"`,
+          "Use a literal @namespace.control reference. Bedrock reports UI control reference not found for variable-valued factory control_ids.");
+      }
+    }
+  }
+
   if (Array.isArray(node.bindings)) validateBindings(node.bindings, here, out, spec);
   if (Array.isArray(node.controls)) {
     for (const child of node.controls) {
@@ -97,7 +113,7 @@ function validateNode(name, node, path, out, spec) {
       const childName = keys[0];
       const childNode = child[childName];
       if (!childNode || typeof childNode !== "object") continue;
-      validateNode(childName, childNode, here, out, spec);
+      validateNode(childName, childNode, here, out, spec, allowedProperties);
     }
   }
 }
@@ -105,10 +121,11 @@ function validateNode(name, node, path, out, spec) {
 export async function validateUiFile(ui, filePath) {
   const spec = await getSpec();
   const issues = [];
+  const allowedProperties = new Set(Object.values(spec.properties).flat());
   for (const [key, value] of Object.entries(ui)) {
     if (key === "namespace") continue;
     if (value && typeof value === "object") {
-      validateNode(key, value, filePath, issues, spec);
+      validateNode(key, value, filePath, issues, spec, allowedProperties);
     }
   }
   return issues;

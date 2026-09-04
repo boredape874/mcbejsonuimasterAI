@@ -42,3 +42,14 @@ vanilla preset names (e.g. `common_dialogs.main_panel_no_buttons`,
 `common_buttons.light_content_button`, `server_form.long_form`) are commonly
 extended in real packs. No source code was copied; the names referenced are
 those defined by Mojang's vanilla resource pack and are public surface.
+
+## Local research mirrors
+
+`config/research-lock.json` pins JsonForge, JSON-UI-Web-Editor,
+json-ui-builder-web, JSON-UI-Maker, and bedrock-core/ui for local research and
+compatibility fixtures. Mirrors are generated under ignored
+`workspace/upstreams-local/` and are not redistributed by this repository.
+Entries marked `NOASSERTION` are research-only: no source code may be copied.
+MIT sources may only be ported selectively with their copyright and license
+notice preserved here. At this revision, the renderer contains no newly copied
+code from those mirrors.

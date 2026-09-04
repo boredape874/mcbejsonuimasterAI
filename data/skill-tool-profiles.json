@@ -6,13 +6,15 @@
       "skillStatus": "implemented",
       "purpose": "Route a mixed JSON UI task and expose only the tools required by the selected specialist workflow.",
       "toolSelections": [
+        { "id": "skill.route", "phase": "route", "required": true, "reason": "Validate structured intent and enforce one primary owner with at most one follow-on." },
         { "id": "skill.context", "phase": "route", "required": true, "reason": "Expand the selected specialist profile instead of loading the entire registry." },
-        { "id": "prompt.build", "phase": "plan", "required": false, "reason": "Normalize complex tasks into explicit evidence and acceptance criteria." },
-        { "id": "prompt.lint", "phase": "plan", "required": false, "reason": "Check that a generated task prompt preserves the contract." },
-        { "id": "public.audit", "phase": "release", "required": false, "reason": "Check public candidates for local, private, credential, framework, and redistribution leaks." },
+        { "id": "prompt.build", "phase": "plan", "required": false, "when": ["delegation", "cross-layer-plan"], "skipWhen": ["simple-exact-task"], "escalateWhen": ["handoff required"], "reason": "Normalize complex tasks into explicit evidence and acceptance criteria." },
+        { "id": "prompt.lint", "phase": "plan", "required": false, "when": ["delegation", "cross-layer-plan"], "skipWhen": ["simple-exact-task"], "escalateWhen": ["prompt contract diverges"], "reason": "Check that a generated task prompt preserves the contract." },
+        { "id": "final-rp.mcp", "phase": "final-evidence", "required": false, "when": ["integrated-rp", "visual-state-claim", "screenshot-comparison"], "skipWhen": ["syntax-only", "docs-only"], "escalateWhen": ["runtime evidence required"], "reason": "Route an integrated RP's profile-gated state and screenshot investigation to the read-only final-RP service." },
+        { "id": "public.audit", "phase": "release", "required": false, "when": ["public-release"], "skipWhen": ["local-only"], "escalateWhen": ["redistribution unresolved"], "reason": "Check public candidates for local, private, credential, framework, and redistribution leaks." },
         { "id": "skill.doctor", "phase": "preflight", "required": true, "reason": "Confirm required tools are implemented before delegation." }
       ],
-      "workflow": ["skill.doctor", "skill.context", "prompt.build", "prompt.lint", "public.audit"],
+      "workflow": ["skill.route", "skill.doctor", "skill.context", "prompt.build", "prompt.lint", "final-rp.mcp", "public.audit"],
       "successCriteria": ["One specialist profile owns each part of the task.", "No planned tool is described as executable."],
       "boundaries": ["Do not run every JSON UI tool by default.", "Runtime validation remains separate from static evidence."]
     },
@@ -26,11 +28,28 @@
         { "id": "project.init", "phase": "author", "required": false, "reason": "Create a safe IR starting point when no project exists." },
         { "id": "pipeline.run", "phase": "geometry", "required": true, "reason": "Solve and validate the selected geometry." },
         { "id": "preview.texture", "phase": "preview", "required": true, "reason": "Generate state-aware texture evidence and clipping reports." },
-        { "id": "preview.diff", "phase": "compare", "required": false, "reason": "Compare a measured reference against the internal preview." }
+        { "id": "preview.diff", "phase": "compare", "required": false, "reason": "Compare a measured reference against the internal preview." },
+        { "id": "final-rp.mcp", "phase": "final-evidence", "required": false, "reason": "For an integrated RP, require installed vanilla/font evidence, state renders, device calibration, screenshot comparison, and read-only proposals." }
       ],
-      "workflow": ["design.search", "asset.search", "project.init", "pipeline.run", "preview.texture", "preview.diff"],
-      "successCriteria": ["Every visual decision cites a recipe or measured source.", "Alignment, symmetry, and equal gaps are within one UI unit.", "Unsupported renderer behavior is reported."],
-      "boundaries": ["The texture preview is not a Bedrock emulator.", "Do not infer unresolved bindings or collection sizes."]
+      "workflow": ["design.search", "asset.search", "project.init", "pipeline.run", "preview.texture", "preview.diff", "final-rp.mcp"],
+      "successCriteria": ["Every visual decision cites a recipe or measured source.", "Alignment, symmetry, and equal gaps are within one UI unit.", "Unsupported renderer behavior is reported.", "Final-RP coordinate claims are backed by available vanilla/font profiles and calibrated device evidence."],
+      "boundaries": ["The texture preview is not a Bedrock emulator.", "Do not infer unresolved bindings or collection sizes.", "Do not claim pixel accuracy or guess coordinates while font, vanilla, device, state, or calibration evidence is unresolved.", "External editors provide fixture evidence only; Bedrock runtime is final authority."]
+    },
+    {
+      "skill": "mcbe-json-ui-final-rp-inspection",
+      "skillStatus": "implemented",
+      "purpose": "Resolve and inspect an integrated RP through profile-gated state rendering, screenshot calibration, and revision-bound evidence proposals.",
+      "toolSelections": [
+        { "id": "skill.doctor", "phase": "preflight", "required": true, "reason": "Confirm the final-RP service scripts exist before opening local evidence." },
+        { "id": "upstream.compat", "phase": "compatibility", "required": true, "reason": "Require committed baselines or reviewed hash-bound local captures; keep optional pending-local observations unresolved." },
+        { "id": "final-rp.mcp", "phase": "inspect", "required": true, "reason": "Use the read-only service for project revisions, installed profile checks, compatibility fixtures, state renders, calibration, validation, and proposals." },
+        { "id": "final-rp.inspector", "phase": "inspect-ui", "required": false, "reason": "Use the localhost UI when interactive tree and artifact inspection is useful." },
+        { "id": "final-rp.render", "phase": "final-evidence", "required": false, "reason": "Produce deterministic v2 final-RP state PNGs and reports; Bedrock capture remains a separate runtime gate." },
+        { "id": "eval.live", "phase": "runtime", "required": false, "reason": "Record the actual Bedrock state screenshots and clean content log separately from static renderer evidence." }
+      ],
+      "workflow": ["skill.doctor", "upstream.compat", "final-rp.mcp", "final-rp.inspector", "final-rp.render", "eval.live"],
+      "successCriteria": ["Installed vanilla and Minecraft font profiles are available and fingerprinted.", "Pinned offline upstream compatibility fixtures pass.", "Every relevant interaction state is rendered and compared.", "Screenshot calibration records the target device transform and residual.", "Patch proposals cite server-issued evidence IDs and the current project revision.", "Runtime status is promoted only from actual Bedrock screenshots and a clean content log."],
+      "boundaries": ["CAPABILITY_UNAVAILABLE blocks the affected evidence level.", "Do not use system-font fallback, guessed coordinates, or unresolved device settings for pixel-accurate claims.", "External editor output is fixture evidence only.", "All artifacts stay outside the RP and proposals remain read-only until separately authorized."]
     },
     {
       "skill": "mcbe-json-ui-texture-design",
@@ -70,13 +89,14 @@
         { "id": "system.doctor", "phase": "preflight", "required": true, "reason": "Check local tool prerequisites." },
         { "id": "pipeline.run", "phase": "compile", "required": true, "reason": "Run the complete geometry pipeline." },
         { "id": "preview.texture", "phase": "preview", "required": false, "reason": "Generate texture-aware PC/touch state evidence." },
+        { "id": "final-rp.mcp", "phase": "final-evidence", "required": false, "reason": "Inspect integrated RP states and screenshot evidence under the v2 profile gate." },
         { "id": "pack.validate", "phase": "pack", "required": false, "reason": "Validate complete RP registration and assets." },
         { "id": "eval.offline", "phase": "evaluate", "required": false, "reason": "Run fixed deterministic gates." },
         { "id": "public.audit", "phase": "release", "required": false, "reason": "Reject public-release leaks before handoff." }
       ],
-      "workflow": ["system.doctor", "pipeline.run", "preview.texture", "pack.validate", "eval.offline", "public.audit"],
+      "workflow": ["system.doctor", "pipeline.run", "preview.texture", "pack.validate", "final-rp.mcp", "eval.offline", "public.audit"],
       "successCriteria": ["Every invoked command is implemented according to skill.doctor.", "All produced warnings are reviewed and reported."],
-      "boundaries": ["Skip unavailable planned tools explicitly rather than simulating their result.", "Static success is not runtime success."]
+      "boundaries": ["Skip unavailable capabilities explicitly rather than simulating their result.", "Do not use the compatibility render or IR preview for pixel-accurate claims.", "Static success is not runtime success."]
     },
     {
       "skill": "mcbe-json-ui-reference",
@@ -154,12 +174,15 @@
       "skillStatus": "implemented",
       "purpose": "Localize JSON UI failures using the smallest deterministic validation surface first.",
       "toolSelections": [
+        { "id": "content-log.audit", "phase": "runtime-log", "required": false, "reason": "Separate target UI signatures from external Sound and Script noise." },
+        { "id": "ui.route.trace", "phase": "route", "required": false, "reason": "Trace the failing control route." },
+        { "id": "pack.installed.verify", "phase": "installed-pack", "required": false, "reason": "Confirm the inspected source matches the installed pack." },
         { "id": "ui.validate", "phase": "screen", "required": false, "reason": "Check one compiled or handcrafted screen." },
         { "id": "pack.validate", "phase": "pack", "required": false, "reason": "Check registration and asset connections." },
         { "id": "repository.audit", "phase": "repository", "required": false, "reason": "Check repository-level broken references and JSON." },
         { "id": "preview.diff", "phase": "geometry", "required": false, "reason": "Quantify a visual geometry regression." }
       ],
-      "workflow": ["ui.validate", "pack.validate", "preview.diff", "repository.audit"],
+      "workflow": ["content-log.audit", "ui.route.trace", "pack.installed.verify", "ui.validate", "pack.validate", "preview.diff", "repository.audit"],
       "successCriteria": ["The failure is assigned to IR, JSON UI behavior, pack wiring, asset, or runtime ownership.", "Static and runtime evidence are not conflated."],
       "boundaries": ["Do not implement a fix when the request is diagnosis only."]
     },
@@ -204,9 +227,10 @@
       "skillStatus": "implemented",
       "purpose": "Reason about namespaces, _ui_defs, factories, and modifications, with optional pack validation.",
       "toolSelections": [
+        { "id": "ui.route.trace", "phase": "trace", "required": false, "reason": "Trace exact registration, namespace, control, inheritance, and variable edges." },
         { "id": "pack.validate", "phase": "validate", "required": false, "reason": "Confirm registration and reference structure when files are in scope." }
       ],
-      "workflow": ["pack.validate"],
+      "workflow": ["ui.route.trace", "pack.validate"],
       "successCriteria": ["Every screen entry and namespace reference is traced from its owner."],
       "boundaries": ["Do not claim runtime replacement success from static registration alone."]
     },
@@ -278,15 +302,18 @@
       "skillStatus": "implemented",
       "purpose": "Choose evidence sources by authority, tier, redistribution, and task relevance.",
       "toolSelections": [
+        { "id": "research.sync", "phase": "fixtures", "required": false, "reason": "Synchronize reviewed pinned repositories into ignored local mirrors when an offline compatibility fixture is required." },
+        { "id": "upstream.compat", "phase": "fixtures", "required": false, "reason": "Validate reviewed black-box baselines without executing external editor source." },
+        { "id": "upstream.compat.capture", "phase": "fixtures", "required": false, "reason": "Record a reviewed local observation for a pending fixture without automatic baseline promotion." },
         { "id": "sources.validate", "phase": "preflight", "required": false, "reason": "Validate public/local boundaries before collection." },
         { "id": "source.scan", "phase": "collect", "required": false, "reason": "Collect UI-only local evidence." },
         { "id": "design.search", "phase": "query", "required": false, "reason": "Retrieve catalog evidence rather than rely on memory." },
         { "id": "vanilla.index", "phase": "vanilla", "required": false, "reason": "Refresh local vanilla evidence." },
         { "id": "public.audit", "phase": "release", "required": false, "reason": "Verify that public research outputs do not expose local or restricted source data." }
       ],
-      "workflow": ["sources.validate", "source.scan", "design.search", "vanilla.index", "public.audit"],
+      "workflow": ["research.sync", "upstream.compat", "upstream.compat.capture", "sources.validate", "source.scan", "design.search", "vanilla.index", "public.audit"],
       "successCriteria": ["Confirmed facts, inference, and unresolved claims are labeled."],
-      "boundaries": ["Do not redistribute local-only or unknown-license source content."]
+      "boundaries": ["Do not redistribute local-only or unknown-license source content.", "External editors are compatibility fixtures, not Bedrock runtime or visual authorities."]
     },
     {
       "skill": "mcbe-json-ui-vanilla-presets",

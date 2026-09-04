@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "profiles": [
+    {
+      "id": "pc-1920x1080-gui3",
+      "device": "pc",
+      "screenshotSize": [1920, 1080],
+      "logicalSize": [480, 270],
+      "guiScale": 3,
+      "safeArea": [0, 0, 0, 0],
+      "calibration": {
+        "source": "declared-profile",
+        "capturedAt": "2026-09-04T00:00:00Z",
+        "screenshotSha256": "unavailable-no-runtime-capture",
+        "bedrockVersion": "unverified",
+        "anchors": [[0, 0], [480, 0], [0, 270]]
+      },
+      "evidenceLevel": "final-pack-static-visual",
+      "runtimeVerified": false
+    },
+    {
+      "id": "touch-1920x1080-gui3-safe",
+      "device": "touch",
+      "screenshotSize": [1920, 1080],
+      "logicalSize": [480, 270],
+      "guiScale": 3,
+      "safeArea": [48, 27, 48, 27],
+      "calibration": {
+        "source": "declared-profile",
+        "capturedAt": "2026-09-04T00:00:00Z",
+        "screenshotSha256": "unavailable-no-runtime-capture",
+        "bedrockVersion": "unverified",
+        "anchors": [[0, 0], [480, 0], [0, 270]]
+      },
+      "evidenceLevel": "final-pack-static-visual",
+      "runtimeVerified": false
+    }
+  ]
+}

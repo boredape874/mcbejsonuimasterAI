@@ -1,4 +1,5 @@
 import { cp, mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
+import { writeJsonAtomic } from "./fsx.mjs";
 import { spawn } from "node:child_process";
 import { basename, dirname, extname, join, relative, resolve } from "node:path";
 import pixelmatch from "pixelmatch";
@@ -180,6 +181,6 @@ export async function evaluateOffline({ root, taskManifest, taskId = null, repor
     tasks.push({ id: task.id, example: task.example, ok: checks.every((item) => item.ok), checks });
   }
   const report = { schema: "mcbe-jsonui-ai-kit/offline-eval@1", ok: tasks.every((task) => task.ok), updateGoldens, goldenPolicy: GOLDEN_POLICY, tasks };
-  await mkdir(dirname(reportPath), { recursive: true }); await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
+  if (reportPath) await writeJsonAtomic(reportPath, report);
   return report;
 }

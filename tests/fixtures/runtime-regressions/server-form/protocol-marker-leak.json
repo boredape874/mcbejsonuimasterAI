@@ -1,0 +1,4 @@
+{
+  "namespace": "server_form",
+  "screen": { "type": "panel", "$title_token": "SHOP:", "controls": [{ "balance": { "type": "label", "text": "SHOP: 100" } }] }
+}

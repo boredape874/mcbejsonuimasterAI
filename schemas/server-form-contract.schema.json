@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mcbe-jsonui-ai-kit/server-form-contract.schema.json",
+  "title": "Minecraft Bedrock server form RP/BP contract",
+  "type": "object",
+  "required": ["schema", "sender", "receiver", "search", "inputs", "diagnostics", "unresolved"],
+  "properties": {
+    "schema": { "const": "mcbe-jsonui-ai-kit/server-form-contract@1" },
+    "sender": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["source", "formKind", "title", "buttons", "inputs", "cancelHandled"],
+          "properties": {
+            "source": { "type": "string", "minLength": 1 },
+            "formKind": { "enum": ["action", "modal", "message"] },
+            "title": { "type": ["string", "null"] },
+            "buttons": { "type": "array", "items": { "$ref": "#/$defs/indexedItem" } },
+            "inputs": { "type": "array", "items": { "$ref": "#/$defs/indexedItem" } },
+            "cancelHandled": { "type": "boolean" }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "receiver": {
+      "type": "object",
+      "required": ["source", "namespace", "routeTokens", "factories", "collections", "events"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1 },
+        "namespace": { "type": ["string", "null"] },
+        "routeTokens": { "type": "array", "items": { "type": "string" } },
+        "factories": { "type": "array", "items": { "type": "object" } },
+        "collections": { "type": "array", "items": { "type": "object" } },
+        "events": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "search": {
+      "type": "object",
+      "required": ["present", "scope", "caseSensitivity", "indexSafety"],
+      "properties": {
+        "present": { "type": "boolean" },
+        "scope": { "enum": ["current", "all", "unknown"] },
+        "caseSensitivity": { "enum": ["case-sensitive", "unsupported-unresolved", "not-applicable"] },
+        "indexSafety": { "enum": ["safe", "unsafe", "unresolved", "not-applicable"] }
+      },
+      "additionalProperties": true
+    },
+    "inputs": { "type": "array", "items": { "type": "object" } },
+    "diagnostics": { "type": "array", "items": { "$ref": "#/$defs/diagnostic" } },
+    "unresolved": { "type": "array", "items": { "$ref": "#/$defs/diagnostic" } }
+  },
+  "$defs": {
+    "indexedItem": {
+      "type": "object",
+      "required": ["index"],
+      "properties": { "index": { "type": "integer", "minimum": 0 }, "semanticId": { "type": ["string", "null"] } },
+      "additionalProperties": true
+    },
+    "diagnostic": {
+      "type": "object",
+      "required": ["code", "message"],
+      "properties": { "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]+$" }, "message": { "type": "string" }, "path": { "type": "string" } },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

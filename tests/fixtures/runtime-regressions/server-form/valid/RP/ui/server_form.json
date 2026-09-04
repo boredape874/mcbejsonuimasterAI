@@ -1,0 +1,28 @@
+{
+  "namespace": "server_form",
+  "shop_screen": {
+    "type": "panel",
+    "$title_token": "SHOP:",
+    "bindings": [{ "binding_name": "#title_text" }],
+    "controls": [
+      { "items": {
+        "type": "stack_panel",
+        "collection_name": "all_form_buttons",
+        "$search_scope": "all",
+        "$semantic_ids": ["construction", "equipment"],
+        "bindings": [{ "binding_name": "#collection_length" }],
+        "controls": [{ "row": {
+          "type": "panel",
+          "collection_index": 0,
+          "bindings": [{ "source_property_name": "(#form_button_text - #search)", "target_property_name": "#visible" }],
+          "button_mappings": [{ "from_button_id": "button.menu_select", "to_button_id": "button.form_button_click" }]
+        }}]
+      }}
+    ]
+  },
+  "main_screen_content": {
+    "modifications": [{ "array_name": "controls", "operation": "insert_back", "value": [{ "shop_factory": {
+      "type": "panel", "factory": { "name": "server_form_factory", "control_ids": { "long_form": "@server_form.shop_screen" } }
+    }}] }]
+  }
+}

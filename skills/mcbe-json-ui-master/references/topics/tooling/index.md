@@ -4,6 +4,7 @@ Subtopics:
 
 - `visual-editor.md`
 - `builders-and-generated-examples.md`
+- `chest-ui.md`
 - `container-form-sample.md`
 - `aux-dumper-dynamic form library.md`
 

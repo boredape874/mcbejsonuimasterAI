@@ -1,7 +1,7 @@
 import { readdir, stat } from "node:fs/promises";
 import { basename, dirname, extname, isAbsolute, relative, resolve, sep } from "node:path";
 import { exists, readJson } from "./fsx.mjs";
-import { readJsonc } from "./jsonc.mjs";
+import { readUiJson, JsonDialectError } from "./json-dialect.mjs";
 import { PATHS } from "./paths.mjs";
 import { partition, validateUiFile } from "./ui-validator.mjs";
 
@@ -102,6 +102,16 @@ export async function validatePack(inputPath, options = {}) {
   const issues = [];
   const textureRefs = new Set();
   const parsedFiles = new Map();
+  const dialect = options.dialect || "bedrock-json@1.21.100";
+  const vanillaProfileId = options.vanillaProfile || "bedrock-1.21.100";
+  let vanillaProfile = null;
+  try {
+    const profiles = await readJson(resolve(PATHS.root, "data", "vanilla-screen-profiles.json"));
+    vanillaProfile = profiles.profiles?.[vanillaProfileId] || null;
+  } catch {}
+  if (!vanillaProfile) issues.push({ severity: "error", code: "VANILLA_OVERRIDE_PROFILE_UNVERIFIED", path: "data/vanilla-screen-profiles.json", message: `Vanilla screen profile is not verified: ${vanillaProfileId}` });
+  else if (vanillaProfile.dialect !== dialect) issues.push({ severity: "error", code: "OUTPUT_DIALECT_MISMATCH", path: "data/vanilla-screen-profiles.json", message: `Profile ${vanillaProfileId} requires ${vanillaProfile.dialect}, received ${dialect}` });
+  const vanillaOverrides = new Set(vanillaProfile?.overrideFiles || []);
 
   if (files.length === 0) {
     issues.push({ severity: "error", path: portable(relative(packRoot, uiRoot)), message: "ui directory contains no JSON files" });
@@ -110,7 +120,10 @@ export async function validatePack(inputPath, options = {}) {
   for (const file of files) {
     const filePath = portable(relative(packRoot, file));
     try {
-      const ui = await readJsonc(file);
+      if (extname(file).toLowerCase() === ".jsonc") {
+        throw new JsonDialectError("TOOLING_JSONC_ONLY", "Runtime resource packs must contain emitted .json, not authoring .jsonc");
+      }
+      const ui = (await readUiJson(file, { kind: "runtime", dialect })).document;
       parsedFiles.set(file, ui);
       collectTextureRefs(ui, textureRefs);
       collectModificationInheritance(ui, filePath, issues);
@@ -121,7 +134,7 @@ export async function validatePack(inputPath, options = {}) {
         issues.push(...await validateUiFile(ui, filePath));
       }
     } catch (error) {
-      issues.push({ severity: "error", path: filePath, message: `Invalid JSON: ${String(error && error.message || error)}` });
+      issues.push({ severity: "error", code: error?.code || "JSON_SYNTAX_ERROR", path: filePath, message: `Invalid JSON: ${String(error && error.message || error)}` });
     }
   }
 
@@ -155,7 +168,12 @@ export async function validatePack(inputPath, options = {}) {
     }
     for (const file of files) {
       if (file === defsPath || registered.has(file)) continue;
-      issues.push({ severity: "warning", path: portable(relative(packRoot, file)), message: "JSON UI file is not registered in _ui_defs.json" });
+      const relativeFile = portable(relative(packRoot, file));
+      if (vanillaOverrides.has(relativeFile)) {
+        issues.push({ severity: "info", code: "VANILLA_OVERRIDE", path: relativeFile, message: "Vanilla screen override does not require custom _ui_defs registration" });
+      } else {
+        issues.push({ severity: "warning", code: "UI_DEFS_ORPHAN", path: relativeFile, message: "Custom JSON UI file is not registered in _ui_defs.json" });
+      }
     }
   }
 
@@ -175,6 +193,7 @@ export async function validatePack(inputPath, options = {}) {
   const { errors, warnings, infos } = partition(issues);
   return {
     schema: "mcbe-jsonui-ai-kit/pack-report@1",
+    dialect,
     ok: errors.length === 0,
     clean: errors.length === 0 && warnings.length === 0,
     pack: packRoot,

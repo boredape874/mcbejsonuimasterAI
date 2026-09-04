@@ -34,7 +34,7 @@ environment check
   -> later, real Bedrock evidence check
 ```
 
-Use only the stages needed by the task. `skill:context` returns the smaller skill-specific sequence.
+Use only the stages needed by the task. The npm `skill:context` entry returns the compact skill-specific sequence; call `node tools/skill-context.mjs <skill> --full` only for full-contract diagnostics.
 
 ## Implemented command groups
 

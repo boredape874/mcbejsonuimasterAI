@@ -17,12 +17,16 @@ Expand one skill into its ordered minimal tool context.
 
 Options:
   --json            Emit one JSON document
+  --compact         Emit the additive compact-v1 contract
+  --full            Explicit alias for the legacy full contract
+  --tool <id>       Expand one selected tool's full contract
+  --needs <csv>     Select optional stages whose when conditions match
   --report <path>   Write the JSON result inside the repository
   --help            Show this help
 `;
 
 async function main() {
-  const parsed = parseCli(process.argv.slice(2));
+  const parsed = parseCli(process.argv.slice(2), { flags: ["--compact", "--full"], valueOptions: ["--tool", "--needs"] });
   if (!parsed.ok || parsed.positionals.length > 1) {
     process.stderr.write(`${parsed.error || "too many positional arguments"}\n${USAGE}`);
     process.exit(64);
@@ -56,10 +60,33 @@ async function main() {
 
   const byId = registryMap(registry);
   const selectionById = new Map(profile.toolSelections.map((selection) => [selection.id, selection]));
+  if (parsed.options.compact && parsed.options.full) {
+    process.stderr.write("choose --compact or --full\n");
+    process.exit(64);
+  }
+  const needs = new Set((parsed.options.needs || "").split(",").map((value) => value.trim()).filter(Boolean));
+  const activeWorkflow = profile.workflow.filter((id) => {
+    const selection = selectionById.get(id);
+    if (!parsed.options.needs) return true;
+    if (!selection?.when?.length) return true;
+    return selection.when.some((condition) => needs.has(condition));
+  });
+  if (parsed.options.tool && !selectionById.has(parsed.options.tool)) {
+    const result = { ok: false, error: `tool ${parsed.options.tool} is not selected by ${profile.skill}` };
+    if (parsed.options.json) printJson(result); else process.stderr.write(`${result.error}\n`);
+    process.exit(4);
+  }
   const tools = [];
-  for (const id of profile.workflow) {
+  for (const id of activeWorkflow) {
     const contract = byId.get(id);
     tools.push({ selection: selectionById.get(id), contract, availability: await toolAvailability(contract) });
+  }
+  if (parsed.options.tool) {
+    const contract = byId.get(parsed.options.tool);
+    const result = { schema: "mcbe-jsonui-ai-kit/skill-context-tool@1", ok: true, skill: profile.skill, tool: { selection: selectionById.get(parsed.options.tool), contract, availability: await toolAvailability(contract) } };
+    await writeReport(parsed.options.report, result);
+    if (parsed.options.json) printJson(result); else process.stdout.write(`${contract.id}\n${contract.purpose}\n`);
+    return;
   }
   const result = {
     schema: "mcbe-jsonui-ai-kit/skill-context@1",
@@ -73,6 +100,31 @@ async function main() {
     boundaries: profile.boundaries,
     warnings: profileValidation.warnings,
   };
+  if (parsed.options.compact) {
+    const compact = {
+      schema: "mcbe-jsonui-ai-kit/skill-context-compact@1",
+      ok: true,
+      skill: result.skill,
+      skillStatus: result.skillStatus,
+      workflow: tools.map((entry) => entry.selection.id),
+      tools: tools.map((entry) => ({
+        id: entry.selection.id,
+        phase: entry.selection.phase,
+        required: entry.selection.required,
+        reason: entry.selection.reason,
+        availability: entry.availability,
+        blocking: entry.selection.required && !entry.availability.available,
+        command: entry.contract.command.display,
+        failureCodes: entry.contract.failures.map((failure) => failure.exitCode),
+      })),
+      successCriteria: result.successCriteria,
+      boundaries: result.boundaries,
+      warnings: result.warnings,
+    };
+    await writeReport(parsed.options.report, compact);
+    if (parsed.options.json) printJson(compact); else process.stdout.write(`${compact.skill}: ${compact.tools.length} active tools\n`);
+    return;
+  }
   await writeReport(parsed.options.report, result);
   if (parsed.options.json) printJson(result);
   else {

@@ -61,14 +61,27 @@ node tools/diff.mjs   target.png workspace/<name>/preview.png
 
 `render.mjs` writes `coords.json` and, when optional canvas dependencies are installed, `preview.png` next to `ui.json`. `render.mjs` and `diff.mjs` require the optional native dependencies (`@napi-rs/canvas`, `pixelmatch`, `pngjs`) for raster output/comparison. If missing, fall back to numeric review of `solved.json` and `coords.json`.
 
+This renderer is an **IR/standalone-control approximation**. It resolves controls found in the one JSON file and texture files discoverable by walking upward from that file. It does not currently resolve a complete RP namespace graph, `server_form.json` routing, cross-file inheritance, collection data, bindings, or Bedrock focus/hover dispatch. Therefore its PNG cannot prove that the final installed RP screen or its button states render correctly.
+
+For a screen integrated into an RP, hand off final rendering to `mcbe-json-ui-final-rp-inspection`, read [references/final-rp-visual-evidence.md](references/final-rp-visual-evidence.md), and keep these evidence levels separate:
+
+1. IR geometry: solved rectangles and constraint report.
+2. Approximate preview: only the controls, textures, and states the preview report says it resolved.
+3. Final RP structure: validation of the installed screen, routes, referenced namespaces, and texture roots.
+4. Bedrock runtime: screenshots of the actual default and interacted states plus the content log.
+
 ## Hard rules
 
 - Never edit `ui.json` to fix layout. Edit `ir.yaml` and recompile.
 - Never bypass `tools/run.mjs` to "save time" when the user expects a validated result.
 - Always report `report.json` warnings to the user, even if `ok=true`; geometry warnings are treated as layout defects unless intentionally documented.
+- Do not report a screen as visually validated from the IR preview when the implemented RP screen differs from the compiled `ui.json`, or when `preview-report.json` contains unresolved textures, unsupported controls/properties, or diagnostics.
+- Do not claim pixel accuracy or recommend final coordinates until an installed vanilla/font profile, pinned upstream compatibility result, target device profile, and screenshot calibration are all available.
+- For server-form UI, a runtime screenshot is required before claiming correct hover, pressed, focus, collection, binding, inherited texture, or final placement behavior. Without it, say `static validation only`.
 - For non-layout work (bindings, animations, Script API), hand off to the knowledge layer skills and only then patch `ui.json` as a separate, surgical edit.
 
 ## References
 
 - `references/cli-reference.md`
+- `references/final-rp-visual-evidence.md`
 - `docs/42-tools-reference.md`

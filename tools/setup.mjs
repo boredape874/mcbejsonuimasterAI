@@ -5,7 +5,8 @@
 import { spawnSync } from "node:child_process";
 import { PATHS, VANILLA_INDEX_SCHEMAS } from "./_lib/paths.mjs";
 import { log } from "./_lib/log.mjs";
-import { exists, ensureDir, writeJson, readJson } from "./_lib/fsx.mjs";
+import { exists, ensureDir, writeJsonAtomic, readJson } from "./_lib/fsx.mjs";
+import { packageLockSha256 } from "./_lib/dependency-revision.mjs";
 
 const STATE_VERSION = 1;
 
@@ -90,12 +91,15 @@ async function maybeBuildVanillaIndex() {
 }
 
 async function writeState(node, deps, vanillaIndex) {
+  const packageLockHash = await packageLockSha256(PATHS.root);
   const state = {
     version: STATE_VERSION,
     checkedAt: new Date().toISOString(),
     node,
     deps,
+    dependenciesReady: deps === "ok" || deps === "ok-no-optional",
     vanillaIndex,
+    packageLockHash,
     warnings: [],
   };
   if (deps === "ok-no-optional") {
@@ -104,7 +108,7 @@ async function writeState(node, deps, vanillaIndex) {
   if (vanillaIndex !== "ok") {
     state.warnings.push("vanilla-index unavailable; lookups will be limited");
   }
-  await writeJson(PATHS.setupState, state);
+  await writeJsonAtomic(PATHS.setupState, state);
   log.ok(".agent/state/setup-state.json written");
   return state;
 }

@@ -1,0 +1,4 @@
+{
+  "namespace": "server_form",
+  "main_screen_content": { "controls": [{ "factory": { "name": "server_form_factory", "control_ids": { "long_form": "@server_form.missing_screen" } } }] }
+}

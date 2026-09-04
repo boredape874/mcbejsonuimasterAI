@@ -1,0 +1,13 @@
+{
+  "schema": "mcbe-jsonui-ai-kit/server-form-search-pattern@1",
+  "sourceTier": "pattern",
+  "redistribution": "public",
+  "evidence": "locally reconstructed regression fixture",
+  "scope": ["current", "all", "unknown"],
+  "verified": { "caseSensitiveAscii": true, "koreanOrMixedNormalization": false, "bedrockRuntime": false },
+  "contract": {
+    "filter": "#form_button_text - #search",
+    "clearEvent": "button.clear_search",
+    "indexRule": "preserve original collection_index; never renumber the visible subset"
+  }
+}

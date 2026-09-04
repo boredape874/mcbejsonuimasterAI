@@ -343,7 +343,7 @@
       "id": "skill.context",
       "status": "implemented",
       "purpose": "Expand one skill profile into an ordered, minimal tool context for an AI.",
-      "command": { "executable": "node", "script": "tools/skill-context.mjs", "display": "node tools/skill-context.mjs <skill>" },
+      "command": { "executable": "node", "script": "tools/skill-context.mjs", "display": "node tools/skill-context.mjs <skill> --compact" },
       "arguments": [
         { "name": "skill", "kind": "positional", "required": true, "valueType": "string", "description": "Skill profile id." },
         { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Emit JSON." },
@@ -713,6 +713,160 @@
       "supports": { "help": true, "json": true, "report": true }
     },
     {
+      "id": "upstream.compat",
+      "status": "implemented",
+      "purpose": "Validate pinned offline black-box compatibility fixtures and report baseline-verified versus pending observations without executing external editor code.",
+      "command": { "executable": "node", "script": "tools/upstream-compat.mjs", "display": "node tools/upstream-compat.mjs [--lock <path>] [--fixtures <path>]" },
+      "arguments": [
+        { "name": "lock", "kind": "option", "flag": "--lock", "required": false, "valueType": "path", "description": "Reviewed research lock; defaults to config/research-lock.json." },
+        { "name": "fixtures", "kind": "option", "flag": "--fixtures", "required": false, "valueType": "path", "description": "Offline fixture catalog; defaults to the path declared by the lock policy." }
+      ],
+      "inputs": [
+        { "name": "research_lock", "kind": "file", "required": true, "format": "JSON", "pathPattern": "config/research-lock.json", "description": "Pinned revisions, license records, and fixture policy." },
+        { "name": "fixture_catalog", "kind": "file", "required": true, "format": "JSON", "pathPattern": "data/upstream-compat-fixtures.json", "description": "Synthetic inputs and reviewed black-box baseline digests." }
+      ],
+      "outputs": [{ "name": "compatibility_report", "kind": "report", "required": true, "format": "JSON stdout", "description": "Offline status and per-fixture source, state, and digest." }],
+      "preconditions": ["The lock and fixture catalog agree on source IDs and exact revisions.", "Only baseline-verified fixtures support a compatibility claim; pending-local remains unresolved."],
+      "mutates": { "mode": "none", "paths": [], "description": "Compatibility validation is offline and read-only." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "The lock, fixture catalog, policy, revision, or digest is invalid.", "recovery": "Repair the reviewed fixture record; do not weaken or regenerate a baseline implicitly." }
+      ],
+      "evidenceProduced": ["Pinned offline compatibility status with baseline digest for every verified fixture and an explicit pending state for uncaptured fixtures."],
+      "unsupportedBehavior": ["An ok report can still contain pending-local fixtures; pending evidence is not a pass.", "Does not run external editor code, certify Bedrock rendering, or authorize copying upstream source."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
+      "id": "upstream.compat.capture",
+      "status": "implemented",
+      "purpose": "Record one reviewed local black-box observation for a fixture still marked pending-local, without changing the committed baseline catalog.",
+      "command": { "executable": "node", "script": "tools/upstream-compat-capture.mjs", "display": "node tools/upstream-compat-capture.mjs --id <fixture> --observation <json> --out workspace/<file>.json" },
+      "arguments": [
+        { "name": "id", "kind": "option", "flag": "--id", "required": true, "valueType": "string", "description": "Exact pending-local fixture ID." },
+        { "name": "observation", "kind": "option", "flag": "--observation", "required": true, "valueType": "path", "description": "Reviewed black-box observation JSON." },
+        { "name": "out", "kind": "option", "flag": "--out", "required": true, "valueType": "path", "description": "Observation record path below workspace/." }
+      ],
+      "inputs": [
+        { "name": "observation", "kind": "file", "required": true, "format": "JSON", "description": "Local output observed from the pinned fixture input." },
+        { "name": "fixture_catalog", "kind": "file", "required": true, "format": "JSON", "pathPattern": "data/upstream-compat-fixtures.json", "description": "Catalog containing the pending-local fixture." }
+      ],
+      "outputs": [{ "name": "observation_record", "kind": "report", "required": true, "format": "JSON", "pathPattern": "workspace/<project>/upstream-observation.json", "description": "Stable input/observation digests tied to the pinned source revision." }],
+      "preconditions": ["The fixture is explicitly pending-local.", "The observation came from a reviewed black-box run of the pinned input.", "Output remains below workspace/."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<project>/upstream-observation.json"], "description": "Writes one ignored observation record; never updates the committed baseline automatically." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "Arguments, fixture status, observation JSON, lock, or output containment are invalid.", "recovery": "Use a pending-local fixture, reviewed JSON observation, and an output below workspace/." }
+      ],
+      "evidenceProduced": ["Pinned-source black-box observation with stable input and output digests for human review."],
+      "unsupportedBehavior": ["Does not promote the observation to a committed verified baseline or run an editor automatically.", "Does not make external editor output a Bedrock visual or runtime authority."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
+      "id": "final-rp.render",
+      "status": "implemented",
+      "purpose": "Resolve and render the final target RP with the integrated v2 engine, installed Minecraft fonts, collection fixtures, and explicit interaction states.",
+      "command": { "executable": "node", "script": "tools/final-rp-render.mjs", "display": "node tools/final-rp-render.mjs <rp-root> [control] [--fixture file] [--vanilla-root <path>] [--out <png>] [--viewport WxH] [--hover N] [--pressed N] [--states default,hover,pressed] [--engine legacy]" },
+      "arguments": [
+        { "name": "rp-root", "kind": "positional", "required": true, "valueType": "path", "description": "Exact target resource-pack root." },
+        { "name": "control", "kind": "positional", "required": false, "valueType": "string", "description": "Qualified control name; a complete server-form fixture may resolve the route instead." },
+        { "name": "fixture", "kind": "option", "flag": "--fixture", "required": false, "valueType": "path", "description": "Complete server-form title, buttons, textures, and interaction indexes." },
+        { "name": "vanilla-root", "kind": "option", "flag": "--vanilla-root", "required": false, "valueType": "path", "description": "Explicit installed vanilla root; when omitted the local Minecraft UWP package is discovered without network access." },
+        { "name": "out", "kind": "option", "flag": "--out", "required": false, "valueType": "path", "description": "PNG output path outside the target RP." },
+        { "name": "viewport", "kind": "option", "flag": "--viewport", "required": false, "valueType": "string", "description": "Logical viewport as width x height; defaults to 480x270." },
+        { "name": "hover", "kind": "option", "flag": "--hover", "required": false, "valueType": "integer", "description": "Explicit hovered collection index." },
+        { "name": "pressed", "kind": "option", "flag": "--pressed", "required": false, "valueType": "integer", "description": "Explicit pressed collection index." },
+        { "name": "states", "kind": "option", "flag": "--states", "required": false, "valueType": "string", "description": "Comma-separated state matrix and contact sheet." },
+        { "name": "engine", "kind": "option", "flag": "--engine", "required": false, "valueType": "string", "description": "Use legacy only for regression comparison; v2 is the default." }
+      ],
+      "inputs": [
+        { "name": "resource_pack", "kind": "directory", "required": true, "description": "Final integrated target RP." },
+        { "name": "fixture", "kind": "file", "required": false, "format": "JSON", "description": "Static form title, body, collection records, and interaction indexes." },
+        { "name": "vanilla_pack", "kind": "directory", "required": false, "description": "Optional fallback for inherited vanilla controls and textures." }
+      ],
+      "outputs": [
+        { "name": "state_png", "kind": "file", "required": true, "format": "PNG", "pathPattern": "workspace/<project>/final-rp-*.png", "description": "Deterministic v2 final-RP state render or contact sheet." },
+        { "name": "render_report", "kind": "report", "required": true, "format": "JSON", "pathPattern": "workspace/<project>/final-rp-*.report.json", "description": "Resolved tree, layout, unresolved records, render diagnostics, validation, and hash." }
+      ],
+      "preconditions": ["The target RP and fixture/control exist.", "An installed vanilla/font profile is available or supplied explicitly.", "Output is outside the target RP.", "Every visually distinct state is invoked separately."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<project>/final-rp-*.png", "workspace/<project>/final-rp-*.report.json"], "description": "Writes compatibility render evidence only; never edits the RP." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "Project loading, resolution, rendering, validation, or artifact writing failed.", "recovery": "Inspect the error and unresolved dependencies; do not substitute missing controls, textures, or fonts." },
+        { "exitCode": 9, "meaning": "--strict was requested and unresolved or validation issues remain.", "recovery": "Correct the source RP or fixture and rerun the same state." },
+        { "exitCode": 64, "meaning": "The required RP root is missing.", "recovery": "Use the documented command shape and provide a control or resolvable fixture." }
+      ],
+      "evidenceProduced": ["Final-RP v2 state PNGs, profile fingerprint, deterministic hash, resolved layout, collection data, glyph baselines, alpha bounds, unresolved records, and validation issues."],
+      "unsupportedBehavior": ["Does not run upstream compatibility fixtures or execute Bedrock runtime behavior.", "Its PNG alone cannot establish Bedrock runtime correctness; screenshot calibration and the content log remain separate evidence."],
+      "supports": { "help": true, "json": false, "report": true }
+    },
+    {
+      "id": "final-rp.inspector",
+      "status": "implemented",
+      "purpose": "Start the localhost-only read-only final-RP inspector backed by the same declared MCP service contract.",
+      "command": { "executable": "node", "script": "tools/inspector-server.mjs", "display": "node tools/inspector-server.mjs [--port <port>]" },
+      "arguments": [
+        { "name": "port", "kind": "option", "flag": "--port", "required": false, "valueType": "integer", "description": "Loopback port from 1 to 65535; defaults to 4177." }
+      ],
+      "inputs": [{ "name": "api_requests", "kind": "record", "required": true, "format": "JSON", "description": "Read-only project, render, validation, calibration, measurement, compatibility, and proposal requests." }],
+      "outputs": [
+        { "name": "localhost_service", "kind": "environment", "required": true, "description": "Inspector bound to 127.0.0.1 only." },
+        { "name": "inspector_artifacts", "kind": "directory", "required": false, "format": "PNG and JSON", "pathPattern": "workspace/inspector-output/**", "description": "Static render and diagnostic artifacts." }
+      ],
+      "preconditions": ["Repository dependencies are installed.", "Required v2 endpoints are probed; CAPABILITY_UNAVAILABLE blocks their evidence level.", "All artifact paths remain outside the target RP."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/inspector-output"], "description": "Writes ignored inspector artifacts; the inspector never edits an RP." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "The server could not initialize or the port is invalid or unavailable.", "recovery": "Choose an available loopback port and verify repository dependencies." }
+      ],
+      "evidenceProduced": ["Resolved control/state records, local render artifacts, validation results, calibration records, and read-only correction proposals when the matching adapters are available."],
+      "unsupportedBehavior": ["Advertised endpoint presence does not prove that its optional backend adapter is installed; probe and handle CAPABILITY_UNAVAILABLE.", "Does not expose a remote service, modify the RP, or replace Bedrock runtime capture."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
+      "id": "final-rp.mcp",
+      "status": "implemented",
+      "purpose": "Start the read-only stdio MCP service for final-RP resolution, state rendering, inspection, screenshot evidence, and gated v2 measurements.",
+      "command": { "executable": "node", "script": "tools/mcp-server.mjs", "display": "node tools/mcp-server.mjs" },
+      "arguments": [],
+      "inputs": [{ "name": "mcp_requests", "kind": "record", "required": true, "format": "MCP JSON-RPC", "description": "Structured calls for an exact local RP and local evidence files." }],
+      "outputs": [{ "name": "mcp_results", "kind": "record", "required": true, "format": "MCP structured content", "description": "Schema/engine versions, project revision, evidence status, artifacts, diagnostics, evidence IDs, and calibration IDs." }],
+      "preconditions": ["The repository MCP dependency is installed.", "RP roots and evidence files are existing absolute local paths supplied at request time.", "Pixel-level work has an available installed vanilla/font profile, passing offline upstream compatibility evidence, explicit device profile, complete state matrix, and project-bound screenshot calibration."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/mcp-render", "workspace/<project>/final-rp-evidence"], "description": "May write explicitly requested evidence artifacts outside the target RP; correction proposals remain read-only." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "The MCP SDK or local backend could not start.", "recovery": "Install repository dependencies and inspect stderr." }
+      ],
+      "evidenceProduced": ["Project-revision-bound resolver records, state render hashes, validation evidence IDs, screenshot calibration IDs, Minecraft-font measurements, compatibility results, and read-only patch proposals."],
+      "unsupportedBehavior": ["A declared MCP tool can return CAPABILITY_UNAVAILABLE when its optional adapter is not installed; never simulate that evidence.", "Does not apply patch proposals, upload files, launch Bedrock, or make runtime claims from static output.", "Does not permit pixel-accuracy or coordinate recommendations while font, vanilla, device, state, or calibration evidence is unresolved."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
+      "id": "research.sync",
+      "status": "implemented",
+      "purpose": "Synchronize explicitly pinned external research repositories into the ignored local mirror for offline compatibility fixtures and source study.",
+      "command": { "executable": "node", "script": "tools/research-sync.mjs", "display": "node tools/research-sync.mjs [--config <lock.json>] [--id <source>] [--refresh] [--dry-run]" },
+      "arguments": [
+        { "name": "config", "kind": "option", "flag": "--config", "required": false, "valueType": "path", "description": "Pinned research lock; defaults to config/research-lock.json." },
+        { "name": "id", "kind": "option", "flag": "--id", "required": false, "valueType": "string", "description": "Synchronize one exact source ID." },
+        { "name": "refresh", "kind": "flag", "flag": "--refresh", "required": false, "valueType": "boolean", "description": "Fetch the pinned commit before checkout." },
+        { "name": "dry-run", "kind": "flag", "flag": "--dry-run", "required": false, "valueType": "boolean", "description": "Report intended operations without Git network or checkout changes." }
+      ],
+      "inputs": [{ "name": "research_lock", "kind": "file", "required": true, "format": "JSON", "pathPattern": "config/research-lock.json", "description": "Reviewed source URL, exact revision, license evidence, use, and copying policy." }],
+      "outputs": [
+        { "name": "research_mirrors", "kind": "directory", "required": false, "pathPattern": "workspace/upstreams-local/**", "description": "Ignored detached Git mirrors at exact pinned revisions." },
+        { "name": "sync_report", "kind": "report", "required": false, "format": "JSON", "pathPattern": "workspace/upstreams-local/sync-report.json", "description": "Resolved source IDs, commits, licenses, and policies." }
+      ],
+      "preconditions": ["The lock was reviewed for exact revision, license evidence, and copying policy.", "Network Git access is allowed when not using --dry-run."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/upstreams-local"], "description": "Clones, fetches, and checks out ignored research mirrors; never modifies target packs or promotes their files." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "The lock is invalid, a source ID is unknown, Git failed, or the pinned revision mismatched.", "recovery": "Review the lock and network/Git error; never advance a revision implicitly." }
+      ],
+      "evidenceProduced": ["Exact local research revision, license record, and fixture-only copying policy."],
+      "unsupportedBehavior": ["Does not grant redistribution rights or make external editor output a runtime authority.", "Does not update pinned commits or copy external source code into public examples."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
       "id": "eval.offline",
       "status": "implemented",
       "purpose": "Run the deterministic structural, geometry, text, asset, protocol, preview, and leak evaluation suite.",
@@ -735,6 +889,47 @@
       "evidenceProduced": ["Per-gate results, preview artifacts, and private-path/asset leak findings."],
       "unsupportedBehavior": ["Does not replace Bedrock runtime validation.", "Does not update goldens without the explicit destructive --update-goldens flag."],
       "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "skill.route",
+      "status": "implemented",
+      "purpose": "Validate structured intent and select exactly one primary Skill with at most one follow-on.",
+      "command": { "executable": "node", "script": "tools/route-task.mjs", "display": "node tools/route-task.mjs --input <intent.json> --compact" },
+      "arguments": [{ "name": "input", "kind": "option", "flag": "--input", "required": true, "valueType": "path", "description": "Structured intent JSON." }],
+      "inputs": [{ "name": "structured_intent", "kind": "file", "required": true, "format": "JSON", "description": "Surface, task kinds, known files, and evidence target." }],
+      "outputs": [{ "name": "route", "kind": "stdout", "required": true, "format": "JSON", "description": "Fail-closed primary and optional follow-on route." }],
+      "preconditions": ["Intent is structured before automatic routing."],
+      "mutates": { "mode": "none", "paths": [], "description": "Read-only routing." },
+      "successExitCodes": [0],
+      "failures": [{ "exitCode": 9, "meaning": "Intent is unknown, ambiguous, malformed, or exceeds escalation limits.", "recovery": "Correct or disambiguate the structured intent." }],
+      "evidenceProduced": ["Primary owner, mode, route evidence, answer profile, and escalation state."],
+      "unsupportedBehavior": ["Raw prompt input is advisory only and never auto-executes."],
+      "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "skill.lint",
+      "status": "implemented",
+      "purpose": "Read-only portable Skill frontmatter, link, placeholder, mojibake, and orphan audit.",
+      "command": { "executable": "node", "script": "tools/skill-lint.mjs", "display": "node tools/skill-lint.mjs --json" },
+      "arguments": [], "inputs": [{ "name": "skills", "kind": "directory", "required": true, "description": "Repository Skill tree." }],
+      "outputs": [{ "name": "lint_report", "kind": "stdout", "required": true, "format": "JSON", "description": "Portable lint findings and report-only orphan classification." }],
+      "preconditions": [], "mutates": { "mode": "none", "paths": [], "description": "Read-only lint." }, "successExitCodes": [0],
+      "failures": [{ "exitCode": 9, "meaning": "A blocking portable Skill defect was found.", "recovery": "Fix the owning source without deleting reported orphans automatically." }],
+      "evidenceProduced": ["Frontmatter, reference, encoding, placeholder, and orphan findings."],
+      "unsupportedBehavior": ["Does not delete or rewrite Skill files."], "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "skill.sync",
+      "status": "implemented",
+      "purpose": "Compare source and installed Skill sets and content without changing either tree.",
+      "command": { "executable": "node", "script": "tools/skill-sync-check.mjs", "display": "node tools/skill-sync-check.mjs [--installed <directory>]" },
+      "arguments": [{ "name": "installed", "kind": "option", "flag": "--installed", "required": false, "valueType": "path", "description": "Installed Skill root override." }],
+      "inputs": [{ "name": "source_and_installed", "kind": "directory", "required": true, "description": "Source and installed Skill trees." }],
+      "outputs": [{ "name": "sync_report", "kind": "stdout", "required": true, "format": "JSON", "description": "Source-only, installed-only, and file drift classification." }],
+      "preconditions": [], "mutates": { "mode": "none", "paths": [], "description": "Read-only comparison." }, "successExitCodes": [0],
+      "failures": [{ "exitCode": 9, "meaning": "Source topology does not match the reviewed manifest.", "recovery": "Review and update topology deliberately." }],
+      "evidenceProduced": ["Set equality and per-Skill file drift counts."],
+      "unsupportedBehavior": ["Does not install, overwrite, prune, or reconcile files."], "supports": { "help": true, "json": true, "report": false }
     },
     {
       "id": "eval.live",
@@ -762,6 +957,27 @@
       "evidenceProduced": ["Per-task runtime-evidence status and exact missing or invalid evidence."],
       "unsupportedBehavior": ["Does not launch or emulate Bedrock and does not treat synthetic previews as runtime proof."],
       "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "ui.route.trace", "status": "implemented", "purpose": "Trace namespace/control inheritance routes with stable blocking diagnostics.",
+      "command": {"executable": "node", "script": "tools/trace-ui-route.mjs", "display": "node tools/trace-ui-route.mjs <rp-root> <namespace.control> [--json]"}, "arguments": [],
+      "inputs": [{"name": "resource_pack", "kind": "directory", "required": true, "description": "Exact resource-pack root."}], "outputs": [{"name": "route_trace", "kind": "report", "required": true, "format": "JSON", "description": "Resolved route and blocking codes."}],
+      "preconditions": ["The exact resource pack and control are known."], "mutates": {"mode": "none", "paths": [], "description": "Read-only."}, "successExitCodes": [0], "failures": [{"exitCode": 9, "meaning": "The route is unresolved.", "recovery": "Fix the reported registration or reference edge."}],
+      "evidenceProduced": ["Static namespace/control route trace."], "unsupportedBehavior": ["Does not prove Bedrock runtime loading."], "supports": {"help": false, "json": true, "report": false}
+    },
+    {
+      "id": "content-log.audit", "status": "implemented", "purpose": "Classify Bedrock UI, Sound, and Script log signatures and control paths.",
+      "command": {"executable": "node", "script": "tools/audit-content-log.mjs", "display": "node tools/audit-content-log.mjs <log-path> [--target <control>] [--json]"}, "arguments": [],
+      "inputs": [{"name": "content_log", "kind": "file", "required": true, "description": "Bedrock Content Log."}], "outputs": [{"name": "content_log_audit", "kind": "report", "required": true, "format": "JSON", "description": "Target UI errors and external noise."}],
+      "preconditions": ["The log belongs to the relevant run."], "mutates": {"mode": "none", "paths": [], "description": "Read-only."}, "successExitCodes": [0], "failures": [{"exitCode": 9, "meaning": "Target UI errors were found.", "recovery": "Fix the owning UI path and recapture."}],
+      "evidenceProduced": ["Structured Content Log signatures."], "unsupportedBehavior": ["Does not launch Bedrock."], "supports": {"help": false, "json": true, "report": false}
+    },
+    {
+      "id": "pack.installed.verify", "status": "implemented", "purpose": "Compare source and installed pack UUID, version, dependencies, and hashes.",
+      "command": {"executable": "node", "script": "tools/verify-installed-pack.mjs", "display": "node tools/verify-installed-pack.mjs <source> <installed> [more...] [--json]"}, "arguments": [],
+      "inputs": [{"name": "packs", "kind": "directory", "required": true, "description": "Source and installed pack roots."}], "outputs": [{"name": "installed_pack_verification", "kind": "report", "required": true, "format": "JSON", "description": "Fingerprint comparison."}],
+      "preconditions": ["Exact pack roots are known."], "mutates": {"mode": "none", "paths": [], "description": "Read-only."}, "successExitCodes": [0], "failures": [{"exitCode": 9, "meaning": "Installed pack differs.", "recovery": "Remove duplicates or reinstall the expected revision."}],
+      "evidenceProduced": ["Hash-bound installed/source comparison."], "unsupportedBehavior": ["Does not inspect the active world stack."], "supports": {"help": false, "json": true, "report": false}
     }
   ]
 }

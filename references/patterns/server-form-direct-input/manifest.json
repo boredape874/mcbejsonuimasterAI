@@ -1,0 +1,15 @@
+{
+  "schema": "mcbe-jsonui-ai-kit/server-form-direct-input-pattern@1",
+  "sourceTier": "official-derived-contract",
+  "redistribution": "public",
+  "runtimeVerified": false,
+  "contract": {
+    "formKind": "modal",
+    "collection": "custom_form",
+    "inputControl": "custom_input",
+    "submitEvent": "button.submit_custom_form",
+    "requiredStates": ["focus", "type", "clear", "cancel"],
+    "devices": ["pc", "touch"]
+  },
+  "unsupported": ["Adding an arbitrary edit_box to ActionFormData does not create a string response channel"]
+}

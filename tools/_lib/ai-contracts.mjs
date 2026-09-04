@@ -4,7 +4,7 @@ import YAML from "yaml";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import { PATHS } from "./paths.mjs";
-import { exists, readJson, writeJson } from "./fsx.mjs";
+import { exists, readJson, writeJsonAtomic } from "./fsx.mjs";
 
 export const CONTRACT_PATHS = Object.freeze({
   registry: resolve(PATHS.data, "ai-tool-registry.json"),
@@ -149,6 +149,18 @@ export async function toolAvailability(tool) {
   };
 }
 
+export async function toolReadiness(tool) {
+  const availability = await toolAvailability(tool);
+  const dependenciesReady = availability.available ? null : false;
+  return {
+    ...availability,
+    dependenciesReady,
+    readinessReason: availability.available
+        ? "script availability is known; dependency readiness requires a probe"
+        : availability.reason,
+  };
+}
+
 export async function validateEnvelope(envelope, registry) {
   if (!envelopeValidator) envelopeValidator = makeValidator(await readJson(CONTRACT_PATHS.envelopeSchema));
   const schemaOk = envelopeValidator(envelope);
@@ -205,7 +217,7 @@ export function resolveInsideRepo(path) {
 
 export async function writeReport(path, value) {
   if (!path) return;
-  await writeJson(resolveInsideRepo(path), value);
+  await writeJsonAtomic(resolveInsideRepo(path), value);
 }
 
 export function parseCli(argv, spec = {}) {

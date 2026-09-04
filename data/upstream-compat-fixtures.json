@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Normalized, synthetic compatibility contracts that run without an upstream checkout or network access.",
+  "fixtures": [
+    {
+      "id": "jsonforge-import-outline-v1",
+      "source": "jsonforge",
+      "commit": "2e225e5541ecfc3024efee444ae4b4e6309f0682",
+      "inputKind": "synthetic",
+      "required": true,
+      "captureStatus": "captured-from-allowlisted-module",
+      "input": {
+        "namespace": "fixture",
+        "root": { "type": "panel", "size": [120, 40], "controls": [{ "caption": { "type": "label", "text": "Synthetic" } }] },
+        "caption": { "type": "label", "text": "Synthetic" }
+      },
+      "expected": {
+        "namespace": "fixture",
+        "root": { "id": "root", "type": "panel", "properties": { "size": [120, 40] }, "children": [{ "id": "caption", "type": "label", "properties": { "text": "Synthetic" }, "children": [] }] }
+      },
+      "digest": "658bbb65f356e1d27645c1ff4c85b5b636ef4e090041aa351780efec5b9a121d"
+    },
+    {
+      "id": "jsonforge-anchor-9x9-v1",
+      "source": "jsonforge",
+      "commit": "2e225e5541ecfc3024efee444ae4b4e6309f0682",
+      "inputKind": "synthetic",
+      "required": true,
+      "captureStatus": "captured-from-allowlisted-module",
+      "input": { "parent": { "x": 13, "y": 17, "width": 300, "height": 180 }, "size": [40, 20], "offset": [7, -3], "anchors": ["top_left", "top_middle", "top_right", "left_middle", "center", "right_middle", "bottom_left", "bottom_middle", "bottom_right"] },
+      "expected": { "caseCount": 81, "casesSha256": "d8254baab14880b4166c66460233b1d6ec128bc0f55878c01ff65d6305b107d9" },
+      "digest": "c88c22e923dc7642ebaf01eb94e5094d26f5fd5b62f0deda69803f866729b844"
+    },
+    {
+      "id": "jsonforge-asymmetric-nineslice-v1",
+      "source": "jsonforge",
+      "commit": "2e225e5541ecfc3024efee444ae4b4e6309f0682",
+      "inputKind": "synthetic",
+      "required": true,
+      "captureStatus": "captured-from-allowlisted-module",
+      "input": { "baseSize": [6, 5], "ninesliceSize": [1, 2, 2, 1], "targetSize": [9, 8], "pixelPattern": "rgba(x*20,y*30,(x+y)*10,255)" },
+      "expected": { "byteLength": 288, "pixelsSha256": "553d72d4c802e281ec7e071dd687552850a90613a8bb66384c4246a5fe5d00ae" },
+      "digest": "126cdc89b45179d4dc3c4c7788223b2fa41136d8b44d04c068459b72478841b6"
+    },
+    {
+      "id": "jsonforge-unknown-property-roundtrip-v1",
+      "source": "jsonforge",
+      "commit": "2e225e5541ecfc3024efee444ae4b4e6309f0682",
+      "inputKind": "synthetic",
+      "required": true,
+      "captureStatus": "captured-from-allowlisted-module",
+      "input": { "namespace": "fixture_roundtrip", "panel": { "type": "panel", "size": [80, 30], "synthetic_unknown": { "token": "kept", "values": [3, 1, 4] } } },
+      "expected": { "namespace": "fixture_roundtrip", "panel": { "type": "panel", "size": [80, 30], "synthetic_unknown": { "token": "kept", "values": [3, 1, 4] } } },
+      "digest": "11b52c1810a87f26324df25b6c3960ea8b18f45ee3ba022df082bf23bfb6910a"
+    },
+    {
+      "id": "gameza-anchor-box-v1",
+      "source": "json-ui-web-editor",
+      "commit": "e9401621622ef74c25e71c2dd28abfc4261e6bca",
+      "inputKind": "synthetic",
+      "required": true,
+      "captureStatus": "captured-from-allowlisted-module",
+      "input": { "parent": [320, 180], "control": { "size": [100, 40], "anchor_from": "bottom_right", "anchor_to": "center", "offset": [-10, -5] } },
+      "expected": { "left": 260, "top": 155, "width": 100, "height": 40 },
+      "digest": "85955ce2ce75eb5fb91c796982da9def802ebe3bf352f00fc897fb2b1034d368"
+    },
+    {
+      "id": "json-ui-maker-synthetic-panel-v1",
+      "source": "json-ui-maker",
+      "commit": "2504d8456660db0971aca0445e00a609ca92b61f",
+      "inputKind": "synthetic",
+      "required": true,
+      "captureStatus": "pending-local",
+      "input": { "control": { "name": "synthetic_panel", "type": "panel", "size": [137, 59], "offset": [11, -7], "anchor_from": "center", "anchor_to": "center" } },
+      "expected": null,
+      "captureContract": "Run the pinned application locally as an opaque program, enter only this synthetic control, and record its exported JSON with tools/upstream-compat-capture.mjs. Do not inspect or copy source, formulas, constants, or assets."
+    },
+    {
+      "id": "bedrock-core-flex-synthetic-v1",
+      "source": "bedrock-core-ui",
+      "commit": "3c9f62b309a7d5a76797efb9415ebc4050af51f4",
+      "inputKind": "synthetic",
+      "required": false,
+      "captureStatus": "pending-local",
+      "input": { "container": { "size": [211, 97], "direction": "row", "padding": [7, 5, 11, 3], "gap": 13 }, "children": [{ "id": "a", "size": [23, 19] }, { "id": "b", "size": [31, 17] }] },
+      "expected": null,
+      "captureContract": "Record only normalized output positions from an independently run pinned checkout; do not import its runtime or source into this repository."
+    }
+  ]
+}

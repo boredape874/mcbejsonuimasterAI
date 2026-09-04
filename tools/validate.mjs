@@ -14,8 +14,10 @@
 //                      tools/run.mjs uses --report explicitly.
 
 import { log } from "./_lib/log.mjs";
-import { readJson, writeJson } from "./_lib/fsx.mjs";
+import { readJson } from "./_lib/fsx.mjs";
 import { validateUiFile, partition } from "./_lib/ui-validator.mjs";
+import { createResultEnvelope, printResultJson, resultExitCode } from "./_lib/result-envelope.mjs";
+import { writeReportArtifact } from "./_lib/report-envelope.mjs";
 
 function structural(ui, strict) {
   const issues = [];
@@ -105,7 +107,7 @@ function geometryIssues(solved) {
       bottom: (r.y + r.h) - (p.y + p.h),
     };
     const clipped = Object.values(overflow).some((v) => v > tolerance);
-    if (clipped) {
+    if (clipped && el.validation?.allow_parent_overflow !== true) {
       issues.push({
         severity: "warning",
         path,
@@ -136,7 +138,11 @@ function geometryIssues(solved) {
       }
     }
     const collectionSize = expectedCollectionSize(el);
-    if (collectionSize && (r.w < collectionSize[0] || r.h < collectionSize[1])) {
+    if (
+      collectionSize &&
+      (r.w < collectionSize[0] || r.h < collectionSize[1]) &&
+      el.validation?.allow_collection_clip !== true
+    ) {
       issues.push({
         severity: "warning",
         path,
@@ -163,6 +169,7 @@ function geometryIssues(solved) {
 async function main() {
   const argv = process.argv.slice(2);
   const strict = argv.includes("--strict-root");
+  const jsonOutput = argv.includes("--json");
   const reportPath = reportPathFromArgs(argv);
   const positional = argv.filter((a, i) => {
     if (a.startsWith("--")) return false;
@@ -194,12 +201,19 @@ async function main() {
     solved: solvedFile || null,
     checkedAt: new Date().toISOString(),
   };
-  if (reportPath) await writeJson(reportPath, report);
-  if (!report.ok) {
-    log.error("validate FAIL", { errors: errors.length, warnings: warnings.length, ...(reportPath ? { report: reportPath } : {}) });
-    process.exit(9);
-  }
-  log.ok("validate OK", { warnings: warnings.length, infos: infos.length, ...(reportPath ? { report: reportPath } : {}) });
+  const result = createResultEnvelope({
+    ok: report.ok,
+    evidenceLevel: "static-validation",
+    blocking: errors.map((issue) => ({ code: "VALIDATION_ERROR", path: issue.path, message: issue.message })),
+    exitCodeReason: report.ok ? "SUCCESS" : "VALIDATION_FAILED",
+    summary: { errors: errors.length, warnings: warnings.length, infos: infos.length, ui: uiFile, solved: solvedFile || null },
+  });
+  const artifact = await writeReportArtifact(reportPath, report, { kind: "validation-details" });
+  if (artifact) result.artifacts.push(artifact);
+  if (jsonOutput) printResultJson(result);
+  else if (!report.ok) log.error("validate FAIL", { errors: errors.length, warnings: warnings.length, ...(reportPath ? { report: reportPath } : {}) });
+  else log.ok("validate OK", { warnings: warnings.length, infos: infos.length, ...(reportPath ? { report: reportPath } : {}) });
+  process.exitCode = resultExitCode(result);
 }
 
 main().catch((e) => {
