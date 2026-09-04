@@ -115,7 +115,7 @@ What it usually contains:
 
 When to inspect it:
 
-- a PMMP or Script API form needs custom UI
+- a Script API or server-sent form needs custom UI
 - a title prefix chooses among different layouts
 - default action forms are being restyled
 

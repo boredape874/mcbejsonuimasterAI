@@ -5,9 +5,18 @@ references/restricted/
 # AI tool layer
 node_modules/
 workspace/
+.playwright-cli/
+output/
 .agent/state/
+.agent/cache/
 vanilla-index/cache/
 vanilla-index/screens.json
 vanilla-index/textures.json
 _ext/
 *.log
+
+# Local source configuration and transient reports
+config/sources.local.json
+workspace/corpus-local/
+/.tmp-*.json
+/--out

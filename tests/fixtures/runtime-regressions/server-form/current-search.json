@@ -1,0 +1,6 @@
+{
+  "namespace": "server_form",
+  "screen": { "type": "stack_panel", "collection_name": "form_buttons", "$search_scope": "current", "controls": [{ "item": {
+    "type": "panel", "bindings": [{ "source_property_name": "(#form_button_text - #search)", "target_property_name": "#visible" }]
+  }}] }
+}

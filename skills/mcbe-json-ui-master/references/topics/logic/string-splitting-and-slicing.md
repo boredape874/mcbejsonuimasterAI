@@ -2,9 +2,9 @@
 
 Read:
 
-- `../../../../../docs/17-community-patterns-string-score-hud.md`
-- `../../../../../references/community-patterns/string-splitting-notes.md`
-- `../../../../../references/mirrors/bedrock-wiki-json-ui/json-ui-intro.md`
+- `docs/17-community-patterns-string-score-hud.md`
+- `references/community-patterns/string-splitting-notes.md`
+- `references/external/bedrock-wiki-json-ui/json-ui-intro.md`
 
 Use this subtopic for:
 
@@ -12,7 +12,7 @@ Use this subtopic for:
 - fixed-width string slicing
 - Unicode byte-width padding
 - title/actionbar/form payload segmentation
-- deciding whether data should be preprocessed by PMMP or Script API
+- deciding whether data should be preprocessed by Script API or another upstream sender
 
 AI decision rule:
 

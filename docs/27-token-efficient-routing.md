@@ -8,28 +8,30 @@ Do not load the whole repository for one task.
 
 Load in this order:
 
-1. one router file
-2. one topic index
-3. one or two exact topic notes
-4. source files from the target resource pack
-5. external or mirrored references only if the local evidence is not enough
+1. `mcbe-json-ui-master` only when the task is broad or ownership is unclear.
+2. The selected entry in `data/skill-tool-profiles.json`.
+3. The matching contracts in `data/ai-tool-registry.json`, preferably through `skill.doctor` and compact `skill.context`. Use `--full` only when a field omitted by the compact projection is actually required.
+4. One specialist `SKILL.md` and only its required reference.
+5. Target-pack files, then one external or mirrored source only when local evidence is insufficient.
+
+Do not invoke a tool reported as planned or unavailable.
 
 ## Minimal routes
 
 | User request | Load first | Then load only if needed |
 | --- | --- | --- |
-| "what is JSON UI?" | `topics/basics/index.md` | `resource-pack-basics.md`, `docs/23-bedrock-resource-pack-basics.md` |
-| layout, anchors, screen size | `topics/basics/index.md` | `screen-size-and-layout.md`, `docs/24-json-ui-layout-units.md` |
-| `_ui_defs` or load issue | `topics/foundations/index.md` | `entry-points.md`, target `_ui_defs.json` |
-| HUD/actionbar UI | `topics/hud-chat/index.md` | `title-and-actionbar.md`, target `hud_screen.json` |
-| PMMP title/actionbar/form UI | `docs/25-pmmp-json-ui-bridge.md` | target `hud_screen.json` or `server_form.json` |
-| string split/slice | `topics/logic/index.md` | `string-splitting-and-slicing.md` |
-| vanilla texture path | `topics/vanilla/index.md` | `ztech-lookups.md` |
+| "what is JSON UI?" | `skills/mcbe-json-ui-master/references/topics/basics/index.md` | `resource-pack-basics.md`, `docs/23-bedrock-resource-pack-basics.md` |
+| measured layout, proportions, typography, states | `skills/mcbe-json-ui-visual-design/SKILL.md` | `design.search` -> `mcbe-json-ui-ir-authoring` -> `pipeline.run` -> `preview.texture` |
+| exact property, binding, catalog, or vanilla evidence | `skills/mcbe-json-ui-reference/SKILL.md` | `skills/mcbe-json-ui-reference/references/catalog-lookup.md` and one exact evidence file |
+| mine or compare working samples | `skills/mcbe-json-ui-samples/SKILL.md` | `sources.validate` -> `source.scan` -> `catalog.build` -> `design.search` |
+| `_ui_defs` or load issue | `skills/mcbe-json-ui-master/references/topics/foundations/index.md` | `entry-points.md`, target `_ui_defs.json` |
+| HUD/actionbar UI | `skills/mcbe-json-ui-master/references/topics/hud-chat/index.md` | `title-and-actionbar.md`, target `hud_screen.json` |
+| Script API or server-sender title/actionbar/form UI | `docs/34-binding-patterns-value-index.md` or `docs/40-server-form-example-index.md` | target `hud_screen.json` or `server_form.json` |
+| string split/slice | `skills/mcbe-json-ui-master/references/topics/logic/index.md` | `string-splitting-and-slicing.md` |
 | missing texture or invisible UI | `docs/26-common-failure-modes.md` | exact debugging subtopic |
 | merge two packs | `docs/20-pack-merge-playbook.md` | only changed files from both packs |
 | broad audit | `docs/08-reference-hierarchy.md` | exact docs selected from the audit finding |
 | planning a new JSON UI from scratch | `docs/52-json-ui-intake-questionnaire.md` | `docs/39-design-recommendation-catalog.md`, `docs/44-design-to-ir-mapping.md`, then the exact topic doc |
-| choose visual design family | `docs/58-design-reference-atlas.md` | `data/design-reference-index.json`, then one exact reference file |
 | follow a systematic UI workflow | `docs/59-diagrammatic-workflows.md` | the one matching flowchart and target files |
 | choose the right reference for a UI task | `docs/55-reference-task-taxonomy.md` | `data/reference-task-index.json`, then one exact source file |
 | choose a major/mid/sub topic route | `docs/57-hierarchical-task-router.md` | `data/reference-hierarchy.json`, then one exact source file |
@@ -38,12 +40,8 @@ Load in this order:
 | phone/PDA/device special form | `docs/62-special-form-device-ui-patterns.md` | `docs/61-advanced-ui-set-file-pattern-routes.md`, then one device page file |
 | battle/database/storage special UI | `docs/61-advanced-ui-set-file-pattern-routes.md` | one `monster-rpg-b/ui/creature/*.json` file |
 | protocol HUD suite | `docs/60-advanced-ui-set-special-ui-reference.md` | `monster-rpg-b/ui/phud/phud.json`, then one component file |
-| local example lookup | `docs/28-local-example-mining.md` | only the matching mirror or local folder |
-| broad upstream example archive | `docs/29-mcbe-json-ui-resource-upstream.md` | one exact tutorial or sample screen |
 | adapt one code fragment | `docs/30-file-and-code-fragment-usage.md` | `docs/31-fragment-routing-table.md` and one source file |
-| minecraft-bedrock-json-ui-sample archive | `docs/32-minecraft-bedrock-json-ui-sample-upstream.md` | one exact sample UI suite, dynamic form library, NPC, or integrated UI file |
 | animation or `anim_type` | `docs/33-animation-patterns-and-dumper-values.md` | one exact vanilla/local/sample UI suite animation source |
-| binding value or binding dump | `docs/34-binding-patterns-value-index.md` | target screen and one exact source binding file |
 | vertical scroll, horizontal scroll, carousel | `docs/35-scroll-and-carousel-patterns.md` | one exact scroll or offset-animation source |
 | dumper value such as factory/grid/renderer/focus | `docs/36-dumper-value-cookbook.md` | one exact vanilla source object |
 | vanilla screen recipe | `docs/37-vanilla-dumper-screen-recipes.md` | one exact screen and object |

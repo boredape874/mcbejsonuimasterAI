@@ -4,7 +4,7 @@ This is a local private reference family for a large Bedrock JSON UI utility pac
 
 Local private mirror:
 
-- `C:/Users/champ/.codex/references/private/deesse-ui-toolkit/`
+- local-only source catalog entry `deesse-ui-toolkit` when explicitly configured
 
 ## What To Learn From It
 
@@ -56,7 +56,7 @@ Useful subpatterns:
 - instant move buttons behind feature toggles
 - extra utility column expanded by a toggle
 
-This is a practical reference when building PocketMine/Bedrock server utility packs that need chest UI enhancement without replacing the entire inventory screen.
+This is a practical reference when building Bedrock server utility packs that need chest UI enhancement without replacing the entire inventory screen.
 
 ## Common Control Pattern
 

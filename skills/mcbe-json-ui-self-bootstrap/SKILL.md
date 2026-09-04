@@ -11,6 +11,14 @@ Use this skill when:
 - any `tools/*.mjs` reports a missing dependency or directory
 - the user explicitly asks you to "set up the kit" or "fix the environment"
 
+## Contract
+
+- Input: repository root, failing command or missing setup state, and the current Node/npm availability.
+- Output: setup and doctor results, changed repository-local files, warnings, and optional index status.
+- Success: the quick doctor passes or the precise remaining blocker is reported without altering the user's system.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-self-bootstrap` entry, but treat the checked-in setup and doctor scripts below as source of truth. Never invoke a profile command whose implementation is absent.
+
 ## Workflow
 
 1. Read `AGENTS.md` (section 0 + section 4).

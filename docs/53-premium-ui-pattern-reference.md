@@ -35,7 +35,7 @@ Use it as a pattern guide for building and adapting JSON UI systems.
 
 ## Multi-Route Server Form Router
 
-Use this when PMMP or Script API can control the form title and you want one RP to skin many form types.
+Use this when BP Script API or another server sender can control the form title and you want one RP to skin many form types.
 
 Minimal architecture:
 

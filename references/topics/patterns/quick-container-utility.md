@@ -4,7 +4,7 @@ This pattern comes from a local private utility UI suite. It is useful for addin
 
 Private local mirror:
 
-- `C:/Users/champ/.codex/references/private/deesse-ui-toolkit/ui/déesse_ui/quick_container/`
+- local-only source catalog entry `deesse-ui-toolkit` when explicitly configured
 
 ## Core Idea
 

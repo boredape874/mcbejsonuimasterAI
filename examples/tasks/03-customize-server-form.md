@@ -26,4 +26,4 @@ Turn a default Bedrock server form into a more structured custom layout while ke
 
 - exact routing approach
 - exact file patch
-- any required protocol conventions from PMMP or Script API
+- any required protocol conventions from Script API or another server sender

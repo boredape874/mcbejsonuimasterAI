@@ -12,7 +12,7 @@ Tell me which approach is safer, what server-side preprocessing is needed, and w
 
 ```text
 Use mcbe-json-ui-tooling.
-Explain how bedrock-auxgen fits into a Bedrock JSON UI or PMMP item rendering workflow.
+Explain how bedrock-auxgen fits into a Bedrock JSON UI or server item-rendering workflow.
 Show when to use AUX IDs and when to use verified texture paths instead.
 ```
 

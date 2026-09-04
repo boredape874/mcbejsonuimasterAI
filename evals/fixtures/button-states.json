@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "controlType": "button",
+  "requiredStates": [
+    "default",
+    "hover",
+    "pressed"
+  ],
+  "optionalStates": [
+    "locked"
+  ],
+  "invariants": {
+    "equalOuterSize": true,
+    "equalLabelRegion": true,
+    "stableAnchorAndOffset": true,
+    "textureContrastOrder": [
+      "pressed",
+      "default",
+      "hover"
+    ]
+  },
+  "canonicalAssets": [
+    "button_default.png",
+    "button_hover.png",
+    "button_pressed.png"
+  ],
+  "example": "examples/v2/01-typography-state-gallery"
+}

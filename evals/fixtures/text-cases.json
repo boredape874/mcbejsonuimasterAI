@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "short_ko",
+      "locale": "ko-KR",
+      "text": "오늘의 보상을 받으세요."
+    },
+    {
+      "id": "long_ko_130",
+      "locale": "ko-KR",
+      "growth": 1.3,
+      "text": "오늘의 보상 목록은 화면 폭이 좁아져도 카드 간격과 버튼 정렬을 유지하며, 긴 한국어 설명이 지정된 영역을 벗어나지 않아야 합니다."
+    },
+    {
+      "id": "short_en",
+      "locale": "en-US",
+      "text": "Claim today's reward."
+    },
+    {
+      "id": "long_en",
+      "locale": "en-US",
+      "text": "This deliberately extended English validation sentence checks that labels remain inside their measured regions without shifting adjacent controls or button states."
+    },
+    {
+      "id": "unbroken_token",
+      "locale": "en-US",
+      "text": "UNBROKEN_IDENTIFIER_WITHOUT_SPACES_ABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"
+    }
+  ],
+  "expectations": {
+    "overflow": 0,
+    "unintendedClipping": 0,
+    "adjacentControlShift": 0
+  }
+}

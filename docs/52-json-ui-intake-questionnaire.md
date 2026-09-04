@@ -5,7 +5,7 @@ Use this when the user says they want to make a Bedrock JSON UI but has not yet 
 The goal is not to interrogate the user. The goal is to turn beginner-friendly choices into an implementation-ready plan that can drive:
 
 1. IR/tools for geometry: position, size, alignment, spacing, symmetry.
-2. Hand-finished Bedrock JSON UI: bindings, collections, factories, animations, screen modifications, and PMMP or Script API payloads.
+2. Hand-finished Bedrock JSON UI: bindings, collections, factories, animations, screen modifications, and Script API or server-sender payloads.
 
 ## Operating rule
 
@@ -95,7 +95,7 @@ Need to capture:
 - Each field name.
 - Example value.
 - Whether it changes often.
-- Whether it comes from PMMP, Script API, scoreboard collection, or vanilla binding.
+- Whether it comes from Script API, another server sender, a scoreboard collection, or a vanilla binding.
 
 ### 3.5. Does anything change size, color, visibility, or count?
 
@@ -118,7 +118,7 @@ Translate answers:
 
 - Fixed size -> IR/tools first with numeric `size`.
 - Content-sized -> raw JSON UI sizing such as `"100%c"`, `"100%cm"`, stack panels, or vanilla content templates; use tools only for the static outer skeleton.
-- Value bar -> `clip_ratio`, `clip_direction`, bindings, or PMMP-provided normalized value.
+- Value bar -> `clip_ratio`, `clip_direction`, bindings, or a server-provided normalized value.
 - Conditional color/visibility -> view bindings, server-provided state fields, or separate controls with `#visible`.
 - Dynamic list -> collection/factory pattern; tools may define the row/card skeleton, but collection behavior is hand-finished.
 - Animated change -> `anims`, `anim_type`, `play_event`, `reset_event`, or offset/alpha/clip animation recipes.
@@ -155,7 +155,7 @@ Rule:
 Reference choices to show:
 
 - Vanilla-safe form: safest compatibility, good for admin/menu/confirm UI.
-- RPG quest/shop/stat panel: good for PMMP economy, quests, stats, skills.
+- RPG quest/shop/stat panel: good for server economies, quests, stats, and skills.
 - NPC dialogue panel: good for story text and choices.
 - Compact HUD/status panel: good for always-visible score, money, level, cooldown.
 - Inventory-like grid: good for shop, recipe, storage, custom item menus.
@@ -246,8 +246,8 @@ Ask:
 
 Offer:
 
-- PMMP sends title/actionbar payload.
-- PMMP sends server form title/body/button text.
+- BP Script API or another server sender emits a title/actionbar payload.
+- BP Script API or another server sender emits server form title/body/button text.
 - Script API sends title/actionbar/form text.
 - Vanilla scoreboard/list collection.
 - Static RP-only UI.
@@ -323,7 +323,7 @@ For every displayed value, collect:
 
 - Name: for example money, level, exp, quest_name, quest_progress.
 - Example: for example `1200`, `Lv. 15`, `3/10`, `Farmer`.
-- Source: PMMP, Script API, scoreboard, vanilla binding, static.
+- Source: Script API, server sender, scoreboard, vanilla binding, static.
 - Update timing: once, every second, on event, on open, on close.
 - Parsing: direct value, separator split, fixed-width slice, collection binding.
 - Value type: number, text, boolean, enum, list.
@@ -335,9 +335,9 @@ Simple field table:
 
 | Field | Example | Type | Source | Effect |
 | --- | --- | --- | --- | --- |
-| `money` | `1200` | number | PMMP actionbar | text only |
-| `hp_percent` | `0.75` | number 0-1 | PMMP title/actionbar | progress bar fill |
-| `quest_state` | `complete` | enum | PMMP form body | color and visible reward button |
+| `money` | `1200` | number | server actionbar | text only |
+| `hp_percent` | `0.75` | number 0-1 | server title/actionbar | progress bar fill |
+| `quest_state` | `complete` | enum | server form body | color and visible reward button |
 | `items` | `Sword,Apple,...` | list | form buttons or Script API | repeated cards |
 
 ### D. Layout model
@@ -398,7 +398,7 @@ Collect:
 
 - Button count and each button action.
 - Toggle/slider/dropdown needs.
-- Whether server form buttons must route to PMMP commands.
+- Whether server form buttons must route to server commands.
 - Whether HUD needs interactable controls.
 - Input modes to support.
 - Close/back behavior.
@@ -411,7 +411,7 @@ Decide the output shape:
 - Compiled JSON UI only.
 - Patch existing RP.
 - Standalone RP example.
-- PMMP payload format plus JSON UI parser.
+- Server payload format plus JSON UI parser.
 - Documentation/example prompt for future AI use.
 
 ## Stage-by-stage conversation template
@@ -562,7 +562,7 @@ Layout:
 - long text behavior: clip / scroll / grow panel / unknown
 
 Data source:
-- PMMP / Script API / scoreboard / static UI / unknown
+- Script API / server sender / scoreboard / static UI / unknown
 
 Output target:
 - new sample RP / patch current RP / make IR first
@@ -585,7 +585,7 @@ Example:
 ```text
 Plan:
 - Target: RP/ui/hud_screen.json with namespace `hud`.
-- Data: PMMP actionbar payload `money|level|quest`.
+- Data: server-sent actionbar payload `money|level|quest`.
 - Layout: bottom-right compact panel, 3 rows, same width labels, equal vertical gap.
 - Dynamic: EXP bar uses fixed background + clipped foreground; quest text clips to a safe area.
 - Geometry: create `workspace/hud_status/ir.yaml`, then run `node tools/run.mjs`.

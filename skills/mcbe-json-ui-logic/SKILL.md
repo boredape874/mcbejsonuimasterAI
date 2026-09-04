@@ -7,6 +7,14 @@ description: Explain and implement Bedrock JSON UI logic rules. Use when Codex m
 
 Use this skill when the main problem is not structure but data flow.
 
+## Contract
+
+- Input: source control/property, payload examples, target value, and the controls that consume it.
+- Output: source-to-derived-value binding trace, exact string protocol, and failure cases.
+- Success: property ownership and transformation order are evidenced and unresolved binding names are not guessed.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-logic` entry. Use a registered inspector only when its command exists; otherwise trace bindings directly from the JSON UI and sender source.
+
 ## Workflow
 
 1. Read `references/logic-map.md`.

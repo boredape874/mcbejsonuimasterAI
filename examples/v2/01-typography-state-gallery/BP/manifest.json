@@ -1,0 +1,55 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "V2 Typography and Button Gallery BP",
+    "description": "Minimal Script API sender for v2:gallery.",
+    "uuid": "10000000-0000-4000-8000-000000000103",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      80
+    ]
+  },
+  "modules": [
+    {
+      "type": "script",
+      "language": "javascript",
+      "uuid": "10000000-0000-4000-8000-000000000104",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "entry": "scripts/main.js"
+    }
+  ],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "2.0.0"
+    },
+    {
+      "module_name": "@minecraft/server-ui",
+      "version": "2.0.0"
+    },
+    {
+      "uuid": "10000000-0000-4000-8000-000000000101",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "metadata": {
+    "authors": [
+      "mcbejsonuimasterAI contributors"
+    ],
+    "license": "MIT"
+  }
+}

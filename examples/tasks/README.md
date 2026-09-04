@@ -29,3 +29,4 @@ Task groups:
 - `14-author-ir-and-compile.md` (tools layer)
 - `15-image-driven-iteration.md` (tools layer)
 - `16-advanced-adventure-ui-adaptation.md`
+- `17-production-rpg-hud-menu.md`

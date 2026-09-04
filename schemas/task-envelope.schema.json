@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/boredape874/mcbejsonuimasterAI/schemas/task-envelope.schema.json",
+  "title": "MCBE JSON UI task envelope",
+  "description": "A deterministic prompt input that separates goal, evidence, constraints, tools, outputs, validation, and unverified work.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "id", "goal", "screenProfiles", "providedMaterials",
+    "measuredEvidence", "constraints", "recipes", "tools", "outputFiles",
+    "validation", "unverified"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+    "goal": { "type": "string", "minLength": 8 },
+    "screenProfiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/screenProfile" }
+    },
+    "providedMaterials": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/material" }
+    },
+    "measuredEvidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence" }
+    },
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/constraint" }
+    },
+    "recipes": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]*$" },
+      "uniqueItems": true
+    },
+    "tools": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/toolSelection" }
+    },
+    "outputFiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/outputFile" }
+    },
+    "validation": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/validation" }
+    },
+    "unverified": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "notes": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "allOf": [
+        { "not": { "pattern": "^(?:[A-Za-z]:[\\\\/]|/|~)" } },
+        { "not": { "pattern": "(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)" } }
+      ]
+    },
+    "screenProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "device", "resolution", "guiScale", "required"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "device": { "enum": ["desktop", "touch", "console"] },
+        "resolution": {
+          "type": "array",
+          "prefixItems": [
+            { "type": "integer", "minimum": 320 },
+            { "type": "integer", "minimum": 180 }
+          ],
+          "items": false
+        },
+        "guiScale": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "required": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "path", "usage"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "kind": { "enum": ["image", "ui", "ir", "texture", "pack", "script", "catalog", "document"] },
+        "path": { "$ref": "#/$defs/relativePath" },
+        "usage": { "type": "string", "minLength": 1 },
+        "redistribution": { "enum": ["public", "local-only", "unknown"] }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim", "source", "status"],
+      "properties": {
+        "claim": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "path": { "$ref": "#/$defs/relativePath" },
+        "recipeId": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]*$" },
+        "status": { "enum": ["confirmed", "inferred", "unresolved"] }
+      }
+    },
+    "constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "category", "requirement", "priority", "verifiable"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "category": { "enum": ["geometry", "text", "state", "texture", "protocol", "compatibility", "safety"] },
+        "requirement": { "type": "string", "minLength": 1 },
+        "priority": { "enum": ["must", "should", "may"] },
+        "verifiable": { "type": "boolean" }
+      }
+    },
+    "toolSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "reason", "required"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$" },
+        "reason": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" }
+      }
+    },
+    "outputFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "role", "required"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "role": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" },
+        "generated": { "type": "boolean", "default": false }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "criterion", "required"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "toolId": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$" },
+        "criterion": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" },
+        "evidencePath": { "$ref": "#/$defs/relativePath" }
+      }
+    }
+  }
+}

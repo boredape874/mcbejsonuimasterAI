@@ -4,7 +4,7 @@ Use this when the goal is not only to make a form work, but to choose a good Bed
 
 ## Goal
 
-Turn a PMMP-driven form into a polished Bedrock JSON UI design using an existing reference family from `docs/39-design-recommendation-catalog.md`.
+Turn a server-driven form into a polished Bedrock JSON UI design using an existing reference family from `docs/39-design-recommendation-catalog.md`.
 
 ## Recommended skills
 
@@ -38,7 +38,7 @@ The AI should return:
 - files changed
 - chosen design family and reason
 - exact dimensions used for root, body, header, buttons, icons, and scroll regions
-- PMMP title prefix or payload convention
+- server form title prefix or payload convention
 - validation command result
 - remaining limitations such as unsupported input fields or long text clipping
 
@@ -57,7 +57,7 @@ Feature:
 Preferred style:
 - <style from docs/39-design-recommendation-catalog.md, or "choose one">
 
-PMMP route:
+Server route:
 - <title prefix or form title convention>
 
 Data:

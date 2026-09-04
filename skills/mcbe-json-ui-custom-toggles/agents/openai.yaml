@@ -1,3 +1,4 @@
-display_name: MCBE Custom Toggles
-short_description: Build and debug custom Bedrock JSON UI toggles and toggle animations.
-default_prompt: Use custom toggle patterns for this Bedrock JSON UI task.
+interface:
+  display_name: "MCBE Custom Toggles"
+  short_description: "Build and debug Bedrock UI toggle state patterns"
+  default_prompt: "Use $mcbe-json-ui-custom-toggles to implement and verify the required toggle states for this Bedrock JSON UI."

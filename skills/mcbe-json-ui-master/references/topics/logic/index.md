@@ -12,4 +12,4 @@ Subtopics:
 
 External docs:
 
-- `../../../../../docs/34-binding-patterns-value-index.md`
+- `docs/34-binding-patterns-value-index.md`

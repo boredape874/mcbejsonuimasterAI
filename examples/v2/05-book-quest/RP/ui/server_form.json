@@ -1,0 +1,409 @@
+{
+  "namespace": "server_form",
+  "main_screen_content": {
+    "modifications": [
+      {
+        "array_name": "controls",
+        "operation": "insert_front",
+        "value": [
+          {
+            "book_quest_route": {
+              "type": "panel",
+              "size": [
+                "100%",
+                "100%"
+              ],
+              "layer": 100,
+              "bindings": [
+                {
+                  "binding_name": "#title_text"
+                },
+                {
+                  "binding_type": "view",
+                  "source_property_name": "(not ((#title_text - 'v2:quest') = #title_text))",
+                  "target_property_name": "#visible"
+                }
+              ],
+              "controls": [
+                {
+                  "shell": {
+                    "type": "panel",
+                    "size": [
+                      680,
+                      430
+                    ],
+                    "anchor_from": "center",
+                    "anchor_to": "center",
+                    "offset": [
+                      0,
+                      0
+                    ],
+                    "controls": [
+                      {
+                        "background": {
+                          "type": "image",
+                          "texture": "textures/ui/v2_book_quest/panel",
+                          "size": [
+                            "100%",
+                            "100%"
+                          ],
+                          "offset": [
+                            0,
+                            0
+                          ],
+                          "anchor_from": "center",
+                          "anchor_to": "center",
+                          "layer": 1
+                        }
+                      },
+                      {
+                        "left_page": {
+                          "type": "image",
+                          "texture": "textures/ui/v2_book_quest/page",
+                          "size": [
+                            306,
+                            366
+                          ],
+                          "offset": [
+                            25,
+                            30
+                          ],
+                          "anchor_from": "top_left",
+                          "anchor_to": "top_left",
+                          "layer": 2
+                        }
+                      },
+                      {
+                        "right_page": {
+                          "type": "image",
+                          "texture": "textures/ui/v2_book_quest/page",
+                          "size": [
+                            306,
+                            366
+                          ],
+                          "offset": [
+                            349,
+                            30
+                          ],
+                          "anchor_from": "top_left",
+                          "anchor_to": "top_left",
+                          "layer": 2
+                        }
+                      },
+                      {
+                        "quest_title": {
+                          "type": "label",
+                          "text": "THE LOST COMPASS",
+                          "localize": false,
+                          "size": [
+                            250,
+                            24
+                          ],
+                          "offset": [
+                            53,
+                            58
+                          ],
+                          "anchor_from": "top_left",
+                          "anchor_to": "top_left",
+                          "text_alignment": "center",
+                          "font_size": "large",
+                          "font_scale_factor": 0.9,
+                          "color": [
+                            0.22,
+                            0.12,
+                            0.07
+                          ],
+                          "shadow": false,
+                          "layer": 8
+                        }
+                      },
+                      {
+                        "quest_body": {
+                          "type": "label",
+                          "text": "Search the old watchtower and recover the brass compass before nightfall.",
+                          "localize": false,
+                          "size": [
+                            250,
+                            150
+                          ],
+                          "offset": [
+                            53,
+                            100
+                          ],
+                          "anchor_from": "top_left",
+                          "anchor_to": "top_left",
+                          "text_alignment": "left",
+                          "font_size": "normal",
+                          "font_scale_factor": 0.85,
+                          "color": [
+                            0.25,
+                            0.16,
+                            0.1
+                          ],
+                          "shadow": false,
+                          "layer": 8
+                        }
+                      },
+                      {
+                        "objectives": {
+                          "type": "label",
+                          "text": "OBJECTIVES",
+                          "localize": false,
+                          "size": [
+                            250,
+                            20
+                          ],
+                          "offset": [
+                            377,
+                            58
+                          ],
+                          "anchor_from": "top_left",
+                          "anchor_to": "top_left",
+                          "text_alignment": "center",
+                          "font_size": "large",
+                          "font_scale_factor": 0.9,
+                          "color": [
+                            0.22,
+                            0.12,
+                            0.07
+                          ],
+                          "shadow": false,
+                          "layer": 8
+                        }
+                      },
+                      {
+                        "objective_list": {
+                          "type": "label",
+                          "text": "1. Visit the watchtower\n2. Defeat the sentry\n3. Return the compass",
+                          "localize": false,
+                          "size": [
+                            250,
+                            150
+                          ],
+                          "offset": [
+                            377,
+                            100
+                          ],
+                          "anchor_from": "top_left",
+                          "anchor_to": "top_left",
+                          "text_alignment": "left",
+                          "font_size": "normal",
+                          "font_scale_factor": 0.85,
+                          "color": [
+                            0.25,
+                            0.16,
+                            0.1
+                          ],
+                          "shadow": false,
+                          "layer": 8
+                        }
+                      },
+                      {
+                        "accept": {
+                          "type": "button",
+                          "size": [
+                            210,
+                            44
+                          ],
+                          "offset": [
+                            405,
+                            330
+                          ],
+                          "anchor_from": "top_left",
+                          "anchor_to": "top_left",
+                          "layer": 10,
+                          "default_control": "default",
+                          "hover_control": "hover",
+                          "pressed_control": "pressed",
+                          "button_mappings": [
+                            {
+                              "from_button_id": "button.menu_select",
+                              "to_button_id": "button.form_button_click",
+                              "mapping_type": "pressed"
+                            },
+                            {
+                              "from_button_id": "button.menu_ok",
+                              "to_button_id": "button.form_button_click",
+                              "mapping_type": "focused"
+                            }
+                          ],
+                          "controls": [
+                            {
+                              "default": {
+                                "type": "panel",
+                                "size": [
+                                  "100%",
+                                  "100%"
+                                ],
+                                "controls": [
+                                  {
+                                    "background": {
+                                      "type": "image",
+                                      "texture": "textures/ui/v2_book_quest/button_default",
+                                      "size": [
+                                        "100%",
+                                        "100%"
+                                      ],
+                                      "offset": [
+                                        0,
+                                        0
+                                      ],
+                                      "anchor_from": "center",
+                                      "anchor_to": "center",
+                                      "layer": 1
+                                    }
+                                  },
+                                  {
+                                    "label": {
+                                      "type": "label",
+                                      "text": "ACCEPT QUEST",
+                                      "localize": false,
+                                      "size": [
+                                        194,
+                                        18
+                                      ],
+                                      "offset": [
+                                        0,
+                                        0
+                                      ],
+                                      "anchor_from": "center",
+                                      "anchor_to": "center",
+                                      "text_alignment": "center",
+                                      "font_size": "normal",
+                                      "font_scale_factor": 0.9,
+                                      "color": [
+                                        0.95,
+                                        0.96,
+                                        0.98
+                                      ],
+                                      "shadow": true,
+                                      "layer": 3
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "hover": {
+                                "type": "panel",
+                                "size": [
+                                  "100%",
+                                  "100%"
+                                ],
+                                "controls": [
+                                  {
+                                    "background": {
+                                      "type": "image",
+                                      "texture": "textures/ui/v2_book_quest/button_hover",
+                                      "size": [
+                                        "100%",
+                                        "100%"
+                                      ],
+                                      "offset": [
+                                        0,
+                                        0
+                                      ],
+                                      "anchor_from": "center",
+                                      "anchor_to": "center",
+                                      "layer": 1
+                                    }
+                                  },
+                                  {
+                                    "label": {
+                                      "type": "label",
+                                      "text": "ACCEPT QUEST",
+                                      "localize": false,
+                                      "size": [
+                                        194,
+                                        18
+                                      ],
+                                      "offset": [
+                                        0,
+                                        0
+                                      ],
+                                      "anchor_from": "center",
+                                      "anchor_to": "center",
+                                      "text_alignment": "center",
+                                      "font_size": "normal",
+                                      "font_scale_factor": 0.9,
+                                      "color": [
+                                        0.95,
+                                        0.96,
+                                        0.98
+                                      ],
+                                      "shadow": true,
+                                      "layer": 3
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "pressed": {
+                                "type": "panel",
+                                "size": [
+                                  "100%",
+                                  "100%"
+                                ],
+                                "controls": [
+                                  {
+                                    "background": {
+                                      "type": "image",
+                                      "texture": "textures/ui/v2_book_quest/button_pressed",
+                                      "size": [
+                                        "100%",
+                                        "100%"
+                                      ],
+                                      "offset": [
+                                        0,
+                                        0
+                                      ],
+                                      "anchor_from": "center",
+                                      "anchor_to": "center",
+                                      "layer": 1
+                                    }
+                                  },
+                                  {
+                                    "label": {
+                                      "type": "label",
+                                      "text": "ACCEPT QUEST",
+                                      "localize": false,
+                                      "size": [
+                                        194,
+                                        18
+                                      ],
+                                      "offset": [
+                                        0,
+                                        0
+                                      ],
+                                      "anchor_from": "center",
+                                      "anchor_to": "center",
+                                      "text_alignment": "center",
+                                      "font_size": "normal",
+                                      "font_scale_factor": 0.9,
+                                      "color": [
+                                        0.95,
+                                        0.96,
+                                        0.98
+                                      ],
+                                      "shadow": true,
+                                      "layer": 3
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -4,7 +4,7 @@ Use for server forms that should look like a phone, PDA, guidebook, profile devi
 
 Open the full project doc first when available:
 
-- `../../../docs/62-special-form-device-ui-patterns.md`
+- `docs/62-special-form-device-ui-patterns.md`
 
 ## Minimal Checklist
 

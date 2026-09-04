@@ -2,9 +2,9 @@
 
 ## Visual editor
 
-- `../../../references/mirrors/bedrock-json-ui-editor/README.md`
-- `../../../references/mirrors/bedrock-json-ui-editor/app.js`
-- `../../../docs/09-schema-and-tooling.md`
+- `references/external/bedrock-json-ui-editor/README.md`
+- `references/external/bedrock-json-ui-editor/app.js`
+- `docs/09-schema-and-tooling.md`
 
 Use for:
 
@@ -15,8 +15,8 @@ Use for:
 
 ## Builder-generated examples
 
-- `../../../references/mirrors/builder-sample/README.md`
-- `../../../references/mirrors/builder-sample/ui/custom_ui/`
+- `references/external/EasyUIBuilder/README.md`
+- `references/external/EasyUIBuilder/ui/custom_ui/`
 
 Use for:
 
@@ -26,8 +26,8 @@ Use for:
 
 ## Minecraft Bedrock JSON UI Sample archive
 
-- `../../../docs/32-minecraft-bedrock-json-ui-sample-upstream.md`
-- `../../../references/reference-mirrors/minecraft-bedrock-json-ui-sample/` when locally synced
+- `docs/32-minecraft-bedrock-json-ui-sample-upstream.md`
+- `references/upstreams/minecraft-bedrock-json-ui-sample/` when locally synced
 
 Use for:
 
@@ -41,7 +41,7 @@ Open only one exact source file after searching with `rg`.
 
 ## Dumper and animation values
 
-- `../../../docs/33-animation-patterns-and-dumper-values.md`
+- `docs/33-animation-patterns-and-dumper-values.md`
 
 Use for:
 
@@ -55,9 +55,9 @@ Use for:
 
 ## Dumper value cookbook
 
-- `../../../docs/36-dumper-value-cookbook.md`
-- `../../../docs/37-vanilla-dumper-screen-recipes.md`
-- `../../../docs/38-advanced-json-ui-recipes.md`
+- `docs/36-dumper-value-cookbook.md`
+- `docs/37-vanilla-dumper-screen-recipes.md`
+- `docs/38-advanced-json-ui-recipes.md`
 
 Use for:
 
@@ -75,9 +75,9 @@ Use for:
 
 ## Chest UI tooling
 
-- `../../../references/mirrors/container-form-sample/README.md`
-- `../../../references/mirrors/container-form-sample/RP/ui/`
-- `../../../references/mirrors/container-form-sample/BP-scripts/extensions/forms.js`
+- `references/external/Chest-UI/README.md`
+- `references/external/Chest-UI/RP/ui/`
+- `references/external/Chest-UI/BP-scripts/extensions/forms.js`
 
 Use for:
 

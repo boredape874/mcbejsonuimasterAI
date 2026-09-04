@@ -1,0 +1,19 @@
+schemaVersion: 1.0.0
+id: invalid_task
+goal: too short
+screenProfiles: []
+providedMaterials:
+  - id: local_secret
+    kind: document
+    path: ../../private/source.txt
+    usage: This repository-escaping path must be rejected.
+measuredEvidence: []
+constraints: []
+recipes: []
+tools:
+  - id: unknown.tool
+    reason: Unknown tools must be rejected.
+    required: true
+outputFiles: []
+validation: []
+unverified: []

@@ -1,0 +1,135 @@
+screen: book_quest
+base_resolution:
+  - 1920
+  - 1080
+gui_scale: 3
+elements:
+  - id: shell
+    kind: image
+    anchor: center
+    pos:
+      - 0
+      - 0
+    size:
+      - 680
+      - 430
+    props:
+      texture: textures/ui/v2_book_quest/panel
+  - id: left_page
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 25
+      - 30
+    size:
+      - 306
+      - 366
+    props:
+      texture: textures/ui/v2_book_quest/page
+  - id: right_page
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 349
+      - 30
+    size:
+      - 306
+      - 366
+    props:
+      texture: textures/ui/v2_book_quest/page
+  - id: quest_title
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 53
+      - 58
+    size:
+      - 250
+      - 24
+    props:
+      text: THE LOST COMPASS
+      localize: false
+      font_size: large
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: quest_body
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 53
+      - 100
+    size:
+      - 250
+      - 150
+    props:
+      text: Search the old watchtower and recover the brass compass before nightfall.
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.85
+      text_alignment: left
+  - id: objectives
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 377
+      - 58
+    size:
+      - 250
+      - 20
+    props:
+      text: OBJECTIVES
+      localize: false
+      font_size: large
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: objective_list
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 377
+      - 100
+    size:
+      - 250
+      - 150
+    props:
+      text: 1. Visit the watchtower\n2. Defeat the sentry\n3. Return the compass
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.85
+      text_alignment: left
+  - id: accept
+    kind: button
+    parent: shell
+    anchor: top_left
+    pos:
+      - 405
+      - 330
+    size:
+      - 210
+      - 44
+constraints:
+  - op: same_size
+    ids:
+      - left_page
+      - right_page
+  - op: symmetric_x
+    ids:
+      - left_page
+      - right_page
+  - op: align_y
+    ids:
+      - left_page
+      - right_page
+    edge: center
+  - op: same_width
+    ids:
+      - quest_title
+      - quest_body
+      - objectives
+      - objective_list

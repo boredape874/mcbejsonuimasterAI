@@ -1,0 +1,35 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "V2 HUD Minimap RP",
+    "description": "Top-right minimap shell with player and waypoint markers. First-party v2 public example.",
+    "uuid": "40000000-0000-4000-8000-000000000401",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      80
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "40000000-0000-4000-8000-000000000402",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "metadata": {
+    "authors": [
+      "mcbejsonuimasterAI contributors"
+    ],
+    "license": "CC0-1.0"
+  }
+}

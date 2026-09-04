@@ -1,6 +1,6 @@
 # Custom AUX IDs And Server Form Progress
 
-Use this when a PMMP, Script API, or JSON UI workflow needs custom item/block AUX IDs, `#item_id_aux`, chest-like item rendering, or a numeric progress bar inside `server_form.json`.
+Use this when a Script API, server integration, or JSON UI workflow needs custom item/block AUX IDs, `#item_id_aux`, chest-like item rendering, or a numeric progress bar inside `server_form.json`.
 
 ## Custom AUX ID Notes
 
@@ -115,7 +115,7 @@ Use a custom pack scanner when:
 
 - custom item files are present
 - file names and identifiers may differ
-- PMMP needs a generated map for chest-like JSON UI item display
+- a server integration needs a generated map for chest-like JSON UI item display
 - multiple addon packs can affect registration order
 
 Minimal generator shape:
@@ -227,4 +227,3 @@ Avoid it when:
 - the body text is arbitrary user text and may start with numbers
 - more than one progress value is needed
 - the platform/version is not tested with this binding coercion
-

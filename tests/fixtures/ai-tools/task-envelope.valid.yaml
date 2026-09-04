@@ -1,0 +1,46 @@
+schemaVersion: 1.0.0
+id: compact_form_grid
+goal: Build a symmetric Minecraft Bedrock server-form grid from measured geometry.
+screenProfiles:
+  - id: pc_16_9
+    device: desktop
+    resolution: [1920, 1080]
+    guiScale: 3
+    required: true
+providedMaterials:
+  - id: source_ir
+    kind: ir
+    path: tests/fixtures/ai-tools/layout.yaml
+    usage: Geometry source of truth used by the fixture.
+    redistribution: public
+measuredEvidence:
+  - claim: Three buttons use the same size and a fixed horizontal gap.
+    source: fixture measurement
+    path: tests/fixtures/ai-tools/layout.yaml
+    status: confirmed
+constraints:
+  - id: equal_buttons
+    category: geometry
+    requirement: Apply same_size, align_y, equal_gap_x, and center_group_x to the button row.
+    priority: must
+    verifiable: true
+recipes: []
+tools:
+  - id: pipeline.run
+    reason: Solve, compile, and validate the fixture IR.
+    required: true
+  - id: preview.texture
+    reason: Generate PC state evidence after compilation.
+    required: false
+outputFiles:
+  - path: workspace/_test_ai_tools/ui.json
+    role: Compiled JSON UI fixture.
+    required: true
+    generated: true
+validation:
+  - id: pipeline_clean
+    toolId: pipeline.run
+    criterion: The IR pipeline exits successfully with no validation errors.
+    required: true
+unverified:
+  - Bedrock runtime rendering and input are outside this offline fixture.

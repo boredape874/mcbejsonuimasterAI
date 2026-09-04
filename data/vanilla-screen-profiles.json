@@ -1,0 +1,15 @@
+{
+  "schema": "mcbe-jsonui-ai-kit/vanilla-screen-profiles@1",
+  "profiles": {
+    "bedrock-1.21.100": {
+      "dialect": "bedrock-json@1.21.100",
+      "overrideFiles": [
+        "ui/chat_screen.json",
+        "ui/hud_screen.json",
+        "ui/pause_screen.json",
+        "ui/server_form.json",
+        "ui/start_screen.json"
+      ]
+    }
+  }
+}

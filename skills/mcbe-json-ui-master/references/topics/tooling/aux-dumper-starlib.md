@@ -2,9 +2,9 @@
 
 Read:
 
-- `../../../../../docs/18-tooling-auxgen-dumper-dynamic form library.md`
-- `../../../../../docs/47-custom-auxid-and-form-progress.md`
-- `../../../../../docs/48-json-ui-field-catalogue.md`
+- `docs/18-tooling-auxgen-dumper-starlib.md`
+- `docs/47-custom-auxid-and-form-progress.md`
+- `docs/48-json-ui-field-catalogue.md`
 
 Use this subtopic for:
 

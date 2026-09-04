@@ -1,0 +1,153 @@
+screen: server_form_grid
+base_resolution:
+  - 1920
+  - 1080
+gui_scale: 3
+elements:
+  - id: shell
+    kind: image
+    anchor: center
+    pos:
+      - 0
+      - 0
+    size:
+      - 600
+      - 300
+    props:
+      texture: textures/ui/v2_form_grid/panel
+  - id: title
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 40
+      - 18
+    size:
+      - 520
+      - 24
+    props:
+      text: SERVER MENU
+      localize: false
+      font_size: large
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: menu_0
+    kind: button
+    parent: shell
+    anchor: top_left
+    pos:
+      - 44
+      - 74
+    size:
+      - 160
+      - 64
+    props:
+      text: PROFILE
+  - id: menu_1
+    kind: button
+    parent: shell
+    anchor: top_left
+    pos:
+      - 218
+      - 74
+    size:
+      - 160
+      - 64
+    props:
+      text: QUESTS
+  - id: menu_2
+    kind: button
+    parent: shell
+    anchor: top_left
+    pos:
+      - 392
+      - 74
+    size:
+      - 160
+      - 64
+    props:
+      text: REWARDS
+  - id: menu_3
+    kind: button
+    parent: shell
+    anchor: top_left
+    pos:
+      - 44
+      - 152
+    size:
+      - 160
+      - 64
+    props:
+      text: PARTY
+  - id: menu_4
+    kind: button
+    parent: shell
+    anchor: top_left
+    pos:
+      - 218
+      - 152
+    size:
+      - 160
+      - 64
+    props:
+      text: SETTINGS
+  - id: menu_5
+    kind: button
+    parent: shell
+    anchor: top_left
+    pos:
+      - 392
+      - 152
+    size:
+      - 160
+      - 64
+    props:
+      text: CLOSE
+constraints:
+  - op: same_size
+    ids:
+      - menu_0
+      - menu_1
+      - menu_2
+      - menu_3
+      - menu_4
+      - menu_5
+  - op: equal_gap_x
+    ids:
+      - menu_0
+      - menu_1
+      - menu_2
+    gap: 14
+  - op: equal_gap_x
+    ids:
+      - menu_3
+      - menu_4
+      - menu_5
+    gap: 14
+  - op: align_y
+    ids:
+      - menu_0
+      - menu_1
+      - menu_2
+    edge: center
+  - op: align_y
+    ids:
+      - menu_3
+      - menu_4
+      - menu_5
+    edge: center
+  - op: align_x
+    ids:
+      - menu_0
+      - menu_3
+    edge: center
+  - op: align_x
+    ids:
+      - menu_1
+      - menu_4
+    edge: center
+  - op: align_x
+    ids:
+      - menu_2
+      - menu_5
+    edge: center

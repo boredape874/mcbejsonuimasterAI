@@ -1,0 +1,551 @@
+{
+  "namespace": "v2_responsive",
+  "screen": {
+    "type": "panel",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "layer": 100,
+    "bindings": [
+      {
+        "binding_name": "#title_text"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not ((#title_text - 'v2:responsive') = #title_text))",
+        "target_property_name": "#visible"
+      }
+    ],
+    "controls": [
+      {
+        "shell": {
+          "type": "panel",
+          "size": [
+            "88%",
+            "76%"
+          ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "offset": [
+            0,
+            0
+          ],
+          "controls": [
+            {
+              "background": {
+                "type": "image",
+                "texture": "textures/ui/v2_responsive/panel",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "offset": [
+                  0,
+                  0
+                ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "layer": 1
+              }
+            },
+            {
+              "title": {
+                "type": "label",
+                "text": "RESPONSIVE SAFE SHELL",
+                "localize": false,
+                "size": [
+                  "100% - 64px",
+                  24
+                ],
+                "offset": [
+                  32,
+                  20
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "text_alignment": "center",
+                "font_size": "large",
+                "font_scale_factor": 0.9,
+                "color": [
+                  0.95,
+                  0.96,
+                  0.98
+                ],
+                "shadow": true,
+                "layer": 8
+              }
+            },
+            {
+              "description": {
+                "type": "label",
+                "text": "Percentage sizing preserves outer margins while forty-eight unit actions remain touch safe.",
+                "localize": false,
+                "size": [
+                  "100% - 64px",
+                  52
+                ],
+                "offset": [
+                  32,
+                  62
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "text_alignment": "left",
+                "font_size": "normal",
+                "font_scale_factor": 0.85,
+                "color": [
+                  0.675,
+                  0.71,
+                  0.773
+                ],
+                "shadow": true,
+                "layer": 8
+              }
+            },
+            {
+              "content": {
+                "type": "image",
+                "texture": "textures/ui/v2_responsive/card",
+                "size": [
+                  "100% - 64px",
+                  "100% - 190px"
+                ],
+                "offset": [
+                  32,
+                  124
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "content_label": {
+                "type": "label",
+                "text": "PC: centered wide shell\nTOUCH: retained edge padding and large targets",
+                "localize": false,
+                "size": [
+                  "100% - 112px",
+                  72
+                ],
+                "offset": [
+                  56,
+                  154
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "text_alignment": "left",
+                "font_size": "normal",
+                "font_scale_factor": 0.9,
+                "color": [
+                  0.95,
+                  0.96,
+                  0.98
+                ],
+                "shadow": true,
+                "layer": 8
+              }
+            },
+            {
+              "primary": {
+                "type": "button",
+                "size": [
+                  200,
+                  48
+                ],
+                "offset": [
+                  -110,
+                  -28
+                ],
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "layer": 10,
+                "default_control": "default",
+                "hover_control": "hover",
+                "pressed_control": "pressed",
+                "button_mappings": [
+                  {
+                    "from_button_id": "button.menu_select",
+                    "to_button_id": "button.form_button_click",
+                    "mapping_type": "pressed"
+                  },
+                  {
+                    "from_button_id": "button.menu_ok",
+                    "to_button_id": "button.form_button_click",
+                    "mapping_type": "focused"
+                  }
+                ],
+                "controls": [
+                  {
+                    "default": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_responsive/button_default",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "PRIMARY ACTION",
+                            "localize": false,
+                            "size": [
+                              184,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "hover": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_responsive/button_hover",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "PRIMARY ACTION",
+                            "localize": false,
+                            "size": [
+                              184,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "pressed": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_responsive/button_pressed",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "PRIMARY ACTION",
+                            "localize": false,
+                            "size": [
+                              184,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "secondary": {
+                "type": "button",
+                "size": [
+                  200,
+                  48
+                ],
+                "offset": [
+                  110,
+                  -28
+                ],
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "layer": 10,
+                "default_control": "default",
+                "hover_control": "hover",
+                "pressed_control": "pressed",
+                "button_mappings": [
+                  {
+                    "from_button_id": "button.menu_select",
+                    "to_button_id": "button.form_button_click",
+                    "mapping_type": "pressed"
+                  },
+                  {
+                    "from_button_id": "button.menu_ok",
+                    "to_button_id": "button.form_button_click",
+                    "mapping_type": "focused"
+                  }
+                ],
+                "controls": [
+                  {
+                    "default": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_responsive/button_default",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "BACK",
+                            "localize": false,
+                            "size": [
+                              184,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "hover": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_responsive/button_hover",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "BACK",
+                            "localize": false,
+                            "size": [
+                              184,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "pressed": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_responsive/button_pressed",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "BACK",
+                            "localize": false,
+                            "size": [
+                              184,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

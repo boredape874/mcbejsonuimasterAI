@@ -44,7 +44,7 @@ Chosen style:
 Route prefix:
 - <prefix in form title>
 
-Data from PMMP:
+Data from BP Script API or another server sender:
 - <buttons, icons, prices, descriptions, stats, progress, etc.>
 
 Reference:

@@ -13,5 +13,5 @@ Show which title prefixes or form identifiers are used to select each custom scr
 ```text
 Use mcbe-json-ui-server-forms, mcbe-json-ui-patterns, and mcbe-json-ui-tooling.
 Build a chest-like server form layout for this Bedrock pack.
-Prefer a pattern compatible with the included references and explain the title or data protocol expected from PMMP or Script API.
+Prefer a pattern compatible with the included references and explain the title or data protocol expected from Script API or another server sender.
 ```

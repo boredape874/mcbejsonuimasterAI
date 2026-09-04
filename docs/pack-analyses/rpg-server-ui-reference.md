@@ -35,7 +35,7 @@ Important behaviors:
 - title-text-based routing
 - chest, furnace, and custom form substitution
 
-This is directly useful for PMMP plugin driven UI protocols.
+This is directly useful for Script API or external server-driven UI protocols.
 
 ## Best use cases
 

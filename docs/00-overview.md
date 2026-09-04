@@ -7,7 +7,7 @@ It is built around four principles:
 1. Prefer working Bedrock resource-pack samples over abstract explanation
 2. Treat JSON UI as part of the full RP and addon structure
 3. Validate vanilla paths against upstream sources instead of memory
-4. Answer in file-level terms that a PMMP or Bedrock developer can edit immediately
+4. Answer in file-level terms that a Bedrock RP/BP or Script API developer can edit immediately
 5. Keep AI context small by routing to one topic and one or two exact references
 6. Route broad UI requests through `docs/55-reference-task-taxonomy.md`, `docs/57-hierarchical-task-router.md`, `data/reference-task-index.json`, and `data/reference-hierarchy.json`
 7. Use IR/tools as the geometry source of truth for layout-heavy UI, then hand-finish Bedrock-specific behavior

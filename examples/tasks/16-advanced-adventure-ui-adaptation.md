@@ -24,7 +24,7 @@ Adapt the architecture from `docs/50-advanced-ui-reference-analysis.md` into a t
 ## Required Decisions
 
 - which family is being adapted: battle pass, store, quest, NPC, equipment, map, reward toast, or generic router
-- route prefix and payload format controlled by PMMP
+- route prefix and payload format controlled by BP Script API or another server sender
 - modal vs full-screen shell
 - root size and max size
 - header/body/footer split
@@ -39,7 +39,7 @@ The AI should return:
 - files changed
 - exact JSON UI controls added or modified
 - `_ui_defs.json` registration changes
-- route/payload convention PMMP should emit
+- route/payload convention the BP or server sender should emit
 - exact dimensions and ratios used
 - texture paths verified in the target pack
 - validation command result
@@ -61,7 +61,7 @@ Route prefix:
 - <prefix>
 
 Payload:
-- <title/body/button format emitted by PMMP>
+- <title/body/button format emitted by the server sender>
 
 Style constraints:
 - <dark RPG / bright shop / quest parchment / compact equipment / full-screen store>

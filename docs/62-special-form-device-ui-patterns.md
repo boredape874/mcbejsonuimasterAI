@@ -111,7 +111,7 @@ Recommended starting dimensions:
    - `#form_button_texture_file_system`
 7. Route clicks with `button.form_button_click`.
 8. Keep a vanilla `long_form` fallback for unmatched titles.
-9. Document the script-side marker protocol next to the BP/PMMP code that opens the form.
+9. Document the marker protocol next to the BP Script API or server sender code that opens the form.
 
 ## Script Data Contract
 

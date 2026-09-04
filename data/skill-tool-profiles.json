@@ -1,0 +1,332 @@
+{
+  "schemaVersion": "1.0.0",
+  "profiles": [
+    {
+      "skill": "mcbe-json-ui-master",
+      "skillStatus": "implemented",
+      "purpose": "Route a mixed JSON UI task and expose only the tools required by the selected specialist workflow.",
+      "toolSelections": [
+        { "id": "skill.route", "phase": "route", "required": true, "reason": "Validate structured intent and enforce one primary owner with at most one follow-on." },
+        { "id": "skill.context", "phase": "route", "required": true, "reason": "Expand the selected specialist profile instead of loading the entire registry." },
+        { "id": "prompt.build", "phase": "plan", "required": false, "when": ["delegation", "cross-layer-plan"], "skipWhen": ["simple-exact-task"], "escalateWhen": ["handoff required"], "reason": "Normalize complex tasks into explicit evidence and acceptance criteria." },
+        { "id": "prompt.lint", "phase": "plan", "required": false, "when": ["delegation", "cross-layer-plan"], "skipWhen": ["simple-exact-task"], "escalateWhen": ["prompt contract diverges"], "reason": "Check that a generated task prompt preserves the contract." },
+        { "id": "final-rp.mcp", "phase": "final-evidence", "required": false, "when": ["integrated-rp", "visual-state-claim", "screenshot-comparison"], "skipWhen": ["syntax-only", "docs-only"], "escalateWhen": ["runtime evidence required"], "reason": "Route an integrated RP's profile-gated state and screenshot investigation to the read-only final-RP service." },
+        { "id": "public.audit", "phase": "release", "required": false, "when": ["public-release"], "skipWhen": ["local-only"], "escalateWhen": ["redistribution unresolved"], "reason": "Check public candidates for local, private, credential, framework, and redistribution leaks." },
+        { "id": "skill.doctor", "phase": "preflight", "required": true, "reason": "Confirm required tools are implemented before delegation." }
+      ],
+      "workflow": ["skill.route", "skill.doctor", "skill.context", "prompt.build", "prompt.lint", "final-rp.mcp", "public.audit"],
+      "successCriteria": ["One specialist profile owns each part of the task.", "No planned tool is described as executable."],
+      "boundaries": ["Do not run every JSON UI tool by default.", "Runtime validation remains separate from static evidence."]
+    },
+    {
+      "skill": "mcbe-json-ui-visual-design",
+      "skillStatus": "implemented",
+      "purpose": "Select measured recipes and verify size, ratio, alignment, typography, states, and texture-aware previews.",
+      "toolSelections": [
+        { "id": "design.search", "phase": "evidence", "required": true, "reason": "Find measured designs matching the target role and profile." },
+        { "id": "asset.search", "phase": "assets", "required": false, "reason": "Find UI-first, duplicate-filtered local textures without exposing absolute paths." },
+        { "id": "project.init", "phase": "author", "required": false, "reason": "Create a safe IR starting point when no project exists." },
+        { "id": "pipeline.run", "phase": "geometry", "required": true, "reason": "Solve and validate the selected geometry." },
+        { "id": "preview.texture", "phase": "preview", "required": true, "reason": "Generate state-aware texture evidence and clipping reports." },
+        { "id": "preview.diff", "phase": "compare", "required": false, "reason": "Compare a measured reference against the internal preview." },
+        { "id": "final-rp.mcp", "phase": "final-evidence", "required": false, "reason": "For an integrated RP, require installed vanilla/font evidence, state renders, device calibration, screenshot comparison, and read-only proposals." }
+      ],
+      "workflow": ["design.search", "asset.search", "project.init", "pipeline.run", "preview.texture", "preview.diff", "final-rp.mcp"],
+      "successCriteria": ["Every visual decision cites a recipe or measured source.", "Alignment, symmetry, and equal gaps are within one UI unit.", "Unsupported renderer behavior is reported.", "Final-RP coordinate claims are backed by available vanilla/font profiles and calibrated device evidence."],
+      "boundaries": ["The texture preview is not a Bedrock emulator.", "Do not infer unresolved bindings or collection sizes.", "Do not claim pixel accuracy or guess coordinates while font, vanilla, device, state, or calibration evidence is unresolved.", "External editors provide fixture evidence only; Bedrock runtime is final authority."]
+    },
+    {
+      "skill": "mcbe-json-ui-final-rp-inspection",
+      "skillStatus": "implemented",
+      "purpose": "Resolve and inspect an integrated RP through profile-gated state rendering, screenshot calibration, and revision-bound evidence proposals.",
+      "toolSelections": [
+        { "id": "skill.doctor", "phase": "preflight", "required": true, "reason": "Confirm the final-RP service scripts exist before opening local evidence." },
+        { "id": "upstream.compat", "phase": "compatibility", "required": true, "reason": "Require committed baselines or reviewed hash-bound local captures; keep optional pending-local observations unresolved." },
+        { "id": "final-rp.mcp", "phase": "inspect", "required": true, "reason": "Use the read-only service for project revisions, installed profile checks, compatibility fixtures, state renders, calibration, validation, and proposals." },
+        { "id": "final-rp.inspector", "phase": "inspect-ui", "required": false, "reason": "Use the localhost UI when interactive tree and artifact inspection is useful." },
+        { "id": "final-rp.render", "phase": "final-evidence", "required": false, "reason": "Produce deterministic v2 final-RP state PNGs and reports; Bedrock capture remains a separate runtime gate." },
+        { "id": "eval.live", "phase": "runtime", "required": false, "reason": "Record the actual Bedrock state screenshots and clean content log separately from static renderer evidence." }
+      ],
+      "workflow": ["skill.doctor", "upstream.compat", "final-rp.mcp", "final-rp.inspector", "final-rp.render", "eval.live"],
+      "successCriteria": ["Installed vanilla and Minecraft font profiles are available and fingerprinted.", "Pinned offline upstream compatibility fixtures pass.", "Every relevant interaction state is rendered and compared.", "Screenshot calibration records the target device transform and residual.", "Patch proposals cite server-issued evidence IDs and the current project revision.", "Runtime status is promoted only from actual Bedrock screenshots and a clean content log."],
+      "boundaries": ["CAPABILITY_UNAVAILABLE blocks the affected evidence level.", "Do not use system-font fallback, guessed coordinates, or unresolved device settings for pixel-accurate claims.", "External editor output is fixture evidence only.", "All artifacts stay outside the RP and proposals remain read-only until separately authorized."]
+    },
+    {
+      "skill": "mcbe-json-ui-texture-design",
+      "skillStatus": "implemented",
+      "purpose": "Turn catalog evidence into original state-complete Bedrock UI texture briefs, generation prompts, and nine-slice contracts.",
+      "toolSelections": [
+        { "id": "asset.catalog", "phase": "index", "required": true, "reason": "Build the local evidence-backed semantic catalog from indexed textures and their JSON UI usage sites." },
+        { "id": "asset.context", "phase": "evidence", "required": true, "reason": "Summarize measured roles, states, sizes, palettes, alpha, and nine-slice patterns into a source-redacted generation context." },
+        { "id": "asset.search", "phase": "fallback", "required": false, "reason": "Fall back to metadata search when the semantic catalog is unavailable or a concrete local candidate must be inspected." },
+        { "id": "preview.texture", "phase": "integration", "required": false, "reason": "Check the resulting texture states and nine-slice behavior in a deterministic static preview after the files exist." },
+        { "id": "pack.validate", "phase": "validate", "required": false, "reason": "Check RP texture references and adjacent metadata after integration." },
+        { "id": "public.audit", "phase": "release", "required": false, "reason": "Reject local paths, private source identifiers, and restricted source details from public briefs and prompts." }
+      ],
+      "workflow": ["asset.catalog", "asset.context", "asset.search", "preview.texture", "pack.validate", "public.audit"],
+      "successCriteria": ["The brief separates measured evidence from new design decisions.", "Required interaction states and output files are explicit.", "Every scalable PNG has a same-stem nine-slice contract or a documented unresolved status."],
+      "boundaries": ["Catalog assets are analysis evidence, not automatically redistributable inputs.", "Image generation runs only after an explicit user request to create or edit an image.", "Public outputs omit absolute paths and source-specific identities."]
+    },
+    {
+      "skill": "mcbe-json-ui-ir-authoring",
+      "skillStatus": "implemented",
+      "purpose": "Translate measured layout intent into solver-ready IR constraints.",
+      "toolSelections": [
+        { "id": "design.search", "phase": "evidence", "required": false, "reason": "Use an existing measured recipe when the catalog is available." },
+        { "id": "project.init", "phase": "author", "required": false, "reason": "Create a non-overwriting starter IR." },
+        { "id": "ir.validate", "phase": "validate", "required": true, "reason": "Reject invalid ids, references, and solver-stage units early." },
+        { "id": "pipeline.run", "phase": "compile", "required": true, "reason": "Produce solved geometry and the first validated JSON UI skeleton." }
+      ],
+      "workflow": ["design.search", "project.init", "ir.validate", "pipeline.run"],
+      "successCriteria": ["Geometry intent is represented as explicit constraints.", "Compiled geometry is changed only by editing the source IR."],
+      "boundaries": ["Dynamic Bedrock expressions are not solver inputs.", "Do not hand-tune compiled offsets to fix geometry."]
+    },
+    {
+      "skill": "mcbe-json-ui-tools-runner",
+      "skillStatus": "implemented",
+      "purpose": "Execute the deterministic IR, preview, pack, and evaluation toolchain in dependency order.",
+      "toolSelections": [
+        { "id": "system.doctor", "phase": "preflight", "required": true, "reason": "Check local tool prerequisites." },
+        { "id": "pipeline.run", "phase": "compile", "required": true, "reason": "Run the complete geometry pipeline." },
+        { "id": "preview.texture", "phase": "preview", "required": false, "reason": "Generate texture-aware PC/touch state evidence." },
+        { "id": "final-rp.mcp", "phase": "final-evidence", "required": false, "reason": "Inspect integrated RP states and screenshot evidence under the v2 profile gate." },
+        { "id": "pack.validate", "phase": "pack", "required": false, "reason": "Validate complete RP registration and assets." },
+        { "id": "eval.offline", "phase": "evaluate", "required": false, "reason": "Run fixed deterministic gates." },
+        { "id": "public.audit", "phase": "release", "required": false, "reason": "Reject public-release leaks before handoff." }
+      ],
+      "workflow": ["system.doctor", "pipeline.run", "preview.texture", "pack.validate", "final-rp.mcp", "eval.offline", "public.audit"],
+      "successCriteria": ["Every invoked command is implemented according to skill.doctor.", "All produced warnings are reviewed and reported."],
+      "boundaries": ["Skip unavailable capabilities explicitly rather than simulating their result.", "Do not use the compatibility render or IR preview for pixel-accurate claims.", "Static success is not runtime success."]
+    },
+    {
+      "skill": "mcbe-json-ui-reference",
+      "skillStatus": "implemented",
+      "purpose": "Look up exact JSON UI properties, bindings, recipes, and vanilla evidence without guessing.",
+      "toolSelections": [
+        { "id": "design.search", "phase": "lookup", "required": false, "reason": "Search measured recipes in the current catalog." },
+        { "id": "asset.search", "phase": "lookup", "required": false, "reason": "Search verified local UI asset metadata while keeping local paths hidden by default." },
+        { "id": "vanilla.index", "phase": "lookup", "required": false, "reason": "Refresh local vanilla screen and texture evidence when stale." },
+        { "id": "tools.describe", "phase": "tooling", "required": false, "reason": "Inspect the exact contract for a deterministic lookup tool." }
+      ],
+      "workflow": ["vanilla.index", "design.search", "asset.search", "tools.describe"],
+      "successCriteria": ["Exact names cite a local schema, sample, recipe, or vanilla index."],
+      "boundaries": ["Do not invent unsupported properties, bindings, or texture paths."]
+    },
+    {
+      "skill": "mcbe-json-ui-samples",
+      "skillStatus": "implemented",
+      "purpose": "Mine working sample packs into traceable, source-tiered patterns.",
+      "toolSelections": [
+        { "id": "sources.validate", "phase": "preflight", "required": true, "reason": "Confirm source and redistribution boundaries." },
+        { "id": "corpus.inventory", "phase": "discover", "required": false, "reason": "Inventory a broad local example archive into neutral local-only sources and recipe candidates before selecting packs." },
+        { "id": "source.scan", "phase": "collect", "required": true, "reason": "Extract UI-only evidence from the chosen source." },
+        { "id": "catalog.build", "phase": "index", "required": true, "reason": "Build recipe and evidence relationships." },
+        { "id": "design.search", "phase": "query", "required": true, "reason": "Return concrete patterns rather than general prose." },
+        { "id": "asset.search", "phase": "assets", "required": false, "reason": "Find adjacent UI textures by category, size, source, hash, and duplicate state." }
+      ],
+      "workflow": ["sources.validate", "corpus.inventory", "source.scan", "catalog.build", "design.search", "asset.search"],
+      "successCriteria": ["Every extracted pattern retains source tier and evidence paths.", "Private or restricted inputs remain local-only."],
+      "boundaries": ["Quarantine sources are searchable only locally and are never automatic recommendations."]
+    },
+    {
+      "skill": "mcbe-json-ui-patterns",
+      "skillStatus": "implemented",
+      "purpose": "Select and adapt a proven UI pattern while preserving its evidence and device constraints.",
+      "toolSelections": [
+        { "id": "design.search", "phase": "select", "required": false, "reason": "Find catalog patterns by role and target profile." },
+        { "id": "pipeline.run", "phase": "layout", "required": false, "reason": "Revalidate layout changes expressed through IR." },
+        { "id": "pack.validate", "phase": "integrate", "required": false, "reason": "Check the adapted pack wiring and texture references." }
+      ],
+      "workflow": ["design.search", "pipeline.run", "pack.validate"],
+      "successCriteria": ["Pattern adaptation cites the source pattern and revalidates changed geometry."],
+      "boundaries": ["Do not copy source-specific ids, credits, or private assets into public output."]
+    },
+    {
+      "skill": "mcbe-json-ui-server-forms",
+      "skillStatus": "implemented",
+      "purpose": "Implement and validate title routing, form collections, button order, states, and pack integration.",
+      "toolSelections": [
+        { "id": "design.search", "phase": "select", "required": false, "reason": "Select a measured server-form shell or button-grid recipe." },
+        { "id": "pipeline.run", "phase": "layout", "required": false, "reason": "Solve static shell and grid geometry." },
+        { "id": "pack.validate", "phase": "integrate", "required": true, "reason": "Check _ui_defs, namespaces, textures, and modifications." },
+        { "id": "prompt.lint", "phase": "handoff", "required": false, "reason": "Ensure button order and protocol acceptance criteria are explicit." }
+      ],
+      "workflow": ["design.search", "pipeline.run", "pack.validate", "prompt.lint"],
+      "successCriteria": ["Title route, collection owner, button indexes, and cancel behavior are traced together.", "All static pack references validate."],
+      "boundaries": ["Pack validation cannot prove a live form binding or click event."]
+    },
+    {
+      "skill": "mcbe-json-ui-addon-integration",
+      "skillStatus": "implemented",
+      "purpose": "Trace and validate JSON UI, textures, RP registration, and BP protocol ownership together.",
+      "toolSelections": [
+        { "id": "source.scan", "phase": "trace", "required": false, "reason": "Collect linked RP/BP evidence from configured read-only sources." },
+        { "id": "asset.search", "phase": "assets", "required": false, "reason": "Locate UI-specific texture candidates without copying them before license review." },
+        { "id": "pack.validate", "phase": "validate", "required": true, "reason": "Check RP UI and texture connections." },
+        { "id": "prompt.build", "phase": "handoff", "required": false, "reason": "Record the data owner, generated files, and runtime-only checks explicitly." }
+      ],
+      "workflow": ["source.scan", "asset.search", "pack.validate", "prompt.build"],
+      "successCriteria": ["Every dynamic value has a named owner and sender path.", "RP and BP changes are validated as one feature boundary."],
+      "boundaries": ["Do not hardcode dynamic state in RP labels.", "Runtime protocol behavior remains unverified until Bedrock execution."]
+    },
+    {
+      "skill": "mcbe-json-ui-debugging",
+      "skillStatus": "implemented",
+      "purpose": "Localize JSON UI failures using the smallest deterministic validation surface first.",
+      "toolSelections": [
+        { "id": "content-log.audit", "phase": "runtime-log", "required": false, "reason": "Separate target UI signatures from external Sound and Script noise." },
+        { "id": "ui.route.trace", "phase": "route", "required": false, "reason": "Trace the failing control route." },
+        { "id": "pack.installed.verify", "phase": "installed-pack", "required": false, "reason": "Confirm the inspected source matches the installed pack." },
+        { "id": "ui.validate", "phase": "screen", "required": false, "reason": "Check one compiled or handcrafted screen." },
+        { "id": "pack.validate", "phase": "pack", "required": false, "reason": "Check registration and asset connections." },
+        { "id": "repository.audit", "phase": "repository", "required": false, "reason": "Check repository-level broken references and JSON." },
+        { "id": "preview.diff", "phase": "geometry", "required": false, "reason": "Quantify a visual geometry regression." }
+      ],
+      "workflow": ["content-log.audit", "ui.route.trace", "pack.installed.verify", "ui.validate", "pack.validate", "preview.diff", "repository.audit"],
+      "successCriteria": ["The failure is assigned to IR, JSON UI behavior, pack wiring, asset, or runtime ownership.", "Static and runtime evidence are not conflated."],
+      "boundaries": ["Do not implement a fix when the request is diagnosis only."]
+    },
+    {
+      "skill": "mcbe-json-ui-vanilla-assets",
+      "skillStatus": "implemented",
+      "purpose": "Verify vanilla screen and texture paths against local evidence.",
+      "toolSelections": [
+        { "id": "vanilla.index", "phase": "index", "required": false, "reason": "Refresh local evidence when sources or schema changed." },
+        { "id": "pack.validate", "phase": "target", "required": false, "reason": "Confirm the selected target RP can resolve its references." }
+      ],
+      "workflow": ["vanilla.index", "pack.validate"],
+      "successCriteria": ["Every vanilla path has a source and file evidence record."],
+      "boundaries": ["Index presence does not mean the target RP owns a custom texture."]
+    },
+    {
+      "skill": "mcbe-json-ui-self-bootstrap",
+      "skillStatus": "implemented",
+      "purpose": "Prepare and diagnose the repository-local JSON UI tool environment.",
+      "toolSelections": [
+        { "id": "system.setup", "phase": "bootstrap", "required": false, "reason": "Create state only when first-run setup is missing." },
+        { "id": "system.doctor", "phase": "verify", "required": true, "reason": "Verify the resulting local environment." },
+        { "id": "repository.audit", "phase": "verify", "required": false, "reason": "Check repository integrity after setup when needed." }
+      ],
+      "workflow": ["system.setup", "system.doctor", "repository.audit"],
+      "successCriteria": ["Repository-local state and dependencies pass doctor checks."],
+      "boundaries": ["Never install global packages, elevate privileges, or modify the user's system."]
+    },
+    {
+      "skill": "mcbe-json-ui-basics",
+      "skillStatus": "implemented",
+      "purpose": "Teach pack and screen fundamentals without invoking implementation tools unnecessarily.",
+      "toolSelections": [
+        { "id": "tools.describe", "phase": "optional", "required": false, "reason": "Explain an exact tool contract only when the user asks to proceed." }
+      ],
+      "workflow": ["tools.describe"],
+      "successCriteria": ["The explanation distinguishes RP structure, screen registration, and runtime limitations."],
+      "boundaries": ["Do not run build tools for a purely explanatory request."]
+    },
+    {
+      "skill": "mcbe-json-ui-foundations",
+      "skillStatus": "implemented",
+      "purpose": "Reason about namespaces, _ui_defs, factories, and modifications, with optional pack validation.",
+      "toolSelections": [
+        { "id": "ui.route.trace", "phase": "trace", "required": false, "reason": "Trace exact registration, namespace, control, inheritance, and variable edges." },
+        { "id": "pack.validate", "phase": "validate", "required": false, "reason": "Confirm registration and reference structure when files are in scope." }
+      ],
+      "workflow": ["ui.route.trace", "pack.validate"],
+      "successCriteria": ["Every screen entry and namespace reference is traced from its owner."],
+      "boundaries": ["Do not claim runtime replacement success from static registration alone."]
+    },
+    {
+      "skill": "mcbe-json-ui-hud-and-chat",
+      "skillStatus": "implemented",
+      "purpose": "Build and verify HUD/chat layouts and message-driven protocols.",
+      "toolSelections": [
+        { "id": "pipeline.run", "phase": "layout", "required": false, "reason": "Solve static overlay geometry." },
+        { "id": "pack.validate", "phase": "pack", "required": true, "reason": "Check HUD/chat registration and asset references." },
+        { "id": "prompt.lint", "phase": "protocol", "required": false, "reason": "Keep payload and runtime acceptance criteria explicit." }
+      ],
+      "workflow": ["pipeline.run", "pack.validate", "prompt.lint"],
+      "successCriteria": ["Static geometry and dynamic message protocol are validated separately."],
+      "boundaries": ["Message parsing and click behavior require Bedrock runtime evidence."]
+    },
+    {
+      "skill": "mcbe-json-ui-logic",
+      "skillStatus": "implemented",
+      "purpose": "Implement binding, string, and visibility logic with explicit runtime assumptions.",
+      "toolSelections": [
+        { "id": "ui.validate", "phase": "static", "required": false, "reason": "Check the surrounding JSON UI structure." },
+        { "id": "prompt.lint", "phase": "contract", "required": false, "reason": "Ensure protocol inputs and unverified runtime behavior are named." }
+      ],
+      "workflow": ["ui.validate", "prompt.lint"],
+      "successCriteria": ["Binding sources, preserved text, parsing rules, and fallbacks are explicit."],
+      "boundaries": ["Static validators do not execute bindings or evaluate client data."]
+    },
+    {
+      "skill": "mcbe-json-ui-custom-toggles",
+      "skillStatus": "implemented",
+      "purpose": "Implement toggle factories and state visuals with static pack checks and state-aware preview when available.",
+      "toolSelections": [
+        { "id": "preview.texture", "phase": "states", "required": false, "reason": "Render default, hover, and pressed state evidence." },
+        { "id": "pack.validate", "phase": "pack", "required": true, "reason": "Check template and texture references." }
+      ],
+      "workflow": ["preview.texture", "pack.validate"],
+      "successCriteria": ["Every visible state and event path is represented and referenced."],
+      "boundaries": ["Focus and toggle interaction still require runtime verification."]
+    },
+    {
+      "skill": "mcbe-json-ui-schemas",
+      "skillStatus": "implemented",
+      "purpose": "Use schema sources as static evidence while documenting their coverage limits.",
+      "toolSelections": [
+        { "id": "ui.validate", "phase": "validate", "required": false, "reason": "Run the kit's structural validator alongside source schema lookup." },
+        { "id": "pack.validate", "phase": "pack", "required": false, "reason": "Check context that isolated schemas cannot cover." }
+      ],
+      "workflow": ["ui.validate", "pack.validate"],
+      "successCriteria": ["Schema findings and Bedrock runtime claims are clearly separated."],
+      "boundaries": ["Schema acceptance is not proof that the client supports a property in context."]
+    },
+    {
+      "skill": "mcbe-json-ui-tooling",
+      "skillStatus": "implemented",
+      "purpose": "Select practical authoring and validation tools from explicit machine-readable contracts.",
+      "toolSelections": [
+        { "id": "tools.list", "phase": "discover", "required": true, "reason": "List only registered tools and their status." },
+        { "id": "tools.describe", "phase": "inspect", "required": true, "reason": "Read the exact contract before invoking a tool." },
+        { "id": "asset.search", "phase": "example", "required": false, "reason": "Use the safe local asset search contract when authoring needs UI textures." },
+        { "id": "skill.doctor", "phase": "verify", "required": true, "reason": "Ensure the tool is implemented and available." }
+      ],
+      "workflow": ["tools.list", "tools.describe", "asset.search", "skill.doctor"],
+      "successCriteria": ["Selected tools have explicit inputs, outputs, failures, mutations, and evidence."],
+      "boundaries": ["External visual editors are research inputs, not validation authorities."]
+    },
+    {
+      "skill": "mcbe-json-ui-research",
+      "skillStatus": "implemented",
+      "purpose": "Choose evidence sources by authority, tier, redistribution, and task relevance.",
+      "toolSelections": [
+        { "id": "research.sync", "phase": "fixtures", "required": false, "reason": "Synchronize reviewed pinned repositories into ignored local mirrors when an offline compatibility fixture is required." },
+        { "id": "upstream.compat", "phase": "fixtures", "required": false, "reason": "Validate reviewed black-box baselines without executing external editor source." },
+        { "id": "upstream.compat.capture", "phase": "fixtures", "required": false, "reason": "Record a reviewed local observation for a pending fixture without automatic baseline promotion." },
+        { "id": "sources.validate", "phase": "preflight", "required": false, "reason": "Validate public/local boundaries before collection." },
+        { "id": "source.scan", "phase": "collect", "required": false, "reason": "Collect UI-only local evidence." },
+        { "id": "design.search", "phase": "query", "required": false, "reason": "Retrieve catalog evidence rather than rely on memory." },
+        { "id": "vanilla.index", "phase": "vanilla", "required": false, "reason": "Refresh local vanilla evidence." },
+        { "id": "public.audit", "phase": "release", "required": false, "reason": "Verify that public research outputs do not expose local or restricted source data." }
+      ],
+      "workflow": ["research.sync", "upstream.compat", "upstream.compat.capture", "sources.validate", "source.scan", "design.search", "vanilla.index", "public.audit"],
+      "successCriteria": ["Confirmed facts, inference, and unresolved claims are labeled."],
+      "boundaries": ["Do not redistribute local-only or unknown-license source content.", "External editors are compatibility fixtures, not Bedrock runtime or visual authorities."]
+    },
+    {
+      "skill": "mcbe-json-ui-vanilla-presets",
+      "skillStatus": "implemented",
+      "purpose": "Author IR that extends verified vanilla presets and validate the compiled skeleton.",
+      "toolSelections": [
+        { "id": "vanilla.index", "phase": "verify", "required": false, "reason": "Verify the referenced vanilla control source." },
+        { "id": "project.init", "phase": "author", "required": false, "reason": "Start from a preset-capable template." },
+        { "id": "pipeline.run", "phase": "compile", "required": true, "reason": "Compile and validate preset-based geometry." }
+      ],
+      "workflow": ["vanilla.index", "project.init", "pipeline.run"],
+      "successCriteria": ["Preset names and variables are verified and compiled geometry passes validation."],
+      "boundaries": ["Do not hand-roll a preset skeleton when a verified vanilla control owns it."]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "namespace": "server_form",
+  "reply_screen": {
+    "type": "stack_panel", "$title_token": "REPLY:", "collection_name": "custom_form",
+    "controls": [
+      { "input_factory": { "type": "panel", "factory": { "name": "custom_form_factory", "control_ids": { "input": "@server_form.custom_input" } } } },
+      { "clear": { "type": "button", "button_mappings": [{ "from_button_id": "button.menu_secondary_select", "to_button_id": "button.clear_custom_form" }] } },
+      { "submit": { "type": "button", "button_mappings": [{ "from_button_id": "button.menu_select", "to_button_id": "button.submit_custom_form" }] } }
+    ]
+  },
+  "custom_input@settings_common.option_text_edit": {
+    "$text_box_name": "reply_text",
+    "focus_enabled": true,
+    "bindings": [{ "binding_name": "#item_name" }]
+  },
+  "main_screen_content": { "controls": [{ "factory": { "name": "server_form_factory", "control_ids": { "custom_form": "@server_form.reply_screen" } } }] }
+}

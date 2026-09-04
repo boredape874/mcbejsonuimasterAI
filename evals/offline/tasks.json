@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "suite": "mcbe-json-ui-design-system-v2-offline",
+  "fixed": true,
+  "tasks": [
+    {
+      "id": "typography_state_gallery",
+      "example": "examples/v2/01-typography-state-gallery",
+      "surface": "form",
+      "profiles": [
+        "pc_1920x1080_gui3",
+        "touch_1280x720_gui2"
+      ],
+      "fixtures": [
+        "evals/fixtures/text-cases.json",
+        "evals/fixtures/button-states.json",
+        "evals/fixtures/color-ranges.json"
+      ],
+      "invariants": [
+        "all JSON files parse",
+        "all JavaScript files pass syntax check",
+        "_ui_defs entries resolve",
+        "referenced first-party textures exist",
+        "same-stem nine-slice metadata exists for stretchable textures",
+        "all JSON UI color components are within the normalized 0..1 range",
+        "all labels declare explicit size",
+        "repeated controls preserve equal size and gap",
+        "preview and measurement overlay exist",
+        "runtime-unverified results are not reported as Bedrock validated"
+      ],
+      "geometryToleranceUiUnits": 1
+    },
+    {
+      "id": "daily_rewards",
+      "example": "examples/v2/02-daily-rewards",
+      "surface": "form",
+      "profiles": [
+        "pc_1920x1080_gui3",
+        "touch_1280x720_gui2"
+      ],
+      "fixtures": [
+        "evals/fixtures/text-cases.json",
+        "evals/fixtures/button-states.json",
+        "evals/fixtures/color-ranges.json"
+      ],
+      "invariants": [
+        "all JSON files parse",
+        "all JavaScript files pass syntax check",
+        "_ui_defs entries resolve",
+        "referenced first-party textures exist",
+        "same-stem nine-slice metadata exists for stretchable textures",
+        "all JSON UI color components are within the normalized 0..1 range",
+        "all labels declare explicit size",
+        "repeated controls preserve equal size and gap",
+        "preview and measurement overlay exist",
+        "runtime-unverified results are not reported as Bedrock validated"
+      ],
+      "geometryToleranceUiUnits": 1
+    },
+    {
+      "id": "server_form_grid",
+      "example": "examples/v2/03-server-form-grid",
+      "surface": "form",
+      "profiles": [
+        "pc_1920x1080_gui3",
+        "touch_1280x720_gui2"
+      ],
+      "fixtures": [
+        "evals/fixtures/text-cases.json",
+        "evals/fixtures/button-states.json",
+        "evals/fixtures/color-ranges.json"
+      ],
+      "invariants": [
+        "all JSON files parse",
+        "all JavaScript files pass syntax check",
+        "_ui_defs entries resolve",
+        "referenced first-party textures exist",
+        "same-stem nine-slice metadata exists for stretchable textures",
+        "all JSON UI color components are within the normalized 0..1 range",
+        "all labels declare explicit size",
+        "repeated controls preserve equal size and gap",
+        "preview and measurement overlay exist",
+        "runtime-unverified results are not reported as Bedrock validated"
+      ],
+      "geometryToleranceUiUnits": 1
+    },
+    {
+      "id": "hud_minimap",
+      "example": "examples/v2/04-hud-minimap",
+      "surface": "hud",
+      "profiles": [
+        "pc_1920x1080_gui3",
+        "touch_1280x720_gui2"
+      ],
+      "fixtures": [
+        "evals/fixtures/text-cases.json",
+        "evals/fixtures/button-states.json",
+        "evals/fixtures/color-ranges.json"
+      ],
+      "invariants": [
+        "all JSON files parse",
+        "all JavaScript files pass syntax check",
+        "_ui_defs entries resolve",
+        "referenced first-party textures exist",
+        "same-stem nine-slice metadata exists for stretchable textures",
+        "all JSON UI color components are within the normalized 0..1 range",
+        "all labels declare explicit size",
+        "repeated controls preserve equal size and gap",
+        "preview and measurement overlay exist",
+        "runtime-unverified results are not reported as Bedrock validated"
+      ],
+      "geometryToleranceUiUnits": 1
+    },
+    {
+      "id": "book_quest",
+      "example": "examples/v2/05-book-quest",
+      "surface": "form",
+      "profiles": [
+        "pc_1920x1080_gui3",
+        "touch_1280x720_gui2"
+      ],
+      "fixtures": [
+        "evals/fixtures/text-cases.json",
+        "evals/fixtures/button-states.json",
+        "evals/fixtures/color-ranges.json"
+      ],
+      "invariants": [
+        "all JSON files parse",
+        "all JavaScript files pass syntax check",
+        "_ui_defs entries resolve",
+        "referenced first-party textures exist",
+        "same-stem nine-slice metadata exists for stretchable textures",
+        "all JSON UI color components are within the normalized 0..1 range",
+        "all labels declare explicit size",
+        "repeated controls preserve equal size and gap",
+        "preview and measurement overlay exist",
+        "runtime-unverified results are not reported as Bedrock validated"
+      ],
+      "geometryToleranceUiUnits": 1
+    },
+    {
+      "id": "casino_reels",
+      "example": "examples/v2/06-casino-reels",
+      "surface": "form",
+      "profiles": [
+        "pc_1920x1080_gui3",
+        "touch_1280x720_gui2"
+      ],
+      "fixtures": [
+        "evals/fixtures/text-cases.json",
+        "evals/fixtures/button-states.json",
+        "evals/fixtures/color-ranges.json"
+      ],
+      "invariants": [
+        "all JSON files parse",
+        "all JavaScript files pass syntax check",
+        "_ui_defs entries resolve",
+        "referenced first-party textures exist",
+        "same-stem nine-slice metadata exists for stretchable textures",
+        "all JSON UI color components are within the normalized 0..1 range",
+        "all labels declare explicit size",
+        "repeated controls preserve equal size and gap",
+        "preview and measurement overlay exist",
+        "runtime-unverified results are not reported as Bedrock validated"
+      ],
+      "geometryToleranceUiUnits": 1
+    },
+    {
+      "id": "responsive_shell",
+      "example": "examples/v2/07-responsive-shell",
+      "surface": "form",
+      "profiles": [
+        "pc_1920x1080_gui3",
+        "touch_1280x720_gui2"
+      ],
+      "fixtures": [
+        "evals/fixtures/text-cases.json",
+        "evals/fixtures/button-states.json",
+        "evals/fixtures/color-ranges.json"
+      ],
+      "invariants": [
+        "all JSON files parse",
+        "all JavaScript files pass syntax check",
+        "_ui_defs entries resolve",
+        "referenced first-party textures exist",
+        "same-stem nine-slice metadata exists for stretchable textures",
+        "all JSON UI color components are within the normalized 0..1 range",
+        "all labels declare explicit size",
+        "repeated controls preserve equal size and gap",
+        "preview and measurement overlay exist",
+        "runtime-unverified results are not reported as Bedrock validated"
+      ],
+      "geometryToleranceUiUnits": 1
+    }
+  ]
+}

@@ -64,7 +64,7 @@ Do not build long expression chains when a simpler expression or a server-side e
 Prefer:
 
 - simpler prefix parsing
-- preformatted text from PMMP or BP code
+- preformatted text from BP Script API or another server sender
 
 Over:
 
@@ -102,7 +102,7 @@ prefer adapting it over inventing a fresh version.
 
 ## Use server-side formatting intentionally
 
-For PMMP and BP-driven UI systems, it is often better to make the server send cleaner, more structured text tokens.
+For BP Script API and server-driven UI systems, it is often better to make the sender emit cleaner, more structured text tokens.
 
 Examples:
 

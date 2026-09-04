@@ -1,0 +1,33 @@
+{
+  "schema": "mcbe-jsonui-ai-kit/skill-routing@1",
+  "modes": ["quick", "standard", "deep"],
+  "answerProfiles": ["compact", "default", "detailed"],
+  "broadTaskKinds": ["broad", "mixed", "owner-unclear"],
+  "escalationReasons": ["ROUTE_AMBIGUOUS", "REQUIRED_TOOL_UNAVAILABLE", "BLOCKING_UNRESOLVED", "CACHE_MISMATCH", "CONTRACT_DIVERGENCE", "STATIC_RUNTIME_DISAGREEMENT", "RUNTIME_EVIDENCE_REQUIRED", "USER_AUTHORITY_REQUIRED"],
+  "maxEscalations": 2,
+  "routes": [
+    {"skill":"mcbe-json-ui-master","primaryFor":["broad","mixed","owner-unclear"],"antiTriggers":["exact-owner"],"defaultMode":"standard","referencesByNeed":{},"escalateWhen":["owner remains unclear"],"answerProfile":"compact"},
+    {"skill":"mcbe-json-ui-addon-integration","primaryFor":["addon-integration","rp-bp-contract","dependency-trace"],"antiTriggers":["json-ui-only"],"defaultMode":"standard","referencesByNeed":{"contract":"references/addon-map.md"},"escalateWhen":["BP sender required"],"answerProfile":"default"},
+    {"skill":"mcbe-json-ui-basics","primaryFor":["beginner-explanation","resource-pack-basics"],"antiTriggers":["implementation"],"defaultMode":"quick","referencesByNeed":{},"escalateWhen":["implementation requested"],"answerProfile":"compact"},
+    {"skill":"mcbe-json-ui-custom-toggles","primaryFor":["toggle","toggle-animation","toggle-state"],"antiTriggers":["button-only"],"defaultMode":"standard","referencesByNeed":{},"escalateWhen":["runtime state differs"],"answerProfile":"default"},
+    {"skill":"mcbe-json-ui-debugging","primaryFor":["runtime-error","non-rendering","incorrect-behavior","content-log"],"antiTriggers":["greenfield-layout"],"defaultMode":"quick","referencesByNeed":{},"escalateWhen":["owner ambiguous","runtime evidence required"],"answerProfile":"compact"},
+    {"skill":"mcbe-json-ui-final-rp-inspection","primaryFor":["final-rp-inspection","screenshot-comparison","state-render"],"antiTriggers":["ir-only"],"defaultMode":"deep","referencesByNeed":{},"escalateWhen":["runtime evidence required"],"answerProfile":"default"},
+    {"skill":"mcbe-json-ui-foundations","primaryFor":["ui-defs","namespace","screen-registration","factory"],"antiTriggers":["binding-only"],"defaultMode":"quick","referencesByNeed":{},"escalateWhen":["cross-namespace route"],"answerProfile":"compact"},
+    {"skill":"mcbe-json-ui-hud-and-chat","primaryFor":["hud","chat","title","actionbar","scoreboard"],"antiTriggers":["server-form-only"],"defaultMode":"standard","referencesByNeed":{},"escalateWhen":["BP protocol required"],"answerProfile":"default"},
+    {"skill":"mcbe-json-ui-ir-authoring","primaryFor":["layout","positioning","alignment","symmetry","pixel-geometry"],"antiTriggers":["binding-only"],"defaultMode":"standard","referencesByNeed":{},"escalateWhen":["dynamic behavior required"],"answerProfile":"compact"},
+    {"skill":"mcbe-json-ui-logic","primaryFor":["binding","expression","string-protocol","visibility-logic"],"antiTriggers":["layout-only"],"defaultMode":"standard","referencesByNeed":{},"escalateWhen":["runtime source unresolved"],"answerProfile":"default"},
+    {"skill":"mcbe-json-ui-patterns","primaryFor":["pattern-adaptation","reusable-pattern"],"antiTriggers":["exact-lookup"],"defaultMode":"standard","referencesByNeed":{"map":"references/pattern-map.md"},"escalateWhen":["source evidence missing"],"answerProfile":"default"},
+    {"skill":"mcbe-json-ui-reference","primaryFor":["exact-lookup","property-lookup","binding-lookup"],"antiTriggers":["implementation"],"defaultMode":"quick","referencesByNeed":{},"escalateWhen":["authority conflict"],"answerProfile":"compact"},
+    {"skill":"mcbe-json-ui-research","primaryFor":["source-research","authority-review"],"antiTriggers":["local-edit-only"],"defaultMode":"deep","referencesByNeed":{},"escalateWhen":["version evidence missing"],"answerProfile":"detailed"},
+    {"skill":"mcbe-json-ui-samples","primaryFor":["sample-analysis","pack-mining"],"antiTriggers":["unsupported-copy"],"defaultMode":"deep","referencesByNeed":{},"escalateWhen":["license unresolved"],"answerProfile":"detailed"},
+    {"skill":"mcbe-json-ui-schemas","primaryFor":["schema","vscode-schema","schema-coverage"],"antiTriggers":["runtime-proof"],"defaultMode":"quick","referencesByNeed":{},"escalateWhen":["schema disagreement"],"answerProfile":"compact"},
+    {"skill":"mcbe-json-ui-self-bootstrap","primaryFor":["bootstrap","setup-failure","tool-doctor"],"antiTriggers":["normal-operation"],"defaultMode":"quick","referencesByNeed":{},"escalateWhen":["required tool unavailable"],"answerProfile":"compact"},
+    {"skill":"mcbe-json-ui-server-forms","primaryFor":["server-form","form-buttons","title-route","form-input"],"antiTriggers":["hud-only","texture-path-only"],"defaultMode":"standard","referencesByNeed":{},"escalateWhen":["BP sender required","runtime state differs"],"answerProfile":"default"},
+    {"skill":"mcbe-json-ui-texture-design","primaryFor":["texture-design","nine-slice-design","ui-icon-design"],"antiTriggers":["layout-only","path-lookup"],"defaultMode":"standard","referencesByNeed":{},"escalateWhen":["generation requested"],"answerProfile":"default"},
+    {"skill":"mcbe-json-ui-tooling","primaryFor":["tool-selection","editor-workflow"],"antiTriggers":["ui-implementation"],"defaultMode":"quick","referencesByNeed":{},"escalateWhen":["tool contract missing"],"answerProfile":"compact"},
+    {"skill":"mcbe-json-ui-tools-runner","primaryFor":["run-tools","compile-ir","validate-ir"],"antiTriggers":["concept-only"],"defaultMode":"standard","referencesByNeed":{},"escalateWhen":["blocking tool failure"],"answerProfile":"compact"},
+    {"skill":"mcbe-json-ui-vanilla-assets","primaryFor":["vanilla-texture","vanilla-icon","atlas-path"],"antiTriggers":["original-art"],"defaultMode":"quick","referencesByNeed":{},"escalateWhen":["index stale"],"answerProfile":"compact"},
+    {"skill":"mcbe-json-ui-vanilla-presets","primaryFor":["vanilla-preset","common-dialog","common-button"],"antiTriggers":["custom-surface-only"],"defaultMode":"standard","referencesByNeed":{},"escalateWhen":["preset unresolved"],"answerProfile":"compact"},
+    {"skill":"mcbe-json-ui-visual-design","primaryFor":["visual-design","spacing","typography","visual-state"],"antiTriggers":["texture-generation-only"],"defaultMode":"standard","referencesByNeed":{},"escalateWhen":["screenshot comparison required"],"answerProfile":"default"}
+  ]
+}

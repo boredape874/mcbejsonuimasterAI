@@ -24,3 +24,4 @@ Prompt groups:
 - `12-prompt-to-ir.md` (tools layer)
 - `13-image-to-ir.md` (tools layer)
 - `14-advanced-adventure-ui.md`
+- `15-production-rpg-ui.md`

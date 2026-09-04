@@ -54,7 +54,7 @@ Use subtopic notes only for the exact problem:
 - pack merge and version update workflow
 - Bedrock resource-pack basics
 - JSON UI layout units
-- PMMP-to-JSON UI bridge
+- binding, server-form, and addon protocol integration
 - common failure triage
 - token-efficient routing
 - local example mining

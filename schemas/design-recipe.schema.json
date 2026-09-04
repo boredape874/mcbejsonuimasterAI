@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/boredape874/mcbejsonuimasterAI/schemas/design-recipe.schema.json",
+  "title": "Measured MCBE JSON UI design recipe catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "generatedAt", "contentHash", "recipes"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "generatedAt": { "type": ["string", "null"], "format": "date-time" },
+    "contentHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "recipes": { "type": "array", "items": { "$ref": "#/$defs/recipe" } }
+  },
+  "$defs": {
+    "pair": { "type": "array", "minItems": 2, "maxItems": 2 },
+    "recipe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "family", "role", "sourceTier", "targetProfiles", "controls", "padding", "gap", "anchors", "textRoles", "states", "textures", "protocol", "evidence", "validation", "redistribution"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]*$" },
+        "family": { "type": "string" },
+        "role": { "type": "string" },
+        "sourceTier": { "enum": ["gold", "gold-candidate", "pattern", "quarantine"] },
+        "targetProfiles": { "type": "array", "items": { "type": "string" } },
+        "rootSize": { "$ref": "#/$defs/pair" },
+        "controls": { "type": "array", "items": { "$ref": "#/$defs/control" } },
+        "padding": { "type": "array", "items": {} },
+        "gap": { "type": "array", "items": {} },
+        "anchors": { "type": "array", "items": { "type": "string" } },
+        "textRoles": { "type": "array", "items": { "type": "string" } },
+        "states": { "type": "array", "items": { "type": "string" } },
+        "textures": { "type": "array", "items": { "$ref": "#/$defs/texture" } },
+        "protocol": { "type": ["object", "null"] },
+        "evidence": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["sourceId", "screen"] } },
+        "validation": { "type": "object", "additionalProperties": false, "required": ["static", "visual", "runtime"], "properties": { "static": { "type": "boolean" }, "visual": { "type": "boolean" }, "runtime": { "type": "boolean" } } },
+        "warnings": { "type": "array", "items": { "type": "string" } },
+        "redistribution": { "enum": ["public", "metadata-only", "local-only", "prohibited"] }
+      }
+    },
+    "control": { "type": "object", "additionalProperties": false, "required": ["id", "type", "size", "offset", "anchorFrom", "anchorTo", "textRole", "states"], "properties": { "id": { "type": "string" }, "type": { "type": "string" }, "size": { "type": ["array", "null"] }, "offset": { "type": ["array", "null"] }, "anchorFrom": { "type": ["string", "null"] }, "anchorTo": { "type": ["string", "null"] }, "textRole": { "type": ["string", "null"] }, "states": { "type": "array", "items": { "type": "string" } } } },
+    "texture": { "type": "object", "required": ["reference", "kind", "path", "nineslice", "evidence"], "properties": { "reference": { "type": "string" }, "kind": { "enum": ["local-texture", "vanilla-texture"] }, "path": { "type": ["string", "null"] }, "nineslice": { "type": ["object", "null"] }, "image": { "type": ["object", "null"] }, "evidence": { "type": "array", "items": { "type": "object" } } } }
+  }
+}

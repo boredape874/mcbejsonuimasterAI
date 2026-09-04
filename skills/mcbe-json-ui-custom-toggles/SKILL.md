@@ -7,6 +7,14 @@ description: Design, debug, and implement custom Minecraft Bedrock JSON UI toggl
 
 Use this skill for Bedrock JSON UI toggle behavior, especially when a toggle should look animated, change hover/focus visuals, or drive other controls.
 
+## Contract
+
+- Input: target toggle or button template, required states and events, and the closest working source.
+- Output: chosen interaction pattern, exact controls/events to edit, and verification notes for each state.
+- Success: state ownership is explicit, default and hover/focus/pressed behavior is reachable, and server-form submission behavior is not accidentally consumed.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-custom-toggles` entry. Use only registered commands whose implementation is present; otherwise validate from source structure and Bedrock runtime evidence.
+
 ## Workflow
 
 1. Read `references/source-map.md` to pick the closest internal reference family before editing JSON UI.

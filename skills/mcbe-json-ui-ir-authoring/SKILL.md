@@ -7,7 +7,15 @@ description: Use when the user asks for layout, positioning, alignment, symmetry
 
 Use this skill when **the user's primary need is correct layout** — positions, sizes, alignment, symmetry, gaps. For dynamic bindings, animations, or Script API wiring, use the knowledge layer skills (`mcbe-json-ui-logic`, `mcbe-json-ui-hud-and-chat`, etc.) instead, then patch the compiled `ui.json` directly.
 
-For new UI planning where the user has not supplied a complete spec, read `../../docs/52-json-ui-intake-questionnaire.md` first, then translate the chosen layout constraints into IR.
+## Contract
+
+- Input: target profile, root bounds, element roles, visual evidence or recipe IDs, and explicit layout intent.
+- Output: `workspace/<screen>/ir.yaml`, declared constraints, assumptions, and the next non-geometry handoff.
+- Success: the IR validates, all visible relationships are constrained, solved geometry is stable, and unresolved dynamic values remain outside the solver.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-ir-authoring` entry. Confirm referenced tools exist before invocation; if the catalog or prompt helpers are unavailable, author from verified repository schemas and record that limitation.
+
+For new UI planning where the user has not supplied a complete spec, read `docs/52-json-ui-intake-questionnaire.md` first, then translate the chosen layout constraints into IR.
 
 ## When to choose IR vs raw JSON
 
@@ -16,7 +24,7 @@ For new UI planning where the user has not supplied a complete spec, read `../..
 | "build a HUD/panel/form like this image" | Yes |
 | "center this", "make these symmetric", "equal spacing", "align these" | Yes |
 | "fix the layout / nothing lines up" | Yes |
-| "add a binding", "wire it to my PMMP form", "animate this on focus" | No — edit `ui.json` directly using knowledge layer |
+| "add a binding", "wire it to my server form", "animate this on focus" | No — edit `ui.json` directly using knowledge layer |
 | "explain why this isn't loading" | No — knowledge layer first |
 
 If unsure, ask the user one short question.
@@ -63,5 +71,5 @@ Hand back:
 ## References
 
 - `references/intent-to-constraint.md`
-- `../../docs/41-ir-spec.md`
-- `../../schemas/ir.schema.json`
+- `docs/41-ir-spec.md`
+- `schemas/ir.schema.json`

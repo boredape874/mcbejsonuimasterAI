@@ -36,12 +36,12 @@ Avoid:
 - saying a skill or reference was used without naming the actual file opened
 - publishing restricted reference pack names, comments, credits, or texture paths when a neutral pattern summary is enough
 
-## PMMP and server context
+## Script API and server context
 
 When the UI depends on server text:
 
 - define the exact title/actionbar/chat/form payload
-- say where PMMP or Script API sends it
+- say where BP Script API or another server sender emits it
 - state if JSON UI is parsing or only displaying it
 - when the user asks for a visual design but does not specify a style, offer 2-3 concrete design references before implementing the final look
 

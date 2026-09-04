@@ -3,9 +3,10 @@
 // Safe to re-run. Never installs Node, never elevates, never modifies system.
 
 import { spawnSync } from "node:child_process";
-import { PATHS } from "./_lib/paths.mjs";
+import { PATHS, VANILLA_INDEX_SCHEMAS } from "./_lib/paths.mjs";
 import { log } from "./_lib/log.mjs";
-import { exists, ensureDir, writeJson, readJson } from "./_lib/fsx.mjs";
+import { exists, ensureDir, writeJsonAtomic, readJson } from "./_lib/fsx.mjs";
+import { packageLockSha256 } from "./_lib/dependency-revision.mjs";
 
 const STATE_VERSION = 1;
 
@@ -57,9 +58,15 @@ async function ensureWorkspace() {
 
 async function maybeBuildVanillaIndex() {
   const screensExists = await exists(PATHS.vanillaIndexScreens);
-  if (screensExists) {
-    log.ok("vanilla-index already built");
-    return "ok";
+  const texturesExists = await exists(PATHS.vanillaIndexTextures);
+  if (screensExists && texturesExists) {
+    const screens = await readJson(PATHS.vanillaIndexScreens).catch(() => null);
+    const textures = await readJson(PATHS.vanillaIndexTextures).catch(() => null);
+    if (screens?.schema === VANILLA_INDEX_SCHEMAS.screens && textures?.schema === VANILLA_INDEX_SCHEMAS.textures) {
+      log.ok("vanilla-index already built");
+      return "ok";
+    }
+    log.info("vanilla-index schema changed; rebuilding");
   }
   const ztech = await exists(PATHS.ztechMirror);
   const samples = await exists(PATHS.bedrockSamplesUi);
@@ -84,12 +91,15 @@ async function maybeBuildVanillaIndex() {
 }
 
 async function writeState(node, deps, vanillaIndex) {
+  const packageLockHash = await packageLockSha256(PATHS.root);
   const state = {
     version: STATE_VERSION,
     checkedAt: new Date().toISOString(),
     node,
     deps,
+    dependenciesReady: deps === "ok" || deps === "ok-no-optional",
     vanillaIndex,
+    packageLockHash,
     warnings: [],
   };
   if (deps === "ok-no-optional") {
@@ -98,7 +108,7 @@ async function writeState(node, deps, vanillaIndex) {
   if (vanillaIndex !== "ok") {
     state.warnings.push("vanilla-index unavailable; lookups will be limited");
   }
-  await writeJson(PATHS.setupState, state);
+  await writeJsonAtomic(PATHS.setupState, state);
   log.ok(".agent/state/setup-state.json written");
   return state;
 }

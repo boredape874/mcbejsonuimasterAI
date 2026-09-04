@@ -1,0 +1,983 @@
+{
+  "schemaVersion": "1.0.0",
+  "tools": [
+    {
+      "id": "system.setup",
+      "status": "implemented",
+      "purpose": "Bootstrap repository-local dependencies and state without modifying global Node settings.",
+      "command": { "executable": "node", "script": "tools/setup.mjs", "display": "node tools/setup.mjs" },
+      "arguments": [],
+      "inputs": [{ "name": "repository", "kind": "directory", "required": true, "description": "Repository root containing package.json." }],
+      "outputs": [{ "name": "setup_state", "kind": "file", "required": true, "format": "JSON", "pathPattern": ".agent/state/setup-state.json", "description": "Recorded local bootstrap state." }],
+      "preconditions": ["Node.js 18.17 or newer is available."],
+      "mutates": { "mode": "repository", "paths": ["node_modules", ".agent/state", "workspace", "vanilla-index"], "description": "May install repository-local dependencies and create local state directories." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 2, "meaning": "Node.js is too old.", "recovery": "Install a supported Node.js version outside this tool, then rerun." },
+        { "exitCode": 3, "meaning": "Local npm installation failed.", "recovery": "Read .agent/doctor.md and run system.doctor before retrying." }
+      ],
+      "evidenceProduced": ["Setup-state JSON with dependency and vanilla-index status."],
+      "unsupportedBehavior": ["Does not install Node.js, use sudo, or change global npm configuration."],
+      "supports": { "help": false, "json": false, "report": false }
+    },
+    {
+      "id": "system.doctor",
+      "status": "implemented",
+      "purpose": "Check repository-local prerequisites and optionally apply whitelisted repairs.",
+      "command": { "executable": "node", "script": "tools/doctor.mjs", "display": "node tools/doctor.mjs [--quick|--fix|--verbose]" },
+      "arguments": [
+        { "name": "quick", "kind": "flag", "flag": "--quick", "required": false, "valueType": "boolean", "description": "Run the short pre-task health check." },
+        { "name": "fix", "kind": "flag", "flag": "--fix", "required": false, "valueType": "boolean", "description": "Attempt only whitelisted local repairs." },
+        { "name": "verbose", "kind": "flag", "flag": "--verbose", "required": false, "valueType": "boolean", "description": "Print full result details." }
+      ],
+      "inputs": [{ "name": "repository", "kind": "directory", "required": true, "description": "Repository root and local setup state." }],
+      "outputs": [{ "name": "diagnostics", "kind": "stdout", "required": true, "format": "text", "description": "Named prerequisite checks and repair suggestions." }],
+      "preconditions": ["Node.js can execute ES modules."],
+      "mutates": { "mode": "repository", "paths": ["node_modules", ".agent/state", "vanilla-index"], "description": "Read-only unless --fix is supplied; --fix uses a whitelist." },
+      "successExitCodes": [0],
+      "failures": [{ "exitCode": 4, "meaning": "One or more full-mode checks failed.", "recovery": "Apply the reported local fix or rerun with --fix after reviewing it." }],
+      "evidenceProduced": ["Per-check health result in stdout."],
+      "unsupportedBehavior": ["Quick mode is a sanity check and does not prove optional renderer availability."],
+      "supports": { "help": false, "json": false, "report": false }
+    },
+    {
+      "id": "project.init",
+      "status": "implemented",
+      "purpose": "Create a non-overwriting IR workspace from a bundled template.",
+      "command": { "executable": "node", "script": "tools/init-project.mjs", "display": "node tools/init-project.mjs <name> [--template <id>]" },
+      "arguments": [
+        { "name": "name", "kind": "positional", "required": true, "valueType": "string", "description": "Lowercase workspace name." },
+        { "name": "template", "kind": "option", "flag": "--template", "required": false, "valueType": "enum", "values": ["minimal", "rpg_hud", "rpg_menu"], "description": "Bundled IR template." },
+        { "name": "list-templates", "kind": "flag", "flag": "--list-templates", "required": false, "valueType": "boolean", "description": "List available templates without writing files." }
+      ],
+      "inputs": [{ "name": "template", "kind": "file", "required": false, "format": "YAML", "pathPattern": "templates/ir/*.yaml", "description": "Selected bundled starter template." }],
+      "outputs": [{ "name": "ir", "kind": "file", "required": true, "format": "YAML", "pathPattern": "workspace/<name>/ir.yaml", "description": "New editable layout IR." }],
+      "preconditions": ["The requested workspace name is lowercase and the target ir.yaml does not already exist."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<name>/ir.yaml"], "description": "Creates one new IR and refuses to overwrite it." },
+      "successExitCodes": [0],
+      "failures": [{ "exitCode": 64, "meaning": "Invalid name, template, or argument shape.", "recovery": "List templates and retry with a valid lowercase name." }],
+      "evidenceProduced": ["Created IR path and selected template in stdout."],
+      "unsupportedBehavior": ["Does not overwrite or merge an existing IR."],
+      "supports": { "help": false, "json": false, "report": false }
+    },
+    {
+      "id": "ir.validate",
+      "status": "implemented",
+      "purpose": "Validate IR schema, references, and solver-stage pixel units.",
+      "command": { "executable": "node", "script": "tools/ir-validate.mjs", "display": "node tools/ir-validate.mjs <ir.yaml>" },
+      "arguments": [{ "name": "ir", "kind": "positional", "required": true, "valueType": "path", "description": "IR YAML to validate." }],
+      "inputs": [{ "name": "ir", "kind": "file", "required": true, "format": "YAML", "description": "Layout IR." }],
+      "outputs": [{ "name": "validation", "kind": "stdout", "required": true, "format": "text", "description": "Schema and cross-reference result." }],
+      "preconditions": ["The IR path is inside the repository and schemas/ir.schema.json exists."],
+      "mutates": { "mode": "none", "paths": [], "description": "Validation is read-only." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 5, "meaning": "IR schema validation failed.", "recovery": "Fix the reported schema path in ir.yaml." },
+        { "exitCode": 6, "meaning": "IR reference or solver-unit validation failed.", "recovery": "Fix unknown ids or replace dynamic dimensions with solver-ready pixels." },
+        { "exitCode": 64, "meaning": "IR argument is missing.", "recovery": "Pass one ir.yaml path." }
+      ],
+      "evidenceProduced": ["Successful validation log or exact schema/reference failures."],
+      "unsupportedBehavior": ["Does not solve geometry or validate Bedrock runtime behavior."],
+      "supports": { "help": false, "json": false, "report": false }
+    },
+    {
+      "id": "layout.solve",
+      "status": "implemented",
+      "purpose": "Resolve IR anchors and constraints to deterministic absolute pixel rectangles.",
+      "command": { "executable": "node", "script": "tools/solve.mjs", "display": "node tools/solve.mjs <ir.yaml> <solved.json>" },
+      "arguments": [
+        { "name": "ir", "kind": "positional", "required": true, "valueType": "path", "description": "Validated IR YAML." },
+        { "name": "solved", "kind": "positional", "required": true, "valueType": "path", "description": "Output solved JSON path." }
+      ],
+      "inputs": [{ "name": "ir", "kind": "file", "required": true, "format": "YAML", "description": "Validated layout IR." }],
+      "outputs": [{ "name": "solved", "kind": "file", "required": true, "format": "JSON", "description": "Absolute rectangles, solver log, and convergence state." }],
+      "preconditions": ["ir.validate has succeeded."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<project>/solved.json"], "description": "Writes the selected solved output." },
+      "successExitCodes": [0],
+      "failures": [{ "exitCode": 7, "meaning": "Constraints did not converge within the iteration limit.", "recovery": "Inspect the written solver log and resolve conflicting IR constraints." }],
+      "evidenceProduced": ["Solved rectangles and constraint application log."],
+      "unsupportedBehavior": ["Does not resolve runtime bindings, collections, or dynamic Bedrock size expressions."],
+      "supports": { "help": false, "json": false, "report": false }
+    },
+    {
+      "id": "ui.compile",
+      "status": "implemented",
+      "purpose": "Compile solved geometry into a Bedrock JSON UI skeleton.",
+      "command": { "executable": "node", "script": "tools/compile.mjs", "display": "node tools/compile.mjs <solved.json> <ui.json>" },
+      "arguments": [
+        { "name": "solved", "kind": "positional", "required": true, "valueType": "path", "description": "Solved IR JSON." },
+        { "name": "ui", "kind": "positional", "required": true, "valueType": "path", "description": "Compiled JSON UI output path." }
+      ],
+      "inputs": [{ "name": "solved", "kind": "file", "required": true, "format": "JSON", "description": "Valid solved IR." }],
+      "outputs": [{ "name": "ui", "kind": "file", "required": true, "format": "JSON", "description": "Compiled Bedrock JSON UI skeleton." }],
+      "preconditions": ["layout.solve produced a valid solved document."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<project>/ui.json"], "description": "Writes the selected compiled UI output." },
+      "successExitCodes": [0],
+      "failures": [{ "exitCode": 8, "meaning": "Input is not a valid solved IR document.", "recovery": "Rerun layout.solve from the source IR instead of editing solved.json." }],
+      "evidenceProduced": ["Compiled control tree preserving solved positions and sizes."],
+      "unsupportedBehavior": ["Does not complete complex bindings, animations, or runtime protocols."],
+      "supports": { "help": false, "json": false, "report": false }
+    },
+    {
+      "id": "ui.validate",
+      "status": "implemented",
+      "purpose": "Check JSON UI structure and optionally audit it against solved geometry.",
+      "command": { "executable": "node", "script": "tools/validate.mjs", "display": "node tools/validate.mjs <ui.json> [<solved.json>] [--report <path>]" },
+      "arguments": [
+        { "name": "ui", "kind": "positional", "required": true, "valueType": "path", "description": "JSON UI file." },
+        { "name": "solved", "kind": "positional", "required": false, "valueType": "path", "description": "Solved geometry for layout checks." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Explicit report output path." }
+      ],
+      "inputs": [
+        { "name": "ui", "kind": "file", "required": true, "format": "JSON", "description": "JSON UI to validate." },
+        { "name": "solved", "kind": "file", "required": false, "format": "JSON", "description": "Solved geometry for overflow and constraint checks." }
+      ],
+      "outputs": [{ "name": "report", "kind": "report", "required": true, "format": "JSON", "pathPattern": "workspace/<project>/report.json", "description": "Errors and warnings with geometry evidence when available." }],
+      "preconditions": ["The input is parseable JSON."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<project>/report.json"], "description": "Writes only a validation report." },
+      "successExitCodes": [0],
+      "failures": [{ "exitCode": 9, "meaning": "Structural or geometry validation failed.", "recovery": "Fix the source IR for geometry issues or the owning raw JSON UI layer for behavior issues." }],
+      "evidenceProduced": ["Machine-readable validation errors and warnings."],
+      "unsupportedBehavior": ["A clean report does not prove Bedrock runtime rendering or input behavior."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
+      "id": "pipeline.run",
+      "status": "implemented",
+      "purpose": "Run IR validation, solve, compile, and JSON UI validation as one fail-fast pipeline.",
+      "command": { "executable": "node", "script": "tools/run.mjs", "display": "node tools/run.mjs <ir.yaml> [--out <dir>]" },
+      "arguments": [
+        { "name": "ir", "kind": "positional", "required": true, "valueType": "path", "description": "Source IR YAML." },
+        { "name": "out", "kind": "option", "flag": "--out", "required": false, "valueType": "path", "description": "Output directory; defaults beside the IR." }
+      ],
+      "inputs": [{ "name": "ir", "kind": "file", "required": true, "format": "YAML", "description": "Source layout IR." }],
+      "outputs": [
+        { "name": "solved", "kind": "file", "required": true, "format": "JSON", "description": "Solved geometry." },
+        { "name": "ui", "kind": "file", "required": true, "format": "JSON", "description": "Compiled JSON UI." },
+        { "name": "report", "kind": "report", "required": true, "format": "JSON", "description": "Validation report." }
+      ],
+      "preconditions": ["Source IR is the geometry source of truth."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<project>/solved.json", "workspace/<project>/ui.json", "workspace/<project>/report.json"], "description": "Writes deterministic pipeline artifacts." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 5, "meaning": "IR schema failed.", "recovery": "Fix ir.yaml and rerun the full pipeline." },
+        { "exitCode": 6, "meaning": "IR references or units failed.", "recovery": "Fix ir.yaml references or pixel sizes." },
+        { "exitCode": 8, "meaning": "Solved input could not compile.", "recovery": "Rerun after fixing IR; do not edit compiled output." },
+        { "exitCode": 9, "meaning": "Compiled UI validation failed.", "recovery": "Read report.json and fix the source IR." },
+        { "exitCode": 64, "meaning": "IR path is missing.", "recovery": "Pass one ir.yaml path." }
+      ],
+      "evidenceProduced": ["Solved geometry, compiled UI, and validator report from one invocation."],
+      "unsupportedBehavior": ["Does not replace hand-finishing or Bedrock runtime validation."],
+      "supports": { "help": false, "json": false, "report": false }
+    },
+    {
+      "id": "preview.render",
+      "status": "implemented",
+      "purpose": "Run the texture-aware PC/touch preview engine through its backward-compatible render entry point.",
+      "command": { "executable": "node", "script": "tools/render.mjs", "display": "node tools/render.mjs <ui.json> [<solved.json>] [options]" },
+      "arguments": [
+        { "name": "ui", "kind": "positional", "required": true, "valueType": "path", "description": "Compiled JSON UI." },
+        { "name": "solved", "kind": "positional", "required": false, "valueType": "path", "description": "Solved geometry; inferred beside ui.json if omitted." },
+        { "name": "profiles", "kind": "option", "flag": "--profiles", "required": false, "valueType": "string", "description": "Comma-separated pc,touch profiles." },
+        { "name": "states", "kind": "option", "flag": "--states", "required": false, "valueType": "string", "description": "Comma-separated default,hover,pressed states." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Explicit preview report path." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print the final report as JSON." },
+        { "name": "no-image", "kind": "flag", "flag": "--no-image", "required": false, "valueType": "boolean", "description": "Write geometry and reports without raster output." }
+      ],
+      "inputs": [
+        { "name": "ui", "kind": "file", "required": true, "format": "JSON", "description": "Compiled UI metadata." },
+        { "name": "solved", "kind": "file", "required": true, "format": "JSON", "description": "Solved rectangles." }
+      ],
+      "outputs": [
+        { "name": "coordinates", "kind": "report", "required": true, "format": "JSON", "pathPattern": "workspace/<project>/coords.json", "description": "Deterministic flattened rectangles." },
+        { "name": "unsupported", "kind": "report", "required": true, "format": "JSON", "pathPattern": "workspace/<project>/unsupported.json", "description": "Unsupported control types and properties." },
+        { "name": "preview_report", "kind": "report", "required": true, "format": "JSON", "pathPattern": "workspace/<project>/preview-report.json", "description": "Profiles, states, diagnostics, and output paths." },
+        { "name": "previews", "kind": "file", "required": false, "format": "PNG", "pathPattern": "workspace/<project>/preview-<profile>-<state>.png", "description": "Texture-aware state previews and contact sheet when canvas is available." }
+      ],
+      "preconditions": ["Solved geometry exists; PNG output additionally requires @napi-rs/canvas."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<project>/coords.json", "workspace/<project>/unsupported.json", "workspace/<project>/preview-report.json", "workspace/<project>/preview-*.png"], "description": "Writes preview evidence beside the UI." },
+      "successExitCodes": [0],
+      "failures": [{ "exitCode": 64, "meaning": "UI input is missing.", "recovery": "Pass ui.json and ensure solved.json is available." }],
+      "evidenceProduced": ["Coordinates, unsupported-property list, per-profile/state diagnostics, and optional texture-aware contact sheet."],
+      "unsupportedBehavior": ["Does not emulate Bedrock runtime bindings, collections, input dispatch, or undocumented properties."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "preview.diff",
+      "status": "implemented",
+      "purpose": "Compare two coordinate reports or raster previews and record differences.",
+      "command": { "executable": "node", "script": "tools/diff.mjs", "display": "node tools/diff.mjs <target> <preview> [--out <diff.png>]" },
+      "arguments": [
+        { "name": "target", "kind": "positional", "required": true, "valueType": "path", "description": "Target PNG or coords.json." },
+        { "name": "preview", "kind": "positional", "required": true, "valueType": "path", "description": "Preview PNG or coords.json." },
+        { "name": "out", "kind": "option", "flag": "--out", "required": false, "valueType": "path", "description": "Raster difference output path." }
+      ],
+      "inputs": [
+        { "name": "target", "kind": "file", "required": true, "description": "Reference coordinates or image." },
+        { "name": "preview", "kind": "file", "required": true, "description": "Generated coordinates or image." }
+      ],
+      "outputs": [{ "name": "difference", "kind": "report", "required": true, "format": "JSON", "description": "Coordinate deltas or pixel mismatch count." }],
+      "preconditions": ["Both inputs use the same format; PNG comparison requires pngjs and pixelmatch."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<project>/diff-coords.json", "workspace/<project>/diff-image.json", "workspace/<project>/diff.png"], "description": "Writes comparison evidence beside the preview." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 2, "meaning": "Raster dependencies are unavailable.", "recovery": "Use coords.json comparison or install optional local dependencies through setup." },
+        { "exitCode": 8, "meaning": "The compared artifacts differ.", "recovery": "Inspect the diff report and update source IR rather than compiled JSON." },
+        { "exitCode": 64, "meaning": "Two inputs were not supplied.", "recovery": "Pass a target and preview pair." }
+      ],
+      "evidenceProduced": ["Per-control coordinate deltas or pixel mismatch report."],
+      "unsupportedBehavior": ["A zero diff does not prove interaction, binding, or device runtime behavior."],
+      "supports": { "help": false, "json": false, "report": false }
+    },
+    {
+      "id": "pack.validate",
+      "status": "implemented",
+      "purpose": "Validate pack UI registration, JSONC, namespaces, control references, and textures.",
+      "command": { "executable": "node", "script": "tools/validate-pack.mjs", "display": "node tools/validate-pack.mjs <pack-path> [options]" },
+      "arguments": [
+        { "name": "pack", "kind": "positional", "required": true, "valueType": "path", "description": "Resource-pack root." },
+        { "name": "allow-missing-textures", "kind": "flag", "flag": "--allow-missing-textures", "required": false, "valueType": "boolean", "description": "Allow unresolved textures for partial mirrors." },
+        { "name": "allow-partial-ui-defs", "kind": "flag", "flag": "--allow-partial-ui-defs", "required": false, "valueType": "boolean", "description": "Allow absent files in a deliberately partial _ui_defs mirror." },
+        { "name": "strict-warnings", "kind": "flag", "flag": "--strict-warnings", "required": false, "valueType": "boolean", "description": "Fail when warnings remain." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Write a pack report." }
+      ],
+      "inputs": [{ "name": "pack", "kind": "directory", "required": true, "description": "Resource pack with a ui directory." }],
+      "outputs": [{ "name": "pack_report", "kind": "report", "required": true, "format": "JSON", "description": "Pack-wide errors, warnings, files, and texture references." }],
+      "preconditions": ["The exact target resource pack is known and is not a backup copy."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<project>/pack-report.json"], "description": "Only writes the requested report." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 9, "meaning": "Pack validation found errors.", "recovery": "Fix the reported registration, reference, parse, or texture problem." },
+        { "exitCode": 10, "meaning": "Strict mode found warnings.", "recovery": "Resolve or explicitly document each warning before relaxing strict mode." },
+        { "exitCode": 64, "meaning": "Arguments are invalid.", "recovery": "Pass one pack root and supported options." }
+      ],
+      "evidenceProduced": ["Pack-wide machine-readable validation report."],
+      "unsupportedBehavior": ["Does not prove Bedrock runtime bindings, input, or animation."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
+      "id": "repository.audit",
+      "status": "implemented",
+      "purpose": "Audit repository links, JSON, skill frontmatter, scripts, and retired roots.",
+      "command": { "executable": "node", "script": "tools/audit.mjs", "display": "node tools/audit.mjs [--report <path>]" },
+      "arguments": [{ "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Write a repository audit report." }],
+      "inputs": [{ "name": "repository", "kind": "directory", "required": true, "description": "Current repository contents." }],
+      "outputs": [{ "name": "audit_report", "kind": "report", "required": false, "format": "JSON", "description": "Repository integrity findings." }],
+      "preconditions": ["Run from the repository root."],
+      "mutates": { "mode": "repository", "paths": ["workspace/<project>/audit-report.json"], "description": "Read-only except for an explicitly requested report path." },
+      "successExitCodes": [0],
+      "failures": [{ "exitCode": 11, "meaning": "Repository audit found errors.", "recovery": "Fix the exact reported file and rerun the audit." }],
+      "evidenceProduced": ["Repository-level error and warning report."],
+      "unsupportedBehavior": ["Does not run the full test suite or Bedrock runtime."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
+      "id": "vanilla.index",
+      "status": "implemented",
+      "purpose": "Build local evidence indexes for vanilla screens and texture keys.",
+      "command": { "executable": "node", "script": "tools/build-vanilla-index.mjs", "display": "node tools/build-vanilla-index.mjs [--force]" },
+      "arguments": [{ "name": "force", "kind": "flag", "flag": "--force", "required": false, "valueType": "boolean", "description": "Rebuild even when current index versions exist." }],
+      "inputs": [{ "name": "vanilla_sources", "kind": "directory", "required": false, "description": "Local vanilla mirror and official sample UI." }],
+      "outputs": [
+        { "name": "screens", "kind": "file", "required": true, "format": "JSON", "pathPattern": "vanilla-index/screens.json", "description": "Screen evidence index." },
+        { "name": "textures", "kind": "file", "required": true, "format": "JSON", "pathPattern": "vanilla-index/textures.json", "description": "Texture evidence index." }
+      ],
+      "preconditions": ["At least one local vanilla source is preferred; the tool never downloads one."],
+      "mutates": { "mode": "repository", "paths": ["vanilla-index/screens.json", "vanilla-index/textures.json"], "description": "Regenerates gitignored local indexes." },
+      "successExitCodes": [0],
+      "failures": [{ "exitCode": 1, "meaning": "Index build crashed.", "recovery": "Check local source readability and JSON syntax, then retry." }],
+      "evidenceProduced": ["Source and path evidence for every indexed screen and texture key."],
+      "unsupportedBehavior": ["Does not fetch upstream data and does not prove a texture is available in the target RP."],
+      "supports": { "help": false, "json": false, "report": false }
+    },
+    {
+      "id": "tools.list",
+      "status": "implemented",
+      "purpose": "List registered AI tools, optionally restricted to one skill profile or implementation status.",
+      "command": { "executable": "node", "script": "tools/tool-list.mjs", "display": "node tools/tool-list.mjs [--skill <skill>] [--status <implemented|planned>]" },
+      "arguments": [
+        { "name": "skill", "kind": "option", "flag": "--skill", "required": false, "valueType": "string", "description": "Filter through one skill profile." },
+        { "name": "status", "kind": "option", "flag": "--status", "required": false, "valueType": "enum", "values": ["implemented", "planned"], "description": "Filter by implementation status." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Emit one JSON result." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Write the same result as JSON." }
+      ],
+      "inputs": [{ "name": "registry", "kind": "file", "required": true, "format": "JSON", "pathPattern": "data/ai-tool-registry.json", "description": "Validated tool registry." }],
+      "outputs": [{ "name": "tool_list", "kind": "stdout", "required": true, "format": "text or JSON", "description": "Filtered tool summaries with availability status." }],
+      "preconditions": ["The tool registry passes schemas/ai-tool.schema.json."],
+      "mutates": { "mode": "repository", "paths": ["workspace/<project>/tool-list-report.json"], "description": "Read-only unless --report is supplied." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 4, "meaning": "Requested skill profile does not exist.", "recovery": "Run without --skill or choose a listed profile." },
+        { "exitCode": 5, "meaning": "Registry schema or semantic validation failed.", "recovery": "Fix the registry contract before selecting tools." },
+        { "exitCode": 64, "meaning": "Arguments are invalid.", "recovery": "Use --help and pass supported options." }
+      ],
+      "evidenceProduced": ["Tool ids, statuses, commands, and selected skill context."],
+      "unsupportedBehavior": ["Does not execute listed tools or treat planned tools as available."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "tools.describe",
+      "status": "implemented",
+      "purpose": "Return the complete input, output, mutation, failure, and evidence contract for one tool.",
+      "command": { "executable": "node", "script": "tools/tool-describe.mjs", "display": "node tools/tool-describe.mjs <tool-id>" },
+      "arguments": [
+        { "name": "tool-id", "kind": "positional", "required": true, "valueType": "string", "description": "Registered tool id." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Emit JSON." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Write the contract as JSON." }
+      ],
+      "inputs": [{ "name": "registry", "kind": "file", "required": true, "format": "JSON", "pathPattern": "data/ai-tool-registry.json", "description": "Validated tool registry." }],
+      "outputs": [{ "name": "tool_contract", "kind": "stdout", "required": true, "format": "text or JSON", "description": "Complete registered contract and current availability." }],
+      "preconditions": ["The requested tool id is registered."],
+      "mutates": { "mode": "repository", "paths": ["workspace/<project>/tool-description.json"], "description": "Read-only unless --report is supplied." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 4, "meaning": "Tool id is unknown.", "recovery": "Use tools.list to discover exact ids." },
+        { "exitCode": 5, "meaning": "Registry validation failed.", "recovery": "Fix the registry before relying on its contract." },
+        { "exitCode": 64, "meaning": "Tool id or option value is missing.", "recovery": "Use --help and pass one tool id." }
+      ],
+      "evidenceProduced": ["One complete versioned tool contract."],
+      "unsupportedBehavior": ["Does not execute, install, or promote planned tools."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "skill.context",
+      "status": "implemented",
+      "purpose": "Expand one skill profile into an ordered, minimal tool context for an AI.",
+      "command": { "executable": "node", "script": "tools/skill-context.mjs", "display": "node tools/skill-context.mjs <skill> --compact" },
+      "arguments": [
+        { "name": "skill", "kind": "positional", "required": true, "valueType": "string", "description": "Skill profile id." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Emit JSON." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Write the expanded context as JSON." }
+      ],
+      "inputs": [
+        { "name": "profiles", "kind": "file", "required": true, "format": "JSON", "pathPattern": "data/skill-tool-profiles.json", "description": "Skill-specific tool selection." },
+        { "name": "registry", "kind": "file", "required": true, "format": "JSON", "pathPattern": "data/ai-tool-registry.json", "description": "Tool contracts." }
+      ],
+      "outputs": [{ "name": "skill_context", "kind": "stdout", "required": true, "format": "text or JSON", "description": "Workflow, boundaries, success criteria, and expanded tool contracts." }],
+      "preconditions": ["Every profile tool id exists in the registry."],
+      "mutates": { "mode": "repository", "paths": ["workspace/<project>/skill-context.json"], "description": "Read-only unless --report is supplied." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 4, "meaning": "Skill profile is unknown.", "recovery": "Use tools.list or skill.doctor --all to discover profiles." },
+        { "exitCode": 5, "meaning": "Registry or profile references are invalid.", "recovery": "Repair the data contract before generating context." },
+        { "exitCode": 64, "meaning": "Skill argument is missing.", "recovery": "Pass one exact skill id." }
+      ],
+      "evidenceProduced": ["Minimal ordered tool set with status and reason for each selection."],
+      "unsupportedBehavior": ["Does not load unrelated skills or execute tools."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "skill.doctor",
+      "status": "implemented",
+      "purpose": "Validate registry schema, profile references, command availability, and planned-tool boundaries.",
+      "command": { "executable": "node", "script": "tools/skill-doctor.mjs", "display": "node tools/skill-doctor.mjs [<skill>|--all]" },
+      "arguments": [
+        { "name": "skill", "kind": "positional", "required": false, "valueType": "string", "description": "One profile id; omit with --all." },
+        { "name": "all", "kind": "flag", "flag": "--all", "required": false, "valueType": "boolean", "description": "Validate all profiles." },
+        { "name": "probe", "kind": "flag", "flag": "--probe", "required": false, "valueType": "boolean", "description": "Run --help for implemented tools declaring help support." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Emit JSON." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Write the diagnostic report." }
+      ],
+      "inputs": [
+        { "name": "registry", "kind": "file", "required": true, "format": "JSON", "description": "Tool registry and schema." },
+        { "name": "profiles", "kind": "file", "required": true, "format": "JSON", "description": "Skill-to-tool profiles." }
+      ],
+      "outputs": [{ "name": "doctor_report", "kind": "report", "required": true, "format": "JSON", "description": "Errors, warnings, implemented availability, and planned absence." }],
+      "preconditions": ["Repository files are readable."],
+      "mutates": { "mode": "repository", "paths": ["workspace/<project>/skill-doctor-report.json"], "description": "Read-only unless --report is supplied." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 4, "meaning": "Requested skill is unknown.", "recovery": "Run --all or use an exact profile id." },
+        { "exitCode": 5, "meaning": "Contract errors were found.", "recovery": "Fix duplicate ids, broken references, status mismatches, or missing implemented scripts." },
+        { "exitCode": 64, "meaning": "Arguments are invalid.", "recovery": "Use either one skill id or --all." }
+      ],
+      "evidenceProduced": ["Per-tool availability and contract-integrity report."],
+      "unsupportedBehavior": ["Does not execute arbitrary registered commands or consider a missing planned script an error."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "prompt.build",
+      "status": "implemented",
+      "purpose": "Build a stable Markdown task prompt from a validated task envelope.",
+      "command": { "executable": "node", "script": "tools/prompt-build.mjs", "display": "node tools/prompt-build.mjs <task-envelope> [--output <prompt.md>]" },
+      "arguments": [
+        { "name": "envelope", "kind": "positional", "required": true, "valueType": "path", "description": "YAML or JSON task envelope." },
+        { "name": "output", "kind": "option", "flag": "--output", "required": false, "valueType": "path", "description": "Write the generated Markdown prompt." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Emit a JSON result containing the prompt." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Write build and validation evidence." }
+      ],
+      "inputs": [{ "name": "task_envelope", "kind": "file", "required": true, "format": "YAML or JSON", "description": "Structured task intent and acceptance criteria." }],
+      "outputs": [
+        { "name": "prompt", "kind": "stdout", "required": true, "format": "Markdown or JSON", "description": "Canonical task prompt." },
+        { "name": "build_report", "kind": "report", "required": false, "format": "JSON", "description": "Schema and tool-reference checks." }
+      ],
+      "preconditions": ["Task envelope validates and every selected tool id is registered."],
+      "mutates": { "mode": "repository", "paths": ["workspace/<project>/prompt.md", "workspace/<project>/prompt-build-report.json"], "description": "Writes only explicit --output and --report paths." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 5, "meaning": "Envelope schema or tool-reference validation failed.", "recovery": "Fix the reported envelope field or use a registered tool id." },
+        { "exitCode": 64, "meaning": "Arguments are invalid.", "recovery": "Pass one envelope and supported output options." }
+      ],
+      "evidenceProduced": ["Canonical prompt plus a report containing envelope id and selected tool statuses."],
+      "unsupportedBehavior": ["Does not execute the task, invent evidence, or promote unresolved claims."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "prompt.lint",
+      "status": "implemented",
+      "purpose": "Lint a task envelope or generated Markdown prompt for required sections and registered tools.",
+      "command": { "executable": "node", "script": "tools/prompt-lint.mjs", "display": "node tools/prompt-lint.mjs <prompt-or-envelope>" },
+      "arguments": [
+        { "name": "input", "kind": "positional", "required": true, "valueType": "path", "description": "Markdown prompt or YAML/JSON envelope." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Emit JSON." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Write lint findings." }
+      ],
+      "inputs": [{ "name": "prompt_or_envelope", "kind": "file", "required": true, "description": "Structured envelope or canonical Markdown prompt." }],
+      "outputs": [{ "name": "lint_report", "kind": "report", "required": true, "format": "JSON", "description": "Errors, warnings, and detected input kind." }],
+      "preconditions": ["Input is readable UTF-8."],
+      "mutates": { "mode": "repository", "paths": ["workspace/<project>/prompt-lint-report.json"], "description": "Read-only unless --report is supplied." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 5, "meaning": "Required prompt contract checks failed.", "recovery": "Add the missing section or fix the envelope schema/tool reference." },
+        { "exitCode": 64, "meaning": "Input or option is missing.", "recovery": "Pass one prompt or envelope path." }
+      ],
+      "evidenceProduced": ["Machine-readable prompt-contract findings."],
+      "unsupportedBehavior": ["Does not judge visual quality or replace deterministic UI validation."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "source.scan",
+      "status": "implemented",
+      "purpose": "Scan configured UI-only RP/BP sources into a local evidence corpus.",
+      "command": { "executable": "node", "script": "tools/source-scan.mjs", "display": "node tools/source-scan.mjs [--config <path>] [--source <id>] [--out <dir>] [--json]" },
+      "arguments": [
+        { "name": "config", "kind": "option", "flag": "--config", "required": false, "valueType": "path", "description": "Source config; defaults to config/sources.public.json." },
+        { "name": "source", "kind": "option", "flag": "--source", "required": false, "valueType": "string", "description": "Limit collection to one configured source." },
+        { "name": "out", "kind": "option", "flag": "--out", "required": false, "valueType": "path", "description": "Corpus output directory." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print summary JSON." }
+      ],
+      "inputs": [{ "name": "sources", "kind": "file", "required": true, "format": "JSON", "description": "Public and local source configuration." }],
+      "outputs": [{ "name": "corpus", "kind": "directory", "required": true, "pathPattern": "workspace/corpus-local", "description": "Local-only normalized evidence records." }],
+      "preconditions": ["Source validation succeeds and local inputs are treated as read-only."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/corpus-local"], "description": "Writes only generated local corpus data." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 9, "meaning": "Source configuration, selected source id, or scan evidence is invalid.", "recovery": "Fix the source record or quarantine the source; never guess missing data." },
+        { "exitCode": 64, "meaning": "Arguments are invalid.", "recovery": "Use --help and pass supported options." }
+      ],
+      "evidenceProduced": ["Screen, control, texture, nine-slice, and BP protocol source records."],
+      "unsupportedBehavior": ["Does not modify source packs or resolve dynamic values that cannot be determined statically."],
+      "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "catalog.build",
+      "status": "implemented",
+      "purpose": "Build redistribution-safe design recipes and evidence links from the normalized corpus.",
+      "command": { "executable": "node", "script": "tools/catalog-build.mjs", "display": "node tools/catalog-build.mjs [--corpus <index.json>] [--out <recipes.json>] [--public] [--generated-at <ISO>] [--json]" },
+      "arguments": [
+        { "name": "corpus", "kind": "option", "flag": "--corpus", "required": false, "valueType": "path", "description": "Corpus index input." },
+        { "name": "out", "kind": "option", "flag": "--out", "required": false, "valueType": "path", "description": "Catalog output path." },
+        { "name": "public", "kind": "flag", "flag": "--public", "required": false, "valueType": "boolean", "description": "Build the redistribution-safe checked-in public catalog; rejects local-only and prohibited evidence." },
+        { "name": "generated-at", "kind": "option", "flag": "--generated-at", "required": false, "valueType": "string", "description": "Optional deterministic ISO timestamp; otherwise SOURCE_DATE_EPOCH or null is used." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print summary JSON." }
+      ],
+      "inputs": [{ "name": "corpus", "kind": "directory", "required": true, "description": "Normalized source evidence." }],
+      "outputs": [{ "name": "catalog", "kind": "file", "required": true, "format": "JSON", "description": "Design recipes with source tier and redistribution status." }],
+      "preconditions": ["source.scan completed and source redistribution boundaries are known."],
+      "mutates": { "mode": "repository", "paths": ["workspace/catalog-local/design-recipes.json", "data/design-recipes.public.json"], "description": "Writes a local catalog by default or the checked-in redistribution-safe catalog with --public." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 9, "meaning": "Generated recipes failed the design-recipe schema.", "recovery": "Fix corpus extraction or recipe construction without weakening the schema." },
+        { "exitCode": 64, "meaning": "Arguments are invalid.", "recovery": "Use --help and pass supported options." }
+      ],
+      "evidenceProduced": ["Recipe-to-source evidence graph and token adoption counts."],
+      "unsupportedBehavior": ["Does not promote single-source repetition to a universal token or copy restricted assets into the public catalog."],
+      "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "design.search",
+      "status": "implemented",
+      "purpose": "Search design recipes by role, profile, source tier, geometry, state, and redistribution.",
+      "command": { "executable": "node", "script": "tools/design-search.mjs", "display": "node tools/design-search.mjs [query] [--tier <tier>] [--role <role>] [--limit <n>] [--catalog <path>] [--json]" },
+      "arguments": [
+        { "name": "query", "kind": "positional", "required": false, "repeatable": true, "valueType": "string", "description": "Free-text terms matched against recipe metadata." },
+        { "name": "tier", "kind": "option", "flag": "--tier", "required": false, "valueType": "string", "description": "Exact source tier filter." },
+        { "name": "role", "kind": "option", "flag": "--role", "required": false, "valueType": "string", "description": "Exact role filter." },
+        { "name": "limit", "kind": "option", "flag": "--limit", "required": false, "valueType": "integer", "description": "Positive maximum result count." },
+        { "name": "catalog", "kind": "option", "flag": "--catalog", "required": false, "valueType": "path", "description": "Catalog input path." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print matched recipe objects as JSON." }
+      ],
+      "inputs": [{ "name": "catalog", "kind": "file", "required": true, "format": "JSON", "description": "Built public and optional local recipe indexes." }],
+      "outputs": [{ "name": "matches", "kind": "stdout", "required": true, "format": "text or JSON", "description": "Ranked recipes with evidence and source-tier warnings." }],
+      "preconditions": ["A valid local catalog exists, or the checked-in data/design-recipes.public.json fallback is available."],
+      "mutates": { "mode": "none", "paths": [], "description": "Search is read-only." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "Catalog loading or search execution crashed.", "recovery": "Validate or rebuild the catalog, then retry." },
+        { "exitCode": 64, "meaning": "Arguments are invalid.", "recovery": "Use a positive --limit and supported filters." }
+      ],
+      "evidenceProduced": ["Recipe ids, matched fields, scores, and evidence pointers."],
+      "unsupportedBehavior": ["Does not infer semantic equivalence beyond indexed fields or automatically promote quarantine content."],
+      "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "preview.texture",
+      "status": "implemented",
+      "purpose": "Render texture-aware JSON UI states with nine-slice, text bounds, and unsupported-property evidence.",
+      "command": { "executable": "node", "script": "tools/preview.mjs", "display": "node tools/preview.mjs <ui.json> [<solved.json>] [--profiles <list>] [--states <list>] [--report <path>] [--json] [--no-image]" },
+      "arguments": [
+        { "name": "ui", "kind": "positional", "required": true, "valueType": "path", "description": "JSON UI input." },
+        { "name": "solved", "kind": "positional", "required": false, "valueType": "path", "description": "Solved geometry; inferred beside ui.json if omitted." },
+        { "name": "profiles", "kind": "option", "flag": "--profiles", "required": false, "valueType": "string", "description": "Comma-separated pc,touch profiles." },
+        { "name": "states", "kind": "option", "flag": "--states", "required": false, "valueType": "string", "description": "Comma-separated default,hover,pressed states." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Explicit preview report path." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print the final report as JSON." },
+        { "name": "no-image", "kind": "flag", "flag": "--no-image", "required": false, "valueType": "boolean", "description": "Write geometry and reports without raster output." }
+      ],
+      "inputs": [
+        { "name": "ui", "kind": "file", "required": true, "format": "JSON", "description": "JSON UI and its texture references." },
+        { "name": "solved", "kind": "file", "required": true, "format": "JSON", "description": "Solved rectangles." }
+      ],
+      "outputs": [
+        { "name": "contact_sheet", "kind": "file", "required": false, "format": "PNG", "description": "Default, hover, and pressed states for selected profiles when canvas is available." },
+        { "name": "preview_report", "kind": "report", "required": true, "format": "JSON", "description": "Profiles, states, renderer status, diagnostics, outputs, and unsupported properties." },
+        { "name": "unsupported", "kind": "report", "required": true, "format": "JSON", "description": "Unsupported control types and properties." }
+      ],
+      "preconditions": ["Required textures and same-stem nine-slice metadata are available."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<project>/coords.json", "workspace/<project>/unsupported.json", "workspace/<project>/preview-report.json", "workspace/<project>/preview-*.png"], "description": "Writes deterministic preview artifacts beside the UI." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "Preview input or rendering crashed.", "recovery": "Check ui.json, solved.json, texture paths, and selected profiles/states." },
+        { "exitCode": 64, "meaning": "UI input is missing.", "recovery": "Pass ui.json and ensure solved.json exists." }
+      ],
+      "evidenceProduced": ["State contact sheet, resolved rectangles, text bounds, and unsupported-property list."],
+      "unsupportedBehavior": ["Does not emulate runtime bindings, collection data, input dispatch, or undocumented client behavior."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "sources.validate",
+      "status": "implemented",
+      "purpose": "Validate source records, local/public boundaries, licenses, revisions, and include/exclude rules.",
+      "command": { "executable": "node", "script": "tools/validate-sources.mjs", "display": "node tools/validate-sources.mjs [config.json] [--json]" },
+      "arguments": [
+        { "name": "config", "kind": "positional", "required": false, "valueType": "path", "description": "Source config; defaults to config/sources.public.json." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print the validation report as JSON." }
+      ],
+      "inputs": [{ "name": "source_configs", "kind": "file", "required": true, "format": "JSON", "description": "Public and local source records." }],
+      "outputs": [{ "name": "source_report", "kind": "report", "required": true, "format": "JSON", "description": "Schema, path, license, and redistribution findings." }],
+      "preconditions": ["Local source config remains Git-ignored."],
+      "mutates": { "mode": "none", "paths": [], "description": "Source validation is read-only." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 9, "meaning": "A source record, path, license evidence, or redistribution boundary is invalid.", "recovery": "Correct the record or downgrade it to local-only quarantine." },
+        { "exitCode": 64, "meaning": "Arguments are invalid.", "recovery": "Pass at most one config path and optional --json." }
+      ],
+      "evidenceProduced": ["Validated source tier, revision, license evidence, and local/public separation."],
+      "unsupportedBehavior": ["Never infers redistribution permission from file presence alone."],
+      "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "public.audit",
+      "status": "implemented",
+      "purpose": "Audit public-release candidates for local paths, private source names, credentials, core server-framework references, and redistribution leaks.",
+      "command": { "executable": "node", "script": "tools/public-audit.mjs", "display": "node tools/public-audit.mjs [--report <path>] [--json]" },
+      "arguments": [
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Write the JSON report inside the repository." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print the JSON report." }
+      ],
+      "inputs": [{ "name": "public_candidates", "kind": "directory", "required": true, "description": "Tracked and non-ignored untracked release candidates discovered through Git." }],
+      "outputs": [{ "name": "public_audit", "kind": "report", "required": true, "format": "JSON", "description": "Candidate counts, exclusions, and exact leak violations." }],
+      "preconditions": ["Run inside the Git repository before publishing public changes."],
+      "mutates": { "mode": "repository", "paths": ["workspace/<project>/public-audit-report.json"], "description": "Read-only unless --report is supplied; the report path must remain inside the repository." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "Git candidate discovery, file reading, or report handling failed.", "recovery": "Fix repository access or choose a report path with an existing in-repository ancestor." },
+        { "exitCode": 9, "meaning": "One or more public-release violations were found.", "recovery": "Remove the leaked local path, private name, credential, core server-framework reference, or invalid redistribution record; do not suppress the finding." },
+        { "exitCode": 64, "meaning": "Arguments are invalid.", "recovery": "Use --help and pass only --json or an in-repository --report path." }
+      ],
+      "evidenceProduced": ["File, line, column, rule, redacted match, and description for each public-release violation."],
+      "unsupportedBehavior": ["Does not scan references/external, ignored local data, workspace output, or other explicitly excluded private/restricted mirrors.", "Does not grant redistribution permission when no leak is detected."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "corpus.inventory",
+      "status": "implemented",
+      "purpose": "Inventory a broad local JSON UI archive into neutral local-only sources, measured controls, assets, protocols, unresolved evidence, and recipe candidates.",
+      "command": { "executable": "node", "script": "tools/corpus-inventory.mjs", "display": "node tools/corpus-inventory.mjs --root <archive> [--out workspace/corpus-local/archive] [--concurrency 12] [--json]" },
+      "arguments": [
+        { "name": "root", "kind": "option", "flag": "--root", "required": true, "valueType": "path", "description": "Local archive root to inventory." },
+        { "name": "out", "kind": "option", "flag": "--out", "required": false, "valueType": "path", "description": "Output directory under workspace/corpus-local." },
+        { "name": "concurrency", "kind": "option", "flag": "--concurrency", "required": false, "valueType": "integer", "description": "Bounded file-processing concurrency." },
+        { "name": "limit", "kind": "option", "flag": "--limit", "required": false, "valueType": "integer", "description": "Optional diagnostic file limit." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print the summary as JSON." }
+      ],
+      "inputs": [{ "name": "local_archive", "kind": "directory", "required": true, "description": "Local JSON UI examples and assets; originals remain read-only." }],
+      "outputs": [{ "name": "local_corpus", "kind": "directory", "required": true, "format": "JSON", "pathPattern": "workspace/corpus-local/**", "description": "Neutral source inventory, evidence, caches, unresolved records, and schema-valid local design recipes searchable by design.search." }],
+      "preconditions": ["The archive root exists and is not the repository output directory."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/corpus-local"], "description": "Writes ignored local inventory and incremental cache files; never modifies source archives." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "The archive could not be read or an output could not be written.", "recovery": "Check the root and keep output inside workspace/corpus-local." },
+        { "exitCode": 64, "meaning": "Arguments are invalid.", "recovery": "Use --help and provide --root." }
+      ],
+      "evidenceProduced": ["Neutral source counts, file hashes, UI controls, geometry, texture references, protocols, recipe candidates, exclusions, and unresolved records."],
+      "unsupportedBehavior": ["Does not scan excluded archives, ZIP contents, generated trees, symlinks, or unsupported file types.", "Does not grant redistribution permission or runtime validity."],
+      "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "asset.catalog",
+      "status": "implemented",
+      "purpose": "Build a local semantic texture catalog by joining the curated asset index with observed JSON UI usage, visual measurements, states, and nine-slice evidence.",
+      "command": { "executable": "node", "script": "tools/asset-catalog-build.mjs", "display": "node tools/asset-catalog-build.mjs [--root <asset-library>] [--out workspace/corpus-local/assets.semantic.json] [--json]" },
+      "arguments": [
+        { "name": "root", "kind": "option", "flag": "--root", "required": false, "valueType": "path", "description": "Explicit local asset-library root." },
+        { "name": "config", "kind": "option", "flag": "--config", "required": false, "valueType": "path", "description": "Ignored local source config." },
+        { "name": "source-id", "kind": "option", "flag": "--source-id", "required": false, "valueType": "string", "description": "Configured asset-library source id." },
+        { "name": "out", "kind": "option", "flag": "--out", "required": false, "valueType": "path", "description": "Semantic catalog path under workspace/corpus-local." },
+        { "name": "cache", "kind": "option", "flag": "--cache", "required": false, "valueType": "path", "description": "Incremental cache path under workspace/corpus-local." },
+        { "name": "no-palette", "kind": "flag", "flag": "--no-palette", "required": false, "valueType": "boolean", "description": "Skip PNG palette decoding." },
+        { "name": "refresh", "kind": "flag", "flag": "--refresh", "required": false, "valueType": "boolean", "description": "Ignore existing semantic caches." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print the summary as JSON." }
+      ],
+      "inputs": [{ "name": "asset_index", "kind": "file", "required": true, "format": "JSON", "pathPattern": "indexes/assets.json", "description": "Local curated asset index and referenced UI JSON files." }],
+      "outputs": [{ "name": "semantic_catalog", "kind": "file", "required": true, "format": "JSON", "pathPattern": "workspace/corpus-local/assets.semantic.json", "description": "Source-redacted roles, states, visual measurements, usage evidence, and unresolved records." }],
+      "preconditions": ["The local asset library and its index exist.", "The output and cache remain inside workspace/corpus-local."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/corpus-local/assets.semantic.json", "workspace/corpus-local/asset-semantics-cache.json"], "description": "Writes ignored analysis and cache files; never copies or edits source assets." },
+      "successExitCodes": [0],
+      "failures": [{ "exitCode": 1, "meaning": "Config, index, image decoding, or output processing failed.", "recovery": "Check the local source root and review unresolved evidence; do not promote incomplete records." }],
+      "evidenceProduced": ["Semantic role and state, dimensions, alpha, palette, JSON UI usage, confidence, duplicate state, nine-slice pairing, and unresolved evidence."],
+      "unsupportedBehavior": ["Does not grant redistribution rights or prove runtime rendering.", "Inferred roles remain distinct from observed control usage."],
+      "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "asset.context",
+      "status": "implemented",
+      "purpose": "Create a compact source-redacted texture-generation context from measured semantic asset evidence for one role and optional state.",
+      "command": { "executable": "node", "script": "tools/asset-design-context.mjs", "display": "node tools/asset-design-context.mjs <role> [--state <state>] [--catalog <path>] [--json]" },
+      "arguments": [
+        { "name": "role", "kind": "positional", "required": true, "valueType": "string", "description": "Semantic UI role such as button, panel, slot, icon, bar, map, or book." },
+        { "name": "state", "kind": "option", "flag": "--state", "required": false, "valueType": "string", "description": "Optional interaction state." },
+        { "name": "catalog", "kind": "option", "flag": "--catalog", "required": false, "valueType": "path", "description": "Semantic catalog inside the repository." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print structured context JSON." }
+      ],
+      "inputs": [{ "name": "semantic_catalog", "kind": "file", "required": true, "format": "JSON", "pathPattern": "workspace/corpus-local/assets.semantic.json", "description": "Catalog produced by asset.catalog." }],
+      "outputs": [{ "name": "texture_context", "kind": "report", "required": true, "format": "text or JSON", "description": "Measured size, palette, alpha, states, nine-slice tendencies, evidence counts, generation prompt, and privacy policy." }],
+      "preconditions": ["asset.catalog completed and enough evidence matches the requested role/state."],
+      "mutates": { "mode": "none", "paths": [], "description": "Context generation is read-only." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "The catalog is unavailable, outside the repository, or invalid.", "recovery": "Build the catalog and keep the catalog path inside the repository." },
+        { "exitCode": 2, "meaning": "The requested role/state has insufficient unique or cross-source evidence.", "recovery": "Broaden the query or label the texture as a new design decision without claiming measured support." }
+      ],
+      "evidenceProduced": ["Source-redacted distribution summary and original-art generation constraints."],
+      "unsupportedBehavior": ["Does not expose source paths or copy catalog artwork.", "Does not invoke image generation or claim Bedrock runtime support."],
+      "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "asset.search",
+      "status": "implemented",
+      "purpose": "Search the local MCBE JSON UI asset catalog by metadata terms such as function, state, shape, style, and size without copying assets or exposing absolute paths by default.",
+      "command": { "executable": "node", "script": "tools/asset-search.mjs", "display": "node tools/asset-search.mjs [query] [options]" },
+      "arguments": [
+        { "name": "query", "kind": "positional", "required": false, "repeatable": true, "valueType": "string", "description": "Free-text terms matched against asset metadata." },
+        { "name": "config", "kind": "option", "flag": "--config", "required": false, "valueType": "path", "description": "Local source config." },
+        { "name": "source-id", "kind": "option", "flag": "--source-id", "required": false, "valueType": "string", "description": "Tooling source containing indexes/assets.json." },
+        { "name": "root", "kind": "option", "flag": "--root", "required": false, "valueType": "path", "description": "Explicit asset-library root overriding config lookup." },
+        { "name": "category", "kind": "option", "flag": "--category", "required": false, "valueType": "string", "description": "Comma-separated exact categories or prefixes." },
+        { "name": "source", "kind": "option", "flag": "--source", "required": false, "valueType": "string", "description": "Exact asset sourceId filter." },
+        { "name": "min-width", "kind": "option", "flag": "--min-width", "required": false, "valueType": "integer", "description": "Minimum PNG width." },
+        { "name": "max-width", "kind": "option", "flag": "--max-width", "required": false, "valueType": "integer", "description": "Maximum PNG width." },
+        { "name": "min-height", "kind": "option", "flag": "--min-height", "required": false, "valueType": "integer", "description": "Minimum PNG height." },
+        { "name": "max-height", "kind": "option", "flag": "--max-height", "required": false, "valueType": "integer", "description": "Maximum PNG height." },
+        { "name": "include-duplicates", "kind": "flag", "flag": "--include-duplicates", "required": false, "valueType": "boolean", "description": "Include records with duplicateOf." },
+        { "name": "all-categories", "kind": "flag", "flag": "--all-categories", "required": false, "valueType": "boolean", "description": "Include non-UI catalog categories." },
+        { "name": "absolute", "kind": "flag", "flag": "--absolute", "required": false, "valueType": "boolean", "description": "Explicitly include resolved local asset paths." },
+        { "name": "limit", "kind": "option", "flag": "--limit", "required": false, "valueType": "integer", "description": "Maximum 1 to 500 results." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print one JSON report." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Write the report inside the repository." }
+      ],
+      "inputs": [
+        { "name": "source_config", "kind": "file", "required": true, "format": "JSON or JSONC", "description": "Local source record for the asset library unless --root is explicit." },
+        { "name": "asset_index", "kind": "file", "required": true, "format": "JSON", "pathPattern": "indexes/assets.json", "description": "Human-curated asset catalog with source and duplicate metadata." }
+      ],
+      "outputs": [{ "name": "matches", "kind": "report", "required": true, "format": "text or JSON", "description": "Filtered metadata, source evidence, hash, dimensions, category, and redistribution warning." }],
+      "preconditions": ["The local asset library and its indexes/assets.json exist.", "Copying any result requires independent license verification."],
+      "mutates": { "mode": "repository", "paths": ["workspace/<project>/asset-search-report.json"], "description": "Read-only unless --report is supplied; never copies assets." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "Config, source, index, or report processing failed.", "recovery": "Check the local source id/root and asset index before retrying." },
+        { "exitCode": 64, "meaning": "An option or numeric range is invalid.", "recovery": "Use --help and keep --limit between 1 and 500." }
+      ],
+      "evidenceProduced": ["UI-first, unique-by-default asset matches with sourceId, source-relative path, category, size, alpha, hash, and duplicate state; query matches can support a texture brief but do not prove semantic classification."],
+      "unsupportedBehavior": ["Does not copy assets or grant redistribution permission.", "Does not include non-UI categories or duplicates unless explicitly requested.", "Does not expose resolved local paths unless --absolute is explicitly supplied."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "upstream.compat",
+      "status": "implemented",
+      "purpose": "Validate pinned offline black-box compatibility fixtures and report baseline-verified versus pending observations without executing external editor code.",
+      "command": { "executable": "node", "script": "tools/upstream-compat.mjs", "display": "node tools/upstream-compat.mjs [--lock <path>] [--fixtures <path>]" },
+      "arguments": [
+        { "name": "lock", "kind": "option", "flag": "--lock", "required": false, "valueType": "path", "description": "Reviewed research lock; defaults to config/research-lock.json." },
+        { "name": "fixtures", "kind": "option", "flag": "--fixtures", "required": false, "valueType": "path", "description": "Offline fixture catalog; defaults to the path declared by the lock policy." }
+      ],
+      "inputs": [
+        { "name": "research_lock", "kind": "file", "required": true, "format": "JSON", "pathPattern": "config/research-lock.json", "description": "Pinned revisions, license records, and fixture policy." },
+        { "name": "fixture_catalog", "kind": "file", "required": true, "format": "JSON", "pathPattern": "data/upstream-compat-fixtures.json", "description": "Synthetic inputs and reviewed black-box baseline digests." }
+      ],
+      "outputs": [{ "name": "compatibility_report", "kind": "report", "required": true, "format": "JSON stdout", "description": "Offline status and per-fixture source, state, and digest." }],
+      "preconditions": ["The lock and fixture catalog agree on source IDs and exact revisions.", "Only baseline-verified fixtures support a compatibility claim; pending-local remains unresolved."],
+      "mutates": { "mode": "none", "paths": [], "description": "Compatibility validation is offline and read-only." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "The lock, fixture catalog, policy, revision, or digest is invalid.", "recovery": "Repair the reviewed fixture record; do not weaken or regenerate a baseline implicitly." }
+      ],
+      "evidenceProduced": ["Pinned offline compatibility status with baseline digest for every verified fixture and an explicit pending state for uncaptured fixtures."],
+      "unsupportedBehavior": ["An ok report can still contain pending-local fixtures; pending evidence is not a pass.", "Does not run external editor code, certify Bedrock rendering, or authorize copying upstream source."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
+      "id": "upstream.compat.capture",
+      "status": "implemented",
+      "purpose": "Record one reviewed local black-box observation for a fixture still marked pending-local, without changing the committed baseline catalog.",
+      "command": { "executable": "node", "script": "tools/upstream-compat-capture.mjs", "display": "node tools/upstream-compat-capture.mjs --id <fixture> --observation <json> --out workspace/<file>.json" },
+      "arguments": [
+        { "name": "id", "kind": "option", "flag": "--id", "required": true, "valueType": "string", "description": "Exact pending-local fixture ID." },
+        { "name": "observation", "kind": "option", "flag": "--observation", "required": true, "valueType": "path", "description": "Reviewed black-box observation JSON." },
+        { "name": "out", "kind": "option", "flag": "--out", "required": true, "valueType": "path", "description": "Observation record path below workspace/." }
+      ],
+      "inputs": [
+        { "name": "observation", "kind": "file", "required": true, "format": "JSON", "description": "Local output observed from the pinned fixture input." },
+        { "name": "fixture_catalog", "kind": "file", "required": true, "format": "JSON", "pathPattern": "data/upstream-compat-fixtures.json", "description": "Catalog containing the pending-local fixture." }
+      ],
+      "outputs": [{ "name": "observation_record", "kind": "report", "required": true, "format": "JSON", "pathPattern": "workspace/<project>/upstream-observation.json", "description": "Stable input/observation digests tied to the pinned source revision." }],
+      "preconditions": ["The fixture is explicitly pending-local.", "The observation came from a reviewed black-box run of the pinned input.", "Output remains below workspace/."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<project>/upstream-observation.json"], "description": "Writes one ignored observation record; never updates the committed baseline automatically." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "Arguments, fixture status, observation JSON, lock, or output containment are invalid.", "recovery": "Use a pending-local fixture, reviewed JSON observation, and an output below workspace/." }
+      ],
+      "evidenceProduced": ["Pinned-source black-box observation with stable input and output digests for human review."],
+      "unsupportedBehavior": ["Does not promote the observation to a committed verified baseline or run an editor automatically.", "Does not make external editor output a Bedrock visual or runtime authority."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
+      "id": "final-rp.render",
+      "status": "implemented",
+      "purpose": "Resolve and render the final target RP with the integrated v2 engine, installed Minecraft fonts, collection fixtures, and explicit interaction states.",
+      "command": { "executable": "node", "script": "tools/final-rp-render.mjs", "display": "node tools/final-rp-render.mjs <rp-root> [control] [--fixture file] [--vanilla-root <path>] [--out <png>] [--viewport WxH] [--hover N] [--pressed N] [--states default,hover,pressed] [--engine legacy]" },
+      "arguments": [
+        { "name": "rp-root", "kind": "positional", "required": true, "valueType": "path", "description": "Exact target resource-pack root." },
+        { "name": "control", "kind": "positional", "required": false, "valueType": "string", "description": "Qualified control name; a complete server-form fixture may resolve the route instead." },
+        { "name": "fixture", "kind": "option", "flag": "--fixture", "required": false, "valueType": "path", "description": "Complete server-form title, buttons, textures, and interaction indexes." },
+        { "name": "vanilla-root", "kind": "option", "flag": "--vanilla-root", "required": false, "valueType": "path", "description": "Explicit installed vanilla root; when omitted the local Minecraft UWP package is discovered without network access." },
+        { "name": "out", "kind": "option", "flag": "--out", "required": false, "valueType": "path", "description": "PNG output path outside the target RP." },
+        { "name": "viewport", "kind": "option", "flag": "--viewport", "required": false, "valueType": "string", "description": "Logical viewport as width x height; defaults to 480x270." },
+        { "name": "hover", "kind": "option", "flag": "--hover", "required": false, "valueType": "integer", "description": "Explicit hovered collection index." },
+        { "name": "pressed", "kind": "option", "flag": "--pressed", "required": false, "valueType": "integer", "description": "Explicit pressed collection index." },
+        { "name": "states", "kind": "option", "flag": "--states", "required": false, "valueType": "string", "description": "Comma-separated state matrix and contact sheet." },
+        { "name": "engine", "kind": "option", "flag": "--engine", "required": false, "valueType": "string", "description": "Use legacy only for regression comparison; v2 is the default." }
+      ],
+      "inputs": [
+        { "name": "resource_pack", "kind": "directory", "required": true, "description": "Final integrated target RP." },
+        { "name": "fixture", "kind": "file", "required": false, "format": "JSON", "description": "Static form title, body, collection records, and interaction indexes." },
+        { "name": "vanilla_pack", "kind": "directory", "required": false, "description": "Optional fallback for inherited vanilla controls and textures." }
+      ],
+      "outputs": [
+        { "name": "state_png", "kind": "file", "required": true, "format": "PNG", "pathPattern": "workspace/<project>/final-rp-*.png", "description": "Deterministic v2 final-RP state render or contact sheet." },
+        { "name": "render_report", "kind": "report", "required": true, "format": "JSON", "pathPattern": "workspace/<project>/final-rp-*.report.json", "description": "Resolved tree, layout, unresolved records, render diagnostics, validation, and hash." }
+      ],
+      "preconditions": ["The target RP and fixture/control exist.", "An installed vanilla/font profile is available or supplied explicitly.", "Output is outside the target RP.", "Every visually distinct state is invoked separately."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/<project>/final-rp-*.png", "workspace/<project>/final-rp-*.report.json"], "description": "Writes compatibility render evidence only; never edits the RP." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "Project loading, resolution, rendering, validation, or artifact writing failed.", "recovery": "Inspect the error and unresolved dependencies; do not substitute missing controls, textures, or fonts." },
+        { "exitCode": 9, "meaning": "--strict was requested and unresolved or validation issues remain.", "recovery": "Correct the source RP or fixture and rerun the same state." },
+        { "exitCode": 64, "meaning": "The required RP root is missing.", "recovery": "Use the documented command shape and provide a control or resolvable fixture." }
+      ],
+      "evidenceProduced": ["Final-RP v2 state PNGs, profile fingerprint, deterministic hash, resolved layout, collection data, glyph baselines, alpha bounds, unresolved records, and validation issues."],
+      "unsupportedBehavior": ["Does not run upstream compatibility fixtures or execute Bedrock runtime behavior.", "Its PNG alone cannot establish Bedrock runtime correctness; screenshot calibration and the content log remain separate evidence."],
+      "supports": { "help": true, "json": false, "report": true }
+    },
+    {
+      "id": "final-rp.inspector",
+      "status": "implemented",
+      "purpose": "Start the localhost-only read-only final-RP inspector backed by the same declared MCP service contract.",
+      "command": { "executable": "node", "script": "tools/inspector-server.mjs", "display": "node tools/inspector-server.mjs [--port <port>]" },
+      "arguments": [
+        { "name": "port", "kind": "option", "flag": "--port", "required": false, "valueType": "integer", "description": "Loopback port from 1 to 65535; defaults to 4177." }
+      ],
+      "inputs": [{ "name": "api_requests", "kind": "record", "required": true, "format": "JSON", "description": "Read-only project, render, validation, calibration, measurement, compatibility, and proposal requests." }],
+      "outputs": [
+        { "name": "localhost_service", "kind": "environment", "required": true, "description": "Inspector bound to 127.0.0.1 only." },
+        { "name": "inspector_artifacts", "kind": "directory", "required": false, "format": "PNG and JSON", "pathPattern": "workspace/inspector-output/**", "description": "Static render and diagnostic artifacts." }
+      ],
+      "preconditions": ["Repository dependencies are installed.", "Required v2 endpoints are probed; CAPABILITY_UNAVAILABLE blocks their evidence level.", "All artifact paths remain outside the target RP."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/inspector-output"], "description": "Writes ignored inspector artifacts; the inspector never edits an RP." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "The server could not initialize or the port is invalid or unavailable.", "recovery": "Choose an available loopback port and verify repository dependencies." }
+      ],
+      "evidenceProduced": ["Resolved control/state records, local render artifacts, validation results, calibration records, and read-only correction proposals when the matching adapters are available."],
+      "unsupportedBehavior": ["Advertised endpoint presence does not prove that its optional backend adapter is installed; probe and handle CAPABILITY_UNAVAILABLE.", "Does not expose a remote service, modify the RP, or replace Bedrock runtime capture."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
+      "id": "final-rp.mcp",
+      "status": "implemented",
+      "purpose": "Start the read-only stdio MCP service for final-RP resolution, state rendering, inspection, screenshot evidence, and gated v2 measurements.",
+      "command": { "executable": "node", "script": "tools/mcp-server.mjs", "display": "node tools/mcp-server.mjs" },
+      "arguments": [],
+      "inputs": [{ "name": "mcp_requests", "kind": "record", "required": true, "format": "MCP JSON-RPC", "description": "Structured calls for an exact local RP and local evidence files." }],
+      "outputs": [{ "name": "mcp_results", "kind": "record", "required": true, "format": "MCP structured content", "description": "Schema/engine versions, project revision, evidence status, artifacts, diagnostics, evidence IDs, and calibration IDs." }],
+      "preconditions": ["The repository MCP dependency is installed.", "RP roots and evidence files are existing absolute local paths supplied at request time.", "Pixel-level work has an available installed vanilla/font profile, passing offline upstream compatibility evidence, explicit device profile, complete state matrix, and project-bound screenshot calibration."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/mcp-render", "workspace/<project>/final-rp-evidence"], "description": "May write explicitly requested evidence artifacts outside the target RP; correction proposals remain read-only." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "The MCP SDK or local backend could not start.", "recovery": "Install repository dependencies and inspect stderr." }
+      ],
+      "evidenceProduced": ["Project-revision-bound resolver records, state render hashes, validation evidence IDs, screenshot calibration IDs, Minecraft-font measurements, compatibility results, and read-only patch proposals."],
+      "unsupportedBehavior": ["A declared MCP tool can return CAPABILITY_UNAVAILABLE when its optional adapter is not installed; never simulate that evidence.", "Does not apply patch proposals, upload files, launch Bedrock, or make runtime claims from static output.", "Does not permit pixel-accuracy or coordinate recommendations while font, vanilla, device, state, or calibration evidence is unresolved."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
+      "id": "research.sync",
+      "status": "implemented",
+      "purpose": "Synchronize explicitly pinned external research repositories into the ignored local mirror for offline compatibility fixtures and source study.",
+      "command": { "executable": "node", "script": "tools/research-sync.mjs", "display": "node tools/research-sync.mjs [--config <lock.json>] [--id <source>] [--refresh] [--dry-run]" },
+      "arguments": [
+        { "name": "config", "kind": "option", "flag": "--config", "required": false, "valueType": "path", "description": "Pinned research lock; defaults to config/research-lock.json." },
+        { "name": "id", "kind": "option", "flag": "--id", "required": false, "valueType": "string", "description": "Synchronize one exact source ID." },
+        { "name": "refresh", "kind": "flag", "flag": "--refresh", "required": false, "valueType": "boolean", "description": "Fetch the pinned commit before checkout." },
+        { "name": "dry-run", "kind": "flag", "flag": "--dry-run", "required": false, "valueType": "boolean", "description": "Report intended operations without Git network or checkout changes." }
+      ],
+      "inputs": [{ "name": "research_lock", "kind": "file", "required": true, "format": "JSON", "pathPattern": "config/research-lock.json", "description": "Reviewed source URL, exact revision, license evidence, use, and copying policy." }],
+      "outputs": [
+        { "name": "research_mirrors", "kind": "directory", "required": false, "pathPattern": "workspace/upstreams-local/**", "description": "Ignored detached Git mirrors at exact pinned revisions." },
+        { "name": "sync_report", "kind": "report", "required": false, "format": "JSON", "pathPattern": "workspace/upstreams-local/sync-report.json", "description": "Resolved source IDs, commits, licenses, and policies." }
+      ],
+      "preconditions": ["The lock was reviewed for exact revision, license evidence, and copying policy.", "Network Git access is allowed when not using --dry-run."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/upstreams-local"], "description": "Clones, fetches, and checks out ignored research mirrors; never modifies target packs or promotes their files." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "The lock is invalid, a source ID is unknown, Git failed, or the pinned revision mismatched.", "recovery": "Review the lock and network/Git error; never advance a revision implicitly." }
+      ],
+      "evidenceProduced": ["Exact local research revision, license record, and fixture-only copying policy."],
+      "unsupportedBehavior": ["Does not grant redistribution rights or make external editor output a runtime authority.", "Does not update pinned commits or copy external source code into public examples."],
+      "supports": { "help": false, "json": false, "report": true }
+    },
+    {
+      "id": "eval.offline",
+      "status": "implemented",
+      "purpose": "Run the deterministic structural, geometry, text, asset, protocol, preview, and leak evaluation suite.",
+      "command": { "executable": "node", "script": "tools/eval-offline.mjs", "display": "node tools/eval-offline.mjs [--task <id>] [--report <path>] [--update-goldens] [--json]" },
+      "arguments": [
+        { "name": "task", "kind": "option", "flag": "--task", "required": false, "valueType": "string", "description": "Evaluate one fixed task id." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Report output path." },
+        { "name": "update-goldens", "kind": "flag", "flag": "--update-goldens", "required": false, "valueType": "boolean", "description": "Explicitly replace golden images." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print the report as JSON." }
+      ],
+      "inputs": [{ "name": "fixtures", "kind": "directory", "required": true, "description": "evals/offline/tasks.json, public examples, text cases, and golden images." }],
+      "outputs": [{ "name": "offline_report", "kind": "report", "required": true, "format": "JSON", "description": "Deterministic pass/fail results for every fixed task." }],
+      "preconditions": ["Required tools and public fixtures are available."],
+      "mutates": { "mode": "repository", "paths": ["workspace/_eval_offline", "workspace/offline-eval-report.json", "evals/goldens"], "description": "Writes generated workspace evidence; modifies goldens only with explicit --update-goldens." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 1, "meaning": "Manifest, fixture, renderer, or report processing crashed.", "recovery": "Fix the missing or invalid evaluation input and rerun." },
+        { "exitCode": 9, "meaning": "One or more deterministic evaluation gates failed.", "recovery": "Fix the owning source, tool, recipe, or fixture without weakening expected results." }
+      ],
+      "evidenceProduced": ["Per-gate results, preview artifacts, and private-path/asset leak findings."],
+      "unsupportedBehavior": ["Does not replace Bedrock runtime validation.", "Does not update goldens without the explicit destructive --update-goldens flag."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "skill.route",
+      "status": "implemented",
+      "purpose": "Validate structured intent and select exactly one primary Skill with at most one follow-on.",
+      "command": { "executable": "node", "script": "tools/route-task.mjs", "display": "node tools/route-task.mjs --input <intent.json> --compact" },
+      "arguments": [{ "name": "input", "kind": "option", "flag": "--input", "required": true, "valueType": "path", "description": "Structured intent JSON." }],
+      "inputs": [{ "name": "structured_intent", "kind": "file", "required": true, "format": "JSON", "description": "Surface, task kinds, known files, and evidence target." }],
+      "outputs": [{ "name": "route", "kind": "stdout", "required": true, "format": "JSON", "description": "Fail-closed primary and optional follow-on route." }],
+      "preconditions": ["Intent is structured before automatic routing."],
+      "mutates": { "mode": "none", "paths": [], "description": "Read-only routing." },
+      "successExitCodes": [0],
+      "failures": [{ "exitCode": 9, "meaning": "Intent is unknown, ambiguous, malformed, or exceeds escalation limits.", "recovery": "Correct or disambiguate the structured intent." }],
+      "evidenceProduced": ["Primary owner, mode, route evidence, answer profile, and escalation state."],
+      "unsupportedBehavior": ["Raw prompt input is advisory only and never auto-executes."],
+      "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "skill.lint",
+      "status": "implemented",
+      "purpose": "Read-only portable Skill frontmatter, link, placeholder, mojibake, and orphan audit.",
+      "command": { "executable": "node", "script": "tools/skill-lint.mjs", "display": "node tools/skill-lint.mjs --json" },
+      "arguments": [], "inputs": [{ "name": "skills", "kind": "directory", "required": true, "description": "Repository Skill tree." }],
+      "outputs": [{ "name": "lint_report", "kind": "stdout", "required": true, "format": "JSON", "description": "Portable lint findings and report-only orphan classification." }],
+      "preconditions": [], "mutates": { "mode": "none", "paths": [], "description": "Read-only lint." }, "successExitCodes": [0],
+      "failures": [{ "exitCode": 9, "meaning": "A blocking portable Skill defect was found.", "recovery": "Fix the owning source without deleting reported orphans automatically." }],
+      "evidenceProduced": ["Frontmatter, reference, encoding, placeholder, and orphan findings."],
+      "unsupportedBehavior": ["Does not delete or rewrite Skill files."], "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "skill.sync",
+      "status": "implemented",
+      "purpose": "Compare source and installed Skill sets and content without changing either tree.",
+      "command": { "executable": "node", "script": "tools/skill-sync-check.mjs", "display": "node tools/skill-sync-check.mjs [--installed <directory>]" },
+      "arguments": [{ "name": "installed", "kind": "option", "flag": "--installed", "required": false, "valueType": "path", "description": "Installed Skill root override." }],
+      "inputs": [{ "name": "source_and_installed", "kind": "directory", "required": true, "description": "Source and installed Skill trees." }],
+      "outputs": [{ "name": "sync_report", "kind": "stdout", "required": true, "format": "JSON", "description": "Source-only, installed-only, and file drift classification." }],
+      "preconditions": [], "mutates": { "mode": "none", "paths": [], "description": "Read-only comparison." }, "successExitCodes": [0],
+      "failures": [{ "exitCode": 9, "meaning": "Source topology does not match the reviewed manifest.", "recovery": "Review and update topology deliberately." }],
+      "evidenceProduced": ["Set equality and per-Skill file drift counts."],
+      "unsupportedBehavior": ["Does not install, overwrite, prune, or reconcile files."], "supports": { "help": true, "json": true, "report": false }
+    },
+    {
+      "id": "eval.live",
+      "status": "implemented",
+      "purpose": "Check whether real PC/touch screenshots and a clean Bedrock content log are supplied for fixed tasks.",
+      "command": { "executable": "node", "script": "tools/eval-live.mjs", "display": "node tools/eval-live.mjs [--task <id>] [--evidence <path>] [--report <path>] [--json]" },
+      "arguments": [
+        { "name": "task", "kind": "option", "flag": "--task", "required": false, "valueType": "string", "description": "Evaluate one fixed task id." },
+        { "name": "evidence", "kind": "option", "flag": "--evidence", "required": false, "valueType": "path", "description": "Evidence JSON path." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Report output path." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print the report as JSON." }
+      ],
+      "inputs": [
+        { "name": "task_manifest", "kind": "file", "required": true, "format": "JSON", "pathPattern": "evals/offline/tasks.json", "description": "Fixed task definitions." },
+        { "name": "runtime_evidence", "kind": "file", "required": false, "format": "JSON", "pathPattern": "evals/live/evidence.json", "description": "Paths to real PC/touch screenshots and a Bedrock content log." }
+      ],
+      "outputs": [{ "name": "live_report", "kind": "report", "required": true, "format": "JSON", "description": "Runtime-evidence status, issues, template, and in-game verification prompt." }],
+      "preconditions": ["Offline evaluation is separate and real Bedrock evidence is supplied by a human runtime check."],
+      "mutates": { "mode": "workspace", "paths": ["workspace/live-eval-report.json"], "description": "Writes only the selected live evidence report." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 9, "meaning": "Runtime evidence is missing, invalid, or contains JSON UI errors.", "recovery": "Run the screen in Bedrock and supply real PC/touch screenshots plus a clean content log." },
+        { "exitCode": 64, "meaning": "The requested task id is unknown.", "recovery": "Use an id from evals/offline/tasks.json." }
+      ],
+      "evidenceProduced": ["Per-task runtime-evidence status and exact missing or invalid evidence."],
+      "unsupportedBehavior": ["Does not launch or emulate Bedrock and does not treat synthetic previews as runtime proof."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "ui.route.trace", "status": "implemented", "purpose": "Trace namespace/control inheritance routes with stable blocking diagnostics.",
+      "command": {"executable": "node", "script": "tools/trace-ui-route.mjs", "display": "node tools/trace-ui-route.mjs <rp-root> <namespace.control> [--json]"}, "arguments": [],
+      "inputs": [{"name": "resource_pack", "kind": "directory", "required": true, "description": "Exact resource-pack root."}], "outputs": [{"name": "route_trace", "kind": "report", "required": true, "format": "JSON", "description": "Resolved route and blocking codes."}],
+      "preconditions": ["The exact resource pack and control are known."], "mutates": {"mode": "none", "paths": [], "description": "Read-only."}, "successExitCodes": [0], "failures": [{"exitCode": 9, "meaning": "The route is unresolved.", "recovery": "Fix the reported registration or reference edge."}],
+      "evidenceProduced": ["Static namespace/control route trace."], "unsupportedBehavior": ["Does not prove Bedrock runtime loading."], "supports": {"help": false, "json": true, "report": false}
+    },
+    {
+      "id": "content-log.audit", "status": "implemented", "purpose": "Classify Bedrock UI, Sound, and Script log signatures and control paths.",
+      "command": {"executable": "node", "script": "tools/audit-content-log.mjs", "display": "node tools/audit-content-log.mjs <log-path> [--target <control>] [--json]"}, "arguments": [],
+      "inputs": [{"name": "content_log", "kind": "file", "required": true, "description": "Bedrock Content Log."}], "outputs": [{"name": "content_log_audit", "kind": "report", "required": true, "format": "JSON", "description": "Target UI errors and external noise."}],
+      "preconditions": ["The log belongs to the relevant run."], "mutates": {"mode": "none", "paths": [], "description": "Read-only."}, "successExitCodes": [0], "failures": [{"exitCode": 9, "meaning": "Target UI errors were found.", "recovery": "Fix the owning UI path and recapture."}],
+      "evidenceProduced": ["Structured Content Log signatures."], "unsupportedBehavior": ["Does not launch Bedrock."], "supports": {"help": false, "json": true, "report": false}
+    },
+    {
+      "id": "pack.installed.verify", "status": "implemented", "purpose": "Compare source and installed pack UUID, version, dependencies, and hashes.",
+      "command": {"executable": "node", "script": "tools/verify-installed-pack.mjs", "display": "node tools/verify-installed-pack.mjs <source> <installed> [more...] [--json]"}, "arguments": [],
+      "inputs": [{"name": "packs", "kind": "directory", "required": true, "description": "Source and installed pack roots."}], "outputs": [{"name": "installed_pack_verification", "kind": "report", "required": true, "format": "JSON", "description": "Fingerprint comparison."}],
+      "preconditions": ["Exact pack roots are known."], "mutates": {"mode": "none", "paths": [], "description": "Read-only."}, "successExitCodes": [0], "failures": [{"exitCode": 9, "meaning": "Installed pack differs.", "recovery": "Remove duplicates or reinstall the expected revision."}],
+      "evidenceProduced": ["Hash-bound installed/source comparison."], "unsupportedBehavior": ["Does not inspect the active world stack."], "supports": {"help": false, "json": true, "report": false}
+    }
+  ]
+}

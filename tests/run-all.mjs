@@ -2,23 +2,39 @@
 // Lightweight test runner with no extra deps. Exits non-zero on any failure.
 //
 // Categories:
-//   1) compile-all-examples: run pipeline on every examples/ir/*.yaml under workspace/_test_<n>/
+//   1) compile-all-examples: run pipeline on every examples/ir/*.yaml under the UUID run workspace
 //   2) validator-negative:   feed a deliberately broken ui.json and expect ok=false
 //   3) solver-edge:          inline IR using equal_gap_y, edge_offset, same_size
 //   4) layout-audit:          group centering + solved-geometry warnings
 //   5) root-and-units:        root rect compilation + solver-stage unit guard
 //   6) measured-controls:     auto text/image/collection sizing and form grid props
 //   7) go-solver-parity:      Go solver output parity with Node solver
+//   8) project-templates:      initialize and compile every bundled IR template
+//   9) pack-validator:         JSONC, texture, _ui_defs, and failure behavior
+//  10) vanilla-index:          root-form official samples and texture evidence
 
-import { mkdir, writeFile, rm, readFile } from "node:fs/promises";
+import { cp, mkdir, writeFile, rm, readFile } from "node:fs/promises";
 import { resolve, basename, extname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { spawn } from "node:child_process";
 import { readdir } from "node:fs/promises";
+import { renderProjectTemplate } from "../tools/_lib/project-templates.mjs";
+import { captureRepositoryState, compareRepositoryState, createTestRunContext, DEFAULT_REPOSITORY_GUARDS, runChild } from "./_lib/test-run-context.mjs";
+
+if (process.argv.includes("--help") || process.argv.includes("-h")) {
+  process.stdout.write("Usage: node tests/run-all.mjs\nRuns the 10 core deterministic test categories.\n");
+  process.exit(0);
+}
+if (process.argv.length > 2) {
+  process.stderr.write(`unknown option: ${process.argv[2]}\n`);
+  process.exit(64);
+}
 
 const here = fileURLToPath(new URL(".", import.meta.url));
 const REPO = resolve(here, "..");
 const node = process.execPath;
+const context = await createTestRunContext(REPO);
+const beforeState = await captureRepositoryState(REPO, DEFAULT_REPOSITORY_GUARDS);
+const testPath = (name) => resolve(context.workspace, name);
 
 const FAIL = [];
 const PASS = [];
@@ -34,13 +50,7 @@ function record(name, ok, info) {
 }
 
 function run(cmd, args, opts = {}) {
-  return new Promise((resolveP) => {
-    const child = spawn(cmd, args, { cwd: REPO, ...opts });
-    let stdout = "", stderr = "";
-    child.stdout.on("data", (d) => { stdout += d.toString(); });
-    child.stderr.on("data", (d) => { stderr += d.toString(); });
-    child.on("close", (code) => resolveP({ code, stdout, stderr }));
-  });
+  return runChild(cmd, args, { cwd: opts.cwd || REPO, env: opts.env });
 }
 
 async function readJsonSafe(p) {
@@ -66,12 +76,12 @@ async function category1() {
   const entries = (await readdir(dir)).filter((f) => extname(f) === ".yaml");
   for (const f of entries) {
     const name = basename(f, ".yaml");
-    const wsDir = resolve(REPO, "workspace", `_test_${name}`);
+    const wsDir = testPath(`compile_${name}`);
     await rm(wsDir, { recursive: true, force: true });
     await mkdir(wsDir, { recursive: true });
     const ir = await readFile(resolve(dir, f), "utf8");
     await writeFile(resolve(wsDir, "ir.yaml"), ir, "utf8");
-    const r = await run(node, ["tools/run.mjs", `workspace/_test_${name}/ir.yaml`]);
+    const r = await run(node, ["tools/run.mjs", resolve(wsDir, "ir.yaml")]);
     if (r.code !== 0) { record(`compile:${name}`, false, { code: r.code, stderr: r.stderr.slice(-400) }); continue; }
     const report = await readJsonSafe(resolve(wsDir, "report.json"));
     record(`compile:${name}`, !!report && report.ok === true, report ? { errors: report.errors.length, warnings: report.warnings.length } : { report: "missing" });
@@ -80,7 +90,7 @@ async function category1() {
 
 async function category2() {
   console.log("[2] validator-negative");
-  const wsDir = resolve(REPO, "workspace", "_test_neg");
+  const wsDir = testPath("validator_negative");
   await rm(wsDir, { recursive: true, force: true });
   await mkdir(wsDir, { recursive: true });
   const badUi = {
@@ -98,7 +108,7 @@ async function category2() {
     },
   };
   await writeFile(resolve(wsDir, "ui.json"), JSON.stringify(badUi, null, 2));
-  const r = await run(node, ["tools/validate.mjs", "workspace/_test_neg/ui.json", "--strict-root", "--report", "workspace/_test_neg/report.json"]);
+  const r = await run(node, ["tools/validate.mjs", resolve(wsDir, "ui.json"), "--strict-root", "--report", resolve(wsDir, "report.json")]);
   const report = await readJsonSafe(resolve(wsDir, "report.json"));
   const sawAnchorErr = !!(report && report.errors.find((e) => /anchor_from "top_diagonal"/.test(e.message)));
   const sawBindingWarns = !!(report && report.warnings.find((w) => /source_property_name/.test(w.message)));
@@ -111,7 +121,7 @@ async function category2() {
 
 async function category3() {
   console.log("[3] solver-edge");
-  const wsDir = resolve(REPO, "workspace", "_test_edge");
+  const wsDir = testPath("solver_edge");
   await rm(wsDir, { recursive: true, force: true });
   await mkdir(wsDir, { recursive: true });
   const ir = `screen: edge
@@ -150,7 +160,7 @@ constraints:
   - { op: edge_eq, a: "pinned.bottom", b: "ref.bottom" }
 `;
   await writeFile(resolve(wsDir, "ir.yaml"), ir, "utf8");
-  const r = await run(node, ["tools/run.mjs", "workspace/_test_edge/ir.yaml"]);
+  const r = await run(node, ["tools/run.mjs", resolve(wsDir, "ir.yaml")]);
   const report = await readJsonSafe(resolve(wsDir, "report.json"));
   record("edge:pipeline-ok", r.code === 0 && report && report.ok === true);
 
@@ -176,7 +186,7 @@ constraints:
 
 async function category4() {
   console.log("[4] layout-audit");
-  const wsDir = resolve(REPO, "workspace", "_test_layout_audit");
+  const wsDir = testPath("layout_audit");
   await rm(wsDir, { recursive: true, force: true });
   await mkdir(wsDir, { recursive: true });
   const ir = `screen: layout_audit
@@ -222,7 +232,7 @@ constraints:
   - { op: center_group_x, ids: [left, middle, right] }
 `;
   await writeFile(resolve(wsDir, "ir.yaml"), ir, "utf8");
-  const r = await run(node, ["tools/run.mjs", "workspace/_test_layout_audit/ir.yaml"]);
+  const r = await run(node, ["tools/run.mjs", resolve(wsDir, "ir.yaml")]);
   const report = await readJsonSafe(resolve(wsDir, "report.json"));
   const solved = await readJsonSafe(resolve(wsDir, "solved.json"));
   record("audit:pipeline-ok-with-warnings", r.code === 0 && report && report.ok === true && report.warnings.length >= 2,
@@ -246,7 +256,7 @@ constraints:
 
 async function category5() {
   console.log("[5] root-and-units");
-  const wsDir = resolve(REPO, "workspace", "_test_root_units");
+  const wsDir = testPath("root_units");
   await rm(wsDir, { recursive: true, force: true });
   await mkdir(wsDir, { recursive: true });
   const ir = `screen: root_units
@@ -263,7 +273,7 @@ elements:
     size: [80, 40]
 `;
   await writeFile(resolve(wsDir, "ir.yaml"), ir, "utf8");
-  const r = await run(node, ["tools/run.mjs", "workspace/_test_root_units/ir.yaml"]);
+  const r = await run(node, ["tools/run.mjs", resolve(wsDir, "ir.yaml")]);
   const solved = await readJsonSafe(resolve(wsDir, "solved.json"));
   const ui = await readJsonSafe(resolve(wsDir, "ui.json"));
   const root = solved && solved.rects.__root__;
@@ -274,12 +284,12 @@ elements:
   record("root:compiled-layout", ui && ui.root_panel && ui.root_panel.size[0] === 320 && ui.root_panel.size[1] === 180
     && ui.root_panel.anchor_from === "center" && ui.root_panel.anchor_to === "center",
     ui && ui.root_panel ? ui.root_panel : null);
-  const render = await run(node, ["tools/render.mjs", "workspace/_test_root_units/ui.json", "workspace/_test_root_units/solved.json", "--no-image"]);
+  const render = await run(node, ["tools/render.mjs", resolve(wsDir, "ui.json"), resolve(wsDir, "solved.json"), "--no-image", "--diagnostic-ok"]);
   const coords = await readJsonSafe(resolve(wsDir, "coords.json"));
   record("render:coords-exclude-internal-rects", render.code === 0 && coords && coords.rects.length === 1 && coords.rects[0].id === "child",
     coords ? { rects: coords.rects.map((r) => r.id) } : { coords: "missing" });
 
-  const badDir = resolve(REPO, "workspace", "_test_nonpixel");
+  const badDir = testPath("nonpixel");
   await rm(badDir, { recursive: true, force: true });
   await mkdir(badDir, { recursive: true });
   const badIr = `screen: nonpixel
@@ -290,14 +300,14 @@ elements:
     size: ["100%", 40]
 `;
   await writeFile(resolve(badDir, "ir.yaml"), badIr, "utf8");
-  const bad = await run(node, ["tools/ir-validate.mjs", "workspace/_test_nonpixel/ir.yaml"]);
+  const bad = await run(node, ["tools/ir-validate.mjs", resolve(badDir, "ir.yaml")]);
   record("units:rejects-nonpixel-solver-size", bad.code === 6 && /numeric pixel sizes/.test(bad.stderr + bad.stdout),
     { code: bad.code });
 }
 
 async function category6() {
   console.log("[6] measured-controls");
-  const wsDir = resolve(REPO, "workspace", "_test_measured_controls");
+  const wsDir = testPath("measured_controls");
   await rm(wsDir, { recursive: true, force: true });
   await mkdir(wsDir, { recursive: true });
   const ir = `screen: measured_controls
@@ -342,7 +352,7 @@ elements:
       texture: textures/ui/icon_recipe_book
 `;
   await writeFile(resolve(wsDir, "ir.yaml"), ir, "utf8");
-  const r = await run(node, ["tools/run.mjs", "workspace/_test_measured_controls/ir.yaml"]);
+  const r = await run(node, ["tools/run.mjs", resolve(wsDir, "ir.yaml")]);
   const report = await readJsonSafe(resolve(wsDir, "report.json"));
   const solved = await readJsonSafe(resolve(wsDir, "solved.json"));
   const ui = await readJsonSafe(resolve(wsDir, "ui.json"));
@@ -374,7 +384,7 @@ async function category7() {
     record("go:available-or-skipped", true, { skipped: true });
     return;
   }
-  const wsDir = resolve(REPO, "workspace", "_test_go_parity");
+  const wsDir = testPath("go_parity");
   await rm(wsDir, { recursive: true, force: true });
   await mkdir(wsDir, { recursive: true });
   const ir = `screen: go_parity
@@ -418,10 +428,10 @@ constraints:
   - { op: edge_eq, a: "shadow.bottom", b: "right.bottom" }
 `;
   await writeFile(resolve(wsDir, "ir.yaml"), ir, "utf8");
-  const nodeRun = await run(node, ["tools/solve.mjs", "workspace/_test_go_parity/ir.yaml", "workspace/_test_go_parity/node.json"], {
+  const nodeRun = await run(node, ["tools/solve.mjs", resolve(wsDir, "ir.yaml"), resolve(wsDir, "node.json")], {
     env: { ...process.env, MCBEKIT_SOLVER: "node" },
   });
-  const goRun = await run(node, ["tools/solve.mjs", "workspace/_test_go_parity/ir.yaml", "workspace/_test_go_parity/go.json"], {
+  const goRun = await run(node, ["tools/solve.mjs", resolve(wsDir, "ir.yaml"), resolve(wsDir, "go.json")], {
     env: { ...process.env, MCBEKIT_SOLVER: "go" },
   });
   const nodeSolved = await readJsonSafe(resolve(wsDir, "node.json"));
@@ -431,7 +441,112 @@ constraints:
   record("go:log-parity", !!nodeSolved && !!goSolved && stableJson(nodeSolved.log) === stableJson(goSolved.log));
 }
 
-(async () => {
+async function category8() {
+  console.log("[8] project-templates");
+  const listed = await run(node, ["tools/init-project.mjs", "--list-templates"]);
+  record("template:list", listed.code === 0 && ["minimal", "rpg_hud", "rpg_menu"].every((id) => listed.stdout.includes(id)));
+
+  for (const template of ["minimal", "rpg_hud", "rpg_menu"]) {
+    const name = `test_template_${template}`;
+    const wsDir = testPath(name);
+    await rm(wsDir, { recursive: true, force: true });
+    await mkdir(wsDir, { recursive: true });
+    await writeFile(resolve(wsDir, "ir.yaml"), await renderProjectTemplate(template, name), "utf8");
+    record(`template:${template}:init`, true, { isolated: true });
+    const compiled = await run(node, ["tools/run.mjs", resolve(wsDir, "ir.yaml")]);
+    const report = await readJsonSafe(resolve(wsDir, "report.json"));
+    record(`template:${template}:clean`, compiled.code === 0 && report?.ok === true && report.warnings.length === 0,
+      report ? { errors: report.errors.length, warnings: report.warnings.length } : { code: compiled.code, report: "missing" });
+  }
+
+  const invalid = await run(node, ["tools/init-project.mjs", "test_invalid_template", "--template", "missing"]);
+  record("template:invalid-is-usage-error", invalid.code === 64, { code: invalid.code });
+}
+
+async function category9() {
+  console.log("[9] pack-validator");
+  const validDir = testPath("pack_valid");
+  const validUi = resolve(validDir, "ui");
+  await rm(validDir, { recursive: true, force: true });
+  await mkdir(validUi, { recursive: true });
+  await writeFile(resolve(validUi, "_ui_defs.json"), JSON.stringify({ ui_defs: ["ui/main.json", "ui/extra.json"] }, null, 2));
+  await writeFile(resolve(validUi, "main.json"), JSON.stringify({
+    namespace: "pack_test",
+    root_panel: {
+      type: "panel",
+      size: ["100%", "100%"],
+      controls: [{ icon: { type: "image", size: [20, 20], texture: "textures/ui/Black" } }],
+    },
+  }, null, 2));
+  await writeFile(resolve(validUi, "extra.json"), `{
+  "namespace": "pack_extra",
+  "extra": {
+    "type": "panel",
+    "size": [20, 20]
+  }
+}
+`, "utf8");
+  const valid = await run(node, ["tools/validate-pack.mjs", validDir, "--strict-warnings", "--report", resolve(validDir, "report.json")]);
+  const validReport = await readJsonSafe(resolve(validDir, "report.json"));
+  record("pack:clean-jsonc-pack", valid.code === 0 && validReport?.clean === true && validReport.files === 3,
+    validReport ? { files: validReport.files, errors: validReport.errors.length, warnings: validReport.warnings.length } : { code: valid.code });
+
+  const unknownDir = testPath("pack_unknown_property");
+  const unknownUi = resolve(unknownDir, "ui");
+  await rm(unknownDir, { recursive: true, force: true });
+  await mkdir(unknownUi, { recursive: true });
+  await writeFile(resolve(unknownUi, "_ui_defs.json"), JSON.stringify({ ui_defs: ["ui/main.json"] }, null, 2));
+  await writeFile(resolve(unknownUi, "main.json"), JSON.stringify({
+    namespace: "pack_unknown",
+    root_panel: {
+      type: "panel",
+      controls: [
+        { tooltip: { type: "custom", renderer: "hover_text_renderer", hover_text: "invalid" } },
+        { grid: { type: "grid", grid_dimensions: [1, 1], grid_item_size: [20, 20], controls: [{ cell: { type: "panel", size: [20, 20] } }] } },
+      ],
+    },
+  }, null, 2));
+  const unknown = await run(node, ["tools/validate-pack.mjs", unknownDir, "--report", resolve(unknownDir, "report.json")]);
+  const unknownReport = await readJsonSafe(resolve(unknownDir, "report.json"));
+  record("pack:runtime-unknown-properties-exit-9", unknown.code === 9 && unknownReport?.ok === false, { code: unknown.code });
+  record("pack:flags-runtime-unknown-properties", ["hover_text", "grid_item_size"].every((property) =>
+    unknownReport?.errors.some((error) => error.message === `Unknown property "${property}"`)));
+
+  const brokenDir = testPath("pack_broken");
+  const brokenUi = resolve(brokenDir, "ui");
+  await rm(brokenDir, { recursive: true, force: true });
+  await mkdir(brokenUi, { recursive: true });
+  await writeFile(resolve(brokenUi, "_ui_defs.json"), JSON.stringify({ ui_defs: ["ui/main.json", "ui/missing.json"] }, null, 2));
+  await writeFile(resolve(brokenUi, "main.json"), JSON.stringify({ namespace: "pack_broken", root_panel: { type: "panel" } }, null, 2));
+  const broken = await run(node, ["tools/validate-pack.mjs", brokenDir, "--report", resolve(brokenDir, "report.json")]);
+  const brokenReport = await readJsonSafe(resolve(brokenDir, "report.json"));
+  record("pack:missing-def-entry-exits-9", broken.code === 9 && brokenReport?.ok === false, { code: broken.code });
+  record("pack:flags-missing-def-entry", !!brokenReport?.errors.find((error) => error.path === "ui/missing.json"));
+  const invalidArgs = await run(node, ["tools/validate-pack.mjs", validDir, "--unknown"]);
+  record("pack:invalid-option-is-usage-error", invalidArgs.code === 64, { code: invalidArgs.code });
+}
+
+async function category10() {
+  console.log("[10] vanilla-index");
+  const isolatedRepo = resolve(context.resources, "vanilla-index-builder");
+  await mkdir(resolve(isolatedRepo, "tools", "_lib"), { recursive: true });
+  await cp(resolve(REPO, "tools", "build-vanilla-index.mjs"), resolve(isolatedRepo, "tools", "build-vanilla-index.mjs"));
+  for (const file of ["paths.mjs", "fsx.mjs", "log.mjs"]) {
+    await cp(resolve(REPO, "tools", "_lib", file), resolve(isolatedRepo, "tools", "_lib", file));
+  }
+  await cp(resolve(REPO, "references", "official", "bedrock-samples-ui"), resolve(isolatedRepo, "references", "official", "bedrock-samples-ui"), { recursive: true });
+  const built = await run(node, [resolve(isolatedRepo, "tools", "build-vanilla-index.mjs"), "--force"], { cwd: isolatedRepo });
+  const screens = await readJsonSafe(resolve(isolatedRepo, "vanilla-index", "screens.json"));
+  const textures = await readJsonSafe(resolve(isolatedRepo, "vanilla-index", "textures.json"));
+  record("index:builds", built.code === 0 && screens?.schema?.endsWith("@2") && textures?.schema?.endsWith("@2"),
+    { code: built.code, screens: screens?.count, textures: textures?.count });
+  record("index:official-root-screen", !!screens?.screens?.hud_screen?.find((entry) =>
+    entry.source === "bedrock-samples-ui" && entry.path.endsWith("references/official/bedrock-samples-ui/hud_screen.json")));
+  record("index:texture-evidence", Array.isArray(textures?.textures?.["textures/ui/Black"]));
+}
+
+let cleanupError = null;
+try {
   await category1();
   await category2();
   await category3();
@@ -439,10 +554,28 @@ constraints:
   await category5();
   await category6();
   await category7();
-  console.log("");
-  console.log(`Total: ${PASS.length} passed, ${FAIL.length} failed`);
-  if (FAIL.length) {
-    for (const f of FAIL) console.log("  -", f.name, JSON.stringify(f.info || {}));
-    process.exit(1);
+  await category8();
+  await category9();
+  await category10();
+} catch (error) {
+  record("runner:uncaught-error", false, { error: String(error?.stack || error) });
+} finally {
+  try { await context.cleanup(); }
+  catch (error) { cleanupError = String(error?.stack || error); record("runner:cleanup", false, { error: cleanupError }); }
+  try {
+    const afterState = await captureRepositoryState(REPO, DEFAULT_REPOSITORY_GUARDS);
+    const parity = compareRepositoryState(beforeState, afterState);
+    record("runner:repository-state-parity", parity.ok, parity);
+  } catch (error) {
+    record("runner:repository-state-parity", false, { error: String(error?.stack || error) });
   }
-})();
+}
+
+console.log("");
+console.log(`Run: ${context.runId}`);
+console.log(`Resource manifest: ${context.resourceManifest}`);
+console.log(`Total: ${PASS.length} passed, ${FAIL.length} failed`);
+if (FAIL.length) {
+  for (const failure of FAIL) console.log("  -", failure.name, JSON.stringify(failure.info || {}));
+  process.exitCode = 1;
+}

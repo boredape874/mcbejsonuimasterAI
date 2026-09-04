@@ -1,0 +1,27 @@
+import assert from "node:assert/strict";
+import { mkdtemp, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { createCanvas } from "@napi-rs/canvas";
+import { compareScreenshot, measureReference } from "../tools/_lib/screenshot-compare.mjs";
+
+const dir = await mkdtemp(join(tmpdir(), "mcbe-ui-shot-")), renderPath = join(dir, "render.png"), screenshotPath = join(dir, "screen.png");
+const render = createCanvas(100, 50), rc = render.getContext("2d"); rc.fillStyle="#f00"; rc.fillRect(10,10,20,10); await writeFile(renderPath,await render.encode("png"));
+await writeFile(join(dir,"render.report.json"),JSON.stringify({viewport:[100,50],render:{alphaBoxes:{chip:{x:10,y:10,w:20,h:10}}}}));
+const screen = createCanvas(200,100), sc = screen.getContext("2d"); sc.fillStyle="#f00"; sc.fillRect(24,20,40,20); await writeFile(screenshotPath,await screen.encode("png"));
+const measured=await measureReference({imagePath:screenshotPath,rootRect:[0,0,200,100],regions:[{id:"chip",rect:[20,16,50,28]}]});
+assert.deepEqual(measured.regions[0].alphaBBox,{x:24,y:20,w:40,h:20});
+assert.deepEqual(measured.regions[0].contentBBox,{x:24,y:20,w:40,h:20});
+const compared=await compareScreenshot({renderPath,screenshotPath,rootRect:[0,0,200,100]});
+assert.equal(compared.ok,true); assert.equal(compared.elements.length,1); assert.deepEqual(compared.elements[0].delta,{dx:2,dy:0,dw:0,dh:0}); assert.equal(compared.elements[0].alphaOverlap,180/220);
+const explicit=await compareScreenshot({renderPath,screenshotPath,rootRect:[0,0,200,100],regions:[{id:"chip",rect:[20,20,40,20]}]});
+assert.deepEqual(explicit.elements[0].delta,{dx:0,dy:0,dw:0,dh:0});
+const opaquePath=join(dir,"opaque.png"),opaque=createCanvas(200,100),oc=opaque.getContext("2d");oc.fillStyle="#102030";oc.fillRect(0,0,200,100);oc.fillStyle="#ff0000";oc.fillRect(24,20,40,20);await writeFile(opaquePath,await opaque.encode("png"));
+const opaqueResult=await compareScreenshot({renderPath,screenshotPath:opaquePath,rootRect:[0,0,200,100]});
+assert.deepEqual(opaqueResult.elements[0].delta,{dx:2,dy:0,dw:0,dh:0});
+assert.equal(opaqueResult.rootDetection.method,"provided");
+const autoRenderPath=join(dir,"auto-render.png"),autoScreenPath=join(dir,"auto-screen.png"),autoRender=createCanvas(80,40),ar=autoRender.getContext("2d");ar.fillStyle="#e22";ar.fillRect(4,3,22,9);ar.fillStyle="#19d";ar.fillRect(38,7,31,12);ar.fillStyle="#fd2";ar.fillRect(13,25,51,8);await writeFile(autoRenderPath,await autoRender.encode("png"));
+await writeFile(join(dir,"auto-render.report.json"),JSON.stringify({viewport:[80,40],controls:{red:{alphaBBox:{x:4,y:3,w:22,h:9}},blue:{alphaBBox:{x:38,y:7,w:31,h:12}},gold:{alphaBBox:{x:13,y:25,w:51,h:8}}}}));
+const autoScreen=createCanvas(300,180),as=autoScreen.getContext("2d");as.fillStyle="#26313b";as.fillRect(0,0,300,180);as.imageSmoothingEnabled=false;as.drawImage(autoRender,30,24,160,80);await writeFile(autoScreenPath,await autoScreen.encode("png"));
+const automatic=await compareScreenshot({renderPath:autoRenderPath,screenshotPath:autoScreenPath});assert.equal(automatic.rootDetection.method,"static-pixel-coarse-to-fine");assert.ok(automatic.rootDetection.score>.98);assert.ok(Math.abs(automatic.rootRect.x-30)<=1);assert.ok(Math.abs(automatic.rootRect.y-24)<=1);assert.ok(Math.abs(automatic.rootRect.w-160)<=2);assert.equal(automatic.elements.length,3);assert.ok(automatic.elements.every(item=>Math.abs(item.delta.dx)<=1&&Math.abs(item.delta.dy)<=1));
+console.log("screenshot-compare: ok");

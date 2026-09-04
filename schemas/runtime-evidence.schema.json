@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mcbe-jsonui-ai-kit/runtime-evidence.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "bedrock", "pack", "world", "device", "scenario", "requiredStates", "states", "screenshots", "contentLog", "interaction", "review", "capturedAt"],
+  "properties": {
+    "schema": {"const": "mcbe-jsonui-ai-kit/runtime-evidence@1"},
+    "bedrock": {"type": "object", "required": ["version", "channel", "platform", "jsonDialect"], "properties": {"version": {"type": "string", "minLength": 1}, "channel": {"enum": ["stable", "preview"]}, "platform": {"type": "string", "minLength": 1}, "jsonDialect": {"type": "string", "pattern": "^bedrock-json@"}}},
+    "pack": {"type": "object", "required": ["uuid", "version", "fingerprint"], "properties": {"uuid": {"type": "string", "minLength": 1}, "version": {"type": "array", "minItems": 3, "items": {"type": "integer", "minimum": 0}}, "fingerprint": {"$ref": "#/$defs/hash"}}},
+    "world": {"type": "object", "required": ["resourcePackStack", "behaviorPackStack"], "properties": {"resourcePackStack": {"type": "array"}, "behaviorPackStack": {"type": "array"}}},
+    "device": {"type": "object", "required": ["input", "guiScale", "safeZone"], "properties": {"input": {"enum": ["mouse-keyboard", "touch", "gamepad"]}, "guiScale": {"type": ["string", "number"]}, "safeZone": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}}}},
+    "scenario": {"type": "string", "minLength": 1},
+    "requiredStates": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "states": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "screenshots": {"type": "array", "minItems": 1, "items": {"allOf": [{"$ref": "#/$defs/artifact"}, {"type": "object", "required": ["state", "profile"], "properties": {"state": {"type": "string", "minLength": 1}, "profile": {"type": "string", "minLength": 1}}}]}},
+    "contentLog": {"allOf": [{"$ref": "#/$defs/artifact"}, {"type": "object", "required": ["targetUiErrors", "externalErrors"], "properties": {"targetUiErrors": {"const": 0}, "externalErrors": {"type": "integer", "minimum": 0}}}]},
+    "interaction": {"type": "object", "required": ["passed", "observations"], "properties": {"passed": {"const": true}, "observations": {"type": "array", "minItems": 1, "items": {"type": "string"}}}},
+    "review": {"type": "object", "required": ["reviewer", "verifiedAt", "toolVersion"], "properties": {"reviewer": {"type": "string", "minLength": 1}, "verifiedAt": {"type": "string", "format": "date-time"}, "toolVersion": {"type": "string", "minLength": 1}}},
+    "capturedAt": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "artifact": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/hash"}}}
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schemaVersion", "id", "tier", "redistribution", "stats", "patterns", "recipeCandidates", "unresolved", "files"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "pattern": "^local-source-[0-9]{3}$" },
+    "tier": { "enum": ["quarantine", "pattern", "gold-candidate", "gold"] },
+    "redistribution": { "const": "local-only" },
+    "stats": { "type": "object" },
+    "patterns": { "type": "object" },
+    "recipeCandidates": { "type": "array" },
+    "unresolved": { "type": "array" },
+    "files": { "type": "array" }
+  }
+}

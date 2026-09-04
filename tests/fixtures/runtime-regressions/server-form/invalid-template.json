@@ -1,0 +1,4 @@
+{
+  "namespace": "server_form",
+  "screen": { "type": "stack_panel", "collection_name": "form_buttons", "controls": [{ "item@$button_template": {} }] }
+}

@@ -1,0 +1,133 @@
+{
+  "$schema": "../schemas/source.schema.json",
+  "schemaVersion": 1,
+  "scope": "public",
+  "sources": [
+    {
+      "id": "v2-example-typography-state-gallery",
+      "kind": "addon",
+      "tier": "gold-candidate",
+      "redistribution": "public",
+      "license": "MIT (code/data); CC0-1.0 (generated assets)",
+      "licenseEvidence": ["../examples/v2/LICENSE.md"],
+      "revision": "v2-generated-1",
+      "rpRoot": "../examples/v2/01-typography-state-gallery/RP",
+      "bpRoot": "../examples/v2/01-typography-state-gallery/BP",
+      "include": ["ui/_ui_defs.json", "ui/server_form.json", "ui/features/**/*.json"],
+      "exclude": ["node_modules/**", "dist/**", "build/**", "cache/**", ".cache/**", "workspace/**", "preview/**", "**/*.log"],
+      "overrides": {
+        "entryFiles": ["ui/server_form.json"],
+        "protocolFiles": ["scripts/main.js"],
+        "visualEvidence": ["../evals/goldens/typography_state_gallery/preview-contact-sheet.png", "../examples/v2/01-typography-state-gallery/validation.json"]
+      }
+    },
+    {
+      "id": "v2-example-daily-rewards",
+      "kind": "addon",
+      "tier": "gold-candidate",
+      "redistribution": "public",
+      "license": "MIT (code/data); CC0-1.0 (generated assets)",
+      "licenseEvidence": ["../examples/v2/LICENSE.md"],
+      "revision": "v2-generated-1",
+      "rpRoot": "../examples/v2/02-daily-rewards/RP",
+      "bpRoot": "../examples/v2/02-daily-rewards/BP",
+      "include": ["ui/_ui_defs.json", "ui/server_form.json", "ui/features/**/*.json"],
+      "exclude": ["node_modules/**", "dist/**", "build/**", "cache/**", ".cache/**", "workspace/**", "preview/**", "**/*.log"],
+      "overrides": {
+        "entryFiles": ["ui/server_form.json"],
+        "protocolFiles": ["scripts/main.js"],
+        "visualEvidence": ["../evals/goldens/daily_rewards/preview-contact-sheet.png", "../examples/v2/02-daily-rewards/validation.json"]
+      }
+    },
+    {
+      "id": "v2-example-server-form-grid",
+      "kind": "addon",
+      "tier": "gold-candidate",
+      "redistribution": "public",
+      "license": "MIT (code/data); CC0-1.0 (generated assets)",
+      "licenseEvidence": ["../examples/v2/LICENSE.md"],
+      "revision": "v2-generated-1",
+      "rpRoot": "../examples/v2/03-server-form-grid/RP",
+      "bpRoot": "../examples/v2/03-server-form-grid/BP",
+      "include": ["ui/_ui_defs.json", "ui/server_form.json", "ui/features/**/*.json"],
+      "exclude": ["node_modules/**", "dist/**", "build/**", "cache/**", ".cache/**", "workspace/**", "preview/**", "**/*.log"],
+      "overrides": {
+        "entryFiles": ["ui/server_form.json"],
+        "protocolFiles": ["scripts/main.js"],
+        "visualEvidence": ["../evals/goldens/server_form_grid/preview-contact-sheet.png", "../examples/v2/03-server-form-grid/validation.json"]
+      }
+    },
+    {
+      "id": "v2-example-hud-minimap",
+      "kind": "addon",
+      "tier": "gold-candidate",
+      "redistribution": "public",
+      "license": "MIT (code/data); CC0-1.0 (generated assets)",
+      "licenseEvidence": ["../examples/v2/LICENSE.md"],
+      "revision": "v2-generated-1",
+      "rpRoot": "../examples/v2/04-hud-minimap/RP",
+      "bpRoot": "../examples/v2/04-hud-minimap/BP",
+      "include": ["ui/_ui_defs.json", "ui/hud_screen.json", "ui/features/**/*.json"],
+      "exclude": ["node_modules/**", "dist/**", "build/**", "cache/**", ".cache/**", "workspace/**", "preview/**", "**/*.log"],
+      "overrides": {
+        "entryFiles": ["ui/hud_screen.json"],
+        "protocolFiles": ["scripts/main.js"],
+        "visualEvidence": ["../evals/goldens/hud_minimap/preview-contact-sheet.png", "../examples/v2/04-hud-minimap/validation.json"]
+      }
+    },
+    {
+      "id": "v2-example-book-quest",
+      "kind": "addon",
+      "tier": "gold-candidate",
+      "redistribution": "public",
+      "license": "MIT (code/data); CC0-1.0 (generated assets)",
+      "licenseEvidence": ["../examples/v2/LICENSE.md"],
+      "revision": "v2-generated-1",
+      "rpRoot": "../examples/v2/05-book-quest/RP",
+      "bpRoot": "../examples/v2/05-book-quest/BP",
+      "include": ["ui/_ui_defs.json", "ui/server_form.json", "ui/features/**/*.json"],
+      "exclude": ["node_modules/**", "dist/**", "build/**", "cache/**", ".cache/**", "workspace/**", "preview/**", "**/*.log"],
+      "overrides": {
+        "entryFiles": ["ui/server_form.json"],
+        "protocolFiles": ["scripts/main.js"],
+        "visualEvidence": ["../evals/goldens/book_quest/preview-contact-sheet.png", "../examples/v2/05-book-quest/validation.json"]
+      }
+    },
+    {
+      "id": "v2-example-casino-reels",
+      "kind": "addon",
+      "tier": "gold-candidate",
+      "redistribution": "public",
+      "license": "MIT (code/data); CC0-1.0 (generated assets)",
+      "licenseEvidence": ["../examples/v2/LICENSE.md"],
+      "revision": "v2-generated-1",
+      "rpRoot": "../examples/v2/06-casino-reels/RP",
+      "bpRoot": "../examples/v2/06-casino-reels/BP",
+      "include": ["ui/_ui_defs.json", "ui/server_form.json", "ui/features/**/*.json"],
+      "exclude": ["node_modules/**", "dist/**", "build/**", "cache/**", ".cache/**", "workspace/**", "preview/**", "**/*.log"],
+      "overrides": {
+        "entryFiles": ["ui/server_form.json"],
+        "protocolFiles": ["scripts/main.js"],
+        "visualEvidence": ["../evals/goldens/casino_reels/preview-contact-sheet.png", "../examples/v2/06-casino-reels/validation.json"]
+      }
+    },
+    {
+      "id": "v2-example-responsive-shell",
+      "kind": "addon",
+      "tier": "gold-candidate",
+      "redistribution": "public",
+      "license": "MIT (code/data); CC0-1.0 (generated assets)",
+      "licenseEvidence": ["../examples/v2/LICENSE.md"],
+      "revision": "v2-generated-1",
+      "rpRoot": "../examples/v2/07-responsive-shell/RP",
+      "bpRoot": "../examples/v2/07-responsive-shell/BP",
+      "include": ["ui/_ui_defs.json", "ui/server_form.json", "ui/features/**/*.json"],
+      "exclude": ["node_modules/**", "dist/**", "build/**", "cache/**", ".cache/**", "workspace/**", "preview/**", "**/*.log"],
+      "overrides": {
+        "entryFiles": ["ui/server_form.json"],
+        "protocolFiles": ["scripts/main.js"],
+        "visualEvidence": ["../evals/goldens/responsive_shell/preview-contact-sheet.png", "../examples/v2/07-responsive-shell/validation.json"]
+      }
+    }
+  ]
+}

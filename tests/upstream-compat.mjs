@@ -1,0 +1,54 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import { loadResearchLock, validateResearchLock } from "../tools/_lib/upstream-policy.mjs";
+import { loadFixtureCatalog } from "../tools/_lib/upstream-fixtures.mjs";
+
+const repo = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const lock = await loadResearchLock(resolve(repo, "config", "research-lock.json"));
+assert.deepEqual(validateResearchLock(lock), []);
+const portSources = lock.sources.filter((source) => source.policy === "selected-port-with-notice");
+assert.deepEqual(portSources.map((source) => source.id), ["jsonforge", "json-ui-web-editor"]);
+assert.ok(portSources.every((source) => source.license.spdx === "MIT" && source.allowlist.length > 0));
+const jsonforge = lock.sources.find((source) => source.id === "jsonforge");
+const jsonforgePaths = new Set(jsonforge.allowlist.map((entry) => entry.path));
+for (const path of ["src/ui/canvas/anchorMath.ts", "src/ui/canvas/nineslice.ts", "src/ui/canvas/ElementRenderer.tsx", "src/core/io/JsonUiImporter.ts", "src/core/io/JsonUiExporter.ts", "src/core/io/ProjectSerializer.ts"]) assert.ok(jsonforgePaths.has(path), `missing JsonForge allowlist entry: ${path}`);
+assert.ok(jsonforge.allowlist.every((entry) => /^[a-f0-9]{64}$/.test(entry.sha256)));
+assert.ok(lock.sources.filter((source) => source.policy !== "selected-port-with-notice").every((source) => source.allowlist.length === 0 && source.sync === false));
+
+const unknown = lock.sources.find((source) => source.id === "json-ui-builder-web");
+assert.equal(unknown.policy, "excluded-derived-source");
+assert.ok(unknown.exclude.some((entry) => entry.path === "src/utils/coordinate-system.ts"));
+assert.ok(unknown.exclude.some((entry) => entry.path === "src/utils/json-ui-templates.ts"));
+assert.ok(unknown.exclude.some((entry) => entry.path === "public/presets/**"));
+const maker = lock.sources.find((source) => source.id === "json-ui-maker");
+assert.equal(maker.license.spdx, "NOASSERTION");
+assert.ok(["code", "formulas", "constants", "textures"].every((kind) => maker.constraints.includes(`do-not-copy-${kind}`)));
+
+const catalog = await loadFixtureCatalog(resolve(repo, lock.policy.offlineFixture), lock);
+assert.equal(catalog.fixtures.length, 7);
+assert.ok(catalog.fixtures.every((fixture) => fixture.inputKind === "synthetic"));
+assert.equal(catalog.fixtures.find((fixture) => fixture.source === "json-ui-maker").expected, null);
+assert.equal(catalog.fixtures.find((fixture) => fixture.source === "bedrock-core-ui").expected, null);
+const anchorMatrix = catalog.fixtures.find((fixture) => fixture.id === "jsonforge-anchor-9x9-v1");
+assert.equal(anchorMatrix.input.anchors.length, 9);
+assert.equal(anchorMatrix.expected.caseCount, 81);
+const nineSlice = catalog.fixtures.find((fixture) => fixture.id === "jsonforge-asymmetric-nineslice-v1");
+assert.deepEqual(nineSlice.input.ninesliceSize, [1, 2, 2, 1]);
+assert.equal(nineSlice.expected.byteLength, 9 * 8 * 4);
+const roundtrip = catalog.fixtures.find((fixture) => fixture.id === "jsonforge-unknown-property-roundtrip-v1");
+assert.deepEqual(roundtrip.expected.panel.synthetic_unknown, roundtrip.input.panel.synthetic_unknown);
+const rawFixtures = await readFile(resolve(repo, lock.policy.offlineFixture), "utf8");
+assert.ok(!rawFixtures.includes("public/presets/textures"));
+assert.ok(!rawFixtures.includes("UI_SCALAR"));
+
+const cli = spawnSync(process.execPath, ["tools/upstream-compat.mjs"], { cwd: repo, encoding: "utf8", env: { ...process.env, GIT_CONFIG_NOSYSTEM: "1" } });
+assert.equal(cli.status, 0, cli.stderr);
+const report = JSON.parse(cli.stdout);
+assert.deepEqual({ ok: report.ok, ready: report.ready, offline: report.offline, passed: report.passed, pending: report.pending }, { ok: true, ready: false, offline: true, passed: 5, pending: 2 });
+assert.deepEqual(report.requiredPending, ["json-ui-maker-synthetic-panel-v1"]);
+const strict = spawnSync(process.execPath, ["tools/upstream-compat.mjs", "--strict"], { cwd: repo, encoding: "utf8" });
+assert.equal(strict.status, 9, strict.stderr);
+console.log("PASS upstream-compat: pinned provenance, exclusion boundaries, and checkout-free fixtures");

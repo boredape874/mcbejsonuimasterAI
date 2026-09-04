@@ -15,7 +15,7 @@ Most JSON UI work should extract one of these fragments:
 - factory/collection block
 - texture reference
 - animation block
-- PMMP or Script API data source
+- BP Script API or server-sender data source
 
 ## File roles and how to read them
 
@@ -141,7 +141,7 @@ Then decide:
 - if custom texture: copy image and metadata into target pack
 - if third-party asset: check license before redistribution
 
-### Adapt PMMP or Script API payloads
+### Adapt Script API or server-sender payloads
 
 Extract:
 

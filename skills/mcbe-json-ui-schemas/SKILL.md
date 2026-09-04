@@ -7,6 +7,14 @@ description: Validate and reason about Minecraft Bedrock JSON UI using schema so
 
 Use this when schema validation is the main concern.
 
+## Contract
+
+- Input: file class, target schema source, validator/editor context, and the behavior being checked.
+- Output: applicable schema and configuration, validation findings, and schema coverage limits.
+- Success: structural findings are reproducible and no schema result is presented as Bedrock runtime proof.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-schemas` entry. Run a registered validator only after confirming it exists and name any file class the available schemas do not cover.
+
 ## Workflow
 
 1. Read `references/schema-map.md`.

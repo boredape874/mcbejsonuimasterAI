@@ -1,6 +1,6 @@
 # Skill Map
 
-# `mcbe-json-ui-basics`
+## `mcbe-json-ui-basics`
 
 Use for:
 
@@ -15,32 +15,43 @@ Use for:
 
 ## `mcbe-json-ui-master`
 
-Top-level router for end-to-end Bedrock JSON UI work.
+Short top-level router for broad or cross-layer tasks. It selects the smallest specialist skill and does not load every topic document.
 
-Use this when the task spans multiple areas:
+Machine-readable routing uses:
 
-- planning or intake for a new UI
-- basics or mental model
-- pack structure
-- HUD or chat
-- title or actionbar protocols
-- server forms
-- server form visual direction and design recommendation
-- debugging
-- addon integration
-- vanilla asset lookup
+1. `data/skill-tool-profiles.json` for the selected skill's ordered tools and boundaries.
+2. `data/ai-tool-registry.json` for exact command, status, input, output, and failure contracts.
+3. `tools/skill-doctor.mjs` before execution and `tools/skill-context.mjs` to expand only one profile.
 
-For new UI planning, start with `docs/52-json-ui-intake-questionnaire.md`, then route geometry to `mcbe-json-ui-ir-authoring` and Bedrock-specific behavior to the relevant topic skill.
+Never invoke a tool reported as planned or unavailable. Narrow tasks should start directly with their specialist skill.
 
-For visual implementation, sizing, alignment, text fit, or "make it look like this" tasks, also apply `docs/54-visual-fit-and-reference-discipline.md` before editing files.
+## `mcbe-json-ui-visual-design`
 
-For broad "what reference should I use?" routing, apply `docs/55-reference-task-taxonomy.md`, then `docs/57-hierarchical-task-router.md` if the task spans multiple surfaces. Query `data/reference-task-index.json` and `data/reference-hierarchy.json` for machine-readable routing.
+Use for measured proportions, position, size, spacing, alignment, typography, nine-slice surfaces, and visual states.
 
-For restricted local example packs, use `docs/56-local-json-ui-reference-pack-analysis.md`. Raw mirrors under `references/restricted/` are pattern evidence only and must not be copied into public docs with source names, credits, or restricted texture paths.
+Preferred flow:
 
-For the `advanced-ui-set` restricted reference set, use `docs/60-advanced-ui-set-special-ui-reference.md`, `docs/61-advanced-ui-set-file-pattern-routes.md`, `docs/62-special-form-device-ui-patterns.md`, `docs/63-premium-form-gallery.md`, and `docs/64-motion-form-hud-reference.md`. This route covers device/phone forms, premium shop/store forms, animation-heavy ability/progression forms, shop purchase popups, quest tabs, NPC/book forms, battle command UI, creature/database/storage forms, advanced chest-form routing, status/reward HUDs, and protocol HUD suites.
+```text
+visual-design -> design.search -> IR authoring -> pipeline.run -> preview.texture
+```
 
-For visual design work, use `docs/58-design-reference-atlas.md` and `docs/59-diagrammatic-workflows.md` so the AI records design family, layout skeleton, state pattern, data source, closest reference, and patch target before editing.
+Use only stages confirmed available by the skill profile. Static previews are evidence, not Bedrock runtime proof.
+
+## `mcbe-json-ui-reference`
+
+Use for exact control, property, binding, catalog, vanilla screen, texture, or atlas lookup. Return the evidence path and label the result as confirmed, sample-observed, inferred, or unresolved instead of guessing.
+
+## `mcbe-json-ui-samples`
+
+Use to mine working RP/BP samples while preserving source tier, revision, license, and redistribution limits.
+
+When every stage is available, use:
+
+```text
+sources.validate -> source.scan -> catalog.build -> design.search
+```
+
+Restricted or local-only inputs remain local evidence and are not copied into public output.
 
 ## `mcbe-json-ui-ir-authoring`
 
@@ -127,7 +138,7 @@ Use for:
 - UI linked to textures, fonts, blocks, items, entities, or addon data
 - BP and RP cross-reference work
 - addon-wide asset tracing
-- PMMP-to-title/actionbar/chat/form bridge design
+- BP Script API and server-sender title/actionbar/chat/form protocol design
 
 ## `mcbe-json-ui-vanilla-assets`
 

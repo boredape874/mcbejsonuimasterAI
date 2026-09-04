@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/boredape874/mcbejsonuimasterAI/schemas/ai-tool.schema.json",
+  "title": "MCBE JSON UI AI tool registry",
+  "description": "Machine-readable contracts for deterministic tools that an AI may select and invoke.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "tools"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "tools": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/tool" }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$"
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "allOf": [
+        { "not": { "pattern": "^(?:[A-Za-z]:[\\\\/]|/|~)" } },
+        { "not": { "pattern": "(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)" } }
+      ]
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["executable", "script", "display"],
+      "properties": {
+        "executable": { "const": "node" },
+        "script": { "$ref": "#/$defs/path" },
+        "display": { "type": "string", "minLength": 1 }
+      }
+    },
+    "argument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "kind", "required", "description"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^<?[a-z][a-z0-9_-]*>?$" },
+        "kind": { "enum": ["positional", "option", "flag"] },
+        "flag": { "type": "string", "pattern": "^--[a-z][a-z0-9-]*$" },
+        "required": { "type": "boolean" },
+        "repeatable": { "type": "boolean", "default": false },
+        "valueType": { "enum": ["string", "path", "integer", "boolean", "enum"] },
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "description": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "enum": ["option", "flag"] } }, "required": ["kind"] },
+          "then": { "required": ["flag"] }
+        },
+        {
+          "if": { "properties": { "valueType": { "const": "enum" } }, "required": ["valueType"] },
+          "then": { "required": ["values"] }
+        }
+      ]
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "kind", "required", "description"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "kind": { "enum": ["file", "directory", "stdout", "report", "environment", "record"] },
+        "required": { "type": "boolean" },
+        "format": { "type": "string" },
+        "pathPattern": { "type": "string" },
+        "description": { "type": "string", "minLength": 1 }
+      }
+    },
+    "mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "paths", "description"],
+      "properties": {
+        "mode": { "enum": ["none", "workspace", "repository"] },
+        "paths": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/path" },
+          "uniqueItems": true
+        },
+        "description": { "type": "string", "minLength": 1 }
+      }
+    },
+    "failure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exitCode", "meaning", "recovery"],
+      "properties": {
+        "exitCode": { "type": "integer", "minimum": 1, "maximum": 255 },
+        "meaning": { "type": "string", "minLength": 1 },
+        "recovery": { "type": "string", "minLength": 1 }
+      }
+    },
+    "support": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["help", "json", "report"],
+      "properties": {
+        "help": { "type": "boolean" },
+        "json": { "type": "boolean" },
+        "report": { "type": "boolean" }
+      }
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "status", "purpose", "command", "arguments", "inputs", "outputs",
+        "preconditions", "mutates", "successExitCodes", "failures",
+        "evidenceProduced", "unsupportedBehavior", "supports"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "status": { "enum": ["implemented", "planned"] },
+        "purpose": { "type": "string", "minLength": 1 },
+        "command": { "$ref": "#/$defs/command" },
+        "arguments": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/argument" }
+        },
+        "inputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/artifact" }
+        },
+        "outputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/artifact" }
+        },
+        "preconditions": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "mutates": { "$ref": "#/$defs/mutation" },
+        "successExitCodes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "integer", "minimum": 0, "maximum": 255 },
+          "uniqueItems": true
+        },
+        "failures": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/failure" }
+        },
+        "evidenceProduced": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "unsupportedBehavior": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "supports": { "$ref": "#/$defs/support" }
+      }
+    }
+  }
+}

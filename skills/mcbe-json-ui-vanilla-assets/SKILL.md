@@ -7,6 +7,14 @@ description: Verify and use vanilla Minecraft Bedrock texture and icon paths for
 
 Use this when the task needs a confirmed vanilla texture path, current vanilla screen file lookup, or an explanation of how to search the Bedrock vanilla pack correctly.
 
+## Contract
+
+- Input: requested visual role or identifier, asset class, and target Bedrock resource revision when known.
+- Output: verified vanilla path or atlas key with evidence, or an explicit not-found result and custom-asset fallback.
+- Success: every returned path exists in the selected mirror/index and revision uncertainty is disclosed.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-vanilla-assets` entry. Use an index command only when both the command and index exist; otherwise inspect the configured vanilla source directly.
+
 ## Workflow
 
 1. Read `references/vanilla-map.md`.

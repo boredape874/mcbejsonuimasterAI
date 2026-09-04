@@ -2,9 +2,9 @@
 
 Read:
 
-- `../../../../../docs/13-vanilla-asset-workflow.md`
-- `../../../../../references/vanilla/ztech-vanilla-authority.md`
-- `../../../../../references/vanilla/vanilla-search-guide.md`
+- `docs/13-vanilla-asset-workflow.md`
+- `references/vanilla/ztech-vanilla-authority.md`
+- `references/vanilla/vanilla-search-guide.md`
 
 Use this subtopic for:
 
@@ -14,4 +14,4 @@ Use this subtopic for:
 
 If needed, also read:
 
-- `../../../../../references/mirrors/bedrock-wiki-json-ui/add-hud-elements.md`
+- `references/external/bedrock-wiki-json-ui/add-hud-elements.md`

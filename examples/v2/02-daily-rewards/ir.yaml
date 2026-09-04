@@ -1,0 +1,498 @@
+screen: daily_rewards
+base_resolution:
+  - 1920
+  - 1080
+gui_scale: 3
+elements:
+  - id: shell
+    kind: image
+    anchor: center
+    pos:
+      - 0
+      - 0
+    size:
+      - 760
+      - 286
+    props:
+      texture: textures/ui/v2_daily/panel
+  - id: title
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 30
+      - 16
+    size:
+      - 700
+      - 24
+    props:
+      text: DAILY REWARDS
+      localize: false
+      font_size: large
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: card_1
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 36
+      - 62
+    size:
+      - 88
+      - 158
+    props:
+      texture: textures/ui/v2_daily/card
+  - id: day_1
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 44
+      - 76
+    size:
+      - 72
+      - 18
+    props:
+      text: DAY 1
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: reward_1
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 61
+      - 112
+    size:
+      - 38
+      - 38
+    props:
+      texture: textures/ui/v2_daily/reward
+  - id: amount_1
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 44
+      - 158
+    size:
+      - 72
+      - 18
+    props:
+      text: x2
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: card_2
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 136
+      - 62
+    size:
+      - 88
+      - 158
+    props:
+      texture: textures/ui/v2_daily/card
+  - id: day_2
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 144
+      - 76
+    size:
+      - 72
+      - 18
+    props:
+      text: DAY 2
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: reward_2
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 161
+      - 112
+    size:
+      - 38
+      - 38
+    props:
+      texture: textures/ui/v2_daily/reward
+  - id: amount_2
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 144
+      - 158
+    size:
+      - 72
+      - 18
+    props:
+      text: x4
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: card_3
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 236
+      - 62
+    size:
+      - 88
+      - 158
+    props:
+      texture: textures/ui/v2_daily/card
+  - id: day_3
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 244
+      - 76
+    size:
+      - 72
+      - 18
+    props:
+      text: DAY 3
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: reward_3
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 261
+      - 112
+    size:
+      - 38
+      - 38
+    props:
+      texture: textures/ui/v2_daily/reward
+  - id: amount_3
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 244
+      - 158
+    size:
+      - 72
+      - 18
+    props:
+      text: x6
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: card_4
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 336
+      - 62
+    size:
+      - 88
+      - 158
+    props:
+      texture: textures/ui/v2_daily/card
+  - id: day_4
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 344
+      - 76
+    size:
+      - 72
+      - 18
+    props:
+      text: DAY 4
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: reward_4
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 361
+      - 112
+    size:
+      - 38
+      - 38
+    props:
+      texture: textures/ui/v2_daily/reward
+  - id: amount_4
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 344
+      - 158
+    size:
+      - 72
+      - 18
+    props:
+      text: x8
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: card_5
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 436
+      - 62
+    size:
+      - 88
+      - 158
+    props:
+      texture: textures/ui/v2_daily/card
+  - id: day_5
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 444
+      - 76
+    size:
+      - 72
+      - 18
+    props:
+      text: DAY 5
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: reward_5
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 461
+      - 112
+    size:
+      - 38
+      - 38
+    props:
+      texture: textures/ui/v2_daily/reward
+  - id: amount_5
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 444
+      - 158
+    size:
+      - 72
+      - 18
+    props:
+      text: x10
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: card_6
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 536
+      - 62
+    size:
+      - 88
+      - 158
+    props:
+      texture: textures/ui/v2_daily/card
+  - id: day_6
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 544
+      - 76
+    size:
+      - 72
+      - 18
+    props:
+      text: DAY 6
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: reward_6
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 561
+      - 112
+    size:
+      - 38
+      - 38
+    props:
+      texture: textures/ui/v2_daily/reward
+  - id: amount_6
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 544
+      - 158
+    size:
+      - 72
+      - 18
+    props:
+      text: x12
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: card_7
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 636
+      - 62
+    size:
+      - 88
+      - 158
+    props:
+      texture: textures/ui/v2_daily/card
+  - id: day_7
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 644
+      - 76
+    size:
+      - 72
+      - 18
+    props:
+      text: DAY 7
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: reward_7
+    kind: image
+    parent: shell
+    anchor: top_left
+    pos:
+      - 661
+      - 112
+    size:
+      - 38
+      - 38
+    props:
+      texture: textures/ui/v2_daily/reward
+  - id: amount_7
+    kind: label
+    parent: shell
+    anchor: top_left
+    pos:
+      - 644
+      - 158
+    size:
+      - 72
+      - 18
+    props:
+      text: x14
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+  - id: claim
+    kind: button
+    parent: shell
+    anchor: top_left
+    pos:
+      - 270
+      - 232
+    size:
+      - 220
+      - 42
+constraints:
+  - op: same_size
+    ids: &a1
+      - card_1
+      - card_2
+      - card_3
+      - card_4
+      - card_5
+      - card_6
+      - card_7
+  - op: equal_gap_x
+    ids: *a1
+    gap: 12
+  - op: align_y
+    ids: *a1
+    edge: center
+  - op: same_size
+    ids: &a2
+      - day_1
+      - day_2
+      - day_3
+      - day_4
+      - day_5
+      - day_6
+      - day_7
+  - op: equal_gap_x
+    ids: *a2
+    gap: 12
+  - op: align_y
+    ids: *a2
+    edge: center
+  - op: same_size
+    ids: &a3
+      - reward_1
+      - reward_2
+      - reward_3
+      - reward_4
+      - reward_5
+      - reward_6
+      - reward_7
+  - op: equal_gap_x
+    ids: *a3
+    gap: 12
+  - op: align_y
+    ids: *a3
+    edge: center
+  - op: same_size
+    ids: &a4
+      - amount_1
+      - amount_2
+      - amount_3
+      - amount_4
+      - amount_5
+      - amount_6
+      - amount_7
+  - op: equal_gap_x
+    ids: *a4
+    gap: 12
+  - op: align_y
+    ids: *a4
+    edge: center
+  - op: center_group_x
+    ids: *a1

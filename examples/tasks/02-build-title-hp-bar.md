@@ -2,7 +2,7 @@
 
 ## Goal
 
-Implement an HP bar driven by PMMP or BP title text instead of direct gameplay bindings.
+Implement an HP bar driven by BP Script API or server-sent title text instead of direct gameplay bindings.
 
 ## Recommended skills
 
@@ -23,7 +23,7 @@ Implement an HP bar driven by PMMP or BP title text instead of direct gameplay b
 1. choose a proven bar pattern
 2. define the title prefix format
 3. inject the bar into HUD
-4. explain the PMMP title payload needed
+4. explain the title payload the BP or server sender must emit
 
 ## Expected result
 

@@ -120,7 +120,7 @@ Use for:
 
 These local mirrors are especially good for:
 
-- PMMP title or chat protocol driven HUDs
+- BP Script API or server-sender title/chat protocol-driven HUDs
 - scoreboard overlays
 - topbar notifications
 - lightweight utility libraries for repeated UI behavior

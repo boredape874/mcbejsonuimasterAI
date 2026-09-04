@@ -85,7 +85,7 @@ Use this for:
 
 When adapting:
 
-- replace the route token with a project-owned PMMP prefix such as `menu:main`
+- replace the route token with a project-owned server protocol prefix such as `menu:main`
 - keep the vanilla fallback visible when the prefix is absent
 - keep the close hitbox separate from the visible icon
 - do not copy source-specific texture paths; replace with target pack paths or verified vanilla paths
@@ -108,7 +108,7 @@ One notable advanced pattern is a vertical clipped mini-meter driven from a coll
 - collection data from `boss_bars`
 - many small visibility-gated image slices
 
-Use this pattern only when a simpler progress bar cannot represent the state. For most PMMP work, a fixed-width or fixed-height progress bar is safer.
+Use this pattern only when a simpler progress bar cannot represent the state. For most server-driven UI work, a fixed-width or fixed-height progress bar is safer.
 
 ### Chest And Cooking/Crafting Screens
 

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "roles": {
+    "button": ["button", "btn", "click", "submit"],
+    "panel": ["panel", "frame", "dialog", "window", "background", "bg", "popup"],
+    "slot": ["slot", "cell", "inventory", "container"],
+    "icon": ["icon", "glyph", "symbol", "badge"],
+    "bar": ["bar", "progress", "meter", "health", "mana", "stamina", "xp"],
+    "map": ["map", "minimap", "marker", "waypoint", "compass"],
+    "book": ["book", "page", "quest", "journal", "scroll"],
+    "tab": ["tab", "navigation", "nav"],
+    "toggle": ["toggle", "checkbox", "radio", "switch"],
+    "cursor": ["cursor", "focus", "selection", "selected"],
+    "slider": ["slider", "scrollbar", "thumb"],
+    "casino": ["casino", "slotmachine", "reel", "chip", "bet", "card"]
+  },
+  "states": {
+    "hover": ["hover", "hovered", "focus", "focused", "hilight", "highlight"],
+    "pressed": ["pressed", "press", "down", "active", "click"],
+    "disabled": ["disabled", "disable", "locked", "unavailable", "inactive"],
+    "selected": ["selected", "checked", "on"],
+    "default": ["default", "normal", "idle", "base", "up"]
+  },
+  "categoryRole": {
+    "textures/buttons": "button", "textures/panels-frames": "panel",
+    "textures/slots-containers": "slot", "textures/icons": "icon",
+    "textures/feature-icons": "icon", "textures/bars": "bar",
+    "textures/hud-overlays": "panel", "textures/tabs-navigation": "tab",
+    "textures/toggles": "toggle", "textures/focus-selection": "cursor",
+    "textures/sliders-scrollbars": "slider"
+  }
+}

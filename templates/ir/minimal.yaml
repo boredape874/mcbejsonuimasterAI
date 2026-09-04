@@ -1,0 +1,45 @@
+screen: {{name}}
+base_resolution: [1920, 1080]
+gui_scale: 3
+
+elements:
+  - id: panel_main
+    kind: image
+    anchor: center
+    pos: [0, 0]
+    size: [320, 200]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.9
+
+  - id: title
+    parent: panel_main
+    kind: label
+    anchor: top_middle
+    pos: [0, 12]
+    size: [260, 20]
+    props:
+      text: "CUSTOM UI"
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.9
+      text_alignment: center
+
+  - id: btn_left
+    parent: panel_main
+    kind: button
+    anchor: bottom_middle
+    pos: [-70, -16]
+    size: [120, 32]
+
+  - id: btn_right
+    parent: panel_main
+    kind: button
+    anchor: bottom_middle
+    pos: [70, -16]
+    size: [120, 32]
+
+constraints:
+  - { op: same_size, ids: [btn_left, btn_right] }
+  - { op: symmetric_x, ids: [btn_left, btn_right] }
+  - { op: align_y, ids: [btn_left, btn_right], edge: center }

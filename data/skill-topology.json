@@ -1,0 +1,22 @@
+{
+  "schema": "mcbe-jsonui-ai-kit/skill-topology@1",
+  "sourceCount": 23,
+  "sourceSkills": [
+    "mcbe-json-ui-addon-integration", "mcbe-json-ui-basics", "mcbe-json-ui-custom-toggles",
+    "mcbe-json-ui-debugging", "mcbe-json-ui-final-rp-inspection", "mcbe-json-ui-foundations",
+    "mcbe-json-ui-hud-and-chat", "mcbe-json-ui-ir-authoring", "mcbe-json-ui-logic",
+    "mcbe-json-ui-master", "mcbe-json-ui-patterns", "mcbe-json-ui-reference",
+    "mcbe-json-ui-research", "mcbe-json-ui-samples", "mcbe-json-ui-schemas",
+    "mcbe-json-ui-self-bootstrap", "mcbe-json-ui-server-forms", "mcbe-json-ui-texture-design",
+    "mcbe-json-ui-tooling", "mcbe-json-ui-tools-runner", "mcbe-json-ui-vanilla-assets",
+    "mcbe-json-ui-vanilla-presets", "mcbe-json-ui-visual-design"
+  ],
+  "router": "mcbe-json-ui-master",
+  "legacyInstalledAliases": ["mcbe-json-ui-orchestrator"],
+  "callerGlobs": ["AGENTS.md", "README.md", "docs/**/*.md", "examples/**/*.md", "data/*.json", "scripts/*.ps1"],
+  "policy": {
+    "implicitInvocationDefault": true,
+    "installedComparison": "read-only",
+    "orphanAction": "report-only"
+  }
+}

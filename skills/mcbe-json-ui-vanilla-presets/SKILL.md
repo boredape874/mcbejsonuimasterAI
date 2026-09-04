@@ -11,6 +11,14 @@ Use this skill when:
 - The user wants the vanilla look (titlebar, OK/Cancel, light/dark content rows)
 - You'd otherwise have to author dozens of nested `panel`/`button` controls by hand
 
+## Contract
+
+- Input: intended vanilla screen role, target profile, content controls, and required variables/bindings.
+- Output: selected preset reference, required variables, IR `extends` usage, and validation artifacts.
+- Success: the preset exists in the catalog, emitted references resolve, layout constraints remain explicit, and unknown variables are not invented.
+
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-vanilla-presets` entry. Use registered catalog or compile commands only after confirming their implementations are present.
+
 ## Source of truth
 
 - `data/presets-catalog.json` — every preset reference the kit knows about, with the matching `$variable` keys and a `fits_kind` hint.

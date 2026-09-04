@@ -101,7 +101,7 @@ Real pack patterns often drive UI through:
 - global bindings
 - factory collections
 
-This is why PMMP and BP code often send encoded strings such as:
+This is why BP Script API or another server sender often sends encoded strings such as:
 
 - `!topbar:...`
 - `customTitle_AniHPBar_75`
@@ -136,7 +136,7 @@ For "what is this system" questions, prefer:
 3. mirrored example repositories
 4. Ztech vanilla pack for real file paths and actual vanilla assets
 
-For PMMP-driven UI, use `docs/25-pmmp-json-ui-bridge.md`.
+For title/actionbar/chat protocols, use `docs/34-binding-patterns-value-index.md`; for routed forms, use `docs/40-server-form-example-index.md`.
 For first-pass debugging, use `docs/26-common-failure-modes.md`.
 For large packs, use `docs/27-token-efficient-routing.md` before opening references.
 

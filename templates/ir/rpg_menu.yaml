@@ -1,0 +1,222 @@
+screen: {{name}}
+base_resolution: [1920, 1080]
+gui_scale: 3
+
+root:
+  size: [680, 460]
+  anchor: center
+  pos: [0, 0]
+
+elements:
+  - id: shell
+    kind: image
+    anchor: center
+    pos: [0, 0]
+    size: [640, 430]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.78
+
+  - id: header
+    parent: shell
+    kind: image
+    anchor: top_middle
+    pos: [0, 12]
+    size: [590, 64]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.94
+
+  - id: header_title
+    parent: header
+    kind: label
+    anchor: top_left
+    pos: [10, 8]
+    size: [570, 30]
+    props:
+      text: "RPG SERVER MENU"
+      localize: false
+      font_type: MinecraftTen
+      font_size: large
+      font_scale_factor: 0.95
+
+  - id: header_description
+    parent: header
+    kind: label
+    anchor: top_left
+    pos: [10, 42]
+    size: [570, 16]
+    props:
+      text: "Choose a destination or activity."
+      localize: false
+      font_size: normal
+      font_scale_factor: 0.82
+
+  - id: content
+    parent: shell
+    kind: panel
+    anchor: top_middle
+    pos: [0, 84]
+    size: [590, 300]
+
+  - id: left_card
+    parent: content
+    kind: image
+    anchor: top_left
+    pos: [0, 0]
+    size: [290, 300]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.88
+
+  - id: left_icon
+    parent: left_card
+    kind: image
+    anchor: center
+    pos: [0, -24]
+    size: [58, 58]
+    props:
+      texture: textures/items/diamond_sword
+
+  - id: left_label
+    parent: left_card
+    kind: label
+    anchor: center
+    pos: [0, 44]
+    size: [260, 18]
+    props:
+      text: "ADVENTURE"
+      localize: false
+      font_type: MinecraftTen
+      font_size: normal
+      font_scale_factor: 0.86
+      text_alignment: center
+
+  - id: right_top_card
+    parent: content
+    kind: image
+    anchor: top_right
+    pos: [0, 0]
+    size: [294, 148]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.88
+
+  - id: right_top_icon
+    parent: right_top_card
+    kind: image
+    anchor: center
+    pos: [0, -18]
+    size: [58, 58]
+    props:
+      texture: textures/items/diamond_pickaxe
+
+  - id: right_top_label
+    parent: right_top_card
+    kind: label
+    anchor: center
+    pos: [0, 42]
+    size: [264, 18]
+    props:
+      text: "MINING"
+      localize: false
+      font_type: MinecraftTen
+      font_size: normal
+      font_scale_factor: 0.86
+      text_alignment: center
+
+  - id: right_bottom_left
+    parent: content
+    kind: image
+    anchor: bottom_right
+    pos: [-150, 0]
+    size: [144, 146]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.88
+
+  - id: right_bottom_left_icon
+    parent: right_bottom_left
+    kind: image
+    anchor: center
+    pos: [0, -18]
+    size: [50, 50]
+    props:
+      texture: textures/items/diamond_axe
+
+  - id: right_bottom_left_label
+    parent: right_bottom_left
+    kind: label
+    anchor: center
+    pos: [0, 42]
+    size: [124, 18]
+    props:
+      text: "QUESTS"
+      localize: false
+      font_type: MinecraftTen
+      font_size: normal
+      font_scale_factor: 0.82
+      text_alignment: center
+
+  - id: right_bottom_right
+    parent: content
+    kind: image
+    anchor: bottom_right
+    pos: [0, 0]
+    size: [144, 146]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.88
+
+  - id: right_bottom_right_icon
+    parent: right_bottom_right
+    kind: image
+    anchor: center
+    pos: [0, -18]
+    size: [50, 50]
+    props:
+      texture: textures/items/diamond_hoe
+
+  - id: right_bottom_right_label
+    parent: right_bottom_right
+    kind: label
+    anchor: center
+    pos: [0, 42]
+    size: [124, 18]
+    props:
+      text: "FARM"
+      localize: false
+      font_type: MinecraftTen
+      font_size: normal
+      font_scale_factor: 0.82
+      text_alignment: center
+
+  - id: footer
+    parent: shell
+    kind: image
+    anchor: bottom_middle
+    pos: [0, -12]
+    size: [590, 28]
+    props:
+      texture: textures/ui/Black
+      alpha: 0.94
+
+  - id: footer_label
+    parent: footer
+    kind: label
+    anchor: center
+    pos: [0, 0]
+    size: [570, 16]
+    props:
+      text: "LEADERBOARD"
+      localize: false
+      font_type: MinecraftTen
+      font_size: normal
+      font_scale_factor: 0.82
+      text_alignment: center
+
+constraints:
+  - { op: same_size, ids: [right_bottom_left, right_bottom_right] }
+  - { op: align_y, ids: [right_bottom_left, right_bottom_right], edge: end }
+  - { op: edge_offset, a: "right_bottom_left.right", b: "right_bottom_right.left", delta: -6 }
+  - { op: align_x, ids: [header, content, footer], edge: center }

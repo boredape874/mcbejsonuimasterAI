@@ -10,8 +10,8 @@ Before editing a JSON UI screen, the agent must identify the closest working ref
 
 Minimum reference choices:
 
-- Vanilla screen behavior: `references/verified-samples/bedrock-samples-ui/<screen>.json`
-- HUD, chat, title, actionbar, scoreboard: `references/sample-packs/*/ui/hud_screen.json`, `references/local-examples/*/ui/hud_screen.json`
+- Vanilla screen behavior: `references/official/bedrock-samples-ui/<screen>.json`
+- HUD, chat, title, actionbar, scoreboard: `references/source-packs/*/ui/hud_screen.json`, `references/local-examples/*/ui/hud_screen.json`
 - Animated progress bars: `references/local-examples/*/ui/animated_bar.json`
 - Server forms: `docs/39-design-recommendation-catalog.md`, `docs/40-server-form-example-index.md`, `docs/53-premium-ui-pattern-reference.md`
 - Control names/properties: `docs/48-json-ui-field-catalogue.md` and schema references

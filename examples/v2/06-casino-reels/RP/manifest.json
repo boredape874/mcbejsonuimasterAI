@@ -1,0 +1,35 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "V2 Casino Reels RP",
+    "description": "Five by three reel grid with a separate betting panel. First-party v2 public example.",
+    "uuid": "60000000-0000-4000-8000-000000000601",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      80
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "60000000-0000-4000-8000-000000000602",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "metadata": {
+    "authors": [
+      "mcbejsonuimasterAI contributors"
+    ],
+    "license": "CC0-1.0"
+  }
+}

@@ -1,0 +1,1286 @@
+{
+  "namespace": "v2_casino",
+  "screen": {
+    "type": "panel",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "layer": 100,
+    "bindings": [
+      {
+        "binding_name": "#title_text"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not ((#title_text - 'v2:casino') = #title_text))",
+        "target_property_name": "#visible"
+      }
+    ],
+    "controls": [
+      {
+        "shell": {
+          "type": "panel",
+          "size": [
+            720,
+            440
+          ],
+          "anchor_from": "center",
+          "anchor_to": "center",
+          "offset": [
+            0,
+            0
+          ],
+          "controls": [
+            {
+              "background": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/panel",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "offset": [
+                  0,
+                  0
+                ],
+                "anchor_from": "center",
+                "anchor_to": "center",
+                "layer": 1
+              }
+            },
+            {
+              "title": {
+                "type": "label",
+                "text": "FIVE REEL CASINO",
+                "localize": false,
+                "size": [
+                  660,
+                  24
+                ],
+                "offset": [
+                  30,
+                  16
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "text_alignment": "center",
+                "font_size": "large",
+                "font_scale_factor": 0.9,
+                "color": [
+                  1,
+                  0.82,
+                  0.3
+                ],
+                "shadow": true,
+                "layer": 8
+              }
+            },
+            {
+              "cell_0_0": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  34,
+                  66
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_0_0": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_1",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  49,
+                  81
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_0_1": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  34,
+                  146
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_0_1": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_2",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  49,
+                  161
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_0_2": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  34,
+                  226
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_0_2": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_3",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  49,
+                  241
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_1_0": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  114,
+                  66
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_1_0": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_2",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  129,
+                  81
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_1_1": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  114,
+                  146
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_1_1": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_3",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  129,
+                  161
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_1_2": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  114,
+                  226
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_1_2": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_4",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  129,
+                  241
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_2_0": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  194,
+                  66
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_2_0": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_3",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  209,
+                  81
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_2_1": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  194,
+                  146
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_2_1": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_4",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  209,
+                  161
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_2_2": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  194,
+                  226
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_2_2": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_5",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  209,
+                  241
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_3_0": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  274,
+                  66
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_3_0": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_4",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  289,
+                  81
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_3_1": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  274,
+                  146
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_3_1": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_5",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  289,
+                  161
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_3_2": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  274,
+                  226
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_3_2": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_1",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  289,
+                  241
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_4_0": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  354,
+                  66
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_4_0": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_5",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  369,
+                  81
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_4_1": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  354,
+                  146
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_4_1": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_1",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  369,
+                  161
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "cell_4_2": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  72,
+                  72
+                ],
+                "offset": [
+                  354,
+                  226
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "symbol_4_2": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/symbol_2",
+                "size": [
+                  42,
+                  42
+                ],
+                "offset": [
+                  369,
+                  241
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 5
+              }
+            },
+            {
+              "bet_panel": {
+                "type": "image",
+                "texture": "textures/ui/v2_casino/card",
+                "size": [
+                  222,
+                  232
+                ],
+                "offset": [
+                  454,
+                  66
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2
+              }
+            },
+            {
+              "balance": {
+                "type": "label",
+                "text": "BALANCE  12,500",
+                "localize": false,
+                "size": [
+                  190,
+                  20
+                ],
+                "offset": [
+                  470,
+                  88
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "text_alignment": "center",
+                "font_size": "normal",
+                "font_scale_factor": 0.9,
+                "color": [
+                  1,
+                  0.82,
+                  0.3
+                ],
+                "shadow": true,
+                "layer": 8
+              }
+            },
+            {
+              "bet": {
+                "type": "label",
+                "text": "BET  100",
+                "localize": false,
+                "size": [
+                  190,
+                  20
+                ],
+                "offset": [
+                  470,
+                  126
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "text_alignment": "center",
+                "font_size": "normal",
+                "font_scale_factor": 0.9,
+                "color": [
+                  0.95,
+                  0.96,
+                  0.98
+                ],
+                "shadow": true,
+                "layer": 8
+              }
+            },
+            {
+              "bet_down": {
+                "type": "button",
+                "size": [
+                  90,
+                  44
+                ],
+                "offset": [
+                  470,
+                  170
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 10,
+                "default_control": "default",
+                "hover_control": "hover",
+                "pressed_control": "pressed",
+                "button_mappings": [
+                  {
+                    "from_button_id": "button.menu_select",
+                    "to_button_id": "button.form_button_click",
+                    "mapping_type": "pressed"
+                  },
+                  {
+                    "from_button_id": "button.menu_ok",
+                    "to_button_id": "button.form_button_click",
+                    "mapping_type": "focused"
+                  }
+                ],
+                "controls": [
+                  {
+                    "default": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_casino/button_default",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "- BET",
+                            "localize": false,
+                            "size": [
+                              74,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "hover": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_casino/button_hover",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "- BET",
+                            "localize": false,
+                            "size": [
+                              74,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "pressed": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_casino/button_pressed",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "- BET",
+                            "localize": false,
+                            "size": [
+                              74,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "bet_up": {
+                "type": "button",
+                "size": [
+                  90,
+                  44
+                ],
+                "offset": [
+                  570,
+                  170
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 10,
+                "default_control": "default",
+                "hover_control": "hover",
+                "pressed_control": "pressed",
+                "button_mappings": [
+                  {
+                    "from_button_id": "button.menu_select",
+                    "to_button_id": "button.form_button_click",
+                    "mapping_type": "pressed"
+                  },
+                  {
+                    "from_button_id": "button.menu_ok",
+                    "to_button_id": "button.form_button_click",
+                    "mapping_type": "focused"
+                  }
+                ],
+                "controls": [
+                  {
+                    "default": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_casino/button_default",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "+ BET",
+                            "localize": false,
+                            "size": [
+                              74,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "hover": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_casino/button_hover",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "+ BET",
+                            "localize": false,
+                            "size": [
+                              74,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "pressed": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_casino/button_pressed",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "+ BET",
+                            "localize": false,
+                            "size": [
+                              74,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "spin": {
+                "type": "button",
+                "size": [
+                  190,
+                  54
+                ],
+                "offset": [
+                  470,
+                  230
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 10,
+                "default_control": "default",
+                "hover_control": "hover",
+                "pressed_control": "pressed",
+                "button_mappings": [
+                  {
+                    "from_button_id": "button.menu_select",
+                    "to_button_id": "button.form_button_click",
+                    "mapping_type": "pressed"
+                  },
+                  {
+                    "from_button_id": "button.menu_ok",
+                    "to_button_id": "button.form_button_click",
+                    "mapping_type": "focused"
+                  }
+                ],
+                "controls": [
+                  {
+                    "default": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_casino/button_default",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "SPIN",
+                            "localize": false,
+                            "size": [
+                              174,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "hover": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_casino/button_hover",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "SPIN",
+                            "localize": false,
+                            "size": [
+                              174,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "pressed": {
+                      "type": "panel",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "controls": [
+                        {
+                          "background": {
+                            "type": "image",
+                            "texture": "textures/ui/v2_casino/button_pressed",
+                            "size": [
+                              "100%",
+                              "100%"
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "layer": 1
+                          }
+                        },
+                        {
+                          "label": {
+                            "type": "label",
+                            "text": "SPIN",
+                            "localize": false,
+                            "size": [
+                              174,
+                              18
+                            ],
+                            "offset": [
+                              0,
+                              0
+                            ],
+                            "anchor_from": "center",
+                            "anchor_to": "center",
+                            "text_alignment": "center",
+                            "font_size": "normal",
+                            "font_scale_factor": 0.9,
+                            "color": [
+                              0.95,
+                              0.96,
+                              0.98
+                            ],
+                            "shadow": true,
+                            "layer": 3
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "payline": {
+                "type": "label",
+                "text": "WILD x5  |  SCATTER x3",
+                "localize": false,
+                "size": [
+                  360,
+                  18
+                ],
+                "offset": [
+                  36,
+                  326
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "text_alignment": "center",
+                "font_size": "normal",
+                "font_scale_factor": 0.9,
+                "color": [
+                  0.675,
+                  0.71,
+                  0.773
+                ],
+                "shadow": true,
+                "layer": 8
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
