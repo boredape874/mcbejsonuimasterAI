@@ -30,7 +30,8 @@ function semanticSurface(node) {
     const role = value.type === "label" ? "label" : value.type === "image" ? "icon" : null;
     if (!role) return;
     const bindings = JSON.stringify(value.bindings || []);
-    result.push(`${role}:${value.text ?? value.texture ?? ""}:${bindings.replace(/\s/g, "")}:${path.replace(/(?:default|hover|pressed)[^/]*\//gi, "STATE/")}`);
+    const content = role === "label" ? value.text ?? "" : value.semantic_id ?? value.id ?? "";
+    result.push(`${role}:${content}:${bindings.replace(/\s/g, "")}:${path.replace(/(?:default|hover|pressed)[^/]*\//gi, "STATE/")}`);
   });
   return result.sort();
 }

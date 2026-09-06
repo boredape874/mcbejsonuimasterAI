@@ -243,22 +243,26 @@ async function auditDeclaredRepositoryPaths() {
 
   const dataFiles = await listFiles(resolve(PATHS.root, "data"), (path) => extname(path).toLowerCase() === ".json");
   const indexedPaths = [];
-  function visit(value, filePath) {
+  function visit(value, filePath, skillRoot = null) {
     if (typeof value === "string") {
       if (!/^(?:docs|data|references|schemas|templates|skills)\//.test(value) || !isCheckableRepositoryPath(value)) return;
-      indexedPaths.push({ filePath, value });
+      indexedPaths.push({ filePath, value, skillRoot });
       return;
     }
     if (Array.isArray(value)) {
-      for (const item of value) visit(item, filePath);
+      for (const item of value) visit(item, filePath, skillRoot);
       return;
     }
     if (!value || typeof value !== "object") return;
-    for (const item of Object.values(value)) visit(item, filePath);
+    const nestedSkillRoot = filePath === "data/skill-routing.json" && typeof value.skill === "string"
+      ? resolve(PATHS.root, "skills", value.skill)
+      : skillRoot;
+    for (const item of Object.values(value)) visit(item, filePath, nestedSkillRoot);
   }
   for (const file of dataFiles) visit(await readJson(file), portable(relative(PATHS.root, file)));
   for (const indexed of indexedPaths) {
     if (await exactCaseExists(resolve(PATHS.root, indexed.value))) continue;
+    if (indexed.skillRoot && await exactCaseExists(resolve(indexed.skillRoot, indexed.value))) continue;
     issues.push({
       severity: "error",
       path: indexed.filePath,

@@ -1,32 +1,30 @@
 ---
 name: mcbe-json-ui-server-forms
-description: Analyze and implement Bedrock JSON UI server form customization. Use when Codex must modify `server_form.json`, long or custom form routing, chest or furnace form substitution, title-prefix based form detection, custom server form button grids, image rows inside forms, polished form shells, or multi-form factory patterns in Minecraft Bedrock JSON UI.
+description: Analyze and implement Bedrock JSON UI server forms, including title/factory routing, collection-backed buttons, category and global search, hover states, close/search input, inline edit boxes, and typed BP response handling.
 ---
 
 # MCBE JSON UI Server Forms
 
-Use this when the UI is driven by Bedrock server form screens.
+Treat a custom form as one BP/RP protocol, not as an isolated screen skin.
 
 ## Contract
 
-- Input: `server_form.json`, custom route and body files, form title/body/buttons, and sender code when available.
-- Output: title-token-to-factory trace, button/collection index contract, changed files, and interaction checks.
-- Success: routing is unique, button order agrees with the sender, collection ownership is valid, and cancel/input behavior is tested or marked pending.
+- Input: `server_form.json`, routed UI files, exact title/body/buttons or modal fields, sender code, and target input devices.
+- Output: sender -> title route -> factory -> collection/index -> event -> response trace, changed files, and interaction evidence.
+- Success: route/fallback is valid, displayed and callback indices agree, collection ownership is valid, search uses the intended data scope, and close/input behavior is tested or marked pending.
 
-If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-server-forms` entry. Run only present validators and do not treat static collection checks as proof that clicks reach the server.
+If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-server-forms` entry. Static contract checks do not prove that Bedrock dispatches clicks or typed values.
 
 ## Workflow
 
 1. Read `references/server-form-map.md`.
-2. Determine the routing mechanism:
-   - title prefix
-   - form type suffix
-   - chest or furnace special token
-   - factory control id override
-3. Trace how `main_screen_content` inserts the replacement form.
-4. Document the exact form title conventions required on the server side.
+2. Write the complete BP/RP contract before editing: form kind, exact title token, fallback, ordered semantic ids, field types, cancel behavior, and search scope.
+3. Trace `main_screen_content`/route -> qualified factory control -> collection owner -> per-item index -> verified button mapping.
+4. Validate sender/receiver order and marker cleanup, then test mouse, controller, touch, close/cancel, search, and typed submission in Bedrock.
 
-## Output rules
+## Required boundaries
 
-- Always include the title prefix or token that activates the custom UI.
-- Show which factory control id is being replaced.
+- A search toggle cannot search categories whose data is absent from the active collection.
+- `collection_name` belongs to the verified collection owner; `collection_index` belongs to the materialized item.
+- A visual hover/pressed state is not click dispatch.
+- Keep project-specific tokens, labels, namespaces, and hidden payload markers in the project contract, not in this Skill.
