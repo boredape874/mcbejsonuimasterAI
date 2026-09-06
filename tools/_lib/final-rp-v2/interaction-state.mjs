@@ -32,7 +32,7 @@ export function validateStateContentPersistence(host) {
   if(targets.length<2)return issues;
   const signatures=targets.map(child=>({state:child.id,content:flattenContent(child)}));
   const base=signatures[0];
-  for(const current of signatures.slice(1)) if(JSON.stringify(base.content)!==JSON.stringify(current.content)) issues.push({kind:"STATE_CONTENT_LOSS",impact:"blocking",control:host.qualified||host.id,baseState:base.state,state:current.state,baseContent:base.content,stateContent:current.content});
+  for(const current of signatures.slice(1)) if(JSON.stringify(contentSemantics(base.content))!==JSON.stringify(contentSemantics(current.content))) issues.push({kind:"STATE_CONTENT_LOSS",impact:"blocking",control:host.qualified||host.id,baseState:base.state,state:current.state,baseContent:base.content,stateContent:current.content});
   return issues;
 }
 export function projectTooltipVisibility({ hovered=false, focused=false, pressed=false, inputMode="mouse", touchFallback="focus-or-press" }={}) {
@@ -41,5 +41,6 @@ export function projectTooltipVisibility({ hovered=false, focused=false, pressed
   return{visible,reason:visible?`touch-${touchFallback}`:"touch-fallback-hidden",verifiedFallback:["always","focus-or-press"].includes(touchFallback)};
 }
 function flattenContent(node){const out=[];(function walk(value){if(["label","image"].includes(value.props?.type))out.push(contentIdentity(value));for(const child of value.controls||[])walk(child)})(node);return out.sort((a,b)=>String(a.semanticId).localeCompare(String(b.semanticId)));}
+function contentSemantics(content){return content.map(item=>({role:item.role,semanticId:item.semanticId,text:item.role==="label"?item.text:null,collectionIndex:item.collectionIndex,bindings:item.bindings}));}
 function stateChildren(node){return(node.controls||[]).filter(child=>/(default|hover|press|lock|checked|unchecked|selected|unselected|focus)/i.test(child.id||""));}
 function normalizeType(type){return type==="input_panel"?"input_panel":TYPE_STATES[type]?type:"button";}

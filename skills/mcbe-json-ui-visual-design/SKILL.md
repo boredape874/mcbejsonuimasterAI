@@ -27,6 +27,7 @@ Turn a screenshot, working screen, or catalog recipe into explicit layout decisi
 ## Design rules
 
 - Establish the root and content box before placing children.
+- Distinguish baked artwork from live controls before measuring. If a socket, separator, label, or button surface is already present in the background, do not stack a second full surface over it without a deliberate mask or cutout.
 - Use one spacing rule for a repeated row or grid unless the evidence shows a deliberate exception.
 - Size labels from their available region and test the normal string, a 30% longer Korean string, and a long English string.
 - Verify default, hover, pressed, and locked visuals when those states exist.
@@ -34,4 +35,6 @@ Turn a screenshot, working screen, or catalog recipe into explicit layout decisi
 - Preserve image aspect ratio unless stretching is explicitly intended; use verified nine-slice metadata for resizable frames.
 - Do not call a visual result exact or guess coordinates when its Minecraft font/vanilla profile, viewport, GUI scale, safe area, crop, or screenshot calibration is unresolved.
 - Do not claim final server-form placement or state correctness without screenshots from the actual Bedrock screen. Static pack checks and the standalone preview are insufficient for collection-driven and inherited controls.
+- Treat a full-width black line, unexplained strip, or clipped band as an ownership/clip diagnostic. Inspect inherited scroll viewport backgrounds, fill children, clipping bounds, and baked texture pixels before changing offsets.
+- Reserve non-overlapping regions for price, quantity, icon, name, and discount text. Compare rendered alpha bounds, not only declared rectangles; transparent padding can make an icon cover text even when boxes appear separate.
 - Treat external editor output as fixture evidence, not the visual or runtime authority.

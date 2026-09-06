@@ -21,7 +21,8 @@ export function buildBindingGraph(tree, { globals = {}, fixture = {} } = {}) {
       const provenance = provenanceFor(node, pointer);
       const edge = { id: `${control}:${ordinal}`, type, sourceControl, sourceProperty, targetControl: control, targetProperty, collection: binding.binding_collection_name ?? null, pointer, provenance, binding: structuredClone(binding) };
       edges.push(edge);
-      if (!sourceProperty || !targetProperty) unresolved.push({ kind: "unresolved_binding_endpoint", impact: "blocking", control, pointer, edge });
+      const endpointRequired = type !== "collection_details";
+      if (endpointRequired && (!sourceProperty || !targetProperty)) unresolved.push({ kind: "unresolved_binding_endpoint", impact: "blocking", control, pointer, edge });
       if (binding.source_control_name && !byControl.has(binding.source_control_name)) unresolved.push({ kind: "unresolved_binding_source_control", impact: "blocking", control, pointer, sourceControl: binding.source_control_name, provenance });
       if (type === "global" && sourceProperty && !Object.hasOwn(globals, sourceProperty) && !Object.hasOwn(globals, sourceProperty.replace(/^#/, "$"))) unresolved.push({ kind: "unresolved_global_binding", impact: "blocking", control, pointer, sourceProperty, provenance });
       if ((type === "collection" || type === "collection_details") && !edge.collection && !fixture.buttons) unresolved.push({ kind: "unresolved_collection_source", impact: "blocking", control, pointer, provenance });

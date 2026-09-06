@@ -142,7 +142,7 @@ async function resolveBundle(args = {}) {
   if (!resolved.tree) throw new Error(`Control could not be resolved: ${control}`);
   const collections = materializeCollections(resolved.tree, fixture);
   const interaction = projectInteractionState(collections.tree, fixture, { index, interactionState: args.interactionState ?? "default" });
-  const bindingGraph = buildBindingGraph(interaction.tree, { globals:index.globals, fixture });
+  const bindingGraph = buildBindingGraph(interaction.tree, { globals:{...index.globals,...fixtureEnvironment}, fixture });
   materializeDefaultLabelSizes(interaction.tree, profile);
   const layout = layoutTree(interaction.tree, { viewport: args.viewport ?? [480, 270], defaults: args.defaults, content: args.content, contentMax: args.contentMax });
   const unresolved = [

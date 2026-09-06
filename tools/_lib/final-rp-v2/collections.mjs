@@ -16,11 +16,13 @@ export function materializeCollectionGraph(tree, fixture = {}) {
     const environment = collectionEnvironment(item, sourceIndex, fixture);
     for (const key of ["text", "texture", "texture_file_system", "visible", "enabled"]) {
       if (typeof props[key] !== "string" || !props[key].startsWith("#")) continue;
+      if (!Object.hasOwn(environment, props[key])) continue;
       const result = evaluateExpression(props[key], environment, { control: node.qualified || node.id, property: key });
       if (result.ok) props[key] = result.value; else unresolved.push(...result.unresolved);
     }
     for (const [bindingOrdinal, binding] of (props.bindings || []).entries()) {
       if (!binding || !["collection", "collection_details"].includes(binding.binding_type)) continue;
+      if (binding.binding_type === "collection_details" && !binding.binding_name && !binding.source_property_name && !binding.binding_name_override && !binding.target_property_name) continue;
       const source = binding.binding_name || binding.source_property_name;
       const target = String(binding.binding_name_override || binding.target_property_name || source || "").replace(/^#/, "");
       if (!source || !target || !Object.hasOwn(environment, source)) {

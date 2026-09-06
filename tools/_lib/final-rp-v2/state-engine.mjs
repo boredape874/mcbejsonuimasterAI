@@ -54,6 +54,7 @@ export function projectInteractionState(tree, fixture = {}, options = {}) {
       const local = source.slice(1);
       if (Object.hasOwn(props, local)) props[key] = props[local];
       else if (Object.hasOwn(environment, source)) props[key] = environment[source];
+      else unresolved.push({kind:"unresolved_expression",expression:source,reason:`unknown_symbol:${source}`,control:node.qualified||node.id,property:key});
     }
     sampleAnimations(node, props, options.index, unresolved, diagnostics);
     const childIds = new Set((node.controls || []).map(child => child.id));
