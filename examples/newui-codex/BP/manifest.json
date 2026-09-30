@@ -7,7 +7,7 @@
     "version": [
       1,
       0,
-      2
+      4
     ],
     "min_engine_version": [
       1,
@@ -22,7 +22,7 @@
       "version": [
         1,
         0,
-        2
+        4
       ]
     },
     {
@@ -32,7 +32,7 @@
       "version": [
         1,
         0,
-        2
+        4
       ],
       "entry": "scripts/main.js"
     }
@@ -43,7 +43,7 @@
       "version": [
         1,
         0,
-        2
+        4
       ]
     },
     {

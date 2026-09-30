@@ -4,8 +4,8 @@
     "name": "NewUI · 작은 세계 탐험 도감 RP",
     "description": "Original pixel field guide: held book, NPC model portrait and JSON UI. Client testing pending.",
     "uuid": "6b882368-c6c6-4275-8c2b-588a57a3f8b1",
-    "version": [1, 0, 2],
+    "version": [1, 0, 4],
     "min_engine_version": [1, 21, 100]
   },
-  "modules": [{"type": "resources", "uuid": "31ee8360-0847-4096-a0c8-46d67fcfe75d", "version": [1, 0, 2]}]
+  "modules": [{"type": "resources", "uuid": "31ee8360-0847-4096-a0c8-46d67fcfe75d", "version": [1, 0, 4]}]
 }

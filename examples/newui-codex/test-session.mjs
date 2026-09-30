@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { CATALOG } from './BP/scripts/catalog.js';
+import { ADDON_VERSION, CATALOG } from './BP/scripts/catalog.js';
 import { ACTIONS, createSessions } from './BP/scripts/session.js';
 import { BOOK_TYPE, NPC_TYPE, OWNER_TAG, createCodexController } from './BP/scripts/controller.js';
 import { assertCodexBpContract } from './bp-contract.mjs';
@@ -55,7 +55,7 @@ function fixture() {
   }
   const a = player('player-a'), b = player('player-b');
   const controller = createCodexController({ world, system, makeItem: typeId => ({ typeId, amount: 1 }), warn: text => warnings.push(text), prefix: 'test' });
-  const open = p => { assert.equal(controller.queueOpen(p), true); system.advance(); return controller.sessions.getPlayer(p.id); };
+  const open = p => { assert.equal(controller.queueOpen(p), true); system.advance(2); return controller.sessions.getPlayer(p.id); };
   const event = (p, npcId, action, id = 'newui:navigate') => ({ id, sourceEntity: entities.get(npcId), initiator: p, message: action });
   return { ...controller, controller, a, b, open, event, entities, dimensions, world, system, warnings, commands, placements, makeEntity };
 }
@@ -163,6 +163,7 @@ test('navigation rotates NPC, preserves page and links animation', () => {
   f.system.advance(); assert.equal(f.handleScriptEvent(f.event(f.a, original.npcId, 'next')), true);
   const next = f.sessions.getPlayer(f.a.id);
   assert.equal(next.entryIndex, 1); assert.notEqual(next.npcId, original.npcId); assert.equal(originalNpc.isValid, false);
+  f.system.advance();
   assert.equal(f.a.getDynamicProperty('newui:entry'), 1);
   const animation = f.entities.get(next.npcId).animations[0];
   assert.equal(animation.name, 'animation.newui.codex.turn_right'); assert.deepEqual(animation.options.players, [f.a]);
@@ -186,7 +187,7 @@ test('close ticket cannot remove a newly opened session', () => {
 });
 test('cancelled queued open cannot consume a later request', () => {
   const f = fixture(); assert.equal(f.queueOpen(f.a), true); assert.equal(f.queueOpen(f.a), false);
-  f.endPlayer(f.a.id); assert.equal(f.queueOpen(f.a), true); f.system.advance();
+  f.endPlayer(f.a.id); assert.equal(f.queueOpen(f.a), true); f.system.advance(2);
   assert.equal(f.commands.length, 1); assert.equal(f.sessions.all().length, 1);
 });
 test('book grant preserves full inventory, handles index zero and prevents duplicate grant', () => {
@@ -213,7 +214,7 @@ test('dimension changes, inactivity and loaded orphan NPCs only clean owned enti
 });
 test('open failures remove candidates and old snapshots without affecting another player', () => {
   const f = fixture(), first = f.open(f.a), b = f.open(f.b); f.a.failCommand = true;
-  f.system.advance(); f.handleScriptEvent(f.event(f.a, first.npcId, 'next'));
+  f.system.advance(); f.handleScriptEvent(f.event(f.a, first.npcId, 'next')); f.system.advance();
   assert.equal(f.sessions.getPlayer(f.a.id), undefined); assert.equal(f.entities.has(first.npcId), false); assert.equal(f.sessions.getPlayer(f.b.id).id, b.id);
   assert.equal([...f.entities.values()].filter(e => e.typeId === NPC_TYPE).length, 1);
 });
@@ -267,7 +268,8 @@ test('queued saved-page read failure remains contained', () => {
   const f = fixture(); f.a.getDynamicProperty = () => { throw new Error('player became unavailable'); };
   f.queueOpen(f.a); assert.doesNotThrow(() => f.system.advance());
   assert.equal(f.sessions.all().length, 0); assert.equal(f.commands.length, 0);
-  assert.ok(f.warnings.some(w => w.includes('Queued action failed')));
+  assert.ok(f.warnings.some(w => w.includes('stage=플레이어확인') && w.includes('player became unavailable')));
+  assert.ok(f.a.messages.some(message => message.includes(ADDON_VERSION) && message.includes('플레이어확인')));
 });
 test('forged event sources, missing initiator and altered ownership are ignored', () => {
   const f = fixture(), s = f.open(f.a), npc = f.entities.get(s.npcId);
@@ -281,6 +283,140 @@ test('invalid saved pages use the first entry', () => {
     const f = fixture(); f.a.setDynamicProperty('newui:entry', invalid); assert.equal(f.open(f.a).entryIndex, 0);
   }
 });
+test('rejected item requests and canceled or missing-player callbacks leave diagnostics', () => {
+  const f = fixture(); assert.equal(f.queueOpen(f.a), true); assert.equal(f.queueOpen(f.a), false);
+  assert.ok(f.a.messages.some(message => message.includes('이미 처리 중')));
+  f.endPlayer(f.a.id); f.system.advance();
+  assert.ok(f.warnings.some(message => message.includes('QUEUE_CANCELED')));
+  assert.equal(f.queueOpen(f.a), true); f.entities.delete(f.a.id); f.system.advance();
+  assert.ok(f.warnings.some(message => message.includes('QUEUED_PLAYER_UNAVAILABLE')));
+  assert.equal(f.commands.length, 0); assert.equal(f.sessions.all().length, 0);
+});
+test('failed scheduling releases the pending ticket for another request', () => {
+  const f = fixture(), run = f.system.run;
+  f.system.run = () => { throw new Error('schedule unavailable'); };
+  assert.equal(f.queueOpen(f.a), false);
+  assert.ok(f.warnings.some(message => message.includes('stage=예약') && message.includes('schedule unavailable')));
+  f.system.run = run; assert.equal(f.queueOpen(f.a), true); f.system.advance();
+  assert.equal(f.sessions.all().length, 1);
+});
+test('opening failures report the actual bounded stage and build to a valid player', () => {
+  const changes = [
+    ['구조체배치', f => { f.world.structureManager.place = () => { throw new Error('place rejected'); }; }],
+    ['새NPC확인', f => { f.world.structureManager.place = () => {}; }],
+    ['세션등록', f => { const spawn = f.a.dimension.spawnEntity; f.a.dimension.spawnEntity = type => { const npc = spawn(type); npc.setDynamicProperty = () => { throw new Error('property rejected'); }; return npc; }; }],
+    ['대화열기', f => { f.a.runCommand = () => { throw new Error('x'.repeat(2000) + '\nsecond line'); }; }],
+  ];
+  for (const [stage, change] of changes) {
+    const f = fixture(); change(f); assert.equal(f.open(f.a), undefined);
+    const diagnostic = f.warnings.find(message => message.includes(`stage=${stage}`));
+    assert.ok(diagnostic?.includes(`NewUI ${ADDON_VERSION}`) && diagnostic.includes('entry=00'));
+    assert.ok(diagnostic.length < 300 && !diagnostic.includes('\n'));
+    assert.ok(f.a.messages.some(message => message.includes(stage) && message.includes(ADDON_VERSION)));
+    assert.ok(!f.warnings.some(message => message.includes('command=accepted')));
+  }
+});
+test('accepted dialogue command is explicitly unverified and diagnostic chat is opt-in', () => {
+  const f = fixture(); f.queueOpen(f.a, { diagnostic: true }); f.system.advance(2);
+  assert.equal(f.warnings.filter(message => message.includes('command=accepted display=unverified')).length, 1);
+  assert.equal(f.a.messages.filter(message => message.includes('대화 요청을 게임에 전달')).length, 1);
+  f.open(f.b); assert.ok(!f.b.messages.some(message => message.includes('대화 요청을 게임에 전달')));
+});
+test('placement is claimed immediately but dialogue waits one elapsed tick', () => {
+  const f = fixture(); f.queueOpen(f.a); f.system.advance();
+  const current = f.sessions.getPlayer(f.a.id), npc = f.entities.get(current.npcId);
+  assert.equal(npc.getDynamicProperty('newui:owner'), f.a.id); assert.equal(f.commands.length, 0);
+  assert.equal(f.queueOpen(f.a), false);
+  assert.equal(f.handleScriptEvent(f.event(f.a, npc.id, 'next')), false);
+  f.system.advance(); assert.equal(f.commands.length, 1);
+  assert.ok(f.warnings.some(message => message.includes('delayTicks=1') && message.includes(`session=${current.id}`)));
+});
+test('cancelled delayed dialogue cannot open or remove a replacement session', () => {
+  const f = fixture(); f.queueOpen(f.a); f.system.advance();
+  const old = f.sessions.getPlayer(f.a.id); f.endPlayer(f.a.id); f.queueOpen(f.a); f.system.advance();
+  const replacement = f.sessions.getPlayer(f.a.id);
+  assert.notEqual(old.id, replacement.id); assert.equal(f.entities.has(old.npcId), false); assert.equal(f.commands.length, 0);
+  f.system.advance(); assert.equal(f.commands.length, 1); assert.equal(f.sessions.getPlayer(f.a.id).id, replacement.id);
+  assert.ok(f.warnings.some(message => message.includes('DIALOGUE_TICKET_CANCELED')));
+});
+test('deferred callbacks recheck player, dimension and NPC ownership', () => {
+  for (const change of ['player', 'dimension', 'owner']) {
+    const f = fixture(), b = f.open(f.b); f.queueOpen(f.a); f.system.advance();
+    const current = f.sessions.getPlayer(f.a.id), npc = f.entities.get(current.npcId);
+    if (change === 'player') f.a.isValid = false;
+    if (change === 'dimension') f.a.dimension = f.dimensions.get('nether');
+    if (change === 'owner') npc.setDynamicProperty('newui:owner', 'foreign-owner');
+    f.system.advance(); assert.equal(f.commands.length, 1); assert.equal(f.sessions.getPlayer(f.a.id), undefined);
+    assert.equal(f.sessions.getPlayer(f.b.id).id, b.id);
+    assert.equal(npc.isValid, change === 'owner', 'Changed ownership must be preserved; other known candidates are cleaned');
+  }
+});
+test('same-tick timer callbacks are bounded and cannot open in the placement tick', () => {
+  for (const alwaysSameTick of [false, true]) {
+    const f = fixture(), original = f.open(f.a), runTimeout = f.system.runTimeout;
+    let calls = 0;
+    f.system.runTimeout = (callback, ticks) => { calls++; if (alwaysSameTick || calls === 1) callback(); else runTimeout.call(f.system, callback, ticks); };
+    assert.equal(f.handleScriptEvent(f.event(f.a, original.npcId, 'next')), true);
+    assert.equal(calls, 2); assert.equal(f.commands.length, 1);
+    f.system.advance(); assert.equal(f.commands.length, alwaysSameTick ? 1 : 2);
+    if (alwaysSameTick) { assert.equal(f.sessions.getPlayer(f.a.id), undefined); assert.ok(f.warnings.some(message => message.includes('TICK_DID_NOT_ADVANCE'))); }
+    else assert.ok(f.warnings.some(message => message.includes('action=next') && message.includes('delayTicks=1')));
+  }
+});
+test('failed deferred scheduling removes the claimed candidate', () => {
+  const f = fixture(); f.system.runTimeout = () => { throw new Error('deferred scheduling failed'); };
+  assert.equal(f.open(f.a), undefined); assert.equal(f.commands.length, 0);
+  assert.equal([...f.entities.values()].filter(entity => entity.typeId === NPC_TYPE).length, 0);
+  assert.ok(f.warnings.some(message => message.includes('stage=예약') && message.includes('deferred scheduling failed')));
+});
+test('close diagnostics record receipt timing and the delayed exact-ticket result', () => {
+  const f = fixture(), current = f.open(f.a);
+  f.handleScriptEvent(f.event(f.a, current.npcId, 'close', 'newui:close'));
+  assert.ok(f.warnings.some(message => message.includes('close=received') && message.includes('sinceCommand=0')));
+  assert.ok(f.entities.has(current.npcId)); f.system.advance(2);
+  assert.ok(f.warnings.some(message => message.includes(`close=applied session=${current.id}`)));
+  assert.equal(f.entities.has(current.npcId), false);
+});
+
+// Load the real main module with only its API/import specifiers substituted.
+// Registry callbacks, their return status, and the real controller all execute.
+{
+  const f = fixture(), commands = new Map(), items = new Map(), startup = [], logs = [];
+  const signal = () => ({ subscribe() {} });
+  f.world.afterEvents = { playerLeave: signal(), playerSpawn: signal(), playerDimensionChange: signal(), entityDie: signal() };
+  f.system.beforeEvents = { startup: { subscribe: callback => startup.push(callback) } };
+  f.system.afterEvents = { scriptEventReceive: signal() }; f.system.runInterval = () => {};
+  const key = `__newuiApi_${Date.now()}`;
+  globalThis[key] = { world: f.world, system: f.system, ItemStack: class { constructor(typeId, amount) { this.typeId = typeId; this.amount = amount; } }, CommandPermissionLevel: { Any: 0 }, CustomCommandStatus: { Success: 0, Failure: 1 } };
+  const api = `const api=globalThis[${JSON.stringify(key)}];export const {world,system,ItemStack,CommandPermissionLevel,CustomCommandStatus}=api;`;
+  const apiUrl = `data:text/javascript,${encodeURIComponent(api)}`;
+  const source = (await readFile(new URL('BP/scripts/main.js', import.meta.url), 'utf8'))
+    .replace("from '@minecraft/server'", `from '${apiUrl}'`)
+    .replace("from './controller.js'", `from '${new URL('BP/scripts/controller.js', import.meta.url).href}'`)
+    .replace("from './catalog.js'", `from '${new URL('BP/scripts/catalog.js', import.meta.url).href}'`);
+  const previousWarn = console.warn; console.warn = message => logs.push(String(message));
+  try {
+    await import(`data:text/javascript,${encodeURIComponent(source)}`);
+    startup[0]({ itemComponentRegistry: { registerCustomComponent: (id, callbacks) => items.set(id, callbacks) }, customCommandRegistry: { registerCommand: (spec, callback) => commands.set(spec.name, callback) } });
+    test('real main reports startup once and returns failure for rejected requests', () => {
+      assert.equal(logs.filter(message => message.includes(`NewUI ${ADDON_VERSION}`) && message.includes('startup transport=embedded-nbt')).length, 1);
+      const open = commands.get('newui:open'), book = commands.get('newui:book');
+      const accepted = open({ sourceEntity: f.a });
+      assert.equal(accepted.status, 0); assert.ok(accepted.message.includes(ADDON_VERSION) && accepted.message.includes('요청을 접수'));
+      assert.equal(open({ sourceEntity: f.a }).status, 1);
+      assert.equal(book({ sourceEntity: f.a }).status, 1);
+      assert.equal(open({}).status, 1);
+      f.b.isValid = false; assert.equal(open({ sourceEntity: f.b }).status, 1); f.b.isValid = true;
+      f.system.advance(2); assert.equal(f.commands.length, 1);
+      assert.ok(f.a.messages.some(message => message.includes('대화 요청을 게임에 전달') && message.includes('아직 확인되지')));
+      items.get('newui:open_codex').onUse({ source: f.b, itemStack: { typeId: BOOK_TYPE } });
+      items.get('newui:open_codex').onUseOn({ source: f.b, itemStack: { typeId: BOOK_TYPE } });
+      assert.ok(f.b.messages.some(message => message.includes('이미 처리 중')));
+      f.system.advance(2); assert.equal(f.commands.length, 2);
+      assert.ok(!f.b.messages.some(message => message.includes('대화 요청을 게임에 전달')));
+    });
+  } finally { console.warn = previousWarn; delete globalThis[key]; }
+}
 
 const readJson = async path => JSON.parse(await readFile(new URL(path, import.meta.url), 'utf8'));
 const structureBytes = await Promise.all(CATALOG.entries.map((_, index) => readFile(new URL(`BP/structures/newui/entry_${String(index).padStart(2, '0')}.mcstructure`, import.meta.url))));
@@ -336,7 +472,8 @@ test('truncated, trailing, wrong-endian and oversized NBT cannot pass the decode
   assert.throws(() => decodeStructure(wrongEndian));
 });
 const manifest = await readJson('BP/manifest.json'), rp = await readJson('RP/manifest.json');
-assert.deepEqual(manifest.header.version, [1, 0, 2]);
+assert.deepEqual(manifest.header.version, [1, 0, 4]);
+assert.equal(ADDON_VERSION, manifest.header.version.join('.'));
 assert.deepEqual(manifest.dependencies.find(d => d.uuid), { uuid: rp.header.uuid, version: rp.header.version });
 assert.deepEqual(manifest.dependencies.find(d => d.module_name), { module_name: '@minecraft/server', version: '2.1.0' });
 assert.deepEqual((await readJson('BP/entities/codex.json'))['minecraft:entity'].components['minecraft:npc'].npc_data.skin_list, [{ variant: 0 }, { variant: 1 }]);

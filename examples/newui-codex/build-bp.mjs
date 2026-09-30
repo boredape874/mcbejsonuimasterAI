@@ -9,7 +9,7 @@ const out = async (path, value) => {
   const target = fileURLToPath(new URL(`BP/${path}`, root)); await mkdir(dirname(target), { recursive: true });
   await writeFile(target, typeof value === 'string' || Buffer.isBuffer(value) ? value : JSON.stringify(value, null, 2) + '\n');
 };
-const version = [1, 0, 2];
+const version = [1, 0, 4];
 await out('manifest.json', {
   format_version: 2,
   header: { name: 'NewUI · 작은 세계 탐험 도감 BP', description: 'Original NPC dialogue and held guide example. Static checks do not establish target-client behavior.', uuid: 'f7c1d546-8d1d-4c0f-9495-563a510fcb24', version, min_engine_version: [1, 21, 100] },
@@ -45,6 +45,6 @@ for (let index = 0; index < catalog.entries.length; index++) {
 // Retire only this example's old generated scene file. The JSON scene loader's
 // six-button check is distinct from the persisted NPC Actions import path.
 await rm(new URL('BP/dialogue/codex.json', root), { force: true });
-await out('scripts/catalog.js', `// Generated from ../catalog.json by build-bp.mjs.\nexport const CATALOG = ${JSON.stringify(catalog, null, 2)};\n`);
+await out('scripts/catalog.js', `// Generated from ../catalog.json by build-bp.mjs.\nexport const ADDON_VERSION = '${version.join('.')}';\nexport const CATALOG = ${JSON.stringify(catalog, null, 2)};\n`);
 await out('functions/newui/help.mcfunction', 'tellraw @s {"rawtext":[{"text":"작은 세계 탐험 도감: /newui:book 으로 책을 받고 사용하거나 /newui:open 으로 여세요. 두 명령은 플레이어가 직접 실행합니다. BP와 RP를 함께 활성화하세요."}]}\n');
 console.log(JSON.stringify({ ok: true, structures: catalog.entries.length, buttonsPerNpc: 9, closeActions: 1, scriptApi: '2.1.0', runtimeVerified: false }));

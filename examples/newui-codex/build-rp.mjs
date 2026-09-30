@@ -34,12 +34,12 @@ ui.text_content={type:'panel',controls:[
   {label:label('$newui_text',['100% - 4px',12],{font_scale_factor:0.8,layer:2})},
 ]};
 ui['action@common_buttons.light_text_button']={
-  '$button_text':'', '$button_type_panel':'newui_codex.text_content', '$newui_text':'', '$newui_selection_token':'',
+  '$button_text':'', '$button_type_panel':'newui_codex.text_content',
   '$default_button_texture':'textures/newui/ui/button_default',
   '$hover_button_texture':'textures/newui/ui/button_hover',
   '$pressed_button_texture':'textures/newui/ui/button_pressed',
   '$locked_button_texture':'textures/newui/ui/button_default',
-  '$border_visible':false, '$button_tts_name':'$newui_text',
+  '$border_visible':false,
   button_mappings:[
     {from_button_id:'button.menu_select',to_button_id:'button.student_button',mapping_type:'pressed'},
     {from_button_id:'button.menu_ok',to_button_id:'button.student_button',mapping_type:'focused'},
@@ -47,10 +47,11 @@ ui['action@common_buttons.light_text_button']={
   bindings:[{binding_type:'collection_details',binding_collection_name:'student_buttons_collection',binding_collection_prefix:'student_buttons'}],
 };
 function action(id,index,content='newui_codex.text_content',name='',key) {
-  const button={collection_index:index,size:['100%','100%'],focus_identifier:`newui_${id}`,'$button_type_panel':content,'$newui_text':name};
-  if (id.startsWith('tab')) button['$newui_selection_token']=`[NEWUI:C${index}:`;
+  // TTS resolves at the button itself. Give it a literal; visual descendants
+  // read their variables from the collection wrapper's ancestor scope.
+  const button={collection_index:index,size:['100%','100%'],focus_identifier:`newui_${id}`,'$button_type_panel':content,'$button_tts_name':name};
   if(key) button.button_mappings=[...ui['action@common_buttons.light_text_button'].button_mappings,{from_button_id:key,to_button_id:'button.student_button',mapping_type:'global'}];
-  return {[id]:{type:'stack_panel',...box(id),layer:40,collection_name:'student_buttons_collection',controls:[{'button@newui_codex.action':button}]}};
+  return {[id]:{type:'stack_panel',...box(id),layer:40,collection_name:'student_buttons_collection','$newui_text':name,'$newui_selection_token':id.startsWith('tab')?`[NEWUI:C${index}:`:'',controls:[{'button@newui_codex.action':button}]}};
 }
 for(let slot=0;slot<4;slot++) {
   ui[`slot_${slot}_content`]={type:'panel',controls:catalog.categories.map((_,c)=>{
@@ -94,8 +95,8 @@ rootControls.push({description:{...label('#newui_description',box('detail_body')
 ]}});
 ui.book={type:'panel',size:[base.w,base.h],offset:[base.x+base.w/2-screen.w/2,base.y+base.h/2-screen.h/2],controls:rootControls};
 const knownMarkers=`(${catalog.entries.map((_,i)=>has(token(i))).join(' or ')})`;
-const gate=`(#student_view_visible and (#title_text = 'NEWUI_CODEX_V1') and ${knownMarkers})`;
-const gateBindings = expr => [{binding_name:'#student_view_visible',binding_type:'global'},{binding_name:'#title_text',binding_type:'global'},{binding_name:'#dialogtext'},{binding_type:'view',source_property_name:expr,target_property_name:'#visible'}];
+const gate=`((#title_text = 'NEWUI_CODEX_V1') and ${knownMarkers})`;
+const gateBindings = expr => [{binding_name:'#title_text',binding_type:'global'},{binding_name:'#dialogtext'},{binding_type:'view',source_property_name:expr,target_property_name:'#visible'}];
 ui.screen_content={type:'panel',controls:[
   {'vanilla@npc_interact.npc_screen_contents':{bindings:gateBindings(`(not ${gate})`)}},
   {codex:{type:'panel',bindings:gateBindings(gate),controls:[

@@ -1,4 +1,5 @@
 // Generated from ../catalog.json by build-bp.mjs.
+export const ADDON_VERSION = '1.0.4';
 export const CATALOG = {
   "schema": "newui-codex-catalog@1",
   "title": "작은 세계 탐험 도감",

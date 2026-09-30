@@ -49,14 +49,11 @@
   "action@common_buttons.light_text_button": {
     "$button_text": "",
     "$button_type_panel": "newui_codex.text_content",
-    "$newui_text": "",
-    "$newui_selection_token": "",
     "$default_button_texture": "textures/newui/ui/button_default",
     "$hover_button_texture": "textures/newui/ui/button_hover",
     "$pressed_button_texture": "textures/newui/ui/button_pressed",
     "$locked_button_texture": "textures/newui/ui/button_default",
     "$border_visible": false,
-    "$button_tts_name": "$newui_text",
     "button_mappings": [
       {
         "from_button_id": "button.menu_select",
@@ -1131,6 +1128,8 @@
           ],
           "layer": 40,
           "collection_name": "student_buttons_collection",
+          "$newui_text": "숲속",
+          "$newui_selection_token": "[NEWUI:C0:",
           "controls": [
             {
               "button@newui_codex.action": {
@@ -1141,8 +1140,7 @@
                 ],
                 "focus_identifier": "newui_tab0",
                 "$button_type_panel": "newui_codex.text_content",
-                "$newui_text": "숲속",
-                "$newui_selection_token": "[NEWUI:C0:"
+                "$button_tts_name": "숲속"
               }
             }
           ]
@@ -1163,6 +1161,8 @@
           ],
           "layer": 40,
           "collection_name": "student_buttons_collection",
+          "$newui_text": "들판",
+          "$newui_selection_token": "[NEWUI:C1:",
           "controls": [
             {
               "button@newui_codex.action": {
@@ -1173,8 +1173,7 @@
                 ],
                 "focus_identifier": "newui_tab1",
                 "$button_type_panel": "newui_codex.text_content",
-                "$newui_text": "들판",
-                "$newui_selection_token": "[NEWUI:C1:"
+                "$button_tts_name": "들판"
               }
             }
           ]
@@ -1195,6 +1194,8 @@
           ],
           "layer": 40,
           "collection_name": "student_buttons_collection",
+          "$newui_text": "동굴",
+          "$newui_selection_token": "[NEWUI:C2:",
           "controls": [
             {
               "button@newui_codex.action": {
@@ -1205,8 +1206,7 @@
                 ],
                 "focus_identifier": "newui_tab2",
                 "$button_type_panel": "newui_codex.text_content",
-                "$newui_text": "동굴",
-                "$newui_selection_token": "[NEWUI:C2:"
+                "$button_tts_name": "동굴"
               }
             }
           ]
@@ -1227,6 +1227,8 @@
           ],
           "layer": 40,
           "collection_name": "student_buttons_collection",
+          "$newui_text": "생물 선택",
+          "$newui_selection_token": "",
           "controls": [
             {
               "button@newui_codex.action": {
@@ -1237,7 +1239,7 @@
                 ],
                 "focus_identifier": "newui_card0",
                 "$button_type_panel": "newui_codex.slot_0_content",
-                "$newui_text": "생물 선택"
+                "$button_tts_name": "생물 선택"
               }
             }
           ]
@@ -1258,6 +1260,8 @@
           ],
           "layer": 40,
           "collection_name": "student_buttons_collection",
+          "$newui_text": "생물 선택",
+          "$newui_selection_token": "",
           "controls": [
             {
               "button@newui_codex.action": {
@@ -1268,7 +1272,7 @@
                 ],
                 "focus_identifier": "newui_card1",
                 "$button_type_panel": "newui_codex.slot_1_content",
-                "$newui_text": "생물 선택"
+                "$button_tts_name": "생물 선택"
               }
             }
           ]
@@ -1289,6 +1293,8 @@
           ],
           "layer": 40,
           "collection_name": "student_buttons_collection",
+          "$newui_text": "생물 선택",
+          "$newui_selection_token": "",
           "controls": [
             {
               "button@newui_codex.action": {
@@ -1299,7 +1305,7 @@
                 ],
                 "focus_identifier": "newui_card2",
                 "$button_type_panel": "newui_codex.slot_2_content",
-                "$newui_text": "생물 선택"
+                "$button_tts_name": "생물 선택"
               }
             }
           ]
@@ -1320,6 +1326,8 @@
           ],
           "layer": 40,
           "collection_name": "student_buttons_collection",
+          "$newui_text": "생물 선택",
+          "$newui_selection_token": "",
           "controls": [
             {
               "button@newui_codex.action": {
@@ -1330,7 +1338,7 @@
                 ],
                 "focus_identifier": "newui_card3",
                 "$button_type_panel": "newui_codex.slot_3_content",
-                "$newui_text": "생물 선택"
+                "$button_tts_name": "생물 선택"
               }
             }
           ]
@@ -1351,6 +1359,8 @@
           ],
           "layer": 40,
           "collection_name": "student_buttons_collection",
+          "$newui_text": "이전",
+          "$newui_selection_token": "",
           "controls": [
             {
               "button@newui_codex.action": {
@@ -1361,7 +1371,7 @@
                 ],
                 "focus_identifier": "newui_prev",
                 "$button_type_panel": "newui_codex.text_content",
-                "$newui_text": "이전",
+                "$button_tts_name": "이전",
                 "button_mappings": [
                   {
                     "from_button_id": "button.menu_select",
@@ -1399,6 +1409,8 @@
           ],
           "layer": 40,
           "collection_name": "student_buttons_collection",
+          "$newui_text": "다음",
+          "$newui_selection_token": "",
           "controls": [
             {
               "button@newui_codex.action": {
@@ -1409,7 +1421,7 @@
                 ],
                 "focus_identifier": "newui_next",
                 "$button_type_panel": "newui_codex.text_content",
-                "$newui_text": "다음",
+                "$button_tts_name": "다음",
                 "button_mappings": [
                   {
                     "from_button_id": "button.menu_select",
@@ -2940,10 +2952,6 @@
         "vanilla@npc_interact.npc_screen_contents": {
           "bindings": [
             {
-              "binding_name": "#student_view_visible",
-              "binding_type": "global"
-            },
-            {
               "binding_name": "#title_text",
               "binding_type": "global"
             },
@@ -2952,7 +2960,7 @@
             },
             {
               "binding_type": "view",
-              "source_property_name": "(not (#student_view_visible and (#title_text = 'NEWUI_CODEX_V1') and ((not ((#dialogtext - '[NEWUI:C0:E00]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E01]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E02]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E03]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E04]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E05]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E06]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E07]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E08]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E09]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E10]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E11]') = #dialogtext)))))",
+              "source_property_name": "(not ((#title_text = 'NEWUI_CODEX_V1') and ((not ((#dialogtext - '[NEWUI:C0:E00]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E01]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E02]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E03]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E04]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E05]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E06]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E07]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E08]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E09]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E10]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E11]') = #dialogtext)))))",
               "target_property_name": "#visible"
             }
           ]
@@ -2963,10 +2971,6 @@
           "type": "panel",
           "bindings": [
             {
-              "binding_name": "#student_view_visible",
-              "binding_type": "global"
-            },
-            {
               "binding_name": "#title_text",
               "binding_type": "global"
             },
@@ -2975,7 +2979,7 @@
             },
             {
               "binding_type": "view",
-              "source_property_name": "(#student_view_visible and (#title_text = 'NEWUI_CODEX_V1') and ((not ((#dialogtext - '[NEWUI:C0:E00]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E01]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E02]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E03]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E04]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E05]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E06]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E07]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E08]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E09]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E10]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E11]') = #dialogtext))))",
+              "source_property_name": "((#title_text = 'NEWUI_CODEX_V1') and ((not ((#dialogtext - '[NEWUI:C0:E00]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E01]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E02]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E03]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E04]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E05]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E06]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E07]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E08]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E09]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E10]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E11]') = #dialogtext))))",
               "target_property_name": "#visible"
             }
           ],

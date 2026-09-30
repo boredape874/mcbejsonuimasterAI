@@ -38,6 +38,11 @@ export async function verifyRp({rp=join(project,'RP'),vanilla}={}) {
     const control=controls[id];assert.equal(control.collection_name,'student_buttons_collection');
     assert.equal(control.bindings,undefined,`${id} must remain available in every category`);
     const button=children(control)['button@newui_codex.action'];
+    const name=index<3?catalog.categories[index].name:index<7?'생물 선택':index===7?'이전':'다음';
+    assert.equal(button.$button_tts_name,name,`${id} requires literal TTS text, not a same-control variable alias`);
+    assert.equal(control.$newui_text,name,`${id} provides descendant label text in an ancestor scope`);
+    assert.equal(control.$newui_selection_token,index<3?`[NEWUI:C${index}:`:'');
+    assert.equal(button.$newui_text,undefined);assert.equal(button.$newui_selection_token,undefined);
     assert.equal(button.collection_index,index,`${id} must target NBT action ${index}`);
     assert.equal(button.bindings,undefined);assert.equal(button.visible,undefined);assert.equal(button.enabled,undefined);
     assert.equal(button.focus_identifier,`newui_${id}`);return button;
@@ -47,10 +52,11 @@ export async function verifyRp({rp=join(project,'RP'),vanilla}={}) {
   const indices=active.map(b=>b.collection_index);
   assert.deepEqual(indices,[0,1,2,3,4,5,6,7,8]);
   for(const [id,input,text]of [['prev','button.menu_tab_left','이전'],['next','button.menu_tab_right','다음']]){
-    const button=children(controls[id])['button@newui_codex.action'];assert.equal(button.$newui_text,text);
+    const button=children(controls[id])['button@newui_codex.action'];assert.equal(controls[id].$newui_text,text);
     assert.ok(button.button_mappings.some(m=>m.from_button_id===input&&m.to_button_id==='button.student_button'&&m.mapping_type==='global'));
   }
   const action=ui['action@common_buttons.light_text_button'];
+  assert.equal(action.$button_tts_name,undefined);assert.equal(action.$newui_text,undefined);assert.equal(action.$newui_selection_token,undefined);
   assert.ok(action.bindings.some(b=>b.binding_type==='collection_details'&&b.binding_collection_name==='student_buttons_collection'&&b.binding_collection_prefix==='student_buttons'));
   assert.ok(action.button_mappings.some(m=>m.to_button_id==='button.student_button'&&m.mapping_type==='pressed'));
   assert.ok(controls['close@common_buttons.light_text_button'].button_mappings.some(m=>m.to_button_id==='button.exit_student'&&m.mapping_type==='global'));
@@ -58,16 +64,17 @@ export async function verifyRp({rp=join(project,'RP'),vanilla}={}) {
   assert.ok(fallback['vanilla@npc_interact.npc_screen_contents']);
   const condition=custom.codex.bindings.find(b=>b.target_property_name==='#visible').source_property_name;
   const knownMarkers=Array.from({length:12},(_,i)=>`(not ((#dialogtext - '[NEWUI:C${Math.floor(i/4)}:E${String(i).padStart(2,'0')}]') = #dialogtext))`).join(' or ');
-  assert.equal(condition,`(#student_view_visible and (#title_text = 'NEWUI_CODEX_V1') and (${knownMarkers}))`,'Only the 12 defined scene markers may mount the codex');
+  assert.equal(condition,`((#title_text = 'NEWUI_CODEX_V1') and (${knownMarkers}))`,'Owned title and one of 12 markers mount the codex independently of student/editor state');
+  assert.ok(custom.codex.bindings.every(b=>b.binding_name!=='#student_view_visible'));
   assert.equal(fallback['vanilla@npc_interact.npc_screen_contents'].bindings.find(b=>b.target_property_name==='#visible').source_property_name,`(not ${condition})`);
   assert.equal(controls.portrait_collection.controls[0].book.renderer,'actor_portrait_renderer');
   assert.equal(controls.portrait_collection.controls[0].book.collection_index,1);
   const markers=[];
   assert.equal(catalog.categories.length,3);assert.equal(catalog.entries.length,12);
   for(let c=0;c<3;c++) {
-    const button=children(controls[`tab${c}`])['button@newui_codex.action'];
-    assert.equal(button.$newui_text,catalog.categories[c].name,`Stale category ${c} label`);
-    assert.equal(button.$newui_selection_token,`[NEWUI:C${c}:`);
+    const tab=controls[`tab${c}`];
+    assert.equal(tab.$newui_text,catalog.categories[c].name,`Stale category ${c} label`);
+    assert.equal(tab.$newui_selection_token,`[NEWUI:C${c}:`);
     assert.equal(controls[`heading_${c}`].text,`${catalog.categories[c].name} 친구들`);
     assert.equal(visibleExpression(controls[`heading_${c}`]),containsMarker(`[NEWUI:C${c}:`));
   }
