@@ -1,0 +1,158 @@
+{
+  "format_version": "1.16.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.newui.codex_pages",
+        "texture_width": 256,
+        "texture_height": 128,
+        "visible_bounds_width": 5,
+        "visible_bounds_height": 5,
+        "visible_bounds_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "portrait_root",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            80,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "book",
+          "parent": "portrait_root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "left_page",
+          "parent": "book",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -16,
+                0,
+                -10
+              ],
+              "size": [
+                16,
+                0.1,
+                20
+              ],
+              "uv": {
+                "up": {
+                  "uv": [
+                    0,
+                    0
+                  ],
+                  "uv_size": [
+                    128,
+                    128
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "right_page",
+          "parent": "book",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0,
+                0,
+                -10
+              ],
+              "size": [
+                16,
+                0.1,
+                20
+              ],
+              "uv": {
+                "up": {
+                  "uv": [
+                    128,
+                    0
+                  ],
+                  "uv_size": [
+                    128,
+                    128
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "turning_leaf",
+          "parent": "book",
+          "pivot": [
+            0,
+            0.2,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0,
+                0.22,
+                -10
+              ],
+              "size": [
+                16,
+                0.05,
+                20
+              ],
+              "uv": {
+                "up": {
+                  "uv": [
+                    128,
+                    0
+                  ],
+                  "uv_size": [
+                    128,
+                    128
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    128,
+                    128
+                  ],
+                  "uv_size": [
+                    -128,
+                    -128
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

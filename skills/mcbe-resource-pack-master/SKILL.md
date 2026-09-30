@@ -11,7 +11,7 @@ Start from the requested result and actual pack entry files. Select one owner, t
 | --- | --- |
 | JSON UI layouts, forms, HUD or bindings | `mcbe-json-ui-master` or the exact JSON UI specialist |
 | Equipped model, first/third person transform or attachable animation | `mcbe-attachables-ui` |
-| Camera/player geometry UI or GeouiStudio export | `mcbe-geo-ui` |
+| Player geometry UI, NPC portrait book or GeouiStudio export | `mcbe-geo-ui` |
 | Alpha, outlines, material inheritance or PBR texture sets | `mcbe-resource-pack-rendering` |
 | RP/BP state, pack identities or stack collisions | [Addon ownership](references/addon-ownership.md) |
 | Learn reusable patterns from a supplied asset library | `mcbe-json-ui-samples` and the local asset learner |

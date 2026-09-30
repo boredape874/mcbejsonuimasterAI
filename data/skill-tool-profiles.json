@@ -414,7 +414,7 @@
       "skillStatus": "implemented",
       "purpose": "Select the requested Bedrock pack surface and validate only its relevant evidence.",
       "toolSelections": [
-        { "id": "attachable.inspect", "phase": "inspect", "required": false, "when": [ "asset-graph" ], "optIn": true, "reason": "Trace player-renderer GeoUI dependencies." },
+        { "id": "attachable.inspect", "phase": "inspect", "required": false, "when": [ "asset-graph" ], "optIn": true, "reason": "Trace player or NPC portrait GeoUI dependencies." },
         { "id": "material.audit", "phase": "inspect", "required": false, "when": [ "render-materials" ], "optIn": true, "reason": "Inspect material and texture-set structure." },
         { "id": "asset.learn", "phase": "inspect", "required": false, "when": [ "asset-learning" ], "optIn": true, "reason": "Retrieve geometry and UI source patterns." },
         { "id": "geoui.project", "phase": "inspect", "required": false, "when": [ "geoui-project" ], "optIn": true, "reason": "Inspect native project restoration and export risks before building packs." },

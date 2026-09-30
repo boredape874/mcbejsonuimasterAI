@@ -1,0 +1,77 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.newui.field_guide.main_first": {
+      "loop": true,
+      "bones": {
+        "held_book": {
+          "position": [
+            3,
+            17,
+            -5
+          ],
+          "rotation": [
+            10,
+            -20,
+            0
+          ],
+          "scale": 0.75
+        }
+      }
+    },
+    "animation.newui.field_guide.off_first": {
+      "loop": true,
+      "bones": {
+        "held_book": {
+          "position": [
+            -3,
+            17,
+            -5
+          ],
+          "rotation": [
+            10,
+            20,
+            0
+          ],
+          "scale": 0.75
+        }
+      }
+    },
+    "animation.newui.field_guide.main_third": {
+      "loop": true,
+      "bones": {
+        "held_book": {
+          "position": [
+            0,
+            22,
+            -2
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 0.65
+        }
+      }
+    },
+    "animation.newui.field_guide.off_third": {
+      "loop": true,
+      "bones": {
+        "held_book": {
+          "position": [
+            0,
+            22,
+            -2
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 0.65
+        }
+      }
+    }
+  }
+}

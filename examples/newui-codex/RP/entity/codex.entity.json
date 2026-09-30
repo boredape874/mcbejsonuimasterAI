@@ -1,0 +1,32 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "newui:codex",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "transparent": "textures/newui/transparent",
+        "pages": "textures/newui/book_atlas",
+        "cover": "textures/newui/cover"
+      },
+      "geometry": {
+        "pages": "geometry.newui.codex_pages",
+        "cover": "geometry.newui.codex_cover"
+      },
+      "animations": {
+        "open": "animation.newui.codex.open",
+        "turn_left": "animation.newui.codex.turn_left",
+        "turn_right": "animation.newui.codex.turn_right"
+      },
+      "scripts": {
+        "should_update_bones_and_effects_offscreen": true
+      },
+      "render_controllers": [
+        "controller.render.newui.codex_pages",
+        "controller.render.newui.codex_cover"
+      ]
+    }
+  }
+}

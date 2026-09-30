@@ -10,9 +10,12 @@ try {
   await writeFile(resolve(root, "ui/_ui_defs.json"), '{"ui_defs":["ui/custom.json"]}');
   await writeFile(resolve(root, "ui/custom.json"), '{"namespace":"custom","root":{"type":"panel"}}');
   await writeFile(resolve(root, "ui/server_form.json"), '{"namespace":"server_form","screen":{"type":"panel"}}');
+  await writeFile(resolve(root, "ui/npc_interact_screen.json"), '{"namespace":"npc_interact","npc_screen":{"$screen_content":"custom.root"}}');
   await writeFile(resolve(root, "ui/orphan.json"), '{"namespace":"orphan","root":{"type":"panel"}}');
   let report = await validatePack(root, { allowMissingTextures: true });
   assert(report.infos.some((item) => item.code === "VANILLA_OVERRIDE"));
+  assert(report.infos.some((item) => item.code === "VANILLA_OVERRIDE" && item.path === "ui/npc_interact_screen.json"));
+  assert(!report.warnings.some((item) => item.code === "UI_DEFS_ORPHAN" && item.path === "ui/npc_interact_screen.json"));
   assert(report.warnings.some((item) => item.code === "UI_DEFS_ORPHAN" && item.path === "ui/orphan.json"));
   report = await validatePack(root, { dialect: "bedrock-json@9.99", allowMissingTextures: true });
   assert(report.errors.some((item) => item.code === "DIALECT_UNVERIFIED"));

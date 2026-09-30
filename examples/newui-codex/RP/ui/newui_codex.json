@@ -1,0 +1,3003 @@
+{
+  "namespace": "newui_codex",
+  "text_content": {
+    "type": "panel",
+    "controls": [
+      {
+        "selected": {
+          "type": "image",
+          "texture": "textures/newui/ui/button_selected",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "alpha": 0.6,
+          "layer": 1,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - $newui_selection_token) = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "label": {
+          "type": "label",
+          "text": "$newui_text",
+          "size": [
+            "100% - 4px",
+            12
+          ],
+          "font_size": "normal",
+          "font_scale_factor": 0.8,
+          "color": [
+            0.22,
+            0.27,
+            0.25
+          ],
+          "shadow": false,
+          "layer": 2
+        }
+      }
+    ]
+  },
+  "action@common_buttons.light_text_button": {
+    "$button_text": "",
+    "$button_type_panel": "newui_codex.text_content",
+    "$newui_text": "",
+    "$newui_selection_token": "",
+    "$default_button_texture": "textures/newui/ui/button_default",
+    "$hover_button_texture": "textures/newui/ui/button_hover",
+    "$pressed_button_texture": "textures/newui/ui/button_pressed",
+    "$locked_button_texture": "textures/newui/ui/button_default",
+    "$border_visible": false,
+    "$button_tts_name": "$newui_text",
+    "button_mappings": [
+      {
+        "from_button_id": "button.menu_select",
+        "to_button_id": "button.student_button",
+        "mapping_type": "pressed"
+      },
+      {
+        "from_button_id": "button.menu_ok",
+        "to_button_id": "button.student_button",
+        "mapping_type": "focused"
+      }
+    ],
+    "bindings": [
+      {
+        "binding_type": "collection_details",
+        "binding_collection_name": "student_buttons_collection",
+        "binding_collection_prefix": "student_buttons"
+      }
+    ]
+  },
+  "slot_0_content": {
+    "type": "panel",
+    "controls": [
+      {
+        "category_0": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "selected": {
+                "type": "image",
+                "texture": "textures/newui/ui/button_selected",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.6,
+                "layer": 1,
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:E00]') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/fox",
+                "size": [
+                  28,
+                  28
+                ],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [
+                  0,
+                  2
+                ],
+                "layer": 2
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "여우",
+                "size": [
+                  "100% - 4px",
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.7,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 2
+              }
+            }
+          ]
+        }
+      },
+      {
+        "category_1": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "selected": {
+                "type": "image",
+                "texture": "textures/newui/ui/button_selected",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.6,
+                "layer": 1,
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:E04]') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/cow",
+                "size": [
+                  28,
+                  28
+                ],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [
+                  0,
+                  2
+                ],
+                "layer": 2
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "소",
+                "size": [
+                  "100% - 4px",
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.7,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 2
+              }
+            }
+          ]
+        }
+      },
+      {
+        "category_2": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "selected": {
+                "type": "image",
+                "texture": "textures/newui/ui/button_selected",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.6,
+                "layer": 1,
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:E08]') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/bat",
+                "size": [
+                  28,
+                  28
+                ],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [
+                  0,
+                  2
+                ],
+                "layer": 2
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "박쥐",
+                "size": [
+                  "100% - 4px",
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.7,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 2
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "slot_1_content": {
+    "type": "panel",
+    "controls": [
+      {
+        "category_0": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "selected": {
+                "type": "image",
+                "texture": "textures/newui/ui/button_selected",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.6,
+                "layer": 1,
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:E01]') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/wolf",
+                "size": [
+                  28,
+                  28
+                ],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [
+                  0,
+                  2
+                ],
+                "layer": 2
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "늑대",
+                "size": [
+                  "100% - 4px",
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.7,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 2
+              }
+            }
+          ]
+        }
+      },
+      {
+        "category_1": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "selected": {
+                "type": "image",
+                "texture": "textures/newui/ui/button_selected",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.6,
+                "layer": 1,
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:E05]') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/sheep",
+                "size": [
+                  28,
+                  28
+                ],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [
+                  0,
+                  2
+                ],
+                "layer": 2
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "양",
+                "size": [
+                  "100% - 4px",
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.7,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 2
+              }
+            }
+          ]
+        }
+      },
+      {
+        "category_2": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "selected": {
+                "type": "image",
+                "texture": "textures/newui/ui/button_selected",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.6,
+                "layer": 1,
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:E09]') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/axolotl",
+                "size": [
+                  28,
+                  28
+                ],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [
+                  0,
+                  2
+                ],
+                "layer": 2
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "아홀로틀",
+                "size": [
+                  "100% - 4px",
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.7,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 2
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "slot_2_content": {
+    "type": "panel",
+    "controls": [
+      {
+        "category_0": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "selected": {
+                "type": "image",
+                "texture": "textures/newui/ui/button_selected",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.6,
+                "layer": 1,
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:E02]') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/bee",
+                "size": [
+                  28,
+                  28
+                ],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [
+                  0,
+                  2
+                ],
+                "layer": 2
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "꿀벌",
+                "size": [
+                  "100% - 4px",
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.7,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 2
+              }
+            }
+          ]
+        }
+      },
+      {
+        "category_1": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "selected": {
+                "type": "image",
+                "texture": "textures/newui/ui/button_selected",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.6,
+                "layer": 1,
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:E06]') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/pig",
+                "size": [
+                  28,
+                  28
+                ],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [
+                  0,
+                  2
+                ],
+                "layer": 2
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "돼지",
+                "size": [
+                  "100% - 4px",
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.7,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 2
+              }
+            }
+          ]
+        }
+      },
+      {
+        "category_2": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "selected": {
+                "type": "image",
+                "texture": "textures/newui/ui/button_selected",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.6,
+                "layer": 1,
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:E10]') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/glow_squid",
+                "size": [
+                  28,
+                  28
+                ],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [
+                  0,
+                  2
+                ],
+                "layer": 2
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "발광 오징어",
+                "size": [
+                  "100% - 4px",
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.7,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 2
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "slot_3_content": {
+    "type": "panel",
+    "controls": [
+      {
+        "category_0": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "selected": {
+                "type": "image",
+                "texture": "textures/newui/ui/button_selected",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.6,
+                "layer": 1,
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:E03]') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/frog",
+                "size": [
+                  28,
+                  28
+                ],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [
+                  0,
+                  2
+                ],
+                "layer": 2
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "개구리",
+                "size": [
+                  "100% - 4px",
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.7,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 2
+              }
+            }
+          ]
+        }
+      },
+      {
+        "category_1": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "selected": {
+                "type": "image",
+                "texture": "textures/newui/ui/button_selected",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.6,
+                "layer": 1,
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:E07]') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/chicken",
+                "size": [
+                  28,
+                  28
+                ],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [
+                  0,
+                  2
+                ],
+                "layer": 2
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "닭",
+                "size": [
+                  "100% - 4px",
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.7,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 2
+              }
+            }
+          ]
+        }
+      },
+      {
+        "category_2": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "selected": {
+                "type": "image",
+                "texture": "textures/newui/ui/button_selected",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.6,
+                "layer": 1,
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:E11]') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/spider",
+                "size": [
+                  28,
+                  28
+                ],
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "offset": [
+                  0,
+                  2
+                ],
+                "layer": 2
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "거미",
+                "size": [
+                  "100% - 4px",
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.7,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "bottom_middle",
+                "anchor_to": "bottom_middle",
+                "offset": [
+                  0,
+                  -2
+                ],
+                "layer": 2
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "book": {
+    "type": "panel",
+    "size": [
+      320,
+      210
+    ],
+    "offset": [
+      0,
+      -10
+    ],
+    "controls": [
+      {
+        "portrait_collection": {
+          "type": "stack_panel",
+          "collection_name": "skins_collection",
+          "size": [
+            500,
+            500
+          ],
+          "offset": [
+            0,
+            -140
+          ],
+          "layer": 2,
+          "controls": [
+            {
+              "book": {
+                "type": "custom",
+                "renderer": "actor_portrait_renderer",
+                "collection_index": 1,
+                "size": [
+                  500,
+                  500
+                ],
+                "enable_scissor_test": true,
+                "bindings": [
+                  {
+                    "binding_type": "collection",
+                    "binding_collection_name": "skins_collection",
+                    "binding_name": "#skin_index"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "tab0": {
+          "type": "stack_panel",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            58,
+            5
+          ],
+          "size": [
+            64,
+            20
+          ],
+          "layer": 40,
+          "collection_name": "student_buttons_collection",
+          "controls": [
+            {
+              "button@newui_codex.action": {
+                "collection_index": 0,
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "focus_identifier": "newui_tab0",
+                "$button_type_panel": "newui_codex.text_content",
+                "$newui_text": "숲속",
+                "$newui_selection_token": "[NEWUI:C0:"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "tab1": {
+          "type": "stack_panel",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            128,
+            5
+          ],
+          "size": [
+            64,
+            20
+          ],
+          "layer": 40,
+          "collection_name": "student_buttons_collection",
+          "controls": [
+            {
+              "button@newui_codex.action": {
+                "collection_index": 1,
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "focus_identifier": "newui_tab1",
+                "$button_type_panel": "newui_codex.text_content",
+                "$newui_text": "들판",
+                "$newui_selection_token": "[NEWUI:C1:"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "tab2": {
+          "type": "stack_panel",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            198,
+            5
+          ],
+          "size": [
+            64,
+            20
+          ],
+          "layer": 40,
+          "collection_name": "student_buttons_collection",
+          "controls": [
+            {
+              "button@newui_codex.action": {
+                "collection_index": 2,
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "focus_identifier": "newui_tab2",
+                "$button_type_panel": "newui_codex.text_content",
+                "$newui_text": "동굴",
+                "$newui_selection_token": "[NEWUI:C2:"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "card0": {
+          "type": "stack_panel",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            28,
+            61
+          ],
+          "size": [
+            52,
+            48
+          ],
+          "layer": 40,
+          "collection_name": "student_buttons_collection",
+          "controls": [
+            {
+              "button@newui_codex.action": {
+                "collection_index": 3,
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "focus_identifier": "newui_card0",
+                "$button_type_panel": "newui_codex.slot_0_content",
+                "$newui_text": "생물 선택"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "card1": {
+          "type": "stack_panel",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            88,
+            61
+          ],
+          "size": [
+            52,
+            48
+          ],
+          "layer": 40,
+          "collection_name": "student_buttons_collection",
+          "controls": [
+            {
+              "button@newui_codex.action": {
+                "collection_index": 4,
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "focus_identifier": "newui_card1",
+                "$button_type_panel": "newui_codex.slot_1_content",
+                "$newui_text": "생물 선택"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "card2": {
+          "type": "stack_panel",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            28,
+            115
+          ],
+          "size": [
+            52,
+            48
+          ],
+          "layer": 40,
+          "collection_name": "student_buttons_collection",
+          "controls": [
+            {
+              "button@newui_codex.action": {
+                "collection_index": 5,
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "focus_identifier": "newui_card2",
+                "$button_type_panel": "newui_codex.slot_2_content",
+                "$newui_text": "생물 선택"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "card3": {
+          "type": "stack_panel",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            88,
+            115
+          ],
+          "size": [
+            52,
+            48
+          ],
+          "layer": 40,
+          "collection_name": "student_buttons_collection",
+          "controls": [
+            {
+              "button@newui_codex.action": {
+                "collection_index": 6,
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "focus_identifier": "newui_card3",
+                "$button_type_panel": "newui_codex.slot_3_content",
+                "$newui_text": "생물 선택"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "prev": {
+          "type": "stack_panel",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            25,
+            187
+          ],
+          "size": [
+            48,
+            20
+          ],
+          "layer": 40,
+          "collection_name": "student_buttons_collection",
+          "controls": [
+            {
+              "button@newui_codex.action": {
+                "collection_index": 7,
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "focus_identifier": "newui_prev",
+                "$button_type_panel": "newui_codex.text_content",
+                "$newui_text": "이전",
+                "button_mappings": [
+                  {
+                    "from_button_id": "button.menu_select",
+                    "to_button_id": "button.student_button",
+                    "mapping_type": "pressed"
+                  },
+                  {
+                    "from_button_id": "button.menu_ok",
+                    "to_button_id": "button.student_button",
+                    "mapping_type": "focused"
+                  },
+                  {
+                    "from_button_id": "button.menu_tab_left",
+                    "to_button_id": "button.student_button",
+                    "mapping_type": "global"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "next": {
+          "type": "stack_panel",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            247,
+            187
+          ],
+          "size": [
+            48,
+            20
+          ],
+          "layer": 40,
+          "collection_name": "student_buttons_collection",
+          "controls": [
+            {
+              "button@newui_codex.action": {
+                "collection_index": 8,
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "focus_identifier": "newui_next",
+                "$button_type_panel": "newui_codex.text_content",
+                "$newui_text": "다음",
+                "button_mappings": [
+                  {
+                    "from_button_id": "button.menu_select",
+                    "to_button_id": "button.student_button",
+                    "mapping_type": "pressed"
+                  },
+                  {
+                    "from_button_id": "button.menu_ok",
+                    "to_button_id": "button.student_button",
+                    "mapping_type": "focused"
+                  },
+                  {
+                    "from_button_id": "button.menu_tab_right",
+                    "to_button_id": "button.student_button",
+                    "mapping_type": "global"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "close@common_buttons.light_text_button": {
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            122,
+            187
+          ],
+          "size": [
+            76,
+            20
+          ],
+          "layer": 50,
+          "$button_text": "닫기",
+          "$button_font_scale_factor": 0.8,
+          "$default_button_texture": "textures/newui/ui/button_default",
+          "$hover_button_texture": "textures/newui/ui/button_hover",
+          "$pressed_button_texture": "textures/newui/ui/button_pressed",
+          "$border_visible": false,
+          "button_mappings": [
+            {
+              "from_button_id": "button.menu_select",
+              "to_button_id": "button.exit_student",
+              "mapping_type": "pressed"
+            },
+            {
+              "from_button_id": "button.menu_ok",
+              "to_button_id": "button.exit_student",
+              "mapping_type": "focused"
+            },
+            {
+              "from_button_id": "button.menu_cancel",
+              "to_button_id": "button.exit_student",
+              "mapping_type": "global"
+            }
+          ]
+        }
+      },
+      {
+        "heading_0": {
+          "type": "label",
+          "text": "숲속 친구들",
+          "size": [
+            112,
+            14
+          ],
+          "font_size": "normal",
+          "font_scale_factor": 0.95,
+          "color": [
+            0.22,
+            0.27,
+            0.25
+          ],
+          "shadow": false,
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            28,
+            38
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "heading_1": {
+          "type": "label",
+          "text": "들판 친구들",
+          "size": [
+            112,
+            14
+          ],
+          "font_size": "normal",
+          "font_scale_factor": 0.95,
+          "color": [
+            0.22,
+            0.27,
+            0.25
+          ],
+          "shadow": false,
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            28,
+            38
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "heading_2": {
+          "type": "label",
+          "text": "동굴 친구들",
+          "size": [
+            112,
+            14
+          ],
+          "font_size": "normal",
+          "font_scale_factor": 0.95,
+          "color": [
+            0.22,
+            0.27,
+            0.25
+          ],
+          "shadow": false,
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            28,
+            38
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "detail_0": {
+          "type": "panel",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:E00]') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/fox",
+                "size": [
+                  64,
+                  64
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  204,
+                  47
+                ]
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "여우",
+                "size": [
+                  118,
+                  16
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 1,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  117
+                ]
+              }
+            },
+            {
+              "habitat": {
+                "type": "label",
+                "text": "타이가 · 밤",
+                "size": [
+                  118,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.65,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  136
+                ]
+              }
+            },
+            {
+              "page_info": {
+                "type": "label",
+                "text": "1 / 4 · 모든 생물 보기",
+                "size": [
+                  112,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.6,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  28,
+                  163
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "detail_1": {
+          "type": "panel",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:E01]') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/wolf",
+                "size": [
+                  64,
+                  64
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  204,
+                  47
+                ]
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "늑대",
+                "size": [
+                  118,
+                  16
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 1,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  117
+                ]
+              }
+            },
+            {
+              "habitat": {
+                "type": "label",
+                "text": "숲 · 타이가",
+                "size": [
+                  118,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.65,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  136
+                ]
+              }
+            },
+            {
+              "page_info": {
+                "type": "label",
+                "text": "2 / 4 · 모든 생물 보기",
+                "size": [
+                  112,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.6,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  28,
+                  163
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "detail_2": {
+          "type": "panel",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:E02]') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/bee",
+                "size": [
+                  64,
+                  64
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  204,
+                  47
+                ]
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "꿀벌",
+                "size": [
+                  118,
+                  16
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 1,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  117
+                ]
+              }
+            },
+            {
+              "habitat": {
+                "type": "label",
+                "text": "꽃밭 · 벌집",
+                "size": [
+                  118,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.65,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  136
+                ]
+              }
+            },
+            {
+              "page_info": {
+                "type": "label",
+                "text": "3 / 4 · 모든 생물 보기",
+                "size": [
+                  112,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.6,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  28,
+                  163
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "detail_3": {
+          "type": "panel",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:E03]') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/frog",
+                "size": [
+                  64,
+                  64
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  204,
+                  47
+                ]
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "개구리",
+                "size": [
+                  118,
+                  16
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 1,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  117
+                ]
+              }
+            },
+            {
+              "habitat": {
+                "type": "label",
+                "text": "늪 · 맹그로브",
+                "size": [
+                  118,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.65,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  136
+                ]
+              }
+            },
+            {
+              "page_info": {
+                "type": "label",
+                "text": "4 / 4 · 모든 생물 보기",
+                "size": [
+                  112,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.6,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  28,
+                  163
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "detail_4": {
+          "type": "panel",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:E04]') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/cow",
+                "size": [
+                  64,
+                  64
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  204,
+                  47
+                ]
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "소",
+                "size": [
+                  118,
+                  16
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 1,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  117
+                ]
+              }
+            },
+            {
+              "habitat": {
+                "type": "label",
+                "text": "들판 · 풀밭",
+                "size": [
+                  118,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.65,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  136
+                ]
+              }
+            },
+            {
+              "page_info": {
+                "type": "label",
+                "text": "1 / 4 · 모든 생물 보기",
+                "size": [
+                  112,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.6,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  28,
+                  163
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "detail_5": {
+          "type": "panel",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:E05]') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/sheep",
+                "size": [
+                  64,
+                  64
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  204,
+                  47
+                ]
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "양",
+                "size": [
+                  118,
+                  16
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 1,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  117
+                ]
+              }
+            },
+            {
+              "habitat": {
+                "type": "label",
+                "text": "초원 · 언덕",
+                "size": [
+                  118,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.65,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  136
+                ]
+              }
+            },
+            {
+              "page_info": {
+                "type": "label",
+                "text": "2 / 4 · 모든 생물 보기",
+                "size": [
+                  112,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.6,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  28,
+                  163
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "detail_6": {
+          "type": "panel",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:E06]') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/pig",
+                "size": [
+                  64,
+                  64
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  204,
+                  47
+                ]
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "돼지",
+                "size": [
+                  118,
+                  16
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 1,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  117
+                ]
+              }
+            },
+            {
+              "habitat": {
+                "type": "label",
+                "text": "초원 · 숲 가장자리",
+                "size": [
+                  118,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.65,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  136
+                ]
+              }
+            },
+            {
+              "page_info": {
+                "type": "label",
+                "text": "3 / 4 · 모든 생물 보기",
+                "size": [
+                  112,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.6,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  28,
+                  163
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "detail_7": {
+          "type": "panel",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:E07]') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/chicken",
+                "size": [
+                  64,
+                  64
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  204,
+                  47
+                ]
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "닭",
+                "size": [
+                  118,
+                  16
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 1,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  117
+                ]
+              }
+            },
+            {
+              "habitat": {
+                "type": "label",
+                "text": "풀밭 · 농장",
+                "size": [
+                  118,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.65,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  136
+                ]
+              }
+            },
+            {
+              "page_info": {
+                "type": "label",
+                "text": "4 / 4 · 모든 생물 보기",
+                "size": [
+                  112,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.6,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  28,
+                  163
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "detail_8": {
+          "type": "panel",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:E08]') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/bat",
+                "size": [
+                  64,
+                  64
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  204,
+                  47
+                ]
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "박쥐",
+                "size": [
+                  118,
+                  16
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 1,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  117
+                ]
+              }
+            },
+            {
+              "habitat": {
+                "type": "label",
+                "text": "어두운 동굴",
+                "size": [
+                  118,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.65,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  136
+                ]
+              }
+            },
+            {
+              "page_info": {
+                "type": "label",
+                "text": "1 / 4 · 모든 생물 보기",
+                "size": [
+                  112,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.6,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  28,
+                  163
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "detail_9": {
+          "type": "panel",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:E09]') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/axolotl",
+                "size": [
+                  64,
+                  64
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  204,
+                  47
+                ]
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "아홀로틀",
+                "size": [
+                  118,
+                  16
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 1,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  117
+                ]
+              }
+            },
+            {
+              "habitat": {
+                "type": "label",
+                "text": "무성한 동굴 · 물",
+                "size": [
+                  118,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.65,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  136
+                ]
+              }
+            },
+            {
+              "page_info": {
+                "type": "label",
+                "text": "2 / 4 · 모든 생물 보기",
+                "size": [
+                  112,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.6,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  28,
+                  163
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "detail_10": {
+          "type": "panel",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:E10]') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/glow_squid",
+                "size": [
+                  64,
+                  64
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  204,
+                  47
+                ]
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "발광 오징어",
+                "size": [
+                  118,
+                  16
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 1,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  117
+                ]
+              }
+            },
+            {
+              "habitat": {
+                "type": "label",
+                "text": "지하의 물",
+                "size": [
+                  118,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.65,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  136
+                ]
+              }
+            },
+            {
+              "page_info": {
+                "type": "label",
+                "text": "3 / 4 · 모든 생물 보기",
+                "size": [
+                  112,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.6,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  28,
+                  163
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "detail_11": {
+          "type": "panel",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:E11]') = #dialogtext))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "icon": {
+                "type": "image",
+                "texture": "textures/newui/icons/spider",
+                "size": [
+                  64,
+                  64
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  204,
+                  47
+                ]
+              }
+            },
+            {
+              "name": {
+                "type": "label",
+                "text": "거미",
+                "size": [
+                  118,
+                  16
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 1,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  117
+                ]
+              }
+            },
+            {
+              "habitat": {
+                "type": "label",
+                "text": "동굴 · 어두운 곳",
+                "size": [
+                  118,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.65,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  177,
+                  136
+                ]
+              }
+            },
+            {
+              "page_info": {
+                "type": "label",
+                "text": "4 / 4 · 모든 생물 보기",
+                "size": [
+                  112,
+                  12
+                ],
+                "font_size": "normal",
+                "font_scale_factor": 0.6,
+                "color": [
+                  0.22,
+                  0.27,
+                  0.25
+                ],
+                "shadow": false,
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [
+                  28,
+                  163
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "description": {
+          "type": "label",
+          "text": "#newui_description",
+          "size": [
+            118,
+            34
+          ],
+          "font_size": "normal",
+          "font_scale_factor": 0.65,
+          "color": [
+            0.22,
+            0.27,
+            0.25
+          ],
+          "shadow": false,
+          "text_alignment": "left",
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "offset": [
+            177,
+            149
+          ],
+          "layer": 50,
+          "bindings": [
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(#dialogtext - '[NEWUI:C0:E00]' - '[NEWUI:C0:E01]' - '[NEWUI:C0:E02]' - '[NEWUI:C0:E03]' - '[NEWUI:C1:E04]' - '[NEWUI:C1:E05]' - '[NEWUI:C1:E06]' - '[NEWUI:C1:E07]' - '[NEWUI:C2:E08]' - '[NEWUI:C2:E09]' - '[NEWUI:C2:E10]' - '[NEWUI:C2:E11]')",
+              "target_property_name": "#newui_description"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "screen_content": {
+    "type": "panel",
+    "controls": [
+      {
+        "vanilla@npc_interact.npc_screen_contents": {
+          "bindings": [
+            {
+              "binding_name": "#student_view_visible",
+              "binding_type": "global"
+            },
+            {
+              "binding_name": "#title_text",
+              "binding_type": "global"
+            },
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (#student_view_visible and (#title_text = 'NEWUI_CODEX_V1') and ((not ((#dialogtext - '[NEWUI:C0:E00]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E01]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E02]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E03]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E04]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E05]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E06]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E07]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E08]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E09]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E10]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E11]') = #dialogtext)))))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "codex": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#student_view_visible",
+              "binding_type": "global"
+            },
+            {
+              "binding_name": "#title_text",
+              "binding_type": "global"
+            },
+            {
+              "binding_name": "#dialogtext"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(#student_view_visible and (#title_text = 'NEWUI_CODEX_V1') and ((not ((#dialogtext - '[NEWUI:C0:E00]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E01]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E02]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E03]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E04]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E05]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E06]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E07]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E08]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E09]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E10]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E11]') = #dialogtext))))",
+              "target_property_name": "#visible"
+            }
+          ],
+          "controls": [
+            {
+              "backdrop": {
+                "type": "image",
+                "texture": "textures/newui/ui/shade",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "alpha": 0.58,
+                "layer": 0
+              }
+            },
+            {
+              "book@newui_codex.book": {}
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

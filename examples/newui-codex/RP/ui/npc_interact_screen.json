@@ -1,0 +1,6 @@
+{
+  "namespace": "npc_interact",
+  "npc_screen": {
+    "$screen_content": "newui_codex.screen_content"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "format_version": "1.21.100",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "newui:codex",
+      "runtime_identifier": "minecraft:npc",
+      "is_spawnable": false,
+      "is_summonable": true,
+      "is_experimental": false
+    },
+    "components": {
+      "minecraft:type_family": {
+        "family": [
+          "npc",
+          "newui_codex"
+        ]
+      },
+      "minecraft:npc": {
+        "npc_data": {
+          "skin_list": [
+            {
+              "variant": 0
+            },
+            {
+              "variant": 1
+            }
+          ]
+        }
+      },
+      "minecraft:variant": {
+        "value": 0
+      },
+      "minecraft:collision_box": {
+        "width": 0.01,
+        "height": 0.01
+      },
+      "minecraft:physics": {
+        "has_gravity": false,
+        "has_collision": false
+      },
+      "minecraft:pushable": {
+        "is_pushable": false,
+        "is_pushable_by_piston": false
+      },
+      "minecraft:damage_sensor": {
+        "triggers": [
+          {
+            "cause": "all",
+            "deals_damage": false
+          }
+        ]
+      },
+      "minecraft:persistent": {}
+    }
+  }
+}

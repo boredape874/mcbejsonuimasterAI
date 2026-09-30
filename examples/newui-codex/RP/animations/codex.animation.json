@@ -1,0 +1,134 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.newui.codex.open": {
+      "animation_length": 0.45,
+      "bones": {
+        "book": {
+          "position": {
+            "0.0": [
+              0,
+              0,
+              -10
+            ],
+            "0.45": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "left_cover": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              70
+            ],
+            "0.45": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "right_cover": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              -70
+            ],
+            "0.45": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    },
+    "animation.newui.codex.turn_right": {
+      "animation_length": 0.35,
+      "bones": {
+        "turning_leaf": {
+          "scale": {
+            "0.0": [
+              1,
+              1,
+              1
+            ],
+            "0.32": [
+              1,
+              1,
+              1
+            ],
+            "0.35": [
+              0,
+              0,
+              0
+            ]
+          },
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.18": [
+              0,
+              0,
+              -90
+            ],
+            "0.35": [
+              0,
+              0,
+              -180
+            ]
+          }
+        }
+      }
+    },
+    "animation.newui.codex.turn_left": {
+      "animation_length": 0.35,
+      "bones": {
+        "turning_leaf": {
+          "scale": {
+            "0.0": [
+              1,
+              1,
+              1
+            ],
+            "0.32": [
+              1,
+              1,
+              1
+            ],
+            "0.35": [
+              0,
+              0,
+              0
+            ]
+          },
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              -180
+            ],
+            "0.18": [
+              0,
+              0,
+              -90
+            ],
+            "0.35": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

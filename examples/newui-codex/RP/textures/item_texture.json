@@ -1,0 +1,9 @@
+{
+  "resource_pack_name": "NewUI",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "newui:field_guide": {
+      "textures": "textures/newui/field_guide"
+    }
+  }
+}

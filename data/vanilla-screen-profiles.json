@@ -6,6 +6,7 @@
       "overrideFiles": [
         "ui/chat_screen.json",
         "ui/hud_screen.json",
+        "ui/npc_interact_screen.json",
         "ui/pause_screen.json",
         "ui/server_form.json",
         "ui/start_screen.json"
