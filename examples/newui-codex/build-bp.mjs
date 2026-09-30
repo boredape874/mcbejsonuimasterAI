@@ -8,7 +8,7 @@ const out = async (path, value) => {
   const target = fileURLToPath(new URL(`BP/${path}`, root)); await mkdir(dirname(target), { recursive: true });
   await writeFile(target, typeof value === 'string' ? value : JSON.stringify(value, null, 2) + '\n');
 };
-const version = [1, 0, 0];
+const version = [1, 0, 1];
 await out('manifest.json', {
   format_version: 2,
   header: { name: 'NewUI · 작은 세계 탐험 도감 BP', description: 'Original NPC dialogue and held guide example. Static checks do not establish target-client behavior.', uuid: 'f7c1d546-8d1d-4c0f-9495-563a510fcb24', version, min_engine_version: [1, 21, 100] },
@@ -33,7 +33,7 @@ await out('entities/codex.json', {
       'minecraft:collision_box': { width: 0.01, height: 0.01 },
       'minecraft:physics': { has_gravity: false, has_collision: false },
       'minecraft:pushable': { is_pushable: false, is_pushable_by_piston: false },
-      'minecraft:damage_sensor': { triggers: [{ cause: 'all', deals_damage: false }] },
+      'minecraft:damage_sensor': { triggers: [{ cause: 'all', deals_damage: 'no' }] },
       'minecraft:persistent': {},
     },
   },
@@ -46,14 +46,12 @@ const scenes = catalog.entries.map((entry, index) => {
     text: `[NEWUI:C${entry.category}:E${String(index).padStart(2, '0')}]${entry.description}`,
     on_close_commands: ['/scriptevent newui:close close'],
     buttons: [
-      ...catalog.categories.map(category => ({ name: category.name, commands: [`/scriptevent newui:navigate ${category.id}`] })),
+      ...catalog.categories.filter((_, categoryIndex) => categoryIndex !== entry.category).map(category => ({ name: category.name, commands: [`/scriptevent newui:navigate ${category.id}`] })),
       ...localEntries.map((candidate, slot) => ({ name: candidate.name, commands: [`/scriptevent newui:navigate slot${slot}`] })),
-      { name: '이전', commands: ['/scriptevent newui:navigate prev'] },
-      { name: '다음', commands: ['/scriptevent newui:navigate next'] },
     ],
   };
 });
 await out('dialogue/codex.json', { format_version: '1.17', 'minecraft:npc_dialogue': { scenes } });
 await out('scripts/catalog.js', `// Generated from ../catalog.json by build-bp.mjs.\nexport const CATALOG = ${JSON.stringify(catalog, null, 2)};\n`);
 await out('functions/newui/help.mcfunction', 'tellraw @s {"rawtext":[{"text":"작은 세계 탐험 도감: /newui:book 으로 책을 받고 사용하거나 /newui:open 으로 여세요. 두 명령은 플레이어가 직접 실행합니다. BP와 RP를 함께 활성화하세요."}]}\n');
-console.log(JSON.stringify({ ok: true, scenes: scenes.length, buttonsPerScene: 9, scriptApi: '2.1.0', runtimeVerified: false }));
+console.log(JSON.stringify({ ok: true, scenes: scenes.length, buttonsPerScene: 6, scriptApi: '2.1.0', runtimeVerified: false }));

@@ -11,12 +11,6 @@
         ],
         "buttons": [
           {
-            "name": "숲속",
-            "commands": [
-              "/scriptevent newui:navigate forest"
-            ]
-          },
-          {
             "name": "들판",
             "commands": [
               "/scriptevent newui:navigate meadow"
@@ -50,18 +44,6 @@
             "name": "개구리",
             "commands": [
               "/scriptevent newui:navigate slot3"
-            ]
-          },
-          {
-            "name": "이전",
-            "commands": [
-              "/scriptevent newui:navigate prev"
-            ]
-          },
-          {
-            "name": "다음",
-            "commands": [
-              "/scriptevent newui:navigate next"
             ]
           }
         ]
@@ -75,12 +57,6 @@
         ],
         "buttons": [
           {
-            "name": "숲속",
-            "commands": [
-              "/scriptevent newui:navigate forest"
-            ]
-          },
-          {
             "name": "들판",
             "commands": [
               "/scriptevent newui:navigate meadow"
@@ -114,18 +90,6 @@
             "name": "개구리",
             "commands": [
               "/scriptevent newui:navigate slot3"
-            ]
-          },
-          {
-            "name": "이전",
-            "commands": [
-              "/scriptevent newui:navigate prev"
-            ]
-          },
-          {
-            "name": "다음",
-            "commands": [
-              "/scriptevent newui:navigate next"
             ]
           }
         ]
@@ -139,12 +103,6 @@
         ],
         "buttons": [
           {
-            "name": "숲속",
-            "commands": [
-              "/scriptevent newui:navigate forest"
-            ]
-          },
-          {
             "name": "들판",
             "commands": [
               "/scriptevent newui:navigate meadow"
@@ -178,18 +136,6 @@
             "name": "개구리",
             "commands": [
               "/scriptevent newui:navigate slot3"
-            ]
-          },
-          {
-            "name": "이전",
-            "commands": [
-              "/scriptevent newui:navigate prev"
-            ]
-          },
-          {
-            "name": "다음",
-            "commands": [
-              "/scriptevent newui:navigate next"
             ]
           }
         ]
@@ -203,12 +149,6 @@
         ],
         "buttons": [
           {
-            "name": "숲속",
-            "commands": [
-              "/scriptevent newui:navigate forest"
-            ]
-          },
-          {
             "name": "들판",
             "commands": [
               "/scriptevent newui:navigate meadow"
@@ -242,18 +182,6 @@
             "name": "개구리",
             "commands": [
               "/scriptevent newui:navigate slot3"
-            ]
-          },
-          {
-            "name": "이전",
-            "commands": [
-              "/scriptevent newui:navigate prev"
-            ]
-          },
-          {
-            "name": "다음",
-            "commands": [
-              "/scriptevent newui:navigate next"
             ]
           }
         ]
@@ -273,12 +201,6 @@
             ]
           },
           {
-            "name": "들판",
-            "commands": [
-              "/scriptevent newui:navigate meadow"
-            ]
-          },
-          {
             "name": "동굴",
             "commands": [
               "/scriptevent newui:navigate cave"
@@ -306,18 +228,6 @@
             "name": "닭",
             "commands": [
               "/scriptevent newui:navigate slot3"
-            ]
-          },
-          {
-            "name": "이전",
-            "commands": [
-              "/scriptevent newui:navigate prev"
-            ]
-          },
-          {
-            "name": "다음",
-            "commands": [
-              "/scriptevent newui:navigate next"
             ]
           }
         ]
@@ -337,12 +247,6 @@
             ]
           },
           {
-            "name": "들판",
-            "commands": [
-              "/scriptevent newui:navigate meadow"
-            ]
-          },
-          {
             "name": "동굴",
             "commands": [
               "/scriptevent newui:navigate cave"
@@ -370,18 +274,6 @@
             "name": "닭",
             "commands": [
               "/scriptevent newui:navigate slot3"
-            ]
-          },
-          {
-            "name": "이전",
-            "commands": [
-              "/scriptevent newui:navigate prev"
-            ]
-          },
-          {
-            "name": "다음",
-            "commands": [
-              "/scriptevent newui:navigate next"
             ]
           }
         ]
@@ -401,12 +293,6 @@
             ]
           },
           {
-            "name": "들판",
-            "commands": [
-              "/scriptevent newui:navigate meadow"
-            ]
-          },
-          {
             "name": "동굴",
             "commands": [
               "/scriptevent newui:navigate cave"
@@ -434,18 +320,6 @@
             "name": "닭",
             "commands": [
               "/scriptevent newui:navigate slot3"
-            ]
-          },
-          {
-            "name": "이전",
-            "commands": [
-              "/scriptevent newui:navigate prev"
-            ]
-          },
-          {
-            "name": "다음",
-            "commands": [
-              "/scriptevent newui:navigate next"
             ]
           }
         ]
@@ -465,12 +339,6 @@
             ]
           },
           {
-            "name": "들판",
-            "commands": [
-              "/scriptevent newui:navigate meadow"
-            ]
-          },
-          {
             "name": "동굴",
             "commands": [
               "/scriptevent newui:navigate cave"
@@ -498,18 +366,6 @@
             "name": "닭",
             "commands": [
               "/scriptevent newui:navigate slot3"
-            ]
-          },
-          {
-            "name": "이전",
-            "commands": [
-              "/scriptevent newui:navigate prev"
-            ]
-          },
-          {
-            "name": "다음",
-            "commands": [
-              "/scriptevent newui:navigate next"
             ]
           }
         ]
@@ -535,12 +391,6 @@
             ]
           },
           {
-            "name": "동굴",
-            "commands": [
-              "/scriptevent newui:navigate cave"
-            ]
-          },
-          {
             "name": "박쥐",
             "commands": [
               "/scriptevent newui:navigate slot0"
@@ -562,18 +412,6 @@
             "name": "거미",
             "commands": [
               "/scriptevent newui:navigate slot3"
-            ]
-          },
-          {
-            "name": "이전",
-            "commands": [
-              "/scriptevent newui:navigate prev"
-            ]
-          },
-          {
-            "name": "다음",
-            "commands": [
-              "/scriptevent newui:navigate next"
             ]
           }
         ]
@@ -599,12 +437,6 @@
             ]
           },
           {
-            "name": "동굴",
-            "commands": [
-              "/scriptevent newui:navigate cave"
-            ]
-          },
-          {
             "name": "박쥐",
             "commands": [
               "/scriptevent newui:navigate slot0"
@@ -626,18 +458,6 @@
             "name": "거미",
             "commands": [
               "/scriptevent newui:navigate slot3"
-            ]
-          },
-          {
-            "name": "이전",
-            "commands": [
-              "/scriptevent newui:navigate prev"
-            ]
-          },
-          {
-            "name": "다음",
-            "commands": [
-              "/scriptevent newui:navigate next"
             ]
           }
         ]
@@ -663,12 +483,6 @@
             ]
           },
           {
-            "name": "동굴",
-            "commands": [
-              "/scriptevent newui:navigate cave"
-            ]
-          },
-          {
             "name": "박쥐",
             "commands": [
               "/scriptevent newui:navigate slot0"
@@ -690,18 +504,6 @@
             "name": "거미",
             "commands": [
               "/scriptevent newui:navigate slot3"
-            ]
-          },
-          {
-            "name": "이전",
-            "commands": [
-              "/scriptevent newui:navigate prev"
-            ]
-          },
-          {
-            "name": "다음",
-            "commands": [
-              "/scriptevent newui:navigate next"
             ]
           }
         ]
@@ -727,12 +529,6 @@
             ]
           },
           {
-            "name": "동굴",
-            "commands": [
-              "/scriptevent newui:navigate cave"
-            ]
-          },
-          {
             "name": "박쥐",
             "commands": [
               "/scriptevent newui:navigate slot0"
@@ -754,18 +550,6 @@
             "name": "거미",
             "commands": [
               "/scriptevent newui:navigate slot3"
-            ]
-          },
-          {
-            "name": "이전",
-            "commands": [
-              "/scriptevent newui:navigate prev"
-            ]
-          },
-          {
-            "name": "다음",
-            "commands": [
-              "/scriptevent newui:navigate next"
             ]
           }
         ]

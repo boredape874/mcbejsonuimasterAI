@@ -6,6 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { validatePack } from '../../tools/_lib/pack-validator.mjs';
 import { verifyRp } from './verify-rp.mjs';
 import { CATALOG } from './BP/scripts/catalog.js';
+import { assertCodexBpContract } from './bp-contract.mjs';
 const root=path.dirname(fileURLToPath(import.meta.url)), repo=path.resolve(root,'../..');
 const read=relative=>JSON.parse(fs.readFileSync(path.join(root,relative),'utf8'));
 function files(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?files(path.join(dir,e.name)):[path.join(dir,e.name)]);}
@@ -18,6 +19,7 @@ assert.equal(new Set(ids).size,ids.length,'Duplicate manifest UUID');
 for(const id of ids)assert.match(id,/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i);
 assert.ok(bp.dependencies.some(d=>d.uuid===rp.header.uuid&&JSON.stringify(d.version)===JSON.stringify(rp.header.version)),'Missing BP/RP dependency');
 assert.equal(bp.dependencies.find(d=>d.module_name==='@minecraft/server')?.version,'2.1.0');
+for(const manifest of [bp,rp]){assert.deepEqual(manifest.header.version,[1,0,1]);for(const module of manifest.modules)assert.deepEqual(module.version,[1,0,1]);}
 const sourceFiles=[...files(path.join(root,'BP')),...files(path.join(root,'RP'))];
 let jsonFiles=0,scriptFiles=0;
 for(const file of sourceFiles){if(file.endsWith('.json')){JSON.parse(fs.readFileSync(file,'utf8'));jsonFiles++;}if(file.endsWith('.js')){run(['--check',file]);scriptFiles++;}}
@@ -33,21 +35,11 @@ assert.equal(npc.description.identifier,read('RP/entity/codex.entity.json')['min
 assert.deepEqual(npc.components['minecraft:npc'].npc_data.skin_list,[{variant:0},{variant:1}]);
 assert.equal(npc.components['minecraft:variant'].value,0);
 const scenes=read('BP/dialogue/codex.json')['minecraft:npc_dialogue'].scenes;
-assert.equal(scenes.length,12);assert.equal(new Set(scenes.map(s=>s.scene_tag)).size,12);
-const actions=['forest','meadow','cave','slot0','slot1','slot2','slot3','prev','next'];
-scenes.forEach((scene,i)=>{
-  const entry=catalog.entries[i],marker=`[NEWUI:C${entry.category}:E${String(i).padStart(2,'0')}]`;
-  assert.equal(scene.scene_tag,`newui:entry_${String(i).padStart(2,'0')}`);
-  assert.equal(scene.npc_name,'NEWUI_CODEX_V1');assert.equal(scene.text,marker+entry.description);
-  assert.equal(scene.buttons.length,9);
-  assert.deepEqual(scene.buttons.map(b=>b.name),[...catalog.categories.map(c=>c.name),...catalog.entries.filter(e=>e.category===entry.category).map(e=>e.name),'이전','다음']);
-  scene.buttons.forEach((b,index)=>assert.deepEqual(b.commands,[`/scriptevent newui:navigate ${actions[index]}`]));
-  assert.deepEqual(scene.on_close_commands,['/scriptevent newui:close close']);
-});
+assertCodexBpContract({npc,scenes,catalog});
 const pack=await validatePack(path.join(root,'RP'));
 assert.equal(pack.ok,true,JSON.stringify(pack.errors));assert.equal(pack.warnings.length,0,JSON.stringify(pack.warnings));
 const render=await verifyRp();
 const graph=JSON.parse(run(['tools/attachable-inspect.mjs','--rp',path.join(root,'RP'),'--bp',path.join(root,'BP'),'--json']));
 assert.equal(graph.ok,true);assert.equal(graph.summary.unresolved,0);assert.equal(graph.runtimeVerified,false);
 const sessions=run([path.join(root,'test-session.mjs')]);
-console.log(JSON.stringify({ok:true,jsonFiles,scriptFiles,sourceFiles:sourceFiles.length,scenes:scenes.length,buttonsPerScene:9,solvedBoxes:render.solvedBoxes,decodedPngs:render.decodedPngs,graph:graph.summary,sessionTests:sessions,vanillaReferences:render.vanillaReferences,runtimeVerified:false,limitations:['Actor portrait framing and native input require Bedrock screenshots and a fresh Content Log.','Engine materials and dynamic skin selection remain outside static execution.']}));
+console.log(JSON.stringify({ok:true,jsonFiles,scriptFiles,sourceFiles:sourceFiles.length,scenes:scenes.length,buttonsPerScene:6,solvedBoxes:render.solvedBoxes,decodedPngs:render.decodedPngs,graph:graph.summary,sessionTests:sessions,vanillaReferences:render.vanillaReferences,runtimeVerified:false,limitations:['Actor portrait framing and native input require Bedrock screenshots and a fresh Content Log.','Engine materials and dynamic skin selection remain outside static execution.']}));

@@ -4,28 +4,6 @@
     "type": "panel",
     "controls": [
       {
-        "selected": {
-          "type": "image",
-          "texture": "textures/newui/ui/button_selected",
-          "size": [
-            "100%",
-            "100%"
-          ],
-          "alpha": 0.6,
-          "layer": 1,
-          "bindings": [
-            {
-              "binding_name": "#dialogtext"
-            },
-            {
-              "binding_type": "view",
-              "source_property_name": "(not ((#dialogtext - $newui_selection_token) = #dialogtext))",
-              "target_property_name": "#visible"
-            }
-          ]
-        }
-      },
-      {
         "label": {
           "type": "label",
           "text": "$newui_text",
@@ -50,7 +28,6 @@
     "$button_text": "",
     "$button_type_panel": "newui_codex.text_content",
     "$newui_text": "",
-    "$newui_selection_token": "",
     "$default_button_texture": "textures/newui/ui/button_default",
     "$hover_button_texture": "textures/newui/ui/button_hover",
     "$pressed_button_texture": "textures/newui/ui/button_pressed",
@@ -1118,7 +1095,7 @@
       },
       {
         "tab0": {
-          "type": "stack_panel",
+          "type": "panel",
           "anchor_from": "top_left",
           "anchor_to": "top_left",
           "offset": [
@@ -1130,19 +1107,125 @@
             20
           ],
           "layer": 40,
-          "collection_name": "student_buttons_collection",
           "controls": [
             {
-              "button@newui_codex.action": {
-                "collection_index": 0,
+              "current_0": {
+                "type": "panel",
                 "size": [
                   "100%",
                   "100%"
                 ],
-                "focus_identifier": "newui_tab0",
-                "$button_type_panel": "newui_codex.text_content",
-                "$newui_text": "숲속",
-                "$newui_selection_token": "[NEWUI:C0:"
+                "controls": [
+                  {
+                    "background": {
+                      "type": "image",
+                      "texture": "textures/newui/ui/button_selected",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ]
+                    }
+                  },
+                  {
+                    "label": {
+                      "type": "label",
+                      "text": "숲속",
+                      "size": [
+                        "100% - 4px",
+                        12
+                      ],
+                      "font_size": "normal",
+                      "font_scale_factor": 0.8,
+                      "color": [
+                        0.22,
+                        0.27,
+                        0.25
+                      ],
+                      "shadow": false,
+                      "layer": 2
+                    }
+                  }
+                ],
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "current_1": {
+                "type": "stack_panel",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "layer": 40,
+                "collection_name": "student_buttons_collection",
+                "controls": [
+                  {
+                    "button@newui_codex.action": {
+                      "collection_index": 0,
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "focus_identifier": "newui_tab0_from_1",
+                      "$button_type_panel": "newui_codex.text_content",
+                      "$newui_text": "숲속"
+                    }
+                  }
+                ],
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "current_2": {
+                "type": "stack_panel",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "layer": 40,
+                "collection_name": "student_buttons_collection",
+                "controls": [
+                  {
+                    "button@newui_codex.action": {
+                      "collection_index": 0,
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "focus_identifier": "newui_tab0_from_2",
+                      "$button_type_panel": "newui_codex.text_content",
+                      "$newui_text": "숲속"
+                    }
+                  }
+                ],
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
               }
             }
           ]
@@ -1150,7 +1233,7 @@
       },
       {
         "tab1": {
-          "type": "stack_panel",
+          "type": "panel",
           "anchor_from": "top_left",
           "anchor_to": "top_left",
           "offset": [
@@ -1162,19 +1245,125 @@
             20
           ],
           "layer": 40,
-          "collection_name": "student_buttons_collection",
           "controls": [
             {
-              "button@newui_codex.action": {
-                "collection_index": 1,
+              "current_0": {
+                "type": "stack_panel",
                 "size": [
                   "100%",
                   "100%"
                 ],
-                "focus_identifier": "newui_tab1",
-                "$button_type_panel": "newui_codex.text_content",
-                "$newui_text": "들판",
-                "$newui_selection_token": "[NEWUI:C1:"
+                "layer": 40,
+                "collection_name": "student_buttons_collection",
+                "controls": [
+                  {
+                    "button@newui_codex.action": {
+                      "collection_index": 0,
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "focus_identifier": "newui_tab1_from_0",
+                      "$button_type_panel": "newui_codex.text_content",
+                      "$newui_text": "들판"
+                    }
+                  }
+                ],
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "current_1": {
+                "type": "panel",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "controls": [
+                  {
+                    "background": {
+                      "type": "image",
+                      "texture": "textures/newui/ui/button_selected",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ]
+                    }
+                  },
+                  {
+                    "label": {
+                      "type": "label",
+                      "text": "들판",
+                      "size": [
+                        "100% - 4px",
+                        12
+                      ],
+                      "font_size": "normal",
+                      "font_scale_factor": 0.8,
+                      "color": [
+                        0.22,
+                        0.27,
+                        0.25
+                      ],
+                      "shadow": false,
+                      "layer": 2
+                    }
+                  }
+                ],
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "current_2": {
+                "type": "stack_panel",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "layer": 40,
+                "collection_name": "student_buttons_collection",
+                "controls": [
+                  {
+                    "button@newui_codex.action": {
+                      "collection_index": 1,
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "focus_identifier": "newui_tab1_from_2",
+                      "$button_type_panel": "newui_codex.text_content",
+                      "$newui_text": "들판"
+                    }
+                  }
+                ],
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
               }
             }
           ]
@@ -1182,7 +1371,7 @@
       },
       {
         "tab2": {
-          "type": "stack_panel",
+          "type": "panel",
           "anchor_from": "top_left",
           "anchor_to": "top_left",
           "offset": [
@@ -1194,19 +1383,125 @@
             20
           ],
           "layer": 40,
-          "collection_name": "student_buttons_collection",
           "controls": [
             {
-              "button@newui_codex.action": {
-                "collection_index": 2,
+              "current_0": {
+                "type": "stack_panel",
                 "size": [
                   "100%",
                   "100%"
                 ],
-                "focus_identifier": "newui_tab2",
-                "$button_type_panel": "newui_codex.text_content",
-                "$newui_text": "동굴",
-                "$newui_selection_token": "[NEWUI:C2:"
+                "layer": 40,
+                "collection_name": "student_buttons_collection",
+                "controls": [
+                  {
+                    "button@newui_codex.action": {
+                      "collection_index": 1,
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "focus_identifier": "newui_tab2_from_0",
+                      "$button_type_panel": "newui_codex.text_content",
+                      "$newui_text": "동굴"
+                    }
+                  }
+                ],
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C0:') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "current_1": {
+                "type": "stack_panel",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "layer": 40,
+                "collection_name": "student_buttons_collection",
+                "controls": [
+                  {
+                    "button@newui_codex.action": {
+                      "collection_index": 1,
+                      "size": [
+                        "100%",
+                        "100%"
+                      ],
+                      "focus_identifier": "newui_tab2_from_1",
+                      "$button_type_panel": "newui_codex.text_content",
+                      "$newui_text": "동굴"
+                    }
+                  }
+                ],
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C1:') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "current_2": {
+                "type": "panel",
+                "size": [
+                  "100%",
+                  "100%"
+                ],
+                "controls": [
+                  {
+                    "background": {
+                      "type": "image",
+                      "texture": "textures/newui/ui/button_selected",
+                      "size": [
+                        "100%",
+                        "100%"
+                      ]
+                    }
+                  },
+                  {
+                    "label": {
+                      "type": "label",
+                      "text": "동굴",
+                      "size": [
+                        "100% - 4px",
+                        12
+                      ],
+                      "font_size": "normal",
+                      "font_scale_factor": 0.8,
+                      "color": [
+                        0.22,
+                        0.27,
+                        0.25
+                      ],
+                      "shadow": false,
+                      "layer": 2
+                    }
+                  }
+                ],
+                "bindings": [
+                  {
+                    "binding_name": "#dialogtext"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "(not ((#dialogtext - '[NEWUI:C2:') = #dialogtext))",
+                    "target_property_name": "#visible"
+                  }
+                ]
               }
             }
           ]
@@ -1230,7 +1525,7 @@
           "controls": [
             {
               "button@newui_codex.action": {
-                "collection_index": 3,
+                "collection_index": 2,
                 "size": [
                   "100%",
                   "100%"
@@ -1261,7 +1556,7 @@
           "controls": [
             {
               "button@newui_codex.action": {
-                "collection_index": 4,
+                "collection_index": 3,
                 "size": [
                   "100%",
                   "100%"
@@ -1292,7 +1587,7 @@
           "controls": [
             {
               "button@newui_codex.action": {
-                "collection_index": 5,
+                "collection_index": 4,
                 "size": [
                   "100%",
                   "100%"
@@ -1323,7 +1618,7 @@
           "controls": [
             {
               "button@newui_codex.action": {
-                "collection_index": 6,
+                "collection_index": 5,
                 "size": [
                   "100%",
                   "100%"
@@ -1331,102 +1626,6 @@
                 "focus_identifier": "newui_card3",
                 "$button_type_panel": "newui_codex.slot_3_content",
                 "$newui_text": "생물 선택"
-              }
-            }
-          ]
-        }
-      },
-      {
-        "prev": {
-          "type": "stack_panel",
-          "anchor_from": "top_left",
-          "anchor_to": "top_left",
-          "offset": [
-            25,
-            187
-          ],
-          "size": [
-            48,
-            20
-          ],
-          "layer": 40,
-          "collection_name": "student_buttons_collection",
-          "controls": [
-            {
-              "button@newui_codex.action": {
-                "collection_index": 7,
-                "size": [
-                  "100%",
-                  "100%"
-                ],
-                "focus_identifier": "newui_prev",
-                "$button_type_panel": "newui_codex.text_content",
-                "$newui_text": "이전",
-                "button_mappings": [
-                  {
-                    "from_button_id": "button.menu_select",
-                    "to_button_id": "button.student_button",
-                    "mapping_type": "pressed"
-                  },
-                  {
-                    "from_button_id": "button.menu_ok",
-                    "to_button_id": "button.student_button",
-                    "mapping_type": "focused"
-                  },
-                  {
-                    "from_button_id": "button.menu_tab_left",
-                    "to_button_id": "button.student_button",
-                    "mapping_type": "global"
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      },
-      {
-        "next": {
-          "type": "stack_panel",
-          "anchor_from": "top_left",
-          "anchor_to": "top_left",
-          "offset": [
-            247,
-            187
-          ],
-          "size": [
-            48,
-            20
-          ],
-          "layer": 40,
-          "collection_name": "student_buttons_collection",
-          "controls": [
-            {
-              "button@newui_codex.action": {
-                "collection_index": 8,
-                "size": [
-                  "100%",
-                  "100%"
-                ],
-                "focus_identifier": "newui_next",
-                "$button_type_panel": "newui_codex.text_content",
-                "$newui_text": "다음",
-                "button_mappings": [
-                  {
-                    "from_button_id": "button.menu_select",
-                    "to_button_id": "button.student_button",
-                    "mapping_type": "pressed"
-                  },
-                  {
-                    "from_button_id": "button.menu_ok",
-                    "to_button_id": "button.student_button",
-                    "mapping_type": "focused"
-                  },
-                  {
-                    "from_button_id": "button.menu_tab_right",
-                    "to_button_id": "button.student_button",
-                    "mapping_type": "global"
-                  }
-                ]
               }
             }
           ]

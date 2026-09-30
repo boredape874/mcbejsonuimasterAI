@@ -30,11 +30,10 @@ const label = (text,size,extra={}) => ({type:'label',text,size,font_size:'normal
 const image = (texture,size,extra={}) => ({type:'image',texture,size,...extra});
 const ui = {namespace:'newui_codex'};
 ui.text_content={type:'panel',controls:[
-  {selected:image('textures/newui/ui/button_selected',['100%','100%'],{alpha:0.6,layer:1,bindings:visible('(not ((#dialogtext - $newui_selection_token) = #dialogtext))')})},
   {label:label('$newui_text',['100% - 4px',12],{font_scale_factor:0.8,layer:2})},
 ]};
 ui['action@common_buttons.light_text_button']={
-  '$button_text':'', '$button_type_panel':'newui_codex.text_content', '$newui_text':'', '$newui_selection_token':'',
+  '$button_text':'', '$button_type_panel':'newui_codex.text_content', '$newui_text':'',
   '$default_button_texture':'textures/newui/ui/button_default',
   '$hover_button_texture':'textures/newui/ui/button_hover',
   '$pressed_button_texture':'textures/newui/ui/button_pressed',
@@ -46,11 +45,9 @@ ui['action@common_buttons.light_text_button']={
   ],
   bindings:[{binding_type:'collection_details',binding_collection_name:'student_buttons_collection',binding_collection_prefix:'student_buttons'}],
 };
-function action(id,index,content='newui_codex.text_content',name='',key) {
+function action(id,index,content='newui_codex.text_content',name='',bounds=box(id)) {
   const button={collection_index:index,size:['100%','100%'],focus_identifier:`newui_${id}`,'$button_type_panel':content,'$newui_text':name};
-  if (id.startsWith('tab')) button['$newui_selection_token']=`[NEWUI:C${index}:`;
-  if(key) button.button_mappings=[...ui['action@common_buttons.light_text_button'].button_mappings,{from_button_id:key,to_button_id:'button.student_button',mapping_type:'global'}];
-  return {[id]:{type:'stack_panel',...box(id),layer:40,collection_name:'student_buttons_collection',controls:[{'button@newui_codex.action':button}]}};
+  return {[id]:{type:'stack_panel',...bounds,layer:40,collection_name:'student_buttons_collection',controls:[{'button@newui_codex.action':button}]}};
 }
 for(let slot=0;slot<4;slot++) {
   ui[`slot_${slot}_content`]={type:'panel',controls:catalog.categories.map((_,c)=>{
@@ -68,10 +65,26 @@ const rootControls=[];
 rootControls.push({portrait_collection:{type:'stack_panel',collection_name:'skins_collection',size:[500,500],offset:[0,-140],layer:2,controls:[
   {book:{type:'custom',renderer:'actor_portrait_renderer',collection_index:1,size:[500,500],enable_scissor_test:true,bindings:[{binding_type:'collection',binding_collection_name:'skins_collection',binding_name:'#skin_index'}]}},
 ]}});
-for(let c=0;c<3;c++) rootControls.push(action(`tab${c}`,c,'newui_codex.text_content',catalog.categories[c].name));
-for(let slot=0;slot<4;slot++) rootControls.push(action(`card${slot}`,3+slot,`newui_codex.slot_${slot}_content`,'생물 선택'));
-rootControls.push(action('prev',7,'newui_codex.text_content','이전','button.menu_tab_left'));
-rootControls.push(action('next',8,'newui_codex.text_content','다음','button.menu_tab_right'));
+// NPC dialogues expose at most six actions. The active tab is a plain selected
+// panel; the other categories retain catalog order at indices 0 and 1.
+for(let target=0;target<3;target++) {
+  const branches=[];
+  for(let current=0;current<3;current++) {
+    let branch;
+    if(current===target) branch={type:'panel',size:['100%','100%'],controls:[
+      {background:image('textures/newui/ui/button_selected',['100%','100%'])},
+      {label:label(catalog.categories[target].name,['100% - 4px',12],{font_scale_factor:0.8,layer:2})},
+    ]};
+    else {
+      const index=[0,1,2].filter(c=>c!==current).indexOf(target),id=`tab${target}_from_${current}`;
+      branch=action(id,index,'newui_codex.text_content',catalog.categories[target].name,{size:['100%','100%']})[id];
+    }
+    branch.bindings=categoryVisible(current);
+    branches.push({[`current_${current}`]:branch});
+  }
+  rootControls.push({[`tab${target}`]:{type:'panel',...box(`tab${target}`),layer:40,controls:branches}});
+}
+for(let slot=0;slot<4;slot++) rootControls.push(action(`card${slot}`,2+slot,`newui_codex.slot_${slot}_content`,'생물 선택'));
 rootControls.push({'close@common_buttons.light_text_button':{
   ...box('close'),layer:50,'$button_text':'닫기','$button_font_scale_factor':0.8,
   '$default_button_texture':'textures/newui/ui/button_default','$hover_button_texture':'textures/newui/ui/button_hover','$pressed_button_texture':'textures/newui/ui/button_pressed','$border_visible':false,
@@ -145,4 +158,4 @@ for(const [key,pose]of Object.entries(poseData)) {
 }
 await emit('animations/field_guide.animation.json',{format_version:'1.8.0',animations:heldAnimations});
 await emit('attachables/field_guide.player.json',{format_version:'1.10.0','minecraft:attachable':{description:{identifier:'newui:field_guide.player',item:{'newui:field_guide':"query.is_owner_identifier_any('minecraft:player')"},materials:{default:'entity_alphatest'},textures:{default:'textures/newui/cover'},geometry:{default:'geometry.newui.field_guide'},animations:aliases,scripts:{animate:conditions},render_controllers:['controller.render.newui.field_guide']}}});
-console.log(JSON.stringify({ok:true,files:files.length,surface:'NPC actor portrait + native JSON UI + held attachable',buttonIndices:{categories:[0,1,2],slots:[3,4,5,6],previous:7,next:8},skinCollectionIndex:1,geometrySource:'independently authored',layoutSource:'layout/solved.json',runtimeVerified:false}));
+console.log(JSON.stringify({ok:true,files:files.length,surface:'NPC actor portrait + native JSON UI + held attachable',buttonIndices:{otherCategories:[0,1],slots:[2,3,4,5]},activeTab:'selected noninteractive panel',skinCollectionIndex:1,geometrySource:'independently authored',layoutSource:'layout/solved.json',runtimeVerified:false}));

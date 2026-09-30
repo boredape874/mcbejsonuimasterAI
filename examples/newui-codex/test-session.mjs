@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { CATALOG } from './BP/scripts/catalog.js';
 import { ACTIONS, createSessions } from './BP/scripts/session.js';
 import { BOOK_TYPE, NPC_TYPE, OWNER_TAG, createCodexController } from './BP/scripts/controller.js';
+import { assertCodexBpContract } from './bp-contract.mjs';
 
 let cases = 0;
 const test = (name, run) => { run(); cases++; };
@@ -57,7 +58,7 @@ test('catalog and session snapshots stay immutable', () => {
   assert.ok(Object.isFrozen(session) && Object.isFrozen(session.entry));
   assert.throws(() => { session.entry.category = 1; });
 });
-test('all nine action routes and bounds', () => {
+test('internal action routes and bounds retain legacy prev/next support', () => {
   const expected = [0, 4, 8, 4, 5, 6, 7, 4, 6];
   ACTIONS.forEach((action, index) => {
     const store = createSessions(CATALOG), { session } = store.replace({ playerId: 'p', npcId: 'n', dimensionId: 'd', entryIndex: 5, tick: 0 });
@@ -214,16 +215,41 @@ test('invalid saved pages use the first entry', () => {
 
 const readJson = async path => JSON.parse(await readFile(new URL(path, import.meta.url), 'utf8'));
 const scenes = (await readJson('BP/dialogue/codex.json'))['minecraft:npc_dialogue'].scenes;
+const npc = (await readJson('BP/entities/codex.json'))['minecraft:entity'];
+assertCodexBpContract({ npc, scenes, catalog: CATALOG });
 assert.equal(scenes.length, 12);
+const categoryActions = [['meadow', 'cave'], ['forest', 'cave'], ['forest', 'meadow']];
 scenes.forEach((scene, index) => {
   assert.equal(scene.scene_tag, `newui:entry_${String(index).padStart(2, '0')}`);
   assert.equal(scene.npc_name, 'NEWUI_CODEX_V1');
   assert.equal(scene.text, `[NEWUI:C${Math.floor(index / 4)}:E${String(index).padStart(2, '0')}]${CATALOG.entries[index].description}`);
-  assert.deepEqual(scene.buttons.map(b => b.commands[0]), ACTIONS.map(action => `/scriptevent newui:navigate ${action}`));
+  const actions = [...categoryActions[Math.floor(index / 4)], 'slot0', 'slot1', 'slot2', 'slot3'];
+  assert.equal(scene.buttons.length, 6);
+  assert.deepEqual(scene.buttons.map(b => b.commands[0]), actions.map(action => `/scriptevent newui:navigate ${action}`));
   assert.deepEqual(scene.on_close_commands, ['/scriptevent newui:close close']);
   assert.ok(scene.buttons.every(b => b.commands.length === 1 && !b.commands[0].includes('execute')));
 });
+test('seven-button scenes fail the native limit before example mapping checks', () => {
+  const invalid = structuredClone(scenes); invalid[0].buttons.push({ name: 'extra', commands: ['/say extra'] });
+  assert.throws(() => assertCodexBpContract({ npc, scenes: invalid, catalog: CATALOG }), /maximum of 6 buttons/);
+});
+test('boolean damage values cannot pass the target-client contract', () => {
+  for (const value of [false, true, 0, undefined]) {
+    const invalid = structuredClone(npc); invalid.components['minecraft:damage_sensor'].triggers[0].deals_damage = value;
+    assert.throws(() => assertCodexBpContract({ npc: invalid, scenes, catalog: CATALOG }), /deals_damage must be a string/);
+  }
+  for (const value of ['false', 'never', 'yes']) {
+    const invalid = structuredClone(npc); invalid.components['minecraft:damage_sensor'].triggers[0].deals_damage = value;
+    assert.throws(() => assertCodexBpContract({ npc: invalid, scenes, catalog: CATALOG }), /documented "no" enum value/);
+  }
+});
+test('six-button count alone cannot hide wrong category ordering', () => {
+  const invalid = structuredClone(scenes);
+  [invalid[4].buttons[0], invalid[4].buttons[1]] = [invalid[4].buttons[1], invalid[4].buttons[0]];
+  assert.throws(() => assertCodexBpContract({ npc, scenes: invalid, catalog: CATALOG }), assert.AssertionError);
+});
 const manifest = await readJson('BP/manifest.json'), rp = await readJson('RP/manifest.json');
+assert.deepEqual(manifest.header.version, [1, 0, 1]);
 assert.deepEqual(manifest.dependencies.find(d => d.uuid), { uuid: rp.header.uuid, version: rp.header.version });
 assert.deepEqual(manifest.dependencies.find(d => d.module_name), { module_name: '@minecraft/server', version: '2.1.0' });
 assert.deepEqual((await readJson('BP/entities/codex.json'))['minecraft:entity'].components['minecraft:npc'].npc_data.skin_list, [{ variant: 0 }, { variant: 1 }]);
@@ -231,4 +257,4 @@ const itemComponents = (await readJson('BP/items/field_guide.json'))['minecraft:
 assert.equal(itemComponents['minecraft:icon'], 'newui:field_guide');
 assert.equal(itemComponents['minecraft:allow_off_hand'], true);
 assert.equal(itemComponents['minecraft:interact_button'], true);
-console.log(JSON.stringify({ ok: true, sessionScenarios: cases, scenes: scenes.length, buttonsPerScene: 9, runtimeVerified: false }));
+console.log(JSON.stringify({ ok: true, sessionScenarios: cases, scenes: scenes.length, buttonsPerScene: 6, runtimeVerified: false }));
