@@ -82,11 +82,23 @@
       "w": 112,
       "h": 14
     },
+    "next": {
+      "x": 727,
+      "y": 432,
+      "w": 48,
+      "h": 20
+    },
     "page_info": {
       "x": 508,
       "y": 408,
       "w": 112,
       "h": 12
+    },
+    "prev": {
+      "x": 505,
+      "y": 432,
+      "w": 48,
+      "h": 20
     },
     "tab0": {
       "x": 538,
@@ -345,6 +357,22 @@
       "kind": "button",
       "anchor": "top_left",
       "pos": [
+        25,
+        187
+      ],
+      "z": 0,
+      "parent": "__root__",
+      "props": {},
+      "id": "prev",
+      "size": [
+        48,
+        20
+      ]
+    },
+    {
+      "kind": "button",
+      "anchor": "top_left",
+      "pos": [
         122,
         187
       ],
@@ -354,6 +382,22 @@
       "id": "close",
       "size": [
         76,
+        20
+      ]
+    },
+    {
+      "kind": "button",
+      "anchor": "top_left",
+      "pos": [
+        247,
+        187
+      ],
+      "z": 0,
+      "parent": "__root__",
+      "props": {},
+      "id": "next",
+      "size": [
+        48,
         20
       ]
     }

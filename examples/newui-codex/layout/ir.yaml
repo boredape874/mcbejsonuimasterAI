@@ -19,7 +19,9 @@ elements:
   - {id: detail_name, kind: label, pos: [177, 117], size: [118, 16], props: {text: "발광 오징어", text_alignment: center, font_size: normal, font_scale_factor: 1.0}}
   - {id: detail_habitat, kind: label, pos: [177, 136], size: [118, 12], props: {text: "무성한 동굴 · 물", text_alignment: center, font_size: normal, font_scale_factor: 0.8}}
   - {id: detail_body, kind: label, pos: [177, 149], size: [118, 34], props: {text: "물속의 작은 탐험가.\n머리 양옆 아가미가\n아주 매력적이에요.", font_size: normal, font_scale_factor: 0.8}}
+  - {id: prev, kind: button, pos: [25, 187], size: [48, 20]}
   - {id: close, kind: button, pos: [122, 187], size: [76, 20]}
+  - {id: next, kind: button, pos: [247, 187], size: [48, 20]}
 constraints:
   - {op: same_size, ids: [tab0, tab1, tab2]}
   - {op: equal_gap_x, ids: [tab0, tab1, tab2], gap: 6}
@@ -34,3 +36,6 @@ constraints:
   - {op: align_y, ids: [card2, card3], edge: start}
   - {op: align_x, ids: [heading, card0, card2, page_info], edge: start}
   - {op: align_x, ids: [detail_name, detail_habitat, detail_body], edge: start}
+  - {op: same_size, ids: [prev, next]}
+  - {op: symmetric_x, ids: [prev, next]}
+  - {op: align_y, ids: [prev, close, next], edge: start}

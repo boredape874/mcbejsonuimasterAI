@@ -1,30 +1,54 @@
 import assert from 'node:assert/strict';
 
-// Target 1.21.100: damage_sensor string values were documented in the 1.21.40
-// release notes. This example requires "no", without claiming newer enum values.
-// https://www.minecraft.net/en-us/article/minecraft-1-21-40-bedrock-changelog
-// NPC's six-button cap is also confirmed by the user's target-client Content Log.
-// https://edusupport.minecraft.net/hc/en-us/articles/360047555651-Adding-Non-Player-Characters-NPCs
-export function assertCodexBpContract({ npc, scenes, catalog }) {
+// Original NewUI structure contract, not a general NPC schema. The JSON dialogue
+// scene limit does not describe persisted NBT Actions.
+const value = (fields, name, type) => { assert.equal(fields[name]?.type, type, `Invalid NBT type: ${name}`); return fields[name].value; };
+const list = (fields, name, type) => { const data = value(fields, name, 9); assert.equal(data.type, type, `Invalid NBT list type: ${name}`); return data.items; };
+
+export function assertCodexBpContract({ npc, structures, catalog }) {
   const triggers = npc.components['minecraft:damage_sensor']?.triggers;
   assert.ok(Array.isArray(triggers) && triggers.length > 0, 'NPC damage_sensor requires triggers');
   for (const trigger of triggers) {
     assert.equal(typeof trigger.deals_damage, 'string', 'deals_damage must be a string for target 1.21.100; boolean is invalid');
     assert.equal(trigger.deals_damage, 'no', 'NewUI damage_sensor must use the documented "no" enum value');
   }
-  assert.equal(scenes.length, 12);
-  assert.equal(new Set(scenes.map(scene => scene.scene_tag)).size, 12);
-  scenes.forEach((scene, index) => {
-    assert.ok(Array.isArray(scene.buttons) && scene.buttons.length <= 6, 'NPC dialogue supports a maximum of 6 buttons per scene');
-    assert.equal(scene.buttons.length, 6, 'NewUI requires exactly 2 category and 4 entry buttons');
-    const entry = catalog.entries[index], otherCategories = catalog.categories.filter((_, categoryIndex) => categoryIndex !== entry.category);
-    const entries = catalog.entries.filter(candidate => candidate.category === entry.category);
-    const actions = [...otherCategories.map(category => category.id), 'slot0', 'slot1', 'slot2', 'slot3'];
-    assert.equal(scene.scene_tag, `newui:entry_${String(index).padStart(2, '0')}`);
-    assert.equal(scene.npc_name, 'NEWUI_CODEX_V1');
-    assert.equal(scene.text, `[NEWUI:C${entry.category}:E${String(index).padStart(2, '0')}]${entry.description}`);
-    assert.deepEqual(scene.buttons.map(button => button.name), [...otherCategories.map(category => category.name), ...entries.map(candidate => candidate.name)]);
-    scene.buttons.forEach((button, buttonIndex) => assert.deepEqual(button.commands, [`/scriptevent newui:navigate ${actions[buttonIndex]}`]));
-    assert.deepEqual(scene.on_close_commands, ['/scriptevent newui:close close']);
+  assert.equal(structures.length, 12);
+  structures.forEach((document, index) => {
+    assert.equal(document.type, 10);
+    const root = document.value, page = String(index).padStart(2, '0'), entry = catalog.entries[index];
+    assert.equal(value(root, 'format_version', 3), 1);
+    assert.deepEqual(list(root, 'size', 3), [1, 1, 1]);
+    assert.deepEqual(list(root, 'structure_world_origin', 3), [0, 0, 0]);
+    const structure = value(root, 'structure', 10), entities = list(structure, 'entities', 10);
+    assert.equal(entities.length, 1, 'Exactly one NPC per template');
+    assert.deepEqual(list(structure, 'block_indices', 9), [{ type: 3, items: [-1] }, { type: 3, items: [-1] }]);
+    const palette = value(value(structure, 'palette', 10), 'default', 10);
+    assert.deepEqual(list(palette, 'block_palette', 10), []);
+    assert.equal(Object.keys(value(palette, 'block_position_data', 10)).length, 0);
+    const entity = entities[0];
+    assert.equal(value(entity, 'identifier', 8), 'newui:codex');
+    assert.deepEqual(list(entity, 'definitions', 8), ['+newui:codex']);
+    assert.equal(value(entity, 'CustomName', 8), 'NEWUI_CODEX_V1');
+    assert.equal(value(entity, 'RawtextName', 8), 'NEWUI_CODEX_V1');
+    assert.equal(value(entity, 'InterativeText', 8), `[NEWUI:C${entry.category}:E${page}]${entry.description}`);
+    assert.deepEqual(list(entity, 'Tags', 8), ['newui.codex.template', `newui.codex.entry_${page}`]);
+    assert.deepEqual(list(entity, 'Pos', 5), [0.5, 0, 0.5]);
+    assert.deepEqual(list(entity, 'Rotation', 5), [0, 0]);
+    assert.equal(value(entity, 'Persistent', 1), 1);
+    for (const key of ['Variant', 'SkinID']) assert.equal(value(entity, key, 3), 0);
+    assert.deepEqual(Object.keys(entity).sort(), ['identifier', 'definitions', 'CustomName', 'RawtextName', 'InterativeText', 'Actions', 'Tags', 'Pos', 'Rotation', 'Persistent', 'Variant', 'SkinID'].sort(), 'No saved runtime identity, scene or unrelated entity data');
+    const actions = JSON.parse(value(entity, 'Actions', 8));
+    const names = [...catalog.categories.map(category => category.name), ...catalog.entries.filter(candidate => candidate.category === entry.category).map(candidate => candidate.name), '이전', '다음'];
+    const semantic = [...catalog.categories.map(category => category.id), 'slot0', 'slot1', 'slot2', 'slot3', 'prev', 'next'];
+    assert.equal(actions.length, 10, 'Nine button actions plus one close action');
+    actions.forEach((action, actionIndex) => {
+      const close = actionIndex === 9;
+      assert.equal(action.type, 1);
+      assert.equal(action.mode, close ? 1 : 0, 'Close must not consume a native button index');
+      assert.equal(action.button_name, close ? '' : names[actionIndex]);
+      const command = close ? 'scriptevent newui:close close' : `scriptevent newui:navigate ${semantic[actionIndex]}`;
+      assert.deepEqual(action.data, [{ cmd_line: command, cmd_ver: 38 }]);
+      assert.equal(action.text, close ? command : names[actionIndex]);
+    });
   });
 }

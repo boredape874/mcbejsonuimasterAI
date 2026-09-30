@@ -1,14 +1,15 @@
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createCodexStructure, encodeStructure } from './structure-nbt.mjs';
 
 const root = new URL('./', import.meta.url), catalog = JSON.parse(await readFile(new URL('catalog.json', root), 'utf8'));
 if (catalog.entries.length !== 12 || catalog.categories.length !== 3 || catalog.entries.some((entry, index) => entry.category !== Math.floor(index / 4))) throw new Error('Expected three ordered categories of four entries');
 const out = async (path, value) => {
   const target = fileURLToPath(new URL(`BP/${path}`, root)); await mkdir(dirname(target), { recursive: true });
-  await writeFile(target, typeof value === 'string' ? value : JSON.stringify(value, null, 2) + '\n');
+  await writeFile(target, typeof value === 'string' || Buffer.isBuffer(value) ? value : JSON.stringify(value, null, 2) + '\n');
 };
-const version = [1, 0, 1];
+const version = [1, 0, 2];
 await out('manifest.json', {
   format_version: 2,
   header: { name: 'NewUI · 작은 세계 탐험 도감 BP', description: 'Original NPC dialogue and held guide example. Static checks do not establish target-client behavior.', uuid: 'f7c1d546-8d1d-4c0f-9495-563a510fcb24', version, min_engine_version: [1, 21, 100] },
@@ -38,20 +39,12 @@ await out('entities/codex.json', {
     },
   },
 });
-const scenes = catalog.entries.map((entry, index) => {
-  const localEntries = catalog.entries.filter(candidate => candidate.category === entry.category);
-  return {
-    scene_tag: `newui:entry_${String(index).padStart(2, '0')}`,
-    npc_name: 'NEWUI_CODEX_V1',
-    text: `[NEWUI:C${entry.category}:E${String(index).padStart(2, '0')}]${entry.description}`,
-    on_close_commands: ['/scriptevent newui:close close'],
-    buttons: [
-      ...catalog.categories.filter((_, categoryIndex) => categoryIndex !== entry.category).map(category => ({ name: category.name, commands: [`/scriptevent newui:navigate ${category.id}`] })),
-      ...localEntries.map((candidate, slot) => ({ name: candidate.name, commands: [`/scriptevent newui:navigate slot${slot}`] })),
-    ],
-  };
-});
-await out('dialogue/codex.json', { format_version: '1.17', 'minecraft:npc_dialogue': { scenes } });
+for (let index = 0; index < catalog.entries.length; index++) {
+  await out(`structures/newui/entry_${String(index).padStart(2, '0')}.mcstructure`, encodeStructure(createCodexStructure(catalog, index)));
+}
+// Retire only this example's old generated scene file. The JSON scene loader's
+// six-button check is distinct from the persisted NPC Actions import path.
+await rm(new URL('BP/dialogue/codex.json', root), { force: true });
 await out('scripts/catalog.js', `// Generated from ../catalog.json by build-bp.mjs.\nexport const CATALOG = ${JSON.stringify(catalog, null, 2)};\n`);
 await out('functions/newui/help.mcfunction', 'tellraw @s {"rawtext":[{"text":"작은 세계 탐험 도감: /newui:book 으로 책을 받고 사용하거나 /newui:open 으로 여세요. 두 명령은 플레이어가 직접 실행합니다. BP와 RP를 함께 활성화하세요."}]}\n');
-console.log(JSON.stringify({ ok: true, scenes: scenes.length, buttonsPerScene: 6, scriptApi: '2.1.0', runtimeVerified: false }));
+console.log(JSON.stringify({ ok: true, structures: catalog.entries.length, buttonsPerNpc: 9, closeActions: 1, scriptApi: '2.1.0', runtimeVerified: false }));

@@ -4,6 +4,7 @@ import { createSessions } from './session.js';
 export const NPC_TYPE = 'newui:codex';
 export const BOOK_TYPE = 'newui:field_guide';
 export const OWNER_TAG = 'newui.codex.owned';
+const TEMPLATE_TAG = 'newui.codex.template';
 const SESSION_KEY = 'newui:session', OWNER_KEY = 'newui:owner', PAGE_KEY = 'newui:entry';
 const MAX_SESSION_TICKS = 6000;
 
@@ -33,7 +34,7 @@ export function createCodexController({ world, system, makeItem, warn = message 
     } catch (error) { warn(`[NewUI] NPC cleanup deferred: ${String(error).slice(0, 180)}`); }
   }
   function cleanupCandidate(npcId, playerId, sessionId) {
-    // Only an ID returned by our spawn, or a fully matched owned session, enters
+    // Only a new template ID observed across our placement, or a matched session, enters
     // this retry list. Incomplete dynamic properties alone never establish ownership.
     const ticket = { npcId, playerId, sessionId, expires: system.currentTick + MAX_SESSION_TICKS };
     cleanupPending.set(npcId, ticket); retryCleanup(ticket);
@@ -47,19 +48,37 @@ export function createCodexController({ world, system, makeItem, warn = message 
   function endPlayer(playerId) { pending.delete(playerId); const old = sessions.endPlayer(playerId); if (old) removeOwned(old); }
   function present(player, entryIndex, action = 'open') {
     if (!validPlayer(player)) return false;
-    let npc, session, previous;
+    let npc, session, candidates = [];
+    const previous = sessions.getPlayer(player.id);
     try {
-      npc = player.dimension.spawnEntity(NPC_TYPE, player.location);
+      const dimension = player.dimension, location = player.location;
+      const anchor = { x: Math.floor(location.x), y: Math.floor(location.y), z: Math.floor(location.z) };
+      // place() returns void and may queue unloaded chunks. Only attempt this
+      // one-block template in a currently loaded block; never adopt a later NPC.
+      if (!dimension.getBlock(anchor)) throw new Error('Structure anchor is not loaded');
+      const entry = `entry_${String(entryIndex).padStart(2, '0')}`;
+      const query = { type: NPC_TYPE, tags: [TEMPLATE_TAG, `newui.codex.${entry}`], location: anchor, maxDistance: 2 };
+      const before = new Set(dimension.getEntities(query).map(candidate => candidate.id));
+      let placementError;
+      try { world.structureManager.place(`newui:${entry}`, dimension, anchor, { includeBlocks: false, includeEntities: true, waterlogged: false }); }
+      catch (error) { placementError = error; }
+      // Query even after a thrown placement: the engine may have created an
+      // entity before failing. Only the observed ID difference may be cleaned.
+      candidates = dimension.getEntities(query).filter(candidate => !before.has(candidate.id));
+      if (placementError) throw placementError;
+      if (candidates.length !== 1) throw new Error(`Expected one new NPC template, found ${candidates.length}`);
+      npc = candidates[0];
+      if (!npc.isValid || npc.hasTag(OWNER_TAG) || npc.getDynamicProperty(SESSION_KEY) !== undefined || npc.getDynamicProperty(OWNER_KEY) !== undefined || sessions.getNpc(npc.id)) throw new Error('NPC template has an existing ownership identity');
       npc.addTag(OWNER_TAG);
       const selectionTag = `newui_page_${prefix}_${++tagSequence}`;
       npc.addTag(selectionTag);
-      ({ session, previous } = sessions.replace({ playerId: player.id, npcId: npc.id, dimensionId: player.dimension.id, entryIndex, tick: system.currentTick }));
+      ({ session } = sessions.replace({ playerId: player.id, npcId: npc.id, dimensionId: dimension.id, entryIndex, tick: system.currentTick }));
       npc.setDynamicProperty(SESSION_KEY, session.id);
       npc.setDynamicProperty(OWNER_KEY, player.id);
       const selected = player.dimension.getEntities({ type: NPC_TYPE, tags: [selectionTag] });
       if (selected.length !== 1 || selected[0].id !== npc.id) throw new Error('NPC selector is not unique');
-      const scene = `newui:entry_${String(entryIndex).padStart(2, '0')}`;
-      const result = player.runCommand(`dialogue open @e[type=${NPC_TYPE},tag=${selectionTag},c=1] @s ${scene}`);
+      // Use the embedded Actions; do not route through a six-button JSON scene.
+      const result = player.runCommand(`dialogue open @e[type=${NPC_TYPE},tag=${selectionTag},c=1] @s`);
       if (result.successCount < 1) throw new Error('Dialogue open was not accepted');
       player.setDynamicProperty(PAGE_KEY, entryIndex);
       const animation = action === 'prev' ? 'turn_left' : action === 'next' ? 'turn_right' : 'open';
@@ -67,10 +86,10 @@ export function createCodexController({ world, system, makeItem, warn = message 
       catch (error) { warn(`[NewUI] Animation not applied: ${String(error).slice(0, 180)}`); }
       return true;
     } catch (error) {
-      if (session) sessions.close(session);
-      // This newly spawned entity is our own candidate, including setup failures
-      // before the full dynamic-property identity was committed.
-      if (npc) cleanupCandidate(npc.id, player.id, session?.id);
+      if (session || previous) sessions.close(session ?? previous);
+      // Includes partial placement and initialization failures. An older template
+      // at the same location was in before and is never a cleanup candidate.
+      for (const candidate of candidates) cleanupCandidate(candidate.id, player.id, candidate.id === npc?.id ? session?.id : undefined);
       tell(player, '도감을 열지 못했어요. BP/RP 활성화와 콘텐츠 로그를 확인해 주세요.');
       warn(`[NewUI] Open failed: ${String(error).slice(0, 220)}`);
       return false;

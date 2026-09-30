@@ -24,7 +24,7 @@ function screen(category,selected){
   label(ctx,`${catalog.entries.findIndex(e=>e.id===selected)%4+1} / 4 · 모든 생물 보기`,box('page_info'),7);
   const entry=catalog.entries.find(e=>e.id===selected),im=box('detail_icon');ctx.drawImage(icons[selected],im.x,im.y,im.w,im.h);
   label(ctx,entry.name,box('detail_name'),10);label(ctx,entry.habitat,box('detail_habitat'),7.5,'center','#68734D');label(ctx,entry.description,box('detail_body'),8,'left','#534D3F',true);
-  const close=box('close');nine(ctx,buttons.default,close.x,close.y,close.w,close.h);label(ctx,'닫기',close,8);
+  for(const [id,text] of [['prev','< 이전'],['close','닫기'],['next','다음 >']]){const b=box(id);nine(ctx,buttons.default,b.x,b.y,b.w,b.h);label(ctx,text,b,8);}
   return canvas;
 }
 for(let i=0;i<3;i++){const id=catalog.entries[i*4].id;fs.writeFileSync(path.join(preview,`${catalog.categories[i].id}.png`),screen(i,id).toBuffer('image/png'));}

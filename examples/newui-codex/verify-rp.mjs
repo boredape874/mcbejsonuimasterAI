@@ -20,50 +20,36 @@ export async function verifyRp({rp=join(project,'RP'),vanilla}={}) {
   const visibleExpression=c=>c.bindings.find(b=>b.target_property_name==='#visible').source_property_name;
   const containsMarker=marker=>`(not ((#dialogtext - '${marker}') = #dialogtext))`;
   const sameBox=(id,c)=>{const r=solved.rects[id];assert.ok(c,`Missing ${id}`);assert.deepEqual(c.offset,[r.x-br.x,r.y-br.y]);assert.deepEqual(c.size,[r.w,r.h]);checked.add(id);};
-  for(const id of ['tab0','tab1','tab2','card0','card1','card2','card3','close'])sameBox(id,controls[id]||controls[`${id}@common_buttons.light_text_button`]);
+  for(const id of ['tab0','tab1','tab2','card0','card1','card2','card3','prev','next','close'])sameBox(id,controls[id]||controls[`${id}@common_buttons.light_text_button`]);
   sameBox('heading',controls.heading_0);sameBox('detail_body',controls.description);
   const detail=Object.assign({},...controls.detail_0.controls);
   for(const [id,key]of Object.entries({detail_icon:'icon',detail_name:'name',detail_habitat:'habitat',page_info:'page_info'}))sameBox(id,detail[key]);
-  assert.equal(checked.size,14);
-  for(const removed of ['prev','next']){assert.equal(controls[removed],undefined);assert.equal(solved.rects[removed],undefined);}
+  assert.equal(checked.size,16);
   function walk(control,visit,key='') {
     visit(key,control);
     for(const child of control.controls||[])for(const [childKey,value]of Object.entries(child))walk(value,visit,childKey);
   }
-  walk(ui.book,(key,value)=>{
-    if(key.endsWith('@newui_codex.action'))assert.ok(Number.isInteger(value.collection_index)&&value.collection_index>=0&&value.collection_index<=5,'NPC action index must be 0–5');
-    for(const m of value.button_mappings||[])assert.ok(!['button.menu_tab_left','button.menu_tab_right'].includes(m.from_button_id),'Removed page actions must not retain global input');
+  const foundActions=[];
+  walk(ui.book,(key,value)=>{if(key.endsWith('@newui_codex.action')){
+    assert.ok(Number.isInteger(value.collection_index)&&value.collection_index>=0,'NPC action index must be a nonnegative integer');foundActions.push(value);
+  }});
+  const actionIds=['tab0','tab1','tab2','card0','card1','card2','card3','prev','next'];
+  const active=actionIds.map((id,index)=>{
+    const control=controls[id];assert.equal(control.collection_name,'student_buttons_collection');
+    assert.equal(control.bindings,undefined,`${id} must remain available in every category`);
+    const button=children(control)['button@newui_codex.action'];
+    assert.equal(button.collection_index,index,`${id} must target NBT action ${index}`);
+    assert.equal(button.bindings,undefined);assert.equal(button.visible,undefined);assert.equal(button.enabled,undefined);
+    assert.equal(button.focus_identifier,`newui_${id}`);return button;
   });
-  const cardButtons=Array.from({length:4},(_,slot)=>{
-    const card=controls[`card${slot}`];assert.equal(card.collection_name,'student_buttons_collection');
-    const button=children(card)['button@newui_codex.action'];assert.equal(button.collection_index,2+slot);return button;
-  });
-  const categoryMappings=[];
-  for(let current=0;current<3;current++) {
-    const destinations=[0,1,2].filter(c=>c!==current),active=[...cardButtons],mapping=[];
-    for(let target=0;target<3;target++) {
-      const tab=controls[`tab${target}`];assert.equal(tab.type,'panel');
-      assert.deepEqual(Object.keys(children(tab)),['current_0','current_1','current_2']);
-      const branch=children(tab)[`current_${current}`];assert.equal(visibleExpression(branch),containsMarker(`[NEWUI:C${current}:`));
-      if(target===current) {
-        assert.equal(branch.type,'panel');assert.equal(children(branch).label.text,catalog.categories[target].name);
-        assert.equal(children(branch).background.texture,'textures/newui/ui/button_selected');
-        walk(branch,(key,value)=>{
-          assert.ok(!key.includes('@')&&!['button','toggle'].includes(value.type)&&!value.collection_name&&!value.button_mappings&&!value.focus_identifier,'Current category tab must be noninteractive');
-        });
-      } else {
-        assert.equal(branch.collection_name,'student_buttons_collection');
-        const button=children(branch)['button@newui_codex.action'],index=destinations.indexOf(target);
-        assert.equal(button.collection_index,index,`Category ${current} → ${target} must use action ${index}`);
-        assert.equal(button.$newui_text,catalog.categories[target].name);
-        active.push(button);mapping.push({category:target,index});
-      }
-    }
-    assert.deepEqual(active.map(b=>b.collection_index).sort((a,b)=>a-b),[0,1,2,3,4,5]);
-    assert.equal(new Set(active.map(b=>b.focus_identifier)).size,6,'Exactly six distinct action focus targets per category');
-    categoryMappings.push({current,categories:mapping,slots:[2,3,4,5],activeActions:active.length});
+  assert.equal(foundActions.length,9,'Exactly nine controls target the stored NPC button actions');
+  assert.equal(new Set(active.map(b=>b.focus_identifier)).size,9,'Nine distinct action focus targets');
+  const indices=active.map(b=>b.collection_index);
+  assert.deepEqual(indices,[0,1,2,3,4,5,6,7,8]);
+  for(const [id,input,text]of [['prev','button.menu_tab_left','이전'],['next','button.menu_tab_right','다음']]){
+    const button=children(controls[id])['button@newui_codex.action'];assert.equal(button.$newui_text,text);
+    assert.ok(button.button_mappings.some(m=>m.from_button_id===input&&m.to_button_id==='button.student_button'&&m.mapping_type==='global'));
   }
-  const indices=[0,1,2,3,4,5];
   const action=ui['action@common_buttons.light_text_button'];
   assert.ok(action.bindings.some(b=>b.binding_type==='collection_details'&&b.binding_collection_name==='student_buttons_collection'&&b.binding_collection_prefix==='student_buttons'));
   assert.ok(action.button_mappings.some(m=>m.to_button_id==='button.student_button'&&m.mapping_type==='pressed'));
@@ -79,9 +65,14 @@ export async function verifyRp({rp=join(project,'RP'),vanilla}={}) {
   const markers=[];
   assert.equal(catalog.categories.length,3);assert.equal(catalog.entries.length,12);
   for(let c=0;c<3;c++) {
+    const button=children(controls[`tab${c}`])['button@newui_codex.action'];
+    assert.equal(button.$newui_text,catalog.categories[c].name,`Stale category ${c} label`);
+    assert.equal(button.$newui_selection_token,`[NEWUI:C${c}:`);
     assert.equal(controls[`heading_${c}`].text,`${catalog.categories[c].name} 친구들`);
     assert.equal(visibleExpression(controls[`heading_${c}`]),containsMarker(`[NEWUI:C${c}:`));
   }
+  assert.equal(children(ui.text_content).selected.texture,'textures/newui/ui/button_selected');
+  assert.equal(visibleExpression(children(ui.text_content).selected),'(not ((#dialogtext - $newui_selection_token) = #dialogtext))');
   for(let i=0;i<12;i++) {
     const marker=`[NEWUI:C${Math.floor(i/4)}:E${String(i).padStart(2,'0')}]`;
     markers.push(marker);
@@ -160,7 +151,7 @@ export async function verifyRp({rp=join(project,'RP'),vanilla}={}) {
       vanillaReferences='verified-pinned-json-definitions';
     }
   } catch(error) {if(vanilla||error.code!=='ENOENT')throw error;}
-  return {ok:true,evidenceLevel:'static-artifact',runtimeVerified:false,solvedBoxes:checked.size,buttonIndices:indices,categoryMappings,models,animations:animationIds.size,decodedPngs:pngs.length,vanillaReferences,vanillaEvidence,materials:'engine built-in entity_alphatest requires target-client verification',limitations:['Portrait framing, GUI scale, animation timing, touch and NPC callbacks were not executed.','Variant0 transparency is validated as assets/selectors, not a captured game result.']};
+  return {ok:true,evidenceLevel:'static-artifact',runtimeVerified:false,solvedBoxes:checked.size,buttonIndices:indices,activeActions:active.length,transport:'NPC NBT Actions',models,animations:animationIds.size,decodedPngs:pngs.length,vanillaReferences,vanillaEvidence,materials:'engine built-in entity_alphatest requires target-client verification',limitations:['Portrait framing, GUI scale, animation timing, touch and NPC callbacks were not executed.','Variant0 transparency is validated as assets/selectors, not a captured game result.']};
 }
 if (process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
   try {const args=process.argv.slice(2),options={};for(let i=0;i<args.length;i+=2){assert.ok(['--rp','--vanilla'].includes(args[i])&&args[i+1]);const key=args[i].slice(2);assert.ok(!options[key]);options[key]=resolve(args[i+1]);}console.log(JSON.stringify(await verifyRp(options)));}

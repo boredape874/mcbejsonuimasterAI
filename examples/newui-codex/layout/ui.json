@@ -53,7 +53,13 @@
         "detail_body@newui_codex_layout.detail_body": {}
       },
       {
+        "prev@newui_codex_layout.prev": {}
+      },
+      {
         "close@newui_codex_layout.close": {}
+      },
+      {
+        "next@newui_codex_layout.next": {}
       }
     ]
   },
@@ -244,6 +250,19 @@
     "font_size": "normal",
     "font_scale_factor": 0.8
   },
+  "prev": {
+    "type": "button",
+    "size": [
+      48,
+      20
+    ],
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "offset": [
+      25,
+      187
+    ]
+  },
   "close": {
     "type": "button",
     "size": [
@@ -254,6 +273,19 @@
     "anchor_to": "top_left",
     "offset": [
       122,
+      187
+    ]
+  },
+  "next": {
+    "type": "button",
+    "size": [
+      48,
+      20
+    ],
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "offset": [
+      247,
       187
     ]
   }

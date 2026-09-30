@@ -4,11 +4,12 @@ import { CATALOG } from './BP/scripts/catalog.js';
 import { ACTIONS, createSessions } from './BP/scripts/session.js';
 import { BOOK_TYPE, NPC_TYPE, OWNER_TAG, createCodexController } from './BP/scripts/controller.js';
 import { assertCodexBpContract } from './bp-contract.mjs';
+import { decodeStructure, encodeStructure } from './structure-nbt.mjs';
 
 let cases = 0;
 const test = (name, run) => { run(); cases++; };
 function fixture() {
-  const entities = new Map(), dimensions = new Map(), jobs = [], warnings = [], commands = [];
+  const entities = new Map(), dimensions = new Map(), jobs = [], warnings = [], commands = [], placements = [];
   let count = 0;
   const system = {
     currentTick: 0,
@@ -18,7 +19,7 @@ function fixture() {
   };
   function makeEntity(typeId, dimension, id = `npc-${++count}`) {
     const tags = new Set(), properties = new Map();
-    const entity = { id, typeId, dimension, isValid: true, tags, properties, animations: [],
+    const entity = { id, typeId, dimension, location: { x: 0, y: 0, z: 0 }, isValid: true, tags, properties, animations: [],
       addTag: tag => tags.add(tag), hasTag: tag => tags.has(tag),
       setDynamicProperty: (key, value) => properties.set(key, value), getDynamicProperty: key => properties.get(key),
       remove() { this.isValid = false; entities.delete(id); },
@@ -29,11 +30,20 @@ function fixture() {
   for (const name of ['overworld', 'nether', 'the_end']) {
     const dimension = { id: `minecraft:${name}`,
       spawnEntity(typeId) { return makeEntity(typeId, dimension); },
-      getEntities({ type, tags = [] }) { return [...entities.values()].filter(e => e.dimension === dimension && e.typeId === type && tags.every(tag => e.hasTag(tag))); },
+      getBlock() { return {}; },
+      getEntities({ type, tags = [], location, maxDistance = Infinity }) { return [...entities.values()].filter(e => e.dimension === dimension && e.typeId === type && tags.every(tag => e.hasTag(tag)) && (!location || Math.hypot(e.location.x - location.x, e.location.y - location.y, e.location.z - location.z) <= maxDistance)); },
     };
     dimensions.set(name, dimension);
   }
-  const world = { getEntity: id => entities.get(id), getDimension: id => dimensions.get(id) };
+  const world = { getEntity: id => entities.get(id), getDimension: id => dimensions.get(id), structureManager: {
+    place(id, dimension, location, options) {
+      assert.match(id, /^newui:entry_\d{2}$/);
+      placements.push({ id, dimensionId: dimension.id, location: { ...location }, options: { ...options } });
+      const npc = dimension.spawnEntity(NPC_TYPE);
+      npc.location = { x: location.x + 0.5, y: location.y, z: location.z + 0.5 };
+      npc.addTag('newui.codex.template'); npc.addTag(`newui.codex.${id.split(':')[1]}`);
+    },
+  } };
   function player(id) {
     const p = makeEntity('minecraft:player', dimensions.get('overworld'), id), slots = new Array(3);
     p.location = { x: 1, y: 70, z: 2 }; p.messages = []; p.name = 'name" with selector @a';
@@ -47,7 +57,7 @@ function fixture() {
   const controller = createCodexController({ world, system, makeItem: typeId => ({ typeId, amount: 1 }), warn: text => warnings.push(text), prefix: 'test' });
   const open = p => { assert.equal(controller.queueOpen(p), true); system.advance(); return controller.sessions.getPlayer(p.id); };
   const event = (p, npcId, action, id = 'newui:navigate') => ({ id, sourceEntity: entities.get(npcId), initiator: p, message: action });
-  return { ...controller, controller, a, b, open, event, entities, dimensions, world, system, warnings, commands, makeEntity };
+  return { ...controller, controller, a, b, open, event, entities, dimensions, world, system, warnings, commands, placements, makeEntity };
 }
 
 test('catalog and session snapshots stay immutable', () => {
@@ -84,9 +94,68 @@ test('two players have independent NPCs and explicit command targets', () => {
   assert.equal(f.handleScriptEvent(f.event(f.b, a.npcId, 'next')), false);
   assert.equal(f.sessions.getPlayer(f.a.id).entryIndex, 0);
   for (const { command } of f.commands) {
-    assert.match(command, /^dialogue open @e\[type=newui:codex,tag=newui_page_test_\d+,c=1\] @s newui:entry_\d{2}$/);
+    assert.match(command, /^dialogue open @e\[type=newui:codex,tag=newui_page_test_\d+,c=1\] @s$/);
     assert.ok(!command.includes(f.a.name) && !command.includes('@p'));
   }
+});
+test('structure placement uses a loaded floor anchor and entities-only options', () => {
+  const f = fixture(); f.a.location = { x: -1.2, y: 70.8, z: 2.9 }; f.a.setDynamicProperty('newui:entry', 11);
+  const current = f.open(f.a);
+  assert.equal(current.entryIndex, 11);
+  assert.deepEqual(f.placements, [{ id: 'newui:entry_11', dimensionId: 'minecraft:overworld', location: { x: -2, y: 70, z: 2 }, options: { includeBlocks: false, includeEntities: true, waterlogged: false } }]);
+  assert.ok(f.commands[0].command.endsWith(' @s'), 'Embedded NPC Actions are opened without a scene name');
+});
+test('simultaneous queued opens at the same position claim different loaded NPCs', () => {
+  const f = fixture(); f.queueOpen(f.a); f.queueOpen(f.b); f.system.advance();
+  const a = f.sessions.getPlayer(f.a.id), b = f.sessions.getPlayer(f.b.id);
+  assert.notEqual(a.npcId, b.npcId); assert.equal(f.placements.length, 2);
+  assert.equal(f.entities.get(a.npcId).getDynamicProperty('newui:owner'), f.a.id);
+  assert.equal(f.entities.get(b.npcId).getDynamicProperty('newui:owner'), f.b.id);
+});
+test('an existing template at the load position is never adopted or deleted', () => {
+  const f = fixture(), old = f.makeEntity(NPC_TYPE, f.a.dimension);
+  old.location = { ...f.a.location }; old.addTag('newui.codex.template'); old.addTag('newui.codex.entry_00');
+  const current = f.open(f.a); assert.notEqual(current.npcId, old.id);
+  f.endPlayer(f.a.id); assert.equal(old.isValid, true); assert.equal(old.getDynamicProperty('newui:owner'), undefined);
+});
+test('zero loaded candidates fail closed without adopting an existing template', () => {
+  const f = fixture(), old = f.makeEntity(NPC_TYPE, f.a.dimension);
+  old.location = { ...f.a.location }; old.addTag('newui.codex.template'); old.addTag('newui.codex.entry_00');
+  f.world.structureManager.place = () => {};
+  assert.equal(f.open(f.a), undefined); assert.equal(old.isValid, true); assert.equal(f.commands.length, 0);
+  assert.ok(f.warnings.some(message => message.includes('found 0')));
+});
+test('ambiguous loads clean only the two observed new candidates', () => {
+  const f = fixture(), old = f.makeEntity(NPC_TYPE, f.a.dimension), unmanaged = f.makeEntity(NPC_TYPE, f.a.dimension);
+  old.location = unmanaged.location = { ...f.a.location }; old.addTag('newui.codex.template'); old.addTag('newui.codex.entry_00');
+  const place = f.world.structureManager.place;
+  f.world.structureManager.place = (...args) => { place(...args); place(...args); };
+  assert.equal(f.open(f.a), undefined); assert.equal(f.commands.length, 0);
+  assert.equal(old.isValid, true); assert.equal(unmanaged.isValid, true);
+  assert.deepEqual([...f.entities.values()].filter(entity => entity.typeId === NPC_TYPE).map(entity => entity.id), [old.id, unmanaged.id]);
+});
+test('partial placement then throw cleans the observed entity and leaves another player intact', () => {
+  const f = fixture(), b = f.open(f.b), place = f.world.structureManager.place;
+  f.world.structureManager.place = (...args) => { place(...args); throw new Error('partial structure load'); };
+  assert.equal(f.open(f.a), undefined); assert.equal(f.sessions.getPlayer(f.b.id).id, b.id);
+  assert.deepEqual([...f.entities.values()].filter(entity => entity.typeId === NPC_TYPE).map(entity => entity.id), [b.npcId]);
+});
+test('an unloaded anchor prevents placement and failed navigation closes the old snapshot', () => {
+  const f = fixture(), a = f.open(f.a), b = f.open(f.b), count = f.placements.length;
+  f.a.dimension.getBlock = () => undefined; f.system.advance();
+  assert.equal(f.handleScriptEvent(f.event(f.a, a.npcId, 'next')), true);
+  assert.equal(f.placements.length, count); assert.equal(f.sessions.getPlayer(f.a.id), undefined);
+  assert.equal(f.entities.has(a.npcId), false); assert.equal(f.sessions.getPlayer(f.b.id).id, b.id);
+});
+test('a newly observed entity carrying someone else\'s ownership is preserved', () => {
+  const f = fixture(), place = f.world.structureManager.place;
+  f.world.structureManager.place = (...args) => {
+    place(...args);
+    const candidate = [...f.entities.values()].find(entity => entity.typeId === NPC_TYPE);
+    candidate.setDynamicProperty('newui:owner', 'someone-else'); candidate.setDynamicProperty('newui:session', 'other-session');
+  };
+  assert.equal(f.open(f.a), undefined); assert.equal(f.commands.length, 0);
+  assert.equal([...f.entities.values()].filter(entity => entity.typeId === NPC_TYPE).length, 1);
 });
 test('navigation rotates NPC, preserves page and links animation', () => {
   const f = fixture(), original = f.open(f.a), originalNpc = f.entities.get(original.npcId);
@@ -214,42 +283,60 @@ test('invalid saved pages use the first entry', () => {
 });
 
 const readJson = async path => JSON.parse(await readFile(new URL(path, import.meta.url), 'utf8'));
-const scenes = (await readJson('BP/dialogue/codex.json'))['minecraft:npc_dialogue'].scenes;
+const structureBytes = await Promise.all(CATALOG.entries.map((_, index) => readFile(new URL(`BP/structures/newui/entry_${String(index).padStart(2, '0')}.mcstructure`, import.meta.url))));
+const structures = structureBytes.map(decodeStructure);
 const npc = (await readJson('BP/entities/codex.json'))['minecraft:entity'];
-assertCodexBpContract({ npc, scenes, catalog: CATALOG });
-assert.equal(scenes.length, 12);
-const categoryActions = [['meadow', 'cave'], ['forest', 'cave'], ['forest', 'meadow']];
-scenes.forEach((scene, index) => {
-  assert.equal(scene.scene_tag, `newui:entry_${String(index).padStart(2, '0')}`);
-  assert.equal(scene.npc_name, 'NEWUI_CODEX_V1');
-  assert.equal(scene.text, `[NEWUI:C${Math.floor(index / 4)}:E${String(index).padStart(2, '0')}]${CATALOG.entries[index].description}`);
-  const actions = [...categoryActions[Math.floor(index / 4)], 'slot0', 'slot1', 'slot2', 'slot3'];
-  assert.equal(scene.buttons.length, 6);
-  assert.deepEqual(scene.buttons.map(b => b.commands[0]), actions.map(action => `/scriptevent newui:navigate ${action}`));
-  assert.deepEqual(scene.on_close_commands, ['/scriptevent newui:close close']);
-  assert.ok(scene.buttons.every(b => b.commands.length === 1 && !b.commands[0].includes('execute')));
+assertCodexBpContract({ npc, structures, catalog: CATALOG });
+const structureEntity = document => document.value.structure.value.entities.value.items[0];
+test('NBT retains nine ordered buttons and a separate close event in all twelve entries', () => {
+  structures.forEach((document, index) => {
+    const actions = JSON.parse(structureEntity(document).Actions.value);
+    assert.deepEqual(actions.filter(action => action.mode === 0).map(action => action.data[0].cmd_line), ACTIONS.map(action => `scriptevent newui:navigate ${action}`));
+    assert.equal(actions.filter(action => action.mode === 1).length, 1);
+    assert.deepEqual(encodeStructure(document), structureBytes[index]);
+  });
 });
-test('seven-button scenes fail the native limit before example mapping checks', () => {
-  const invalid = structuredClone(scenes); invalid[0].buttons.push({ name: 'extra', commands: ['/say extra'] });
-  assert.throws(() => assertCodexBpContract({ npc, scenes: invalid, catalog: CATALOG }), /maximum of 6 buttons/);
+test('close mode and button ordering cannot silently shift native indices', () => {
+  for (const change of [actions => { actions[9].mode = 0; }, actions => { [actions[7], actions[8]] = [actions[8], actions[7]]; }, actions => actions.splice(6, 1)]) {
+    const invalid = structuredClone(structures), target = structureEntity(invalid[0]), actions = JSON.parse(target.Actions.value);
+    change(actions); target.Actions.value = JSON.stringify(actions);
+    assert.throws(() => assertCodexBpContract({ npc, structures: invalid, catalog: CATALOG }), assert.AssertionError);
+  }
 });
 test('boolean damage values cannot pass the target-client contract', () => {
   for (const value of [false, true, 0, undefined]) {
     const invalid = structuredClone(npc); invalid.components['minecraft:damage_sensor'].triggers[0].deals_damage = value;
-    assert.throws(() => assertCodexBpContract({ npc: invalid, scenes, catalog: CATALOG }), /deals_damage must be a string/);
+    assert.throws(() => assertCodexBpContract({ npc: invalid, structures, catalog: CATALOG }), /deals_damage must be a string/);
   }
   for (const value of ['false', 'never', 'yes']) {
     const invalid = structuredClone(npc); invalid.components['minecraft:damage_sensor'].triggers[0].deals_damage = value;
-    assert.throws(() => assertCodexBpContract({ npc: invalid, scenes, catalog: CATALOG }), /documented "no" enum value/);
+    assert.throws(() => assertCodexBpContract({ npc: invalid, structures, catalog: CATALOG }), /documented "no" enum value/);
   }
 });
-test('six-button count alone cannot hide wrong category ordering', () => {
-  const invalid = structuredClone(scenes);
-  [invalid[4].buttons[0], invalid[4].buttons[1]] = [invalid[4].buttons[1], invalid[4].buttons[0]];
-  assert.throws(() => assertCodexBpContract({ npc, scenes: invalid, catalog: CATALOG }), assert.AssertionError);
+test('structure ownership, type, entity count, text key and empty blocks are checked', () => {
+  const changes = [
+    doc => { structureEntity(doc).Actions.type = 3; },
+    doc => { const e = structureEntity(doc); e.InteractiveText = e.InterativeText; delete e.InterativeText; },
+    doc => { structureEntity(doc).Tags.value.items[0] = 'other.owner'; },
+    doc => { doc.value.structure.value.entities.value.items.push(structuredClone(structureEntity(doc))); },
+    doc => { doc.value.structure.value.block_indices.value.items[0].items[0] = 0; },
+    doc => { structureEntity(doc).UniqueID = { type: 3, value: 42 }; },
+  ];
+  for (const change of changes) {
+    const invalid = structuredClone(structures); change(invalid[0]);
+    assert.throws(() => assertCodexBpContract({ npc, structures: invalid, catalog: CATALOG }), assert.AssertionError);
+  }
+});
+test('truncated, trailing, wrong-endian and oversized NBT cannot pass the decoder', () => {
+  const original = structureBytes[0];
+  for (const invalid of [original.subarray(0, 4), original.subarray(0, original.length - 1), Buffer.concat([original, Buffer.from([0])]), Buffer.alloc(1024 * 1024 + 1)]) {
+    assert.throws(() => decodeStructure(invalid), assert.AssertionError);
+  }
+  const wrongEndian = Buffer.from(original); wrongEndian[4] = 0; wrongEndian[5] = 14;
+  assert.throws(() => decodeStructure(wrongEndian));
 });
 const manifest = await readJson('BP/manifest.json'), rp = await readJson('RP/manifest.json');
-assert.deepEqual(manifest.header.version, [1, 0, 1]);
+assert.deepEqual(manifest.header.version, [1, 0, 2]);
 assert.deepEqual(manifest.dependencies.find(d => d.uuid), { uuid: rp.header.uuid, version: rp.header.version });
 assert.deepEqual(manifest.dependencies.find(d => d.module_name), { module_name: '@minecraft/server', version: '2.1.0' });
 assert.deepEqual((await readJson('BP/entities/codex.json'))['minecraft:entity'].components['minecraft:npc'].npc_data.skin_list, [{ variant: 0 }, { variant: 1 }]);
@@ -257,4 +344,4 @@ const itemComponents = (await readJson('BP/items/field_guide.json'))['minecraft:
 assert.equal(itemComponents['minecraft:icon'], 'newui:field_guide');
 assert.equal(itemComponents['minecraft:allow_off_hand'], true);
 assert.equal(itemComponents['minecraft:interact_button'], true);
-console.log(JSON.stringify({ ok: true, sessionScenarios: cases, scenes: scenes.length, buttonsPerScene: 6, runtimeVerified: false }));
+console.log(JSON.stringify({ ok: true, sessionScenarios: cases, structures: structures.length, buttonsPerNpc: 9, runtimeVerified: false }));
