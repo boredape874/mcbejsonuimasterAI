@@ -5,16 +5,84 @@ import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { PNG } from 'pngjs';
 import { stripJsonComments, stripJsonTrailingCommas } from '../../tools/_lib/jsonc.mjs';
+import { evaluateExpression } from '../../tools/_lib/final-rp-v2/expression.mjs';
 
 const project = dirname(fileURLToPath(import.meta.url));
 const json = async file => JSON.parse(await readFile(file,'utf8'));
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+export function verifyScreenMount(ui,mount) {
+  assert.equal(ui.namespace,'newui_codex');assert.equal(mount.namespace,'npc_interact');
+  assert.deepEqual(Object.keys(mount).sort(),['namespace','npc_screen']);
+  const screen=mount.npc_screen;
+  // Preserve the inherited screen controls and input mappings. Only append the
+  // owned branch directly to that screen, outside the animated safezone branch.
+  assert.deepEqual(Object.keys(screen).sort(),['$screen_content','modifications','type']);
+  assert.equal(screen.type,'screen');assert.equal(screen.$screen_content,'newui_codex.screen_content');
+  assert.equal(screen.$screen_animations,undefined,'Preserve native fallback entrance and exit animations');
+  assert.equal(screen.modifications.length,1);
+  const insertion=screen.modifications[0];
+  assert.deepEqual(Object.keys(insertion).sort(),['array_name','operation','value']);
+  assert.equal(insertion.array_name,'controls');assert.equal(insertion.operation,'insert_back');
+  assert.equal(insertion.value.length,1);
+  const inserted=Object.entries(insertion.value[0]);assert.equal(inserted.length,1);
+  assert.ok(inserted[0][0].endsWith('@newui_codex.codex_root'),'Custom content must be a direct screen child');
+  assert.deepEqual(inserted[0][1],{},'The mount must not override the verified root definition');
+  const root=ui.codex_root;
+  assert.equal(root.type,'input_panel');assert.deepEqual(root.size,['100%','100%']);
+  assert.equal(root.alpha,1);assert.equal(root.visible,true);assert.equal(root.enabled,true);assert.equal(root.propagate_alpha,true);
+  assert.ok(Number.isFinite(root.layer)&&root.layer>0);
+  assert.equal(root.controls.length,2);
+  const rootChildren=Object.assign({},...root.controls);
+  assert.deepEqual(Object.keys(rootChildren).sort(),['backdrop','book@newui_codex.book']);
+  assert.deepEqual(rootChildren['book@newui_codex.book'],{},'Book reference must use the verified definition');
+  const bookChildren=Object.assign({},...ui.book.controls), close=bookChildren['close@common_buttons.light_text_button'];
+  assert.ok(close,'The close button must remain inside the mounted book');
+  assert.equal(ui.screen_content.controls.length,1,'The safezone content must only mount the vanilla fallback');
+  const fallback=ui.screen_content.controls[0]['vanilla@npc_interact.npc_screen_contents'];assert.ok(fallback);
+  for(const [name,control]of [['codex_root',root],['book',ui.book],['close',close],['screen_content',ui.screen_content],['fallback',fallback]]){
+    assert.ok(control.alpha===undefined||control.alpha===1,`${name} must start opaque`);
+    assert.ok(control.visible===undefined||control.visible===true,`${name} must not start hidden`);
+    assert.ok(control.enabled===undefined||control.enabled===true,`${name} must not disable input`);
+    assert.ok(control.ignored===undefined||control.ignored===false,`${name} must not be ignored`);
+    assert.ok(control.anims===undefined||control.anims.length===0,`${name} must stay outside screen animations`);
+    assert.ok(!Object.values(control).some(value=>typeof value==='string'&&value.startsWith('@')),`${name} must not animate a property`);
+    if(control!==root&&control!==fallback)assert.equal(control.bindings,undefined,`${name} must not add another visibility/input gate`);
+  }
+  assert.deepEqual(close.button_mappings,[
+    {from_button_id:'button.menu_select',to_button_id:'button.exit_student',mapping_type:'pressed'},
+    {from_button_id:'button.menu_ok',to_button_id:'button.exit_student',mapping_type:'focused'},
+    {from_button_id:'button.menu_cancel',to_button_id:'button.exit_student',mapping_type:'global'},
+  ],'Click, focus and Escape must address the owned student close path');
+  const knownMarkers=Array.from({length:12},(_,i)=>`(not ((#dialogtext - '[NEWUI:C${Math.floor(i/4)}:E${String(i).padStart(2,'0')}]') = #dialogtext))`).join(' or ');
+  const condition=`(${knownMarkers})`, fallbackCondition=`(not ${condition})`;
+  for(const [branch,expression]of [[root,condition],[fallback,fallbackCondition]])assert.deepEqual(branch.bindings,[
+    {binding_name:'#dialogtext'},
+    {binding_type:'view',source_property_name:expression,target_property_name:'#visible'},
+  ],'Each mounted branch must import and evaluate its own native dialog text');
+  let dialogtextConsumers=0;
+  function checkBindings(control){
+    if(control.bindings?.some(binding=>binding.source_property_name?.includes('#dialogtext'))){
+      assert.deepEqual(control.bindings.filter(binding=>binding.binding_name==='#dialogtext'),[{binding_name:'#dialogtext'}],'A nested dialog-text consumer needs its own native binding');
+      dialogtextConsumers++;
+    }
+    for(const child of control.controls||[])for(const value of Object.values(child))checkBindings(value);
+  }
+  for(const control of Object.values(ui))if(control&&typeof control==='object')checkBindings(control);
+  // These fixtures verify expression truth tables and authored mount ancestry.
+  // They do not establish native binding delivery, visibility or input handling.
+  const routeCases=[...Array.from({length:12},(_,i)=>[`[NEWUI:C${Math.floor(i/4)}:E${String(i).padStart(2,'0')}]설명`,true]),
+    ...['','일반 NPC 안내','NEWUI_CODEX_V1','[NEWUI:C0:E99]','[NEWUI:C1:E00]','[NEWUI:C0:E0]'].map(text=>[text,false])];
+  for(const [text,expected]of routeCases){
+    const environment={'#dialogtext':text};
+    const selected=evaluateExpression(condition,environment),normal=evaluateExpression(fallbackCondition,environment);
+    assert.equal(selected.ok,true);assert.equal(normal.ok,true);assert.equal(selected.value,expected);assert.equal(normal.value,!expected);
+  }
+  return {routeCases:routeCases.length,dialogtextConsumers,screenMount:'direct-screen-controls-insert_back',customRootAnimations:'none'};
+}
 export async function verifyRp({rp=join(project,'RP'),vanilla}={}) {
   const catalog=await json(join(project,'catalog.json')), solved=await json(join(project,'layout/solved.json'));
   const ui=await json(join(rp,'ui/newui_codex.json')), mount=await json(join(rp,'ui/npc_interact_screen.json'));
-  assert.equal(ui.namespace,'newui_codex');assert.equal(mount.npc_screen.$screen_content,'newui_codex.screen_content');
-  assert.deepEqual(Object.keys(mount).sort(),['namespace','npc_screen']);
-  assert.deepEqual(Object.keys(mount.npc_screen),['$screen_content']); // Keep the vanilla screen implementation.
+  const screenContract=verifyScreenMount(ui,mount);
   const controls=Object.assign({},...ui.book.controls), br=solved.rects.__root__, checked=new Set();
   const children=c=>Object.assign({},...c.controls);
   const visibleExpression=c=>c.bindings.find(b=>b.target_property_name==='#visible').source_property_name;
@@ -59,14 +127,6 @@ export async function verifyRp({rp=join(project,'RP'),vanilla}={}) {
   assert.equal(action.$button_tts_name,undefined);assert.equal(action.$newui_text,undefined);assert.equal(action.$newui_selection_token,undefined);
   assert.ok(action.bindings.some(b=>b.binding_type==='collection_details'&&b.binding_collection_name==='student_buttons_collection'&&b.binding_collection_prefix==='student_buttons'));
   assert.ok(action.button_mappings.some(m=>m.to_button_id==='button.student_button'&&m.mapping_type==='pressed'));
-  assert.ok(controls['close@common_buttons.light_text_button'].button_mappings.some(m=>m.to_button_id==='button.exit_student'&&m.mapping_type==='global'));
-  const [fallback,custom]=ui.screen_content.controls;
-  assert.ok(fallback['vanilla@npc_interact.npc_screen_contents']);
-  const condition=custom.codex.bindings.find(b=>b.target_property_name==='#visible').source_property_name;
-  const knownMarkers=Array.from({length:12},(_,i)=>`(not ((#dialogtext - '[NEWUI:C${Math.floor(i/4)}:E${String(i).padStart(2,'0')}]') = #dialogtext))`).join(' or ');
-  assert.equal(condition,`((#title_text = 'NEWUI_CODEX_V1') and (${knownMarkers}))`,'Owned title and one of 12 markers mount the codex independently of student/editor state');
-  assert.ok(custom.codex.bindings.every(b=>b.binding_name!=='#student_view_visible'));
-  assert.equal(fallback['vanilla@npc_interact.npc_screen_contents'].bindings.find(b=>b.target_property_name==='#visible').source_property_name,`(not ${condition})`);
   assert.equal(controls.portrait_collection.controls[0].book.renderer,'actor_portrait_renderer');
   assert.equal(controls.portrait_collection.controls[0].book.collection_index,1);
   const markers=[];
@@ -146,11 +206,20 @@ export async function verifyRp({rp=join(project,'RP'),vanilla}={}) {
     assert.ok(npc.student_button_label.bindings.some(b=>b.binding_name==='#student_button_text'));
     const common=await parse(join(vanillaRoot,'ui/ui_template_buttons.json'));
     assert.ok(Object.keys(common).some(k=>k.split('@')[0]==='light_text_button'));
+    const screenCommon=await parse(join(vanillaRoot,'ui/ui_common.json'));
+    const nativeAnimations=screenCommon.base_screen['$screen_animations|default'];
+    assert.ok(Array.isArray(nativeAnimations),'The inherited screen must supply its animation defaults');
+    for(const kind of ['push','pop']){
+      assert.ok(nativeAnimations.includes(`@common.screen_exit_animation_${kind}_fade`));
+      const animation=screenCommon[`screen_exit_animation_${kind}_fade`];
+      assert.equal(animation.anim_type,'alpha');assert.equal(animation.from,1);assert.equal(animation.to,0);
+      assert.equal(animation.play_event,`screen.exit_${kind}`);assert.equal(animation.end_event,'screen.exit_end');
+    }
     if(vanilla) vanillaReferences='verified-supplied-json-definitions';
     else {
       const lock=await json(resolve(project,'../../config/design-research-lock.json'));
       const source=lock.sources.find(s=>s.id==='mojang-bedrock-samples');assert.ok(source,'Missing vanilla source lock');
-      for(const path of ['ui/npc_interact_screen.json','ui/ui_template_buttons.json']) {
+      for(const path of ['ui/npc_interact_screen.json','ui/ui_template_buttons.json','ui/ui_common.json']) {
         const file=source.files.find(f=>f.path===`resource_pack/${path}`);assert.ok(file,`Missing pinned ${path}`);
         const bytes=await readFile(join(vanillaRoot,path));assert.equal(bytes.length,file.bytes,`Vanilla size drift: ${path}`);assert.equal(hash(bytes),file.sha256,`Vanilla hash drift: ${path}`);
         vanillaEvidence.push({path,bytes:file.bytes,sha256:file.sha256,revision:source.revision});
@@ -158,7 +227,7 @@ export async function verifyRp({rp=join(project,'RP'),vanilla}={}) {
       vanillaReferences='verified-pinned-json-definitions';
     }
   } catch(error) {if(vanilla||error.code!=='ENOENT')throw error;}
-  return {ok:true,evidenceLevel:'static-artifact',runtimeVerified:false,solvedBoxes:checked.size,buttonIndices:indices,activeActions:active.length,transport:'NPC NBT Actions',models,animations:animationIds.size,decodedPngs:pngs.length,vanillaReferences,vanillaEvidence,materials:'engine built-in entity_alphatest requires target-client verification',limitations:['Portrait framing, GUI scale, animation timing, touch and NPC callbacks were not executed.','Variant0 transparency is validated as assets/selectors, not a captured game result.']};
+  return {ok:true,evidenceLevel:'static-artifact',runtimeVerified:false,solvedBoxes:checked.size,buttonIndices:indices,activeActions:active.length,transport:'NPC NBT Actions',...screenContract,screenAnimations:'inherited vanilla defaults preserved',models,animations:animationIds.size,decodedPngs:pngs.length,vanillaReferences,vanillaEvidence,materials:'engine built-in entity_alphatest requires target-client verification',limitations:['Native dialog-text delivery, actual root visibility, Escape and NPC callbacks were not executed.','Portrait framing, GUI scale, animation timing and touch were not executed.','Variant0 transparency is validated as assets/selectors, not a captured game result.']};
 }
 if (process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
   try {const args=process.argv.slice(2),options={};for(let i=0;i<args.length;i+=2){assert.ok(['--rp','--vanilla'].includes(args[i])&&args[i+1]);const key=args[i].slice(2);assert.ok(!options[key]);options[key]=resolve(args[i+1]);}console.log(JSON.stringify(await verifyRp(options)));}

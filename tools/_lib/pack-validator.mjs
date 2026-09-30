@@ -39,10 +39,10 @@ function collectTextureRefs(value, out) {
   for (const item of Object.values(value)) collectTextureRefs(item, out);
 }
 
-function collectModificationInheritance(value, path, out) {
+function collectModificationInheritance(value, path, out, typedLocalControls) {
   if (!value || typeof value !== "object") return;
   if (Array.isArray(value)) {
-    value.forEach((item, index) => collectModificationInheritance(item, `${path}[${index}]`, out));
+    value.forEach((item, index) => collectModificationInheritance(item, `${path}[${index}]`, out, typedLocalControls));
     return;
   }
   if (Array.isArray(value.modifications)) {
@@ -56,12 +56,15 @@ function collectModificationInheritance(value, path, out) {
           continue;
         }
         for (const [key, child] of Object.entries(current.value)) {
-          if (key.includes("@") && key.split("@")[1]?.includes(".")) {
+          const reference = key.split("@")[1];
+          const knownType = key.split("@").length === 2 && typedLocalControls.has(reference);
+          if (key.includes("@") && reference?.includes(".") && !knownType) {
             out.push({
               severity: "warning",
+              code: "MODIFICATION_TYPE_UNVERIFIED",
               path: `${current.path}.${key}`,
-              message: "Cross-namespace inheritance inside modifications[].value may fail with 'Type not specified'",
-              suggestion: "Route the inherited control outside the modification and gate it with #visible.",
+              message: "Namespaced inheritance inside modifications[].value has no unique, directly typed local definition; runtime type resolution is unverified",
+              suggestion: "Check registration, duplicate definitions and the inherited type before testing the target client.",
             });
           }
           queue.push({ value: child, path: `${current.path}.${key}` });
@@ -70,7 +73,7 @@ function collectModificationInheritance(value, path, out) {
     });
   }
   for (const [key, child] of Object.entries(value)) {
-    if (key !== "modifications") collectModificationInheritance(child, `${path}.${key}`, out);
+    if (key !== "modifications") collectModificationInheritance(child, `${path}.${key}`, out, typedLocalControls);
   }
 }
 
@@ -111,7 +114,7 @@ export async function validatePack(inputPath, options = {}) {
   } catch {}
   if (!vanillaProfile) issues.push({ severity: "error", code: "VANILLA_OVERRIDE_PROFILE_UNVERIFIED", path: "data/vanilla-screen-profiles.json", message: `Vanilla screen profile is not verified: ${vanillaProfileId}` });
   else if (vanillaProfile.dialect !== dialect) issues.push({ severity: "error", code: "OUTPUT_DIALECT_MISMATCH", path: "data/vanilla-screen-profiles.json", message: `Profile ${vanillaProfileId} requires ${vanillaProfile.dialect}, received ${dialect}` });
-  const vanillaOverrides = new Set(vanillaProfile?.overrideFiles || []);
+  const vanillaOverrides = new Set(vanillaProfile?.dialect === dialect ? vanillaProfile.overrideFiles || [] : []);
 
   if (files.length === 0) {
     issues.push({ severity: "error", path: portable(relative(packRoot, uiRoot)), message: "ui directory contains no JSON files" });
@@ -126,7 +129,6 @@ export async function validatePack(inputPath, options = {}) {
       const ui = (await readUiJson(file, { kind: "runtime", dialect })).document;
       parsedFiles.set(file, ui);
       collectTextureRefs(ui, textureRefs);
-      collectModificationInheritance(ui, filePath, issues);
       if (basename(file) !== "_ui_defs.json") {
         if (typeof ui.namespace !== "string" || !ui.namespace) {
           issues.push({ severity: "error", path: filePath, message: "JSON UI file is missing a namespace" });
@@ -140,12 +142,12 @@ export async function validatePack(inputPath, options = {}) {
 
   const defsPath = resolve(uiRoot, "_ui_defs.json");
   const defs = parsedFiles.get(defsPath);
+  const registered = new Set();
   if (!defs) {
     issues.push({ severity: "warning", path: portable(relative(packRoot, defsPath)), message: "No _ui_defs.json was parsed" });
   } else if (!Array.isArray(defs.ui_defs)) {
     issues.push({ severity: "error", path: portable(relative(packRoot, defsPath)), message: "_ui_defs.json must define ui_defs as an array" });
   } else {
-    const registered = new Set();
     for (const entry of defs.ui_defs) {
       if (typeof entry !== "string") {
         issues.push({ severity: "error", path: portable(relative(packRoot, defsPath)), message: "_ui_defs entries must be strings" });
@@ -175,6 +177,27 @@ export async function validatePack(inputPath, options = {}) {
         issues.push({ severity: "warning", code: "UI_DEFS_ORPHAN", path: relativeFile, message: "Custom JSON UI file is not registered in _ui_defs.json" });
       }
     }
+  }
+
+  // Only loaded local definitions can establish an inherited type. Do not
+  // infer types through inheritance chains or choose between duplicate names.
+  const localDefinitions = new Map();
+  for (const [file, ui] of parsedFiles) {
+    if (file === defsPath || typeof ui.namespace !== "string" || !ui.namespace) continue;
+    if (!registered.has(file) && !vanillaOverrides.has(portable(relative(packRoot, file)))) continue;
+    for (const [key, control] of Object.entries(ui)) {
+      if (key === "namespace") continue;
+      const name = `${ui.namespace}.${key.split("@")[0]}`;
+      const definitions = localDefinitions.get(name) || [];
+      definitions.push(control);
+      localDefinitions.set(name, definitions);
+    }
+  }
+  const typedLocalControls = new Set([...localDefinitions].filter(([, definitions]) =>
+    definitions.length === 1 && typeof definitions[0]?.type === "string" && /^[a-z_]+$/.test(definitions[0].type)
+  ).map(([name]) => name));
+  for (const [file, ui] of parsedFiles) {
+    if (file !== defsPath) collectModificationInheritance(ui, portable(relative(packRoot, file)), issues, typedLocalControls);
   }
 
   let vanillaTextures = new Set();

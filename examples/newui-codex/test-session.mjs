@@ -472,7 +472,7 @@ test('truncated, trailing, wrong-endian and oversized NBT cannot pass the decode
   assert.throws(() => decodeStructure(wrongEndian));
 });
 const manifest = await readJson('BP/manifest.json'), rp = await readJson('RP/manifest.json');
-assert.deepEqual(manifest.header.version, [1, 0, 4]);
+assert.deepEqual(manifest.header.version, [1, 0, 6]);
 assert.equal(ADDON_VERSION, manifest.header.version.join('.'));
 assert.deepEqual(manifest.dependencies.find(d => d.uuid), { uuid: rp.header.uuid, version: rp.header.version });
 assert.deepEqual(manifest.dependencies.find(d => d.module_name), { module_name: '@minecraft/server', version: '2.1.0' });

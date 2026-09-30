@@ -9,7 +9,7 @@ const out = async (path, value) => {
   const target = fileURLToPath(new URL(`BP/${path}`, root)); await mkdir(dirname(target), { recursive: true });
   await writeFile(target, typeof value === 'string' || Buffer.isBuffer(value) ? value : JSON.stringify(value, null, 2) + '\n');
 };
-const version = [1, 0, 4];
+const version = [1, 0, 6];
 await out('manifest.json', {
   format_version: 2,
   header: { name: 'NewUI · 작은 세계 탐험 도감 BP', description: 'Original NPC dialogue and held guide example. Static checks do not establish target-client behavior.', uuid: 'f7c1d546-8d1d-4c0f-9495-563a510fcb24', version, min_engine_version: [1, 21, 100] },

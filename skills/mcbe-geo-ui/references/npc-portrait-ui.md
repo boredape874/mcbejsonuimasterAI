@@ -22,6 +22,10 @@ Select this reference only for `npc_interact_screen` / `actor_portrait_renderer`
 4. Trace `student_buttons_collection` indices and its `collection_details` prefix to `button.student_button`; trace close and cancel to `button.exit_student`. Use the actual vanilla bindings, not server-form names such as `#form_button_text`.
 5. Keep protocol text out of visible labels. Restrict custom routing to one exact owned title/token and retain the vanilla path for unrelated NPCs.
 
+Do not assume persisted `RawtextName` equals the live `#title_text` binding. The inspected book routes on its owned `#dialogtext` marker. A title gate needs observed native binding evidence; otherwise use the precise owned body markers. When a transparent NPC screen also traps Escape, trace the gated close control and the screen's entrance animations: the vanilla NPC screen relies on the active close button for Escape. Its teacher, student and editor close events differ, so a global `exit_student` override can break the fallback.
+
+If a direct screen-child diagnostic renders while content under `common.base_screen` does not, that establishes only the diagnostic's display path. It does not identify a specific animation or prove live binding values, portrait rendering or button responses. To compare a direct mount, insert the owned input panel into the screen's existing `controls`; preserve the vanilla variable/input ancestors for the inverse fallback. Do not replace all base controls or publish the temporary diagnostic as the finished UI.
+
 The portrait rectangle, model scale, camera target and bone transforms jointly determine screen placement. A 500-unit portrait or a source model's offset is a calibration sample, not a portable screen size. A static model screenshot cannot establish alignment of native button hitboxes over the projection.
 
 ## Dialogue and session lifecycle

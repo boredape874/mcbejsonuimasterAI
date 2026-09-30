@@ -20,7 +20,7 @@ assert.equal(new Set(ids).size,ids.length,'Duplicate manifest UUID');
 for(const id of ids)assert.match(id,/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i);
 assert.ok(bp.dependencies.some(d=>d.uuid===rp.header.uuid&&JSON.stringify(d.version)===JSON.stringify(rp.header.version)),'Missing BP/RP dependency');
 assert.equal(bp.dependencies.find(d=>d.module_name==='@minecraft/server')?.version,'2.1.0');
-for(const manifest of [bp,rp]){assert.deepEqual(manifest.header.version,[1,0,4]);for(const module of manifest.modules)assert.deepEqual(module.version,[1,0,4]);}
+for(const manifest of [bp,rp]){assert.deepEqual(manifest.header.version,[1,0,6]);for(const module of manifest.modules)assert.deepEqual(module.version,[1,0,6]);}
 const sourceFiles=[...files(path.join(root,'BP')),...files(path.join(root,'RP'))];
 let jsonFiles=0,scriptFiles=0;
 for(const file of sourceFiles){if(file.endsWith('.json')){JSON.parse(fs.readFileSync(file,'utf8'));jsonFiles++;}if(file.endsWith('.js')){run(['--check',file]);scriptFiles++;}}

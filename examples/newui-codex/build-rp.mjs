@@ -95,18 +95,25 @@ rootControls.push({description:{...label('#newui_description',box('detail_body')
 ]}});
 ui.book={type:'panel',size:[base.w,base.h],offset:[base.x+base.w/2-screen.w/2,base.y+base.h/2-screen.h/2],controls:rootControls};
 const knownMarkers=`(${catalog.entries.map((_,i)=>has(token(i))).join(' or ')})`;
-const gate=`((#title_text = 'NEWUI_CODEX_V1') and ${knownMarkers})`;
-const gateBindings = expr => [{binding_name:'#title_text',binding_type:'global'},{binding_name:'#dialogtext'},{binding_type:'view',source_property_name:expr,target_property_name:'#visible'}];
+const gate=knownMarkers;
+const gateBindings = expr => [{binding_name:'#dialogtext'},{binding_type:'view',source_property_name:expr,target_property_name:'#visible'}];
 ui.screen_content={type:'panel',controls:[
   {'vanilla@npc_interact.npc_screen_contents':{bindings:gateBindings(`(not ${gate})`)}},
-  {codex:{type:'panel',bindings:gateBindings(gate),controls:[
-    {backdrop:image('textures/newui/ui/shade',['100%','100%'],{alpha:0.58,layer:0})},
-    {'book@newui_codex.book':{}},
-  ]}},
+]};
+// The direct screen-child probe displayed on the target client. Keep the
+// codex outside the animated safezone ancestry; retain that ancestry for NPCs.
+// This changes mounting only, not the native collection or button protocol.
+ui.codex_root={type:'input_panel',size:['100%','100%'],alpha:1,visible:true,enabled:true,propagate_alpha:true,layer:10,bindings:gateBindings(gate),controls:[
+  {backdrop:image('textures/newui/ui/shade',['100%','100%'],{alpha:0.58,layer:0})},
+  {'book@newui_codex.book':{}},
 ]};
 await emit('ui/newui_codex.json',ui);
 await emit('ui/_ui_defs.json',{ui_defs:['ui/newui_codex.json']});
-await emit('ui/npc_interact_screen.json',{namespace:'npc_interact',npc_screen:{'$screen_content':'newui_codex.screen_content'}});
+await emit('ui/npc_interact_screen.json',{namespace:'npc_interact',npc_screen:{
+  type:'screen',
+  '$screen_content':'newui_codex.screen_content',
+  modifications:[{array_name:'controls',operation:'insert_back',value:[{'newui_codex_root@newui_codex.codex_root':{}}]}],
+}});
 
 const geometry=(identifier,w,h,bones)=>({format_version:'1.16.0','minecraft:geometry':[{description:{identifier,texture_width:w,texture_height:h,visible_bounds_width:5,visible_bounds_height:5,visible_bounds_offset:[0,0,0]},bones}]});
 const frameBones=()=>[{name:'portrait_root',pivot:[0,0,0],rotation:[80,0,0]},{name:'book',parent:'portrait_root',pivot:[0,0,0]}];

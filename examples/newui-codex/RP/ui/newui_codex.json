@@ -2952,55 +2952,54 @@
         "vanilla@npc_interact.npc_screen_contents": {
           "bindings": [
             {
-              "binding_name": "#title_text",
-              "binding_type": "global"
-            },
-            {
               "binding_name": "#dialogtext"
             },
             {
               "binding_type": "view",
-              "source_property_name": "(not ((#title_text = 'NEWUI_CODEX_V1') and ((not ((#dialogtext - '[NEWUI:C0:E00]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E01]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E02]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E03]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E04]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E05]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E06]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E07]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E08]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E09]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E10]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E11]') = #dialogtext)))))",
+              "source_property_name": "(not ((not ((#dialogtext - '[NEWUI:C0:E00]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E01]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E02]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E03]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E04]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E05]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E06]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E07]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E08]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E09]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E10]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E11]') = #dialogtext))))",
               "target_property_name": "#visible"
             }
           ]
+        }
+      }
+    ]
+  },
+  "codex_root": {
+    "type": "input_panel",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "alpha": 1,
+    "visible": true,
+    "enabled": true,
+    "propagate_alpha": true,
+    "layer": 10,
+    "bindings": [
+      {
+        "binding_name": "#dialogtext"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((not ((#dialogtext - '[NEWUI:C0:E00]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E01]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E02]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E03]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E04]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E05]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E06]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E07]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E08]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E09]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E10]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E11]') = #dialogtext)))",
+        "target_property_name": "#visible"
+      }
+    ],
+    "controls": [
+      {
+        "backdrop": {
+          "type": "image",
+          "texture": "textures/newui/ui/shade",
+          "size": [
+            "100%",
+            "100%"
+          ],
+          "alpha": 0.58,
+          "layer": 0
         }
       },
       {
-        "codex": {
-          "type": "panel",
-          "bindings": [
-            {
-              "binding_name": "#title_text",
-              "binding_type": "global"
-            },
-            {
-              "binding_name": "#dialogtext"
-            },
-            {
-              "binding_type": "view",
-              "source_property_name": "((#title_text = 'NEWUI_CODEX_V1') and ((not ((#dialogtext - '[NEWUI:C0:E00]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E01]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E02]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C0:E03]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E04]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E05]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E06]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C1:E07]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E08]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E09]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E10]') = #dialogtext)) or (not ((#dialogtext - '[NEWUI:C2:E11]') = #dialogtext))))",
-              "target_property_name": "#visible"
-            }
-          ],
-          "controls": [
-            {
-              "backdrop": {
-                "type": "image",
-                "texture": "textures/newui/ui/shade",
-                "size": [
-                  "100%",
-                  "100%"
-                ],
-                "alpha": 0.58,
-                "layer": 0
-              }
-            },
-            {
-              "book@newui_codex.book": {}
-            }
-          ]
-        }
+        "book@newui_codex.book": {}
       }
     ]
   }
