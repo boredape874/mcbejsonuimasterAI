@@ -1,0 +1,213 @@
+{
+  "format_version": "1.16.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.newui.codex_cover",
+        "texture_width": 32,
+        "texture_height": 32,
+        "visible_bounds_width": 5,
+        "visible_bounds_height": 5,
+        "visible_bounds_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "portrait_root",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            80,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "book",
+          "parent": "portrait_root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "left_cover",
+          "parent": "book",
+          "pivot": [
+            0,
+            -0.4,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -16.8,
+                -0.65,
+                -10.6
+              ],
+              "size": [
+                16.8,
+                0.5,
+                21.2
+              ],
+              "uv": {
+                "up": {
+                  "uv": [
+                    0,
+                    0
+                  ],
+                  "uv_size": [
+                    32,
+                    32
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    32,
+                    32
+                  ],
+                  "uv_size": [
+                    -32,
+                    -32
+                  ]
+                },
+                "north": {
+                  "uv": [
+                    0,
+                    0
+                  ],
+                  "uv_size": [
+                    32,
+                    2
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    0,
+                    30
+                  ],
+                  "uv_size": [
+                    32,
+                    2
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    0,
+                    0
+                  ],
+                  "uv_size": [
+                    2,
+                    32
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    30,
+                    0
+                  ],
+                  "uv_size": [
+                    2,
+                    32
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "right_cover",
+          "parent": "book",
+          "pivot": [
+            0,
+            -0.4,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0,
+                -0.65,
+                -10.6
+              ],
+              "size": [
+                16.8,
+                0.5,
+                21.2
+              ],
+              "uv": {
+                "up": {
+                  "uv": [
+                    0,
+                    0
+                  ],
+                  "uv_size": [
+                    32,
+                    32
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    32,
+                    32
+                  ],
+                  "uv_size": [
+                    -32,
+                    -32
+                  ]
+                },
+                "north": {
+                  "uv": [
+                    0,
+                    0
+                  ],
+                  "uv_size": [
+                    32,
+                    2
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    0,
+                    30
+                  ],
+                  "uv_size": [
+                    32,
+                    2
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    0,
+                    0
+                  ],
+                  "uv_size": [
+                    2,
+                    32
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    30,
+                    0
+                  ],
+                  "uv_size": [
+                    2,
+                    32
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

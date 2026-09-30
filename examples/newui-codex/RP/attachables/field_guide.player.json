@@ -1,0 +1,45 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:attachable": {
+    "description": {
+      "identifier": "newui:field_guide.player",
+      "item": {
+        "newui:field_guide": "query.is_owner_identifier_any('minecraft:player')"
+      },
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/newui/cover"
+      },
+      "geometry": {
+        "default": "geometry.newui.field_guide"
+      },
+      "animations": {
+        "main_first": "animation.newui.field_guide.main_first",
+        "off_first": "animation.newui.field_guide.off_first",
+        "main_third": "animation.newui.field_guide.main_third",
+        "off_third": "animation.newui.field_guide.off_third"
+      },
+      "scripts": {
+        "animate": [
+          {
+            "main_first": "context.is_first_person && context.item_slot == 'main_hand'"
+          },
+          {
+            "off_first": "context.is_first_person && context.item_slot == 'off_hand'"
+          },
+          {
+            "main_third": "!context.is_first_person && context.item_slot == 'main_hand'"
+          },
+          {
+            "off_third": "!context.is_first_person && context.item_slot == 'off_hand'"
+          }
+        ]
+      },
+      "render_controllers": [
+        "controller.render.newui.field_guide"
+      ]
+    }
+  }
+}

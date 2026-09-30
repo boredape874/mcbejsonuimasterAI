@@ -1,0 +1,41 @@
+screen: newui_codex_layout
+base_resolution: [1280, 720]
+gui_scale: 3
+root:
+  size: [320, 210]
+  anchor: center
+  pos: [0, -10]
+elements:
+  - {id: tab0, kind: button, pos: [58, 5], size: [64, 20]}
+  - {id: tab1, kind: button, pos: [128, 5], size: [64, 20]}
+  - {id: tab2, kind: button, pos: [198, 5], size: [64, 20]}
+  - {id: heading, kind: label, pos: [28, 38], size: [112, 14], props: {text: "작은 세계 탐험 도감", font_scale_factor: 0.8, font_size: normal}}
+  - {id: card0, kind: button, pos: [28, 61], size: [52, 48]}
+  - {id: card1, kind: button, pos: [88, 61], size: [52, 48]}
+  - {id: card2, kind: button, pos: [28, 115], size: [52, 48]}
+  - {id: card3, kind: button, pos: [88, 115], size: [52, 48]}
+  - {id: page_info, kind: label, pos: [28, 163], size: [112, 12], props: {text: "생물 01–04 / 12", font_scale_factor: 0.8, font_size: normal}}
+  - {id: detail_icon, kind: image, pos: [204, 47], size: [64, 64], props: {texture: "textures/newui/icons/fox"}}
+  - {id: detail_name, kind: label, pos: [177, 117], size: [118, 16], props: {text: "발광 오징어", text_alignment: center, font_size: normal, font_scale_factor: 1.0}}
+  - {id: detail_habitat, kind: label, pos: [177, 136], size: [118, 12], props: {text: "무성한 동굴 · 물", text_alignment: center, font_size: normal, font_scale_factor: 0.8}}
+  - {id: detail_body, kind: label, pos: [177, 149], size: [118, 34], props: {text: "물속의 작은 탐험가.\n머리 양옆 아가미가\n아주 매력적이에요.", font_size: normal, font_scale_factor: 0.8}}
+  - {id: prev, kind: button, pos: [25, 187], size: [48, 20]}
+  - {id: close, kind: button, pos: [122, 187], size: [76, 20]}
+  - {id: next, kind: button, pos: [247, 187], size: [48, 20]}
+constraints:
+  - {op: same_size, ids: [tab0, tab1, tab2]}
+  - {op: equal_gap_x, ids: [tab0, tab1, tab2], gap: 6}
+  - {op: center_group_x, ids: [tab0, tab1, tab2]}
+  - {op: align_y, ids: [tab0, tab1, tab2], edge: start}
+  - {op: same_size, ids: [card0, card1, card2, card3]}
+  - {op: edge_offset, a: "card0.right", b: "card1.left", delta: -8}
+  - {op: edge_offset, a: "card2.right", b: "card3.left", delta: -8}
+  - {op: edge_offset, a: "card0.bottom", b: "card2.top", delta: -6}
+  - {op: edge_offset, a: "card1.bottom", b: "card3.top", delta: -6}
+  - {op: align_y, ids: [card0, card1], edge: start}
+  - {op: align_y, ids: [card2, card3], edge: start}
+  - {op: align_x, ids: [heading, card0, card2, page_info], edge: start}
+  - {op: align_x, ids: [detail_name, detail_habitat, detail_body], edge: start}
+  - {op: same_size, ids: [prev, next]}
+  - {op: symmetric_x, ids: [prev, next]}
+  - {op: align_y, ids: [prev, close, next], edge: start}

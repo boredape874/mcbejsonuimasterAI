@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="300" viewBox="0 0 1080 300" role="img" aria-labelledby="title desc">
+  <title id="title">MCBE JSON UI Master AI</title>
+  <desc id="desc">Skills and local tools for JSON UI, Attachables and GeoUI. Diagrams illustrate the surfaces; they are not game screenshots.</desc>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#a9c4d3" stroke-opacity=".055"/>
+    </pattern>
+  </defs>
+  <rect width="1080" height="300" rx="16" fill="#10222d"/>
+  <rect width="1080" height="300" rx="16" fill="url(#grid)"/>
+  <path d="M0 280H1080" stroke="#68dcb2" stroke-width="2" stroke-opacity=".24"/>
+  <g font-family="Segoe UI,Arial,sans-serif">
+    <rect x="42" y="34" width="175" height="25" rx="5" fill="#203d45"/>
+    <text x="55" y="51" font-size="11" font-weight="700" letter-spacing="1.7" fill="#9be8c7">MINECRAFT BEDROCK</text>
+    <text x="40" y="112" font-size="41" font-weight="700" letter-spacing="-.8" fill="#f1f6f4">MCBE JSON UI</text>
+    <text x="40" y="159" font-size="41" font-weight="700" letter-spacing="-.8" fill="#91e6be">MASTER AI</text>
+    <text x="42" y="200" font-size="16" fill="#c3d5dd">Scoped skills. Local tools. Traceable sources.</text>
+    <text x="42" y="239" font-size="11" letter-spacing="1.4" fill="#8faab8">RESOURCE PACKS + BEHAVIOR PACKS</text>
+    <g transform="translate(547 43)">
+      <rect width="146" height="210" rx="10" fill="#17323f" stroke="#30515e"/>
+      <text x="14" y="26" font-size="10" letter-spacing="1.5" fill="#77bfcf">01 / SCREEN</text>
+      <rect x="17" y="46" width="112" height="103" rx="6" fill="#10232d" stroke="#6395a4"/>
+      <rect x="27" y="58" width="45" height="7" rx="2" fill="#75c7d7"/>
+      <rect x="27" y="74" width="91" height="5" rx="2" fill="#365665"/>
+      <rect x="27" y="86" width="68" height="5" rx="2" fill="#365665"/>
+      <rect x="27" y="108" width="41" height="26" rx="4" fill="#78cedb"/>
+      <rect x="75" y="108" width="43" height="26" rx="4" fill="#234755" stroke="#508293"/>
+      <text x="17" y="177" font-size="18" font-weight="600" fill="#ecf5f6">JSON UI</text>
+      <text x="17" y="194" font-size="10" fill="#98b5c2">Layout · bindings · input</text>
+    </g>
+    <g transform="translate(708 43)">
+      <rect width="146" height="210" rx="10" fill="#263b3b" stroke="#51615a"/>
+      <text x="14" y="26" font-size="10" letter-spacing="1.5" fill="#e0c894">02 / EQUIPMENT</text>
+      <path d="M24 52L117 66L115 139L22 125Z" fill="#cfb780" stroke="#f4dcaa" stroke-width="2"/>
+      <path d="M43 70L66 74L66 91L87 94L87 118" fill="none" stroke="#688967" stroke-width="12"/>
+      <path d="M40 111L72 95L99 106" fill="none" stroke="#fcf0c9" stroke-width="3" stroke-dasharray="4 4"/>
+      <path d="M91 74L99 79L94 88L85 83Z" fill="#495e58"/>
+      <circle cx="114" cy="138" r="5" fill="#14292c" stroke="#efcf91" stroke-width="2"/>
+      <path d="M114 144V154" stroke="#efcf91" stroke-width="2"/>
+      <text x="17" y="177" font-size="18" font-weight="600" fill="#f6f0de">Attachables</text>
+      <text x="17" y="194" font-size="10" fill="#bcbca7">Items · poses · assets</text>
+    </g>
+    <g transform="translate(869 43)">
+      <rect width="168" height="210" rx="10" fill="#293044" stroke="#505972"/>
+      <text x="14" y="26" font-size="10" letter-spacing="1.5" fill="#c0b9ee">03 / MODEL UI</text>
+      <path d="M35 72L111 53L135 73L59 94Z" fill="#4b4b69" stroke="#a79bd6"/>
+      <path d="M35 72V124L59 146V94Z" fill="#353e59" stroke="#a79bd6"/>
+      <path d="M59 94L135 73V125L59 146Z" fill="#646083" stroke="#c5b8ec"/>
+      <path d="M72 104L121 91M72 116L105 107M72 128L113 117" stroke="#ddd3f6" stroke-width="4"/>
+      <circle cx="35" cy="72" r="4" fill="#dbd0f8"/>
+      <circle cx="135" cy="73" r="4" fill="#dbd0f8"/>
+      <circle cx="59" cy="146" r="4" fill="#dbd0f8"/>
+      <text x="17" y="177" font-size="18" font-weight="600" fill="#f2edff">GeoUI</text>
+      <text x="17" y="194" font-size="10" fill="#b5b4cf">Projects · state · rendering</text>
+    </g>
+  </g>
+</svg>

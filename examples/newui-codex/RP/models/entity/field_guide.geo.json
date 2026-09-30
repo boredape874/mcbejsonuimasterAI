@@ -1,0 +1,106 @@
+{
+  "format_version": "1.16.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.newui.field_guide",
+        "texture_width": 32,
+        "texture_height": 32,
+        "visible_bounds_width": 5,
+        "visible_bounds_height": 5,
+        "visible_bounds_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "held_book",
+          "binding": "q.item_slot_to_bone_name(context.item_slot)",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                0,
+                -0.4
+              ],
+              "size": [
+                6,
+                8,
+                0.8
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    0,
+                    0
+                  ],
+                  "uv_size": [
+                    32,
+                    32
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    32,
+                    0
+                  ],
+                  "uv_size": [
+                    -32,
+                    32
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    0,
+                    0
+                  ],
+                  "uv_size": [
+                    3,
+                    32
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    29,
+                    0
+                  ],
+                  "uv_size": [
+                    3,
+                    32
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    0,
+                    0
+                  ],
+                  "uv_size": [
+                    32,
+                    3
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    0,
+                    29
+                  ],
+                  "uv_size": [
+                    32,
+                    3
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

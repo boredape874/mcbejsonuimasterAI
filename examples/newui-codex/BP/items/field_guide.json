@@ -1,0 +1,22 @@
+{
+  "format_version": "1.21.100",
+  "minecraft:item": {
+    "description": {
+      "identifier": "newui:field_guide",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:display_name": {
+        "value": "작은 세계 탐험 도감"
+      },
+      "minecraft:icon": "newui:field_guide",
+      "minecraft:max_stack_size": 1,
+      "minecraft:hand_equipped": true,
+      "minecraft:allow_off_hand": true,
+      "minecraft:interact_button": true,
+      "newui:open_codex": {}
+    }
+  }
+}

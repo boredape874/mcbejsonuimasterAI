@@ -7,6 +7,7 @@
 | 여러 RP/BP 기능 | `mcbe-resource-pack-master` | 매니페스트·팩 순서·데이터 소유자 |
 | 장착 아이템 모델 UI | `mcbe-attachables-ui` | item 선택 → attachable → 리소스·시점 |
 | GeouiStudio/플레이어 모델 UI | `mcbe-geo-ui` | player entity → 렌더러·HUD → 동기화 속성 |
+| NPC 초상화 기반 책·도감 | `mcbe-geo-ui`의 NPC portrait 참조 | NPC scene → skins collection → 모델과 native 버튼 |
 | 머테리얼·아웃라인·PBR | `mcbe-resource-pack-rendering` | 별칭·상속·텍스처 레이어·그래픽 모드 |
 
 ## 요청한 부분만 읽기

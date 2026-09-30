@@ -1,0 +1,54 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "NewUI · 작은 세계 탐험 도감 BP",
+    "description": "Original NPC dialogue and held guide example. Static checks do not establish target-client behavior.",
+    "uuid": "f7c1d546-8d1d-4c0f-9495-563a510fcb24",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      100
+    ]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "4df246af-91c7-4cdb-82a2-489c69371680",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "script",
+      "language": "javascript",
+      "uuid": "2809c16d-18cb-4d1e-b224-8ba26180c685",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "entry": "scripts/main.js"
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "6b882368-c6c6-4275-8c2b-588a57a3f8b1",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "module_name": "@minecraft/server",
+      "version": "2.1.0"
+    }
+  ]
+}
