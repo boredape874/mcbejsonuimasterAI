@@ -146,6 +146,10 @@ export async function validateUiFile(ui, filePath) {
   const allowedProperties = new Set(Object.values(spec.properties).flat());
   for (const [key, value] of Object.entries(ui)) {
     if (key === "namespace") continue;
+    // Top-level "$name" entries are file-scoped variable definitions (vanilla
+    // _global_variables.json stores colors as arrays there). They are values,
+    // not controls, so their keys/indices must not be reported as properties.
+    if (key.startsWith("$") || Array.isArray(value)) continue;
     if (value && typeof value === "object") {
       validateNode(key, value, filePath, issues, spec, allowedProperties);
     }

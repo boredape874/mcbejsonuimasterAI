@@ -208,9 +208,10 @@
       "purpose": "Verify vanilla screen and texture paths against local evidence.",
       "toolSelections": [
         { "id": "vanilla.index", "phase": "index", "required": false, "reason": "Refresh local evidence when sources or schema changed." },
+        { "id": "vanilla.samples-sync", "phase": "index", "required": false, "reason": "Verify the committed official sample files against their pinned lock before citing vanilla structure; resync only from an existing local mirror." },
         { "id": "pack.validate", "phase": "target", "required": false, "reason": "Confirm the selected target RP can resolve its references." }
       ],
-      "workflow": ["vanilla.index", "pack.validate"],
+      "workflow": ["vanilla.index", "vanilla.samples-sync", "pack.validate"],
       "successCriteria": ["Every vanilla path has a source and file evidence record."],
       "boundaries": ["Index presence does not mean the target RP owns a custom texture."]
     },
@@ -328,11 +329,12 @@
         { "id": "source.scan", "phase": "collect", "required": false, "reason": "Collect UI-only local evidence." },
         { "id": "design.search", "phase": "query", "required": false, "reason": "Retrieve catalog evidence rather than rely on memory." },
         { "id": "vanilla.index", "phase": "vanilla", "required": false, "reason": "Refresh local vanilla evidence." },
+        { "id": "vanilla.samples-sync", "phase": "fixtures", "required": false, "reason": "Check or refresh the pinned official sample files and lock before using them as vanilla evidence; needs an existing local mirror to resync." },
         { "id": "public.audit", "phase": "release", "required": false, "reason": "Verify that public research outputs do not expose local or restricted source data." },
         { "id": "design.sources", "phase": "source-evidence", "required": false, "when": [ "source-download", "source-integrity" ], "skipWhen": [ "local-edit-only" ], "reason": "Plan or verify one pinned source; explicit download stores original evidence without running code.", "optIn": true },
         { "id": "research.context", "phase": "inspect", "required": false, "when": [ "research-context" ], "optIn": true, "reason": "Retrieve one reviewed research method and its limits." }
       ],
-      "workflow": [ "design.library", "research.sync", "upstream.compat", "upstream.compat.capture", "sources.validate", "source.scan", "design.search", "vanilla.index", "public.audit", "design.sources", "research.context" ],
+      "workflow": [ "design.library", "research.sync", "upstream.compat", "upstream.compat.capture", "sources.validate", "source.scan", "design.search", "vanilla.index", "vanilla.samples-sync", "public.audit", "design.sources", "research.context" ],
       "successCriteria": [ "Confirmed facts, inference, and unresolved claims are labeled." ],
       "boundaries": [ "Do not redistribute local-only or unknown-license source content.", "External editors are compatibility fixtures, not Bedrock runtime or visual authorities." ],
       "contextByNeed": { "pixel-art-method": [ "design.library" ], "research-context": [ "research.context" ] }

@@ -1,7 +1,7 @@
 import { readdir, stat } from "node:fs/promises";
 import { basename, dirname, extname, isAbsolute, relative, resolve, sep } from "node:path";
 import { exists, readJson } from "./fsx.mjs";
-import { readUiJson, JsonDialectError } from "./json-dialect.mjs";
+import { readUiJson, JsonDialectError, DEFAULT_RUNTIME_DIALECT, DEFAULT_VANILLA_PROFILE } from "./json-dialect.mjs";
 import { PATHS } from "./paths.mjs";
 import { partition, validateUiFile } from "./ui-validator.mjs";
 
@@ -105,8 +105,8 @@ export async function validatePack(inputPath, options = {}) {
   const issues = [];
   const textureRefs = new Set();
   const parsedFiles = new Map();
-  const dialect = options.dialect || "bedrock-json@1.21.100";
-  const vanillaProfileId = options.vanillaProfile || "bedrock-1.21.100";
+  const dialect = options.dialect || DEFAULT_RUNTIME_DIALECT;
+  const vanillaProfileId = options.vanillaProfile || DEFAULT_VANILLA_PROFILE;
   let vanillaProfile = null;
   try {
     const profiles = await readJson(resolve(PATHS.root, "data", "vanilla-screen-profiles.json"));
@@ -130,7 +130,9 @@ export async function validatePack(inputPath, options = {}) {
       parsedFiles.set(file, ui);
       collectTextureRefs(ui, textureRefs);
       if (basename(file) !== "_ui_defs.json") {
-        if (typeof ui.namespace !== "string" || !ui.namespace) {
+        // Vanilla _global_variables.json holds only "$name" definitions and
+        // declares no namespace (confirmed in bedrock-samples v1.26.50.4).
+        if (basename(file) !== "_global_variables.json" && (typeof ui.namespace !== "string" || !ui.namespace)) {
           issues.push({ severity: "error", path: filePath, message: "JSON UI file is missing a namespace" });
         }
         issues.push(...await validateUiFile(ui, filePath));

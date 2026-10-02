@@ -1011,7 +1011,8 @@
               "chat_text@chat_label": {
                 "anchor_from": "top_left",
                 "anchor_to": "top_left",
-                "offset": [ 2, 0 ]
+                "offset": [ 2, 0 ],
+                "size": [ "100% - 5px", "default" ]
               }
             }
           ]
@@ -1129,6 +1130,7 @@
                 "text_alignment": "center",
                 "anchor_from": "center",
                 "anchor_to": "center",
+                "enable_profanity_filter": false,
                 "anims": [
                   "@hud.anim_subtitle_txt_wait"
                 ]
@@ -1151,8 +1153,9 @@
 
   "subtitle_panel": {
         "type": "panel",
-        "anchor_from": "bottom_right",
-        "anchor_to": "bottom_right",
+        "anchor_from": "$subtitle_panel_anchor",
+        "anchor_to": "$subtitle_panel_anchor",
+        "$subtitle_panel_anchor|default": "top_right",
         "size": [ "100%", "100%c" ],
         "max_size": [ "100%", "30%" ],
 
@@ -1160,8 +1163,8 @@
             {
                 "stack_panel": {
                     "type": "stack_panel",
-                    "anchor_from": "bottom_right",
-                    "anchor_to": "bottom_right",
+                    "anchor_from": "$subtitle_panel_anchor",
+                    "anchor_to": "$subtitle_panel_anchor",
                     "factory": {
                         "name": "subtitle_item_factory",
                         "max_children_size": 50,
@@ -1173,6 +1176,20 @@
             }
         ]
     },
+
+  "subtitle_container_content": {
+    "type": "panel",
+    "size": [ "30%", "100%" ],
+    "anchor_from": "$subtitle_anchor",
+    "anchor_to": "$subtitle_anchor",
+    "$subtitle_anchor|default": "top_right",
+    "$subtitle_panel_anchor|default": "top_right",
+    "offset": "$subtitle_offset",
+    "$subtitle_offset|default": [ 0, 50 ],
+    "controls": [
+      { "subtitle_panel@hud.subtitle_panel": {} }
+    ]
+  },
 
   "item_durability@common.durability_bar": {
     "$durability_bar_required|default": true,
@@ -1938,6 +1955,8 @@
 
     "$show_text_background|default": false,
 
+    "$localize|default": true,
+
     "$text_color|default": "$tool_tip_text",
     "$text_binding|default": "#item_text",
 
@@ -1974,6 +1993,7 @@
                       "layer": 31,
                       "color": "$text_color",
                       "text": "#text",
+                      "localize": "$localize",
                       "alpha": "@hud.anim_item_name_text_alpha_in",
                       "shadow": true,
                       // Disable profanity filter for this control so that
@@ -2980,28 +3000,28 @@
               "emote_tip_0@hud.emote_tip": {
                 "$keyboard_keyname": "keyboard.keyname.1",
                 "$emote_tip_description": "#button_emote_0_description",
-                "$gamepad_helper_button_name": "common.gamepad_helper_y"
+                "$gamepad_helper_button_name": "common.gamepad_helper_face_up"
               }
             },
             {
               "emote_tip_1@hud.emote_tip": {
                 "$keyboard_keyname": "keyboard.keyname.2",
                 "$emote_tip_description": "#button_emote_1_description",
-                "$gamepad_helper_button_name": "common.gamepad_helper_b"
+                "$gamepad_helper_button_name": "common.gamepad_helper_face_right"
               }
             },
             {
               "emote_tip_2@hud.emote_tip": {
                 "$keyboard_keyname": "keyboard.keyname.3",
                 "$emote_tip_description": "#button_emote_2_description",
-                "$gamepad_helper_button_name": "common.gamepad_helper_a"
+                "$gamepad_helper_button_name": "common.gamepad_helper_face_down"
               }
             },
             {
               "emote_tip_3@hud.emote_tip": {
                 "$keyboard_keyname": "keyboard.keyname.4",
                 "$emote_tip_description": "#button_emote_3_description",
-                "$gamepad_helper_button_name": "common.gamepad_helper_x"
+                "$gamepad_helper_button_name": "common.gamepad_helper_face_left"
               }
             }
           ]
@@ -3312,22 +3332,17 @@
       {
         "right_helpers@hud.right_helpers": {}
       },
-	  { 
-		"subtitle_stack": {
-          "type": "stack_panel",
-          "orientation": "vertical",
-          "size": [ "30%", "100%" ],
-          "anchor_from": "bottom_right",
-          "anchor_to": "bottom_right",
-          "controls": [
-            {
-              "subtitle_padding": {
-                "type": "panel",
-                "size": [ 0, 50 ]
-              }
-            },
-			{ "subtitle_panel@hud.subtitle_panel": {} }
-		  ]
+	  {
+		"subtitle_container_host": {
+          "type": "panel",
+          "size": [ "100%", "100%" ],
+          "factory": {
+            "name": "subtitle_container_factory",
+            "max_children_size": 1,
+            "control_ids": {
+              "subtitle_container": "subtitle_container@hud.subtitle_container_content"
+            }
+          }
 		}
 	  },
       {
@@ -3421,16 +3436,6 @@
         }
       },
       { "vignette_rend@vignette_renderer": {} },
-      {
-        "curor_rend@cursor_renderer": {
-          "bindings": [
-            {
-              "binding_name": "#show_cursor",
-              "binding_name_override": "#visible"
-            }
-          ]
-        }
-      },
       {
         "game_tip@game_tip.game_tip_factory": {}
       },

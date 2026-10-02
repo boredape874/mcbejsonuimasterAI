@@ -1,0 +1,107 @@
+{
+  "schema": "mcbe-jsonui-ai-kit/bedrock-samples-ui-lock@1",
+  "purpose": "Pinned upstream revision of the selected official bedrock-samples UI files committed under references/official/bedrock-samples-ui. Regenerate with node tools/sync-bedrock-samples-ui.mjs; verify with --check.",
+  "syncedAt": "2026-10-02T23:07:59.051Z",
+  "upstream": {
+    "url": "https://github.com/Mojang/bedrock-samples",
+    "ref": "main",
+    "branch": "main",
+    "tag": "v1.26.50.4",
+    "commit": "46ba6ea985fb5a92d79a9419198f10dda14c199d",
+    "commitDate": "2026-09-16T00:27:23-04:00",
+    "version": {
+      "version": "1.26.50.4",
+      "date": "15-09-2026"
+    },
+    "minEngineVersion": [
+      1,
+      26,
+      50
+    ]
+  },
+  "previous": {
+    "commit": "f5b651000f52b66334c968f3ccf1aca7950cd6ee",
+    "tag": "v1.26.10.4",
+    "version": {
+      "version": "1.26.10.4",
+      "date": "24-03-2026"
+    },
+    "syncedAt": "2026-04-25",
+    "note": "Identified by hashing the previously committed files against upstream tags; the committed copy matched v1.26.10.4 (identical UI files to v1.26.20.26)."
+  },
+  "outputDir": "references/official/bedrock-samples-ui",
+  "files": [
+    {
+      "path": "_ui_defs.json",
+      "upstreamPath": "resource_pack/ui/_ui_defs.json",
+      "sha256": "173e108309a10293b6f099cf6ccbd3a84f1da3bee5fd7573140cff67160f0dde",
+      "bytes": 7547
+    },
+    {
+      "path": "_global_variables.json",
+      "upstreamPath": "resource_pack/ui/_global_variables.json",
+      "sha256": "ea39206de2c7b6f157def5cdf1662767c0ccd9560dfafb1378c3c364b236f69b",
+      "bytes": 20210
+    },
+    {
+      "path": "hud_screen.json",
+      "upstreamPath": "resource_pack/ui/hud_screen.json",
+      "sha256": "2daad9e78e49ee68042d6d0db9153aad0c33c266ba513a2a737b0818e4cfefe8",
+      "bytes": 118620
+    },
+    {
+      "path": "chat_screen.json",
+      "upstreamPath": "resource_pack/ui/chat_screen.json",
+      "sha256": "c9af255c5072ee3ee1cc3cd694f401cf7ba78428e869592868755b4c51d979cc",
+      "bytes": 29440
+    },
+    {
+      "path": "server_form.json",
+      "upstreamPath": "resource_pack/ui/server_form.json",
+      "sha256": "950e97f37ee1770fcd64d43463f5d34585f0fc7a0513b1387b4336dbadf7f7aa",
+      "bytes": 19955
+    },
+    {
+      "path": "inventory_screen.json",
+      "upstreamPath": "resource_pack/ui/inventory_screen.json",
+      "sha256": "10e72254bac2a95801b61cb229ad43ab793ec585a52aee7e27791e79ab6d9f80",
+      "bytes": 84539
+    },
+    {
+      "path": "inventory_screen_pocket.json",
+      "upstreamPath": "resource_pack/ui/inventory_screen_pocket.json",
+      "sha256": "2652ac6ea429606650f0e6cbc959e9fdc0bb9d1d7b004faf4d88a1431e585d3d",
+      "bytes": 47497
+    },
+    {
+      "path": "ui_common.json",
+      "upstreamPath": "resource_pack/ui/ui_common.json",
+      "sha256": "8c17795cca5b8c56d72976c7176f7c3586b144b55474eb87b146e161d19f817f",
+      "bytes": 243795
+    },
+    {
+      "path": "chest_screen.json",
+      "upstreamPath": "resource_pack/ui/chest_screen.json",
+      "sha256": "421885e0928a2db41a2850dc2fafcd2faba1cf3639eb90eb3e630f0742b78ee5",
+      "bytes": 8642
+    },
+    {
+      "path": "furnace_screen.json",
+      "upstreamPath": "resource_pack/ui/furnace_screen.json",
+      "sha256": "ca690949189fc27f1b9169c21ea3757bfd16526ff0908ddac3a89741270fe038",
+      "bytes": 63573
+    },
+    {
+      "path": "trade_2_screen.json",
+      "upstreamPath": "resource_pack/ui/trade_2_screen.json",
+      "sha256": "1fb70baa7d454160bb2b65de49e724674a4533a883ee951433eaa5d995670ed9",
+      "bytes": 48570
+    },
+    {
+      "path": "command_block_screen.json",
+      "upstreamPath": "resource_pack/ui/command_block_screen.json",
+      "sha256": "096add8ce9ced4de5da048411a0fcce42f712da2973d53fe70d9e95dc2a77514",
+      "bytes": 37370
+    }
+  ]
+}

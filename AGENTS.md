@@ -91,6 +91,7 @@ Use the existing routing already in this repo. Suggested entry points:
 - Choose authority by claim: official documentation and pinned samples establish documented names and versioned examples; the target client and Content Log establish runtime behavior. Local docs and source packs provide patterns, and tools provide bounded structural/layout evidence. Resolve conflicts using the underlying versioned evidence, not an unconditional document ranking. See `docs/04-source-priority.md`.
 - Never invent vanilla texture paths. Verify against `references/upstreams/MCBVanillaResourcePack` (mirror) or `vanilla-index/textures.json`.
 - Never invent bindings or hardcoded names. Verify against `docs/19` and `docs/34`.
+- Vanilla control, binding, and screen-file names come from the pinned official samples (`references/official/bedrock-samples-ui`, revision in `references/official/bedrock-samples-ui.lock.json`); `node tools/sync-bedrock-samples-ui.mjs --check` must pass before citing them, and `docs/83-vanilla-ui-1.26.50-diff.md` lists what moved in the latest pin.
 - For `Type not specified` inside a modification, trace the registered base, matching resource path, target array ownership and inheritance before choosing a workaround. Cross-namespace `@` alone is not a proven cause. Preserve the vanilla form shell and both form routes; see `docs/26-common-failure-modes.md`.
 - Never bulk-rewrite `ui.json` if a small patch works.
 - Label claims in your reply per `docs/22-ai-response-quality.md`.
@@ -116,4 +117,5 @@ When work is done, the AI should hand back:
 - `docs/45-jsonui-spec-and-presets.md` — `data/jsonui-spec.json` + `data/presets-catalog.json` and how the validator + IR `extends` use them
 - `docs/46-tools-output-to-handcrafted-ui.md` — when to stop at compiler output vs. when to hand-finish the JSON UI; checklist before declaring done
 - `docs/67-production-rpg-ui-architecture.md` — RPG HUD/menu design, protocol, performance, and pack ownership rules
+- `docs/83-vanilla-ui-1.26.50-diff.md` — what changed between the previous and current pinned official sample revision (screens, bindings, spec additions, preview signals) and how to resync
 - `skills/mcbe-json-ui-self-bootstrap/SKILL.md`, `skills/mcbe-json-ui-ir-authoring/SKILL.md`, `skills/mcbe-json-ui-tools-runner/SKILL.md`, `skills/mcbe-json-ui-vanilla-presets/SKILL.md`

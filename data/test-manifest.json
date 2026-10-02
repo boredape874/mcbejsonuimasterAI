@@ -50,6 +50,8 @@
     { "id": "cli-result-contracts", "argv": ["tests/cli-result-contracts.mjs"] },
     { "id": "skill-routing-sync", "argv": ["tests/skill-routing-and-sync.mjs"] },
     { "id": "server-form-contract", "argv": ["tests/server-form-contract.mjs"] },
+    { "id": "official-samples-lock", "argv": ["tests/official-samples-lock.mjs"] },
+    { "id": "jsonui-spec-vanilla-coverage", "argv": ["tests/jsonui-spec-vanilla-coverage.mjs"] },
     { "id": "dialect-matrix", "argv": ["tests/dialect-matrix.mjs"] },
     { "id": "dialect-pack-registration", "argv": ["tests/dialect-pack-registration.mjs"] },
     { "id": "content-log-signatures", "argv": ["tests/content-log-signatures.mjs"] },

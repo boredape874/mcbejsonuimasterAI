@@ -128,7 +128,7 @@ Important:
 | `text` | string |
 | `color`, `locked_color` | vector3 or string |
 | `shadow` | boolean |
-| `font_size` | `small`, `normal`, `large`, `extra_large` |
+| `font_size` | `small`, `normal`, `medium`, `large`, `extra_large` (`medium` occurs in vanilla 1.26.50 `csb_sections/csb_common.json`, `persona_SDL.json`) |
 | `font_scale_factor` | float |
 | `localize` | boolean |
 | `line_padding` | number |
@@ -203,6 +203,8 @@ grid_dimensions, maximum_grid_items, grid_dimension_binding,
 grid_rescaling_type, grid_fill_direction, precached_grid_item_count,
 grid_item_template
 ```
+
+Values confirmed in vanilla 1.26.50: `grid_rescaling_type` `none`, `horizontal`, `vertical` (`store_item_list_screen.json`); `grid_fill_direction` includes `vertical` (`chat_screen.json`, `hud_screen.json`).
 
 ### Stack Panel
 
@@ -318,7 +320,8 @@ vignette_renderer, name_tag_renderer, flying_item_renderer,
 inventory_item_renderer, credits_renderer, debug_screen_renderer,
 gradient_renderer, paper_doll_renderer, progress_bar_renderer,
 debug_overlay_renderer, background_renderer, bohr_model_renderer,
-experience_renderer, menu_background_renderer
+experience_renderer, menu_background_renderer,
+hotbar_slots_renderer (preview 1.26.60 only; absent from the stable sample)
 ```
 
 Renderer-specific fields can include:
@@ -379,8 +382,11 @@ tts_toggle_on, tts_toggle_off, tts_override_control_value,
 tts_inherit_siblings, tts_value_changed, ttsSectionContainer,
 tts_ignore_count, tts_skip_message, tts_value_order_priority,
 tts_play_on_unchanged_focus_control, tts_ignore_subsections,
+tts_skip_enumeration, tts_skip_children, ttsIgnoreChildrenEnumeration,
 text_tts, use_priority, priority
 ```
+
+`tts_skip_enumeration` and `ttsIgnoreChildrenEnumeration` entered the pinned sample files in 1.26.50 (`ui_common.json`, `inventory_screen.json`, `furnace_screen.json`); `tts_skip_children` occurs elsewhere in the same vanilla set. `data/jsonui-spec.json` must list every field in this catalogue that the pinned official samples use; `tests/jsonui-spec-vanilla-coverage.mjs` fails otherwise. The 1.26.50 additions are itemised in `docs/83-vanilla-ui-1.26.50-diff.md`.
 
 ## Practical AI Use
 

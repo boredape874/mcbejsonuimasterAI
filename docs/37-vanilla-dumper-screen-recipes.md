@@ -66,9 +66,25 @@ High-value recipes:
 
 | Recipe | Vanilla objects to inspect | Use |
 | --- | --- | --- |
-| animated top tabs | `tab_offset_anim`, `tab_wait_anim`, `top_tab` | tab strip animation |
+| top tabs with per-mode visibility | `top_tab`, `#construction_tab_visible`, `#equipment_tab_visible`, `#items_tab_visible`, `#nature_tab_visible` | tabbed screens whose tabs hide per game mode (1.26.50 removed the tab entrance animation from this file; see the furnace screen) |
+| TTS tab headers | `$toggle_tts_header`, `$toggle_tts_header_binding_type`, `#search_tab_tts` | accessible tab labels |
 | focus navigation | `focus_identifier`, `focus_change_left/right/up` in tab controls | keyboard/controller UX |
 | toggle group tabs | `toggle_group_forced_index`, `toggle_state_binding_name` | tabbed custom screens |
+
+## Furnace screen
+
+Source:
+
+- `references/official/bedrock-samples-ui/furnace_screen.json` (recipe book built in since 1.26.50)
+
+High-value recipes:
+
+| Recipe | Vanilla objects to inspect | Use |
+| --- | --- | --- |
+| animated top tabs | `tab_offset_anim`, `tab_wait_anim`, `top_tab@common_tabs.tab_top`, `food_tab`/`blocks_tab`/`items_tab`/`search_tab` | tab strip entrance animation (moved here from `inventory_screen.json`) |
+| filtered recipe grid | `filter_toggle@common_toggles.switch_toggle`, `scroll_grid`, `scroll_grid_panel`, `recipe_book_panel` | searchable item grids beside a workstation |
+| layout toggles | `recipe_book_layout_toggle@common.recipe_book_layout_toggle`, `survival_layout_toggle@common.survival_layout_toggle`, `toolbar_panel` | switching between grid and inventory layouts |
+| progress indicators | `furnace_arrow_full_image` (`#furnace_arrow_ratio`), `flame_full_image` (`clip_direction: down`) | arrow and flame fill |
 
 ## UI common
 

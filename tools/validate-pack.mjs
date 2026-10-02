@@ -2,6 +2,7 @@ import { resolve } from "node:path";
 import { log } from "./_lib/log.mjs";
 import { writeJson } from "./_lib/fsx.mjs";
 import { validatePack } from "./_lib/pack-validator.mjs";
+import { DEFAULT_RUNTIME_DIALECT, DEFAULT_VANILLA_PROFILE } from "./_lib/json-dialect.mjs";
 
 function parseArgs(argv) {
   const options = {
@@ -10,8 +11,8 @@ function parseArgs(argv) {
     allowMissingTextures: false,
     allowPartialUiDefs: false,
     strictWarnings: false,
-    dialect: "bedrock-json@1.21.100",
-    vanillaProfile: "bedrock-1.21.100",
+    dialect: DEFAULT_RUNTIME_DIALECT,
+    vanillaProfile: DEFAULT_VANILLA_PROFILE,
   };
   for (let index = 0; index < argv.length; index++) {
     const arg = argv[index];

@@ -85,6 +85,23 @@ Use cases:
 - player list overlays
 - scoreboard-like HUD systems
 
+## Names confirmed in bedrock-samples v1.26.50.4
+
+Confirmed from the pinned official files (`references/official/bedrock-samples-ui.lock.json`); runtime behavior not verified. Full context in `docs/83-vanilla-ui-1.26.50-diff.md`.
+
+| Name | Type | File | Note |
+| --- | --- | --- | --- |
+| `#construction_tab_visible`, `#equipment_tab_visible`, `#items_tab_visible`, `#nature_tab_visible` | global binding | `inventory_screen.json`, `inventory_screen_pocket.json` | per-mode tab visibility; replaces the removed tab factories |
+| `#search_tab_tts`, `#recipe_book_layout_toggle_tts`, `#survival_layout_toggle_tts`, `#pocket_crafting_tab_tts` | global binding | inventory screens | TTS headers via `$toggle_tts_header` |
+| `#custom_multiselect`, `#custom_multiselect_length` | collection `custom_form` | `server_form.json` | multiselect header toggle and option count |
+| `#custom_multiselect_toggled`, `#custom_multiselect_text` | collection `custom_multiselect` | `server_form.json` | per-option state and label; no public Script API sender in the pinned `@minecraft/server-ui` metadata |
+| `#controller_fixed_face_up/right/down/left_icon` | texture binding | `ui_common.json` | used by `common.gamepad_helper_face_*` |
+| `button.menu_inventory_exit` | button id | inventory screens | `button.menu_inventory_cancel` now maps here instead of `button.menu_exit` |
+| `#editor_chat_layout_active`, `#editor_chat_visible`, `#editor_chat_offset` | global binding | `hud_screen.json` | preview 1.26.60 only |
+| `#multiselect_option_text` | collection `custom_form` | `server_form.json` | preview 1.26.60 only |
+
+Removed in 1.26.50: the HUD root no longer contains `curor_rend@cursor_renderer` (`#show_cursor`), and `inventory_screen.json` no longer defines `tab_offset_anim`/`tab_wait_anim`.
+
 ## Practical workflow
 
 When a binding is needed:

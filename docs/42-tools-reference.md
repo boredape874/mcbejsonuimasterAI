@@ -52,6 +52,7 @@ Use only the stages needed by the task. The npm `skill:context` entry returns th
 | Layout pipeline | `npm run run -- <ir.yaml>` | `solved.json`, `ui.json`, and `report.json` |
 | Visual preview | `npm run preview -- <ui.json> [<solved.json>] [options]` | coordinates, unsupported-property report, state previews, and contact sheet |
 | Pack validation | `npm run validate:pack -- <pack-root> [options]` | `_ui_defs`, namespace, control, JSONC, and texture report |
+| Official sample sync | `npm run sync:bedrock-samples-ui -- [--check] [--ref <ref>]` | pinned upstream revision and per-file sha256 in `references/official/bedrock-samples-ui.lock.json` |
 | Public-release audit | `npm run audit:public -- [options]` | local path, private source, credential, framework, and redistribution leak findings |
 | Offline evaluation | `npm run eval:offline -- [options]` | deterministic fixed-task and golden-image report |
 | Runtime evidence gate | `npm run eval:live -- [options]` | status of real PC/touch screenshots and Bedrock content logs |
@@ -128,8 +129,11 @@ Low-level commands remain available for diagnosis:
 | `preview.diff` | `node tools/diff.mjs <target> <preview>` | coordinate or raster difference evidence |
 | `repository.audit` | `node tools/audit.mjs [--report <path>]` | repository links, JSON, skill, and script integrity |
 | `vanilla.index` | `node tools/build-vanilla-index.mjs [--force]` | local vanilla screen and texture evidence |
+| `vanilla.samples-sync` | `node tools/sync-bedrock-samples-ui.mjs [--check] [--mirror <path>] [--ref <name>]` | copy the selected official sample UI files from a local mirror, pin the revision, and verify drift offline |
 
 The Go solver remains geometry-only. YAML parsing, auto-sizing, compilation, validation, preview, and reports stay in Node. Both backends preserve descendant anchors when constraints move or resize their parents. Duplicate or reserved element IDs are rejected before solving. If the solver does not converge, `run` stops with exit code 7 and an `ok: false` report; it does not compile that layout.
+
+`validate-pack` defaults to the `bedrock-1.26.50` vanilla screen profile and the `bedrock-json@1.26.50` dialect: every file listed in the pinned vanilla `_ui_defs.json` (`data/vanilla-screen-profiles.json`, generated from `references/official/bedrock-samples-ui`) counts as a vanilla override that needs no custom registration. Pass `--vanilla-profile=bedrock-1.21.100 --dialect bedrock-json@1.21.100` to reproduce the earlier six-file gate. The parser rules of both dialects are identical; the ids only pin which sample set verified them.
 
 ## Single preview engine
 

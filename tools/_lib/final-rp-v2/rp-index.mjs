@@ -1,7 +1,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { join, resolve } from "node:path";
-import { parseUiSource } from "../json-dialect.mjs";
+import { parseUiSource, DEFAULT_RUNTIME_DIALECT } from "../json-dialect.mjs";
 import { validateUiFile } from "../ui-validator.mjs";
 
 const pointerEscape = value => value.replaceAll("~", "~0").replaceAll("/", "~1");
@@ -79,7 +79,7 @@ export function mergeResourcePackIndexes(lower, upper) {
 async function parseFile(file) {
   const bytes = await readFile(file);
   const text = bytes.toString("utf8").replace(/^\uFEFF/, "");
-  return { document: parseUiSource(text, { kind: "runtime", dialect: "bedrock-json@1.21.100" }).document, hash: hash(bytes) };
+  return { document: parseUiSource(text, { kind: "runtime", dialect: DEFAULT_RUNTIME_DIALECT }).document, hash: hash(bytes) };
 }
 
 export function provenanceTree(value, source, pointer = "") {

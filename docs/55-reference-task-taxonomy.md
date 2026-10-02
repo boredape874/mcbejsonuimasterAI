@@ -102,7 +102,7 @@ Do not start by opening every document. Use the smallest matching row.
 | UI file does not load | `docs/26-common-failure-modes.md` | `_ui_defs.json`, namespace, JSON syntax |
 | Element invisible | target file + vanilla reference | wrong binding, layer, size `[0,0]`, parent hidden |
 | Text clipped or ugly | `docs/54-visual-fit-and-reference-discipline.md` | font scale too large, no explicit label size |
-| Hotbar disappeared | vanilla `hud_screen.json` around hotbar | `hotbar_renderer` or `exp_progress_bar_and_hotbar` overridden |
+| Hotbar disappeared | vanilla `hud_screen.json` around hotbar | `hotbar_renderer` or `exp_progress_bar_and_hotbar` overridden; on preview 1.26.60 also `hotbar_slots_renderer` / `hotbar_grid_frame` |
 | Hunger/heart still visible | vanilla `hud_screen.json` renderer list | missing specific renderer override |
 | Progress bar reversed | animated bar reference | wrong `clip_ratio` polarity |
 | Chat moved wrong | vanilla `hud_screen.json` and `chat_screen.json` | wrong anchor/max size, chat stack conflict |

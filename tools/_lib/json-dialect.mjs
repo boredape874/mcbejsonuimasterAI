@@ -4,7 +4,17 @@ export const JSON_DIALECTS = Object.freeze({
   "strict-json": { id: "strict-json", verified: true, bom: false, comments: false, trailingCommas: false },
   "tooling-jsonc": { id: "tooling-jsonc", verified: true, bom: true, comments: true, trailingCommas: true },
   "bedrock-json@1.21.100": { id: "bedrock-json@1.21.100", verified: true, bom: true, comments: true, trailingCommas: true },
+  // Verified against every resource_pack/ui/*.json file of the pinned Mojang
+  // bedrock-samples v1.26.50.4 (see references/official/bedrock-samples-ui.lock.json):
+  // BOM, // and /* */ comments, and trailing commas all occur and must parse.
+  "bedrock-json@1.26.50": { id: "bedrock-json@1.26.50", verified: true, bom: true, comments: true, trailingCommas: true },
 });
+
+// Default runtime dialect and vanilla screen profile used by pack validation
+// when the caller does not pin a target version. Keep both ids in step with
+// data/vanilla-screen-profiles.json and the official sample lock.
+export const DEFAULT_RUNTIME_DIALECT = "bedrock-json@1.26.50";
+export const DEFAULT_VANILLA_PROFILE = "bedrock-1.26.50";
 
 export class JsonDialectError extends SyntaxError {
   constructor(code, message, details = {}) {

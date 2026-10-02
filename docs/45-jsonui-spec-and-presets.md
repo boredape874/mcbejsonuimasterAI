@@ -15,11 +15,15 @@ The kit ships two machine-readable catalogs the AI must consult before authoring
 
 ## Updating the spec
 
+The spec is kept in step with the pinned official samples (`references/official/bedrock-samples-ui`, revision in `references/official/bedrock-samples-ui.lock.json`, currently v1.26.50.4). Everything added for that revision sits under `_confirmed_extensions.vanilla_1_26_50` with the vanilla file that evidences it; preview-only vocabulary sits under `_confirmed_extensions.preview_1_26_60` and is not treated as stable.
+
 If a new vanilla version adds a property:
 
-1. Add it to the appropriate `properties.<group>` array in `data/jsonui-spec.json`.
-2. If it has an enum (anchors, font sizes, etc.) add it to the relevant top-level array.
-3. Run `node tools/run.mjs workspace/<any>/ir.yaml` to confirm the validator still loads the spec.
+1. Sync the samples (`scripts/sync-bedrock-samples-ui.ps1`, then `node tools/sync-bedrock-samples-ui.mjs --check`) and run `node tests/jsonui-spec-vanilla-coverage.mjs`; it lists every property, type, or enum value the pinned files use that the spec rejects.
+2. Add each property to the appropriate `properties.<group>` array in `data/jsonui-spec.json` (create a group such as `tooltip` or `cycler` when none fits).
+3. If it has an enum (anchors, font sizes, etc.) add it to the relevant top-level array.
+4. Record the vanilla file that uses it in `_confirmed_extensions` and mirror the name in `docs/48-json-ui-field-catalogue.md`.
+5. Run `node tests/jsonui-spec-vanilla-coverage.mjs` and `node tools/run.mjs workspace/<any>/ir.yaml` to confirm the validator still loads the spec.
 
 ## Updating the preset catalog
 

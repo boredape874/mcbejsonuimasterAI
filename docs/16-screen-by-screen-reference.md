@@ -10,6 +10,7 @@ Primary basis:
 - Bedrock Wiki `json-ui-intro`
 - Bedrock Wiki `json-ui-documentation`
 - included local packs and local utility mirrors in this repository
+- the pinned Mojang `bedrock-samples` `_ui_defs.json` (v1.26.50.4, see `references/official/bedrock-samples-ui.lock.json`)
 
 ## How to use this document
 
@@ -36,7 +37,9 @@ Use this when the question is:
 | `ui/command_block_screen.json` | Command block screen | You need dropdown or edit-box patterns from a complex screen | Advanced bindings, dropdowns, enabled-state logic |
 | `ui/death_screen.json` | Death and respawn screen | Death menu behavior or text matters | Respawn/quit visibility patterns |
 | `ui/enchanting_table_screen.json` | Enchanting table screen | Selection state, costs, or list behavior matter | Complex button state and progress references |
-| `ui/furnace_screen.json` | Furnace screen | Furnace-like layouts or progress indicators matter | Arrow and flame ratio references, furnace-style custom UI |
+| `ui/furnace_screen.json` | Furnace screen with built-in recipe book (1.26.50+) | Furnace-like layouts, progress indicators, or tabbed recipe grids matter | Arrow and flame ratio references, tab entrance animation (`tab_offset_anim`), recipe grid and layout toggles |
+| `ui/data_driven_container_screen.json` | Data-driven container screen registered in 1.26.50 | A project targets DDUI-style container screens rather than `server_form.json` | Structure reference only; its Script API sender is not documented in this repository |
+| `ui/hud_crosshair_overlay.json` | Crosshair overlay split out of the HUD in 1.26.50 | Crosshair or center-screen overlays are customized | Separate file to override instead of patching `hud_screen.json` |
 | `ui/horse_screen.json` | Horse inventory screen | Entity inventory layout matters | Mixed inventory + equipment slot patterns |
 | `ui/loom_screen.json` | Loom screen | Grid plus tab-like pattern study is needed | Selector-heavy screen study |
 | `ui/stonecutter_screen.json` | Stonecutter screen | Result list and selector logic matters | Collection and selector references |
@@ -174,6 +177,16 @@ Use them as references for:
 - multi-state toggles
 - advanced enable or visible logic
 - mixed panel and collection layouts
+
+## Screens added or removed in recent versions
+
+Confirmed from the pinned official `_ui_defs.json` (v1.26.10.4 vs v1.26.50.4); details in `docs/83-vanilla-ui-1.26.50-diff.md`.
+
+- Added in 1.26.50: `ui/beta_feedback_qr.json`, `ui/data_driven_container_screen.json`, `ui/hud_crosshair_overlay.json`, `ui/skin_pack_pdp.json`.
+- Removed in 1.26.50: `ui/gathering_info_screen.json`, `ui/manage_feed_screen.json`, `ui/realmsPlus_screen.json`, five `ui/realmsPlus_sections/*` files (only `realmsPlus_purchase_warning_screen.json` remains), `ui/skin_pack_purchase_screen.json`, `ui/skin_picker_screen.json`.
+- Removed in preview 1.26.60: `ui/csb_sections/csb_view_packs_screen.json`, `ui/realms_slots_screen.json`, `ui/realms_plus_ended_screen.json`.
+
+A pack that still ships an override for a removed file is silently ignored by the client; `validate-pack` reports such files as `UI_DEFS_ORPHAN` under the `bedrock-1.26.50` profile.
 
 ## Practical lookup rule
 

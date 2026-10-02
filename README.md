@@ -169,8 +169,8 @@ node tools/design-library.mjs method --method ui-kit-spec-first --style cozy16
 # 서드파티 바닐라 비교 미러 → references/upstreams/MCBVanillaResourcePack/
 .\scripts\sync-ztech-vanilla.ps1
 
-# 공식 bedrock-samples의 선택 UI 파일 → references/official/bedrock-samples-ui/
-.\scripts\sync-bedrock-samples-ui.ps1
+# 공식 bedrock-samples의 선택 UI 파일 → references/official/bedrock-samples-ui/ (+ .lock.json)
+.\scripts\sync-bedrock-samples-ui.ps1 -Ref main
 
 # JSON UI 자료 저장소 → references/upstreams/mcbe-json-ui-resource/
 .\scripts\sync-mcbe-json-ui-resource.ps1
@@ -180,7 +180,10 @@ node tools/design-library.mjs method --method ui-kit-spec-first --style cozy16
 
 ```powershell
 .\scripts\validate-json-ui-pack.ps1 -PackPath references\official\bedrock-samples-ui -AllowPartialUiDefs -AllowMissingTextures
+node tools/sync-bedrock-samples-ui.mjs --check
 ```
+
+공식 샘플의 고정 리비전은 `references/official/bedrock-samples-ui.lock.json`(현재 `v1.26.50.4`)에 기록되며 위 `--check`가 네트워크 없이 커밋된 파일과 lock의 일치를 검사합니다. 이전 고정본과의 차이는 [바닐라 UI 변경 추적](docs/83-vanilla-ui-1.26.50-diff.md)을 참고하세요.
 
 개인 팩의 경로는 `config/sources.local.example.json`을 복사한 `config/sources.local.json`에만 둡니다. 로컬 파일을 대상으로 `validate:sources`를 실행한 뒤 `source:scan`, `catalog:build`, `design:search`를 선택합니다. 대규모 로컬 자료와 attachable·geometry 근거 추출은 [로컬 에셋 작업 흐름](docs/77-resource-pack-skills.md#로컬-에셋-활용)을 참고하세요.
 

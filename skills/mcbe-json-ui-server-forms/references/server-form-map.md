@@ -24,6 +24,12 @@ Do not stop at a visually correct factory. A broken link later in the chain can 
 - Use `instance@$template_variable` only when the surrounding template declares that variable and it resolves to a qualified control id. An undefined `$button_template` is not a fallback alias.
 - For `UI control reference not found`, start at the full Content Log control path and verify each namespace/factory hop. Do not add an empty control with the missing name just to silence the log.
 
+## Vanilla custom_form control ids (bedrock-samples v1.26.50.4)
+
+`server_form.generated_contents.factory.control_ids` currently maps `label`, `toggle`, `slider`, `dropdown`, `input`, `header`, `divider`, and `multiselect` (new in 1.26.50) to `@server_form.custom_*` controls over collection `custom_form`. A router that replaces `generated_contents` must carry every id, including ones the sender does not use yet, or a future form type renders blank.
+
+`custom_multiselect` is a header toggle (`#custom_multiselect`) plus a checkbox collection `custom_multiselect` (`#custom_multiselect_length`, `#custom_multiselect_toggled`, `#custom_multiselect_text`). The pinned `@minecraft/server-ui` metadata (2.2.0 stable, 2.3.0-beta; preview 2.3.0 and 2.4.0-beta) exposes no `multiselect` method on `ModalFormData`, so treat the sender and `formValues` shape as unverified. Preview 1.26.60 splits the control into `custom_multiselect@settings_common.option_generic` and `custom_multiselect_control` with label binding `#multiselect_option_text`; do not inherit the stable control name directly if preview compatibility matters. See `docs/83-vanilla-ui-1.26.50-diff.md`.
+
 ## Title route, fallback, and button indices
 
 The sender and RP must share one explicit contract:

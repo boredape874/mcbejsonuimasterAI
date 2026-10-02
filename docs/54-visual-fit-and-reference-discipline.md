@@ -58,6 +58,7 @@ Hard rules:
 HUD edits must preserve the vanilla renderer graph unless the user explicitly asks to remove it.
 
 - Restore hotbar by not overriding `hotbar_renderer`, `hotbar_panel`, `hotbar_grid`, `hotbar_chooser`, or `exp_progress_bar_and_hotbar`.
+- Preview 1.26.60 paints the slots with `hotbar_slots_renderer` inside `hotbar_grid_frame` and removes the `hotbar_renderer` child from `hotbar_panel`; re-check hotbar overrides against that structure before targeting preview (`docs/83-vanilla-ui-1.26.50-diff.md`).
 - Hide survival icons by overriding only the specific renderer needed, such as `heart_renderer`, `hunger_renderer`, `armor_renderer`, `bubbles_renderer`, or `horse_heart_renderer`.
 - If actionbar/title is used as a data protocol, document the exact packet format.
 - If raw title text should not appear, override `hud_title_text` carefully and keep the binding source available for preserved-value parsing.

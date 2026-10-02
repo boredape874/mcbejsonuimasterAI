@@ -21,6 +21,7 @@
     "compile": "node tools/compile.mjs",
     "validate": "node tools/validate.mjs",
     "validate:pack": "node tools/validate-pack.mjs",
+    "sync:bedrock-samples-ui": "node tools/sync-bedrock-samples-ui.mjs",
     "trace:ui-route": "node tools/trace-ui-route.mjs",
     "audit:content-log": "node tools/audit-content-log.mjs",
     "verify:installed-pack": "node tools/verify-installed-pack.mjs",

@@ -181,6 +181,8 @@ Upstream authority:
 
 Selected official Mojang `bedrock-samples` UI files.
 
+Pinned revision: `references/official/bedrock-samples-ui.lock.json` (`v1.26.50.4`, commit `46ba6ea985fb`, upstream date 2026-09-16, `min_engine_version` `[1, 26, 50]`). The previous pin was `v1.26.10.4`; the differences are tracked in `docs/83-vanilla-ui-1.26.50-diff.md`. Verify the committed files with `node tools/sync-bedrock-samples-ui.mjs --check` before citing them.
+
 Use for:
 
 - confirming current official vanilla structure

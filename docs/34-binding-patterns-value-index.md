@@ -35,6 +35,18 @@ This document maps useful binding patterns to real sample files.
 | `#clip_ratio` | controls image clipping/progress |
 | custom `#...` | local scratch value in `property_bag` |
 
+## Vanilla 1.26.50 additions
+
+Confirmed from `references/official/bedrock-samples-ui` at the pinned revision (`v1.26.50.4`); see `docs/83-vanilla-ui-1.26.50-diff.md` for the surrounding structure.
+
+| Name | Where | Pattern |
+| --- | --- | --- |
+| `#construction_tab_visible` and the other `#*_tab_visible` globals | inventory tab panels | `binding_type: global` + `binding_name_override: #visible` on the panel that wraps the tab toggle |
+| `#custom_multiselect_length` -> `#collection_length` | `server_form.custom_multiselect` | collection `custom_form` drives a nested `custom_multiselect` collection through `$radio_bindings` |
+| `#custom_multiselect_toggled` / `#custom_multiselect_text` | `server_form.custom_multiselect_checkbox` | per-option checkbox state and label bound to collection `custom_multiselect` plus `collection_details` |
+| `$tts_header_binding_type` + `tts_control_header` | `ui_common.json` container item cell | TTS header supplied by a binding instead of a literal |
+| `#controller_fixed_face_*_icon` | `common.gamepad_helper_face_*` | fixed face-button glyphs used by HUD emote tips |
+
 ## Practical patterns
 
 ### Title/actionbar protocol parsing
