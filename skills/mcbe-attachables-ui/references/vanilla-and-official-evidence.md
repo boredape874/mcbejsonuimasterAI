@@ -83,7 +83,7 @@ The official schema repository (`mojang-bedrock-schemas-visual`, `schemas:schema
 
 ## Two construction methods (community-documented)
 
-- Method 1, skeleton copy: copy the player bones without cubes into the attachable geometry and parent the model to `rightItem`; the Wiki states it is limited to one mob and one slot.
+- Method 1, skeleton copy: copy the player bones into the attachable geometry, parent the model cube to `rightItem`, and delete the player cubes before use; the Wiki text says its prepared file has no cubes, but the shipped `method_one/steve_head.geo.json` still carries body, head, arm and leg cubes with a comment telling the reader to remove them. The Wiki states the method is limited to one mob and one slot.
 - Method 2, bone binding: one root bone with `binding: "q.item_slot_to_bone_name(context.item_slot)"`, geometry format ≥ 1.16.0, first/third-person animations switched in `scripts.animate` with `context.is_first_person`, and the `enchanted` material/texture pair kept so the glint survives. This is the vanilla shield/trident/crossbow shape.
 
 Do not copy the Wiki example coordinates or the Mojang numbers; measure the pose on the project's own rig and keep the pinned revision in the report.

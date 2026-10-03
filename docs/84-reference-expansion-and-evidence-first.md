@@ -85,7 +85,7 @@ UI 이름을 확인하던 커밋과 같은 리비전에서 attachable·플레이
 | `mcbe-json-ui-reference` | `skills/mcbe-json-ui-reference/references/official-docs-cross-check.md` | §4·§5의 대조 표와 결과 라벨 |
 | `mcbe-json-ui-samples` | `skills/mcbe-json-ui-samples/references/community-ui-packs.md` | 등록한 JSON UI 애드온·라이브러리·도구의 구조 요약과 재사용 경계 |
 
-`data/bedrock-source-patterns.json`의 카드는 21개에서 85개로 늘어났다(검토일 2026-10-03; 13개 출처를 각각 파일 단위로 읽고 라이선스·증거 줄 번호·한계를 적은 분석 결과를 카드로 옮겼다). 새 카드는 모두 `contextPolicy: explicit-source-only`이므로 스타일 문맥에 자동으로 섞이지 않고 `node tools/design-library.mjs patterns --source ID`로만 읽는다. 카드의 `paths`는 lock에 고정된 파일만 가리키며 `node tools/design-library.mjs verify`가 검사한다. 각 카드의 `limitations`에 라이선스와 미검증 범위가 있다.
+`data/bedrock-source-patterns.json`의 카드는 21개에서 85개로 늘어났다(검토일 2026-10-03; 13개 출처를 각각 파일 단위로 읽고 라이선스·증거 줄 번호·한계를 적은 분석 결과를 카드로 옮겼다). 이어서 출처마다 별도 검증 단계가 인용 경로와 줄 범위를 다시 열어 대조했고, 64개 신규 카드 중 8개의 서술이 파일과 달라 고쳤다(예: 위키 Method 1 예제 geo에 플레이어 큐브가 남아 있음, 커뮤니티 컬렉션 목록은 46개 항목·Community 30개, 공식 `minecraft:icon` 문자열/객체 형태는 포맷 버전과 무관, 공식 스키마 `description_2`가 `item`을 추가 선언). 고친 카드에는 `검증 보정(2026-10-03, 파일 재대조)` 접두사의 한계 항목이 있다. 새 카드는 모두 `contextPolicy: explicit-source-only`이므로 스타일 문맥에 자동으로 섞이지 않고 `node tools/design-library.mjs patterns --source ID`로만 읽는다. 카드의 `paths`는 lock에 고정된 파일만 가리키며 `node tools/design-library.mjs verify`가 검사한다. 각 카드의 `limitations`에 라이선스와 미검증 범위가 있다.
 
 ## 7. 바꾸지 않은 것
 

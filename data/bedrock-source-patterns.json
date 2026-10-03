@@ -627,12 +627,13 @@
         "rig-reference",
         "blockbench-workflow"
       ],
-      "summary": "'Method 1'은 플레이어 스켈레톤의 본(root/waist/body/head/leftArm/rightArm/leftItem/rightItem/leftLeg/rightLeg)을 큐브 없이 attachable geo에 복사하고, 모델 큐브를 `rightItem` 본의 자식으로 두어 손 위치에 고정하는 방식이다. 1인칭 포즈는 `rightArm` 본에 회전·이동을 거는 가이드 애니메이션을 작업 중인 애니메이션과 동시에 재생해 맞춘다. player-geometry 페이지는 Steve/Alex 전체 본 계층(hat/jacket/sleeves/pants 오버레이 본, cape, rightItem의 `lead_hold` 로케이터, Alex의 3폭 팔과 다른 pivot)과 바닐라 플레이어 애니메이션을 재사용하는 NPC 클라이언트 엔티티 예를 제공하며, holding-items 페이지는 엔티티가 아이템을 들려면 `rightItem` 본이 필요하고 지오메트리 변형이 여러 개면 들린 아이템이 표시되지 않을 수 있다고 적었다.",
+      "summary": "'Method 1'은 플레이어 스켈레톤의 본(root/waist/body/head/leftArm/rightArm/leftItem/rightItem/leftLeg/rightLeg)을 attachable geo에 복사하고(위키 본문은 큐브를 지운 파일이라고 적지만 배포된 method_one/steve_head.geo.json에는 body·head·팔·다리 큐브가 남아 있어 L25 주석과 결론 L149가 직접 지우라고 안내한다), 모델 큐브를 `rightItem` 본의 자식으로 두어 손 위치에 고정하는 방식이다. 1인칭 포즈는 `rightArm` 본에 회전·이동을 거는 가이드 애니메이션을 작업 중인 애니메이션과 동시에 재생해 맞춘다. player-geometry 페이지는 Steve/Alex 전체 본 계층(hat/jacket/sleeves/pants 오버레이 본, cape, rightItem의 `lead_hold` 로케이터, Alex의 3폭 팔과 다른 pivot)과 바닐라 플레이어 애니메이션을 재사용하는 NPC 클라이언트 엔티티 예를 제공하며, holding-items 페이지는 엔티티가 아이템을 들려면 `rightItem` 본이 필요하고 지오메트리 변형이 여러 개면 들린 아이템이 표시되지 않을 수 있다고 적었다.",
       "adaptation": "geo-ui/attachables 스킬에서는 플레이어 본 이름(rightItem, leftItem, rightArm, head 등)과 부모 관계를 '검증된 리그 참조'로 두고, 커스텀 NPC나 attachable을 만들 때 이 이름을 그대로 쓰되 큐브를 제거한 스켈레톤만 가져오도록 안내한다. Alex 모델은 pivot과 팔 폭이 다르므로 슬림 스킨 대응 attachable은 두 리그로 각각 확인한다. 엔티티에 아이템을 들리는 작업은 geo에 `rightItem` 본이 있는지, 지오메트리 변형이 하나인지 먼저 점검한다. Method 1은 위키가 '한 종류 몹·한 슬롯 전용'이라고 명시했으므로 여러 몹이나 오프핸드까지 쓰려면 바인딩 방식으로 전환한다.",
       "limitations": [
         "인용한 페이지와 에셋 전부 NOASSERTION이다. 본 이름과 계층은 바닐라 엔진 이름이라 재사용해도 되지만, 위키가 배포한 geo/animation JSON 자체는 복사하지 않고 공식 바닐라 리소스팩이나 자체 모델에서 다시 추출한다.",
         "player-geometry의 NPC 클라이언트 엔티티는 바닐라 플레이어 애니메이션 식별자를 재사용하므로, 핀된 공식 샘플 리비전에서 그 이름이 아직 존재하는지 tools/vanilla-name-check.mjs로 확인한 뒤 인용한다.",
-        "holding-items의 '지오메트리 변형이 여러 개면 들린 아이템이 안 보인다'는 서술은 위키 저자의 관찰이며 런타임 재검증이 필요하다."
+        "holding-items의 '지오메트리 변형이 여러 개면 들린 아이템이 안 보인다'는 서술은 위키 저자의 관찰이며 런타임 재검증이 필요하다.",
+        "검증 보정(2026-10-03, 파일 재대조): Method 1 예제 geo에는 플레이어 큐브가 그대로 들어 있으므로 '큐브 없는 스켈레톤'은 사용자가 지운 뒤의 상태다. 배포 파일을 그대로 쓰면 플레이어 모델이 겹쳐 그려진다."
       ],
       "pathScope": "upstream",
       "screenRoles": [],
@@ -1143,13 +1144,14 @@
         "icon-atlas",
         "manifest"
       ],
-      "summary": "attachable이 붙는 BP 아이템 선언의 세 사례. wrench(1.21.70)와 journal/journal_pencil(1.20.50)은 `minecraft:wearable.slot = slot.weapon.offhand`로 오프핸드 착용을 선언하고(journal 계열은 `dispensable: true` 추가), turret kit·generator kit(1.20.50)은 wearable 없이 `minecraft:entity_placer`·`enchantable`·`durability`·`max_stack_size {value}`·`repairable`만 선언한 채 attachable이 붙는다. `minecraft:icon`은 1.21.70에서 문자열(`\"demo:wrench\"`), 1.20.50에서 객체(`{\"texture\": \"mamm_cds:journal\"}`) 형태이며, 아이콘 키는 `item_texture.json`의 `atlas.items` `texture_data` 키와 일치한다. 아이콘 텍스처(`wrench_ico`)와 attachable 모델 텍스처(`wrench`)는 서로 다른 파일이다. RP/BP manifest는 `min_engine_version [1,20,30]`이고 BP는 `@minecraft/server 2.0.0` 의존성을 선언하며, 표시 이름은 `texts/en_US.lang`의 `item.demo:crown=` 형식 또는 `minecraft:display_name` 컴포넌트로 준다.",
+      "summary": "attachable이 붙는 BP 아이템 선언의 세 사례. wrench(1.21.70)와 journal/journal_pencil(1.20.50)은 `minecraft:wearable.slot = slot.weapon.offhand`로 오프핸드 착용을 선언하고(journal 계열은 `dispensable: true` 추가), turret kit·generator kit(1.20.50)은 wearable 없이 `minecraft:entity_placer`·`enchantable`·`durability`·`max_stack_size {value}`·`repairable`만 선언한 채 attachable이 붙는다. `minecraft:icon`은 문자열 형태(`\"demo:wrench\"` 1.21.70, gray_wave kit 3종의 `\"axe_turret_kit\"`류 1.20.50)와 객체 형태(`{\"texture\": \"mamm_cds:journal\"}` 1.20.50)가 같은 포맷 버전에서 함께 쓰이며, 아이콘 키는 `item_texture.json`의 `atlas.items` `texture_data` 키와 일치한다. 아이콘 텍스처(`wrench_ico`)와 attachable 모델 텍스처(`wrench`)는 서로 다른 파일이다. RP/BP manifest는 `min_engine_version [1,20,30]`이고 BP는 `@minecraft/server 2.0.0` 의존성을 선언하며, 표시 이름은 `texts/en_US.lang`의 `item.demo:crown=` 형식 또는 `minecraft:display_name` 컴포넌트로 준다.",
       "adaptation": "새 attachable을 만들 때 BP 쪽에서 '어느 슬롯에서 보이게 할지'를 먼저 정하고(메인핸드는 추가 컴포넌트 없이, 오프핸드는 wearable offhand, 방어구는 wearable armor 슬롯), RP attachable 식별자를 그 아이템 id와 맞춘다. 아이콘은 item_texture.json 키 하나당 2D 텍스처 하나로, 3D 모델 텍스처는 attachable `textures.default`로 분리한다. 대상 클라이언트 버전에 맞는 `minecraft:icon` 문법(문자열/객체)을 고르고 manifest `min_engine_version`을 사용한 format_version과 맞춘다.",
       "limitations": [
         "라이선스: MIT.",
         "오프핸드 attachable이 실제로 오프핸드 본에 붙어 렌더링되는지는 파일이 증명하지 않는다.",
         "`minecraft:icon`의 두 문법이 각각 어느 버전 범위에서 유효한지는 이 샘플만으로 확정할 수 없다.",
-        "manifest `min_engine_version 1.20.30`과 아이템 format_version 1.21.70의 불일치가 허용되는지는 미검증. 텍스처 PNG는 읽지 않았다."
+        "manifest `min_engine_version 1.20.30`과 아이템 format_version 1.21.70의 불일치가 허용되는지는 미검증. 텍스처 PNG는 읽지 않았다.",
+        "검증 보정(2026-10-03, 파일 재대조): icon 문자열/객체 형태는 format_version과 상관관계가 없다(1.20.50에 두 형태가 공존). 아이콘 키와 item_texture.json atlas 키의 일치는 custom_items에서만 확인했고 gray_wave의 item_texture.json은 인용 경로에 없다."
       ],
       "pathScope": "upstream",
       "screenRoles": [],
@@ -1175,13 +1177,14 @@
         "entity-property",
         "client-entity"
       ],
-      "summary": "엔티티 렌더 컨트롤러의 세 단계. 최소형은 `Geometry.default` / `materials: [{\"*\": \"Material.default\"}]` / `Texture.default`만 나열한다(memory_jar, gray_wave_generator). 변형형은 `arrays.textures`에 `Array.variant`를 두고 `Array.variant[ query.variant ]`로 클라이언트 엔티티 `textures` 맵의 키(default/variant_b/variant_c → `Texture.<키>`)를 고른다(robot). 상태형은 `Array.damageLevels[math.clamp(query.health / 50, 0, 4)]`처럼 Molang 산술로 인덱스를 만든다(turret). 클라이언트 엔티티는 `scripts.animate: [\"drive\"]`로 상시 애니메이션을 돌리고, 바퀴 회전은 `query.modified_distance_moved*40` 식으로 준다. 애니메이션 컨트롤러는 `query.property('mikeamm_gwve:state') == 'active'`로 엔티티 프로퍼티 기반 전이를 한다. attachable 쪽은 커스텀 렌더 컨트롤러 없이 바닐라 `controller.render.item_default`/`controller.render.armor`만 쓴다.",
+      "summary": "엔티티 렌더 컨트롤러의 세 단계. 최소형은 `Geometry.default` / `materials: [{\"*\": \"Material.default\"}]` / `Texture.default`만 나열한다(memory_jar; gray_wave_generator.rc.json 5-12행은 `Array.variants: [\"Texture.black\"]`와 `textures: [\"Texture.black\"]`를 선언한 단일 항목 배열 컨트롤러라 순수 최소형이 아니다). 변형형은 `arrays.textures`에 `Array.variant`를 두고 `Array.variant[ query.variant ]`로 클라이언트 엔티티 `textures` 맵의 키(default/variant_b/variant_c → `Texture.<키>`)를 고른다(robot). 상태형은 `Array.damageLevels[math.clamp(query.health / 50, 0, 4)]`처럼 Molang 산술로 인덱스를 만든다(turret). 클라이언트 엔티티는 `scripts.animate: [\"drive\"]`로 상시 애니메이션을 돌리고, 바퀴 회전은 `query.modified_distance_moved*40` 식으로 준다. 애니메이션 컨트롤러는 `query.property('mikeamm_gwve:state') == 'active'`로 엔티티 프로퍼티 기반 전이를 한다. attachable 쪽은 커스텀 렌더 컨트롤러 없이 바닐라 `controller.render.item_default`/`controller.render.armor`만 쓴다.",
       "adaptation": "텍스처 변형이 필요한 엔티티는 텍스처 키를 클라이언트 정의에 이름으로 등록한 뒤 렌더 컨트롤러 배열에서 Molang으로 인덱싱하는 구조를 따르고, 인덱스 식은 반드시 `math.clamp`로 범위를 묶는다. 시각 상태 전이는 스크립트 대신 엔티티 프로퍼티 + 애니메이션 컨트롤러로 두어 RP만으로 바뀌게 한다. attachable에는 샘플처럼 바닐라 렌더 컨트롤러를 우선 쓰고, 상태별 텍스처가 필요할 때만 엔티티형 배열 컨트롤러를 attachable에 옮겨 시험한다.",
       "limitations": [
         "라이선스: MIT.",
         "렌더 컨트롤러는 format_version 1.8.0, 애니메이션 컨트롤러는 1.10.0 기준이다. `query.health/50` 계수와 체력 범위는 이 게임 엔티티 정의에 종속되므로 수치를 옮기지 말 것.",
         "`query.property`는 BP 엔티티에 해당 프로퍼티가 선언돼 있어야 하며 그 선언 파일은 이번 범위 밖이라 미확인.",
-        "이 소스 범위에는 JSON UI 파일이 없다. 렌더 컨트롤러가 attachable에서도 같은 방식으로 동작하는지는 파일이 증명하지 않는다."
+        "이 소스 범위에는 JSON UI 파일이 없다. 렌더 컨트롤러가 attachable에서도 같은 방식으로 동작하는지는 파일이 증명하지 않는다.",
+        "검증 보정(2026-10-03, 파일 재대조): gray_wave_generator.rc.json은 쓰이지 않는 단일 항목 배열을 가진 컨트롤러이며 memory_jar.render_controllers.json(5-7행)만 최소형이다. 체크아웃에 ui 디렉터리는 없다."
       ],
       "pathScope": "upstream",
       "screenRoles": [],
@@ -1340,7 +1343,7 @@
       "adaptation": "GeoUI 작업에서 아이템 모델이 인벤토리·GUI 프레임에 어떻게 들어가는지 조정할 때는 format_version 1.21.0 지오메트리의 item_display_transforms.gui(필요 시 fit_to_frame:false 와 scale/translation 조합)를 1차 수단으로 검토하고, UI 안에서만 다른 포즈가 필요하면 애니메이션 또는 animate 조건에 query.is_in_ui 를 쓴다. 본 위치 기반 UI/이펙트 계산은 bone_orientation_trs·bone_aabb 를 쓰되 팩 버전을 1.20.60 이상으로 올린다. 레거시 geometry.<name> 형식의 inflate/reset 은 큐브 단위 inflate 로 옮기고, 지오메트리 템플릿은 1.16.0 이상(binding 지원)을 기본으로 둔다.",
       "limitations": [
         "item_display_transforms 가 어떤 클라이언트 버전부터, 어떤 렌더 경로(HUD 핫바, 인벤토리 슬롯, 아이템 프레임 블록)에 적용되는지는 문서에 없다; 'gui' 컨텍스트 이름과 fit_to_frame 기본값만 확인되었고 inventory 역할 태그는 그 이름에서 추정한 것이다.",
-        "geometry 페이지들은 ai-assisted 이고 1.12.0/1.14.0/1.19.30 페이지는 제목 외 차이가 없어, 버전별 실제 차이는 1.16.0(binding)과 1.21.0(item_display_transforms, uv_rotation)만 식별 가능하다.",
+        "1.12.0≡1.14.0(binding 없음)이고 1.16.0≡1.19.30(1.19.30 L46·L61-64에 binding 있음)이라 제목·서문 외 차이가 없는 쌍은 그 둘뿐이며,",
         "query.is_in_ui 는 '엔티티가 UI 일부로 렌더될 때'라고만 적혀 있어 paper doll, 스크린 렌더러별 적용 범위는 미검증이다.",
         "CC-BY-4.0 문서; 수치 예시는 없고 구조만 인용 가능하다."
       ],
@@ -1373,7 +1376,7 @@
         "molang",
         "texture-set"
       ],
-      "summary": "클라이언트 엔티티와 attachable 이 공유하는 정의(actor_resource_definition)와 버전 규칙. 1.8.0 페이지는 description 에 animation_controllers 배열이 따로 있고 scripts 가 parent_setup/pre_animation/scale 뿐이지만(L39-77), 1.10.0 페이지부터 animation_controllers 가 사라지고 scripts.animate/initialize/variables('public')/should_update_*_offscreen 과 hide_armor, held_item_ignores_lighting, queryable_geometry, particle_emitters, item(Object/String/Molang), render_controllers(객체·문자열·Molang 배열)가 등재된다(L42-99). 1.26.0 페이지는 scripts.hide_held_items(Molang, enable_attachables 를 덮어씀)를 추가하고 pre_animation/initialize 에서 {} 중괄호 스코프를 허용한다고 적는다(L13-19, L86). ClientEntityDocumentationIntroduction 은 동일 identifier 정의가 여러 개일 때 최상위 리소스팩 엔진 버전 이하 중 가장 가까운 min_engine_version 정의만 파싱된다고 설명한다(L64-68). syntax-guide 는 Molang 버전 변경(삼항 결합 1.18.10, AND/OR 우선순위 1.18.20, block_property 제거 1.20.50 등)이 각 팩 manifest 의 min_engine_version 으로 결정되며 팩마다 다른 규칙이 동시에 적용될 수 있다고 적는다(L323-345). AnimationUpgrade 는 1.8→1.10에서 animation_controllers 가 animations 섹션으로 합쳐지고 scripts.animate 가 추가된 변화를 기록한다(L23-30). TextureSetsIntroduction 은 color 레이어 필수, normal↔heightmap 및 MER↔MERS 상호 배제, 같은 팩 내 텍스처만 참조, 스택 간 병합 없음, .tga > .png > .jpg > .jpeg 우선순위를 명시한다(L143-167).",
+      "summary": "클라이언트 엔티티와 attachable 이 공유하는 정의(actor_resource_definition)와 버전 규칙. 1.8.0 페이지는 description 에 animation_controllers 배열이 따로 있고 scripts 가 parent_setup/pre_animation/scale 뿐이지만(L39-77), 1.10.0 페이지부터 animation_controllers 가 사라지고 scripts.animate/initialize/variables('public')/should_update_*_offscreen, queryable_geometry, item(Object/String/Molang), render_controllers(객체·문자열·Molang 배열)가 처음 등재된다(L42-99; hide_armor·held_item_ignores_lighting·particle_emitters·enable_attachables는 1.8.0 페이지 L43-55에도 이미 있다). 1.26.0 페이지는 scripts.hide_held_items(Molang, enable_attachables 를 덮어씀)를 추가하고 pre_animation/initialize 에서 {} 중괄호 스코프를 허용한다고 적는다(L13-19, L86). ClientEntityDocumentationIntroduction 은 동일 identifier 정의가 여러 개일 때 최상위 리소스팩 엔진 버전 이하 중 가장 가까운 min_engine_version 정의만 파싱된다고 설명한다(L64-68). syntax-guide 는 Molang 버전 변경(삼항 결합 1.18.10, AND/OR 우선순위 1.18.20, block_property 제거 1.20.50 등)이 각 팩 manifest 의 min_engine_version 으로 결정되며 팩마다 다른 규칙이 동시에 적용될 수 있다고 적는다(L323-345). AnimationUpgrade 는 1.8→1.10에서 animation_controllers 가 animations 섹션으로 합쳐지고 페이지가 'scriptAnimate'라고 부르는 항목이 추가된 변화를 기록한다(L23-30, L29). TextureSetsIntroduction 은 color 레이어 필수, normal↔heightmap 및 MER↔MERS 상호 배제, 같은 팩 내 텍스처만 참조, 스택 간 병합 없음, .tga > .png > .jpg > .jpeg 우선순위를 명시한다(L143-167).",
       "adaptation": "리소스팩 소유권과 병합을 설계할 때 (1) attachable 과 client_entity 를 같은 스키마로 취급해 같은 검증 규칙을 적용하고, (2) 팩 manifest 의 min_engine_version 을 Molang 파서 버전 선택자로 간주해 공용 팩과 애드온 팩의 버전을 맞추며, (3) 동일 identifier 재정의가 필요하면 min_engine_version 으로 우선순위를 두는 공식 메커니즘을 활용한다. 쿼리 사용 시 is_local_player(1.19.60+), bone_orientation_trs(1.20.60+)처럼 페이지에 적힌 최소 버전을 함께 기록하고, 폐기된 get_equipped_item_name 대신 is_item_name_any 를 쓴다. PBR 텍스처 세트는 팩 간 참조가 불가하므로 레이어 이미지와 .texture_set.json 을 같은 팩 안에 둔다.",
       "limitations": [
         "actor_resource_definition 페이지들은 ai-assisted 이고 설명이 거의 비어 있어 키 이름과 허용 타입만 확인 가능하며, hide_held_items 가 1.26.0 페이지에만 있는 것이 신규 추가인지 1.10.0 페이지의 누락인지 문서만으로는 단정할 수 없다.",
@@ -1623,7 +1626,7 @@
       "adaptation": "attachable scripts를 작성·검토할 때는 attachable 전용 scripts 스키마 대신 이 entity 쪽 scripts 형태(animate의 이름→조건 맵, 배열형 initialize/pre_animation)를 기준으로 삼고, 핀된 바닐라 샘플로 재확인한다. `min_engine_version` 타입이 두 스키마에서 다르므로 검증기는 양쪽을 허용하고 실제 값 형식은 바닐라 파일에서 확인한다. public variables는 attachable과 부모 엔티티 간 Molang 상태 공유 설계의 아이디어로 활용하되 런타임 테스트를 전제로 한다.",
       "limitations": [
         "라이선스: MIT(Microsoft Corporation).",
-        "description_2/scripts_2/spawn_egg_2는 설명 문구만 다른 자동 생성 중복본이며(scripts_2는 scripts와 바이트 단위로 동일) 추가 정보가 없다.",
+        "scripts_2는 scripts와 바이트 단위 동일, spawn_egg_2는 설명 문구(4·27행)만 다르다. description_2는 설명 문구 외에 `item`(173-195행, object/string/scope Identifier anyOf)을 추가 선언하므로 attachable 쪽 유일한 `item` 선언 위치이며 scripts_2·spawn_egg_2를 $ref한다.",
         "materials/textures/geometry/animations/particle_* 등은 `properties: {}`로 비어 있어 내용 검증이 불가능하다.",
         "스키마는 선언만 할 뿐, Bedrock이 attachable에서 `initialize`/`variables`/축별 scale/`queryable_geometry`를 실제로 평가하는지는 증명하지 않는다.",
         "`->` 연산자 설명은 엔티티 문맥 기준이며 attachable 문맥에서는 미검증이다."
@@ -1815,7 +1818,8 @@
         "GPL-3.0 소스이며, 파일 주석은 원래 방식이 r4isen1920의 MIT 라이선스 작업이라고 밝히지만 이 저장소 안에서는 GPL 배포본의 일부이므로 분석 전용으로 다룬다.",
         "쿨다운 텍스처(textures/cooldown/*)는 이 sparse 체크아웃에 포함되지 않아 uv 좌표와 텍스처 크기의 정합성을 확인할 수 없다.",
         "title 기반 상태 전달은 다른 애드온의 title과 충돌하거나 low_frequency_rendering으로 지연될 수 있으며 런타임 동작은 미검증이다.",
-        "서식 연산자와 uv 참조 문자열 결합은 바닐라 문서에 없는 커뮤니티 관용구로 버전별 검증이 필요하다."
+        "서식 연산자와 uv 참조 문자열 결합은 바닐라 문서에 없는 커뮤니티 관용구로 버전별 검증이 필요하다.",
+        "검증 보정(2026-10-03, 파일 재대조): hud_actionbar_text는 접두사로 숨겨지는 것이 아니라 image+label로 재정의되어 #hud_title_text_string에 'a:'가 있고 'reset'이 없을 때만 보인다(hud_screen.json 76-109, 105행); 접두사로 무시(ignored)되는 쪽은 hud_title_text(2-4행)뿐이다. enter_by_alpha(15-21)와 destroy_by_alpha(29-36)는 선언만 있고 어디서도 참조되지 않으며 cooldown_bar_uv.json의 uv 애니메이션 81개는 모두 stay_by_alpha로 이어진다. requires 조건은 메인 바 72개(a:chibar_0..70 + reset, 58-130행), 파일 전체 100개다."
       ],
       "pathScope": "upstream",
       "screenRoles": [
@@ -2303,13 +2307,14 @@
         "container-screens",
         "checklist"
       ],
-      "summary": "collections.md는 컬렉션 이름을 화면 단위(인벤토리/핫바/방어구/제작, 크리에이티브, 레시피, 컨테이너, 화로 계열 input/fuel/output, 거래, 인챈트, 모루, 대장장이, 베틀, 석재절단기, 신호기, 말, NPC, 커맨드/구조물/직소 블록, 설정, 채팅, 월드·서버·마켓플레이스 목록, 드레싱룸, 이모트, 카메라, 로딩·사망·접속해제 화면, 범용 button_list/text_list)로 묶어 47개 항목을 적고, 그중 16개만 Vanilla UI 출처로 표시한다. 모든 예시는 `collection_name`과 `binding_type: \"collection\"`을 한 객체에 함께 적으며, 문서 끝에 항목 템플릿과 JSON 스키마(display_name/description/type/screen/status/source/example)를 제공한다.",
+      "summary": "collections.md는 컬렉션 이름을 화면 단위(인벤토리/핫바/방어구/제작, 크리에이티브, 레시피, 컨테이너, 화로 계열 input/fuel/output, 거래, 인챈트, 모루, 대장장이, 베틀, 석재절단기, 신호기, 말, NPC, 커맨드/구조물/직소 블록, 설정, 채팅, 월드·서버·마켓플레이스 목록, 드레싱룸, 이모트, 카메라, 로딩·사망·접속해제 화면, 범용 button_list/text_list)로 묶어 '## ' 제목 47개 중 1개는 코드펜스 안의 항목 템플릿 placeholder(1212행)라 실제 컬렉션 항목은 46개이고, 그중 16개가 Vanilla UI, 30개가 Community Research 출처로 표시된다. 모든 예시는 `collection_name`과 `binding_type: \"collection\"`을 한 객체에 함께 적으며, 문서 끝에 항목 템플릿과 JSON 스키마(display_name/description/type/screen/status/source/example)를 제공한다.",
       "adaptation": "'어느 바닐라 화면이 컬렉션을 쓰는가'의 점검표로만 사용하고, 실제 이름은 핀된 바닐라 화면 파일에서 컨트롤의 `collection_name`과 바인딩의 `binding_collection_name`을 각각 읽어 가져온다. 이 소스처럼 두 속성을 한 객체에 섞지 않는다. 화면별 그룹화와 항목 템플릿(status/source/screen/example) 아이디어는 이 저장소의 컬렉션 카탈로그 구조에 차용할 수 있다.",
       "limitations": [
-        "25개가 Community 출처이며, 바닐라 출처 16개도 파일 경로·버전이 없음",
-        "Unknown/Experimental 절은 placeholder 키(unknown_collection_1, experimental_collection_1)뿐이라 최종 통계 47개 중 6개는 실제 이름이 아님",
+        "30개가 Community Research 출처이며 문서 끝의 통계 표(1239행: 47/16/25/1/5)는 파일 내용과 맞지 않는다. 바닐라 출처 16개도 파일 경로·버전이 없음",
+        "placeholder 키는 unknown_collection_1·2(1165-1172행)와 experimental_collection_1(1182-1185행) 세 개이며 실제 이름이 아님",
         "314행에 닫는 코드펜스가 떠 있는 등 마크다운이 깨진 부분이 있음",
-        "MIT reference 정책, 런타임 미검증"
+        "MIT reference 정책, 런타임 미검증",
+        "검증 보정(2026-10-03, 파일 재대조): '모든 예시는 collection_name과 binding_type을 한 객체에 적는다'는 예시 블록이 있는 34개 항목에만 해당하고, 117-289행의 12개 항목(creative_items, creative_categories, recipe_items, recipe_book_items, container_items, furnace_items, blast_furnace_items, smoker_items, trade_items, trade_recipes, settings_list, chat_messages)은 예시가 없다."
       ],
       "pathScope": "upstream",
       "screenRoles": [
