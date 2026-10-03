@@ -2342,6 +2342,283 @@
       "pathScope": "upstream",
       "screenRoles": [],
       "contextPolicy": "explicit-source-only"
+    },
+    {
+      "id": "starlib-package-layout-and-debug-slot-defaults",
+      "sourceId": "pipangry-starlibv2",
+      "paths": [
+        "_ui_defs.json",
+        "starlib2/global.jsonc",
+        "starlib2/style.jsonc",
+        "starlib2/starlib_changelog.txt",
+        "starlib2/package_screen/screen_template.jsonc"
+      ],
+      "roles": [
+        "form-library",
+        "package-layout",
+        "ui-defs",
+        "slot-variable",
+        "debug-fallback"
+      ],
+      "summary": "`_ui_defs.json`이 14개의 `.jsonc` 파일을 global → style → screen → button → dynamic → custom 순서로 등록하고, 각 파일은 고유 네임스페이스를 가진 \"패키지\"로 나뉜다. 공용 라벨/이미지 베이스와 바닐라 텍스처만 쓰는 기본 스타일 요소가 style 파일에 모여 있고, 라이브러리의 모든 \"슬롯\"(헤더 내용, 버튼 아이템, 사이저 출력, 스크롤 내용 등)은 `|default`가 붙은 변수로 열려 있다. 슬롯 변수를 채우지 않으면 \"~이 정의되지 않음\"이라는 빨간 디버그 라벨 컨트롤이 기본값으로 들어가 화면에 오류 원인이 그대로 표시된다. 크기 0인 빈 패널을 \"없음\" 슬롯 값으로 쓰는 관례도 포함된다.",
+      "adaptation": "자체 폼 라이브러리를 만들 때는 (1) 파일을 역할별 네임스페이스로 나누고 `_ui_defs.json`에 의존 순서대로 등록, (2) 커스터마이즈 지점을 전부 `$변수|default`로 노출, (3) 각 슬롯의 기본값을 눈에 보이는 디버그 라벨로 두어 설정 누락을 즉시 발견하게 하는 구조만 가져온다. 네임스페이스·변수 이름·디버그 문구는 프로젝트 고유로 새로 정하고, `.jsonc` 대신 순수 `.json`을 쓸지 여부는 대상 클라이언트에서 확인한다.",
+      "limitations": [
+        "GPL-3.0: 구조와 아이디어만 참고, JSON·변수명·디버그 문구 복사 금지(복사 시 팩 전체가 GPL 의무 대상)",
+        "`.jsonc` 확장자와 `//` 주석을 클라이언트가 실제로 로드/제거하는지는 이 소스로 증명되지 않음(선언만 확인)",
+        "changelog 1.0.3.3-release('Fixed Json-UI errors on new versions')와 HEAD 커밋(2025-04-30, 'child index collisions on the new versions' 수정)은 이전 판이 최신 클라이언트에서 오류를 냈음을 시사하므로 핀된 바닐라 버전에서 재검증 필요",
+        "README에는 문서 사이트 링크만 있고 외부 문서는 읽지 않았으므로 라이브러리 사용 규약은 파일 선언만으로 판단"
+      ],
+      "pathScope": "upstream",
+      "screenRoles": [
+        "menu"
+      ],
+      "contextPolicy": "explicit-source-only"
+    },
+    {
+      "id": "starlib-key-in-button-text-switch",
+      "sourceId": "pipangry-starlibv2",
+      "paths": [
+        "starlib2/global.jsonc",
+        "starlib2/package_button/button_style.jsonc",
+        "starlib2/package_button/common_button.jsonc",
+        "starlib2/package_dynamic/dynamic_structure.jsonc",
+        "starlib2/package_dynamic/common_dynamic.jsonc"
+      ],
+      "roles": [
+        "conditional-visibility",
+        "server-form",
+        "binding-expression",
+        "style-variant",
+        "disabled-state"
+      ],
+      "summary": "서버 폼 버튼 텍스트(`#form_button_text`, collection 바인딩) 또는 폼 제목(`#title_text`, global 바인딩)에 숨긴 \"키\" 문자열이 포함되는지를 문자열 빼기 후 원문과 등호 비교하는 view 바인딩으로 불리언화하고, 그 결과를 `#visible`과 `#enabled` 두 곳에 동시에 넣는 네 가지 스위치 패널(정방향/역방향 × 버튼/제목)이 global 파일에 정의된다. 이 스위치를 스타일 이미지(배경 텍스처 변형), 비활성 버튼 변형(버튼 셸과 스타일을 각각 키 조건으로 교체), 동적 아이템의 상/하 패딩 표시 여부, 이미지 유무에 따른 자동 패딩 등 라이브러리 전반의 \"변형 선택기\"로 재사용한다. 별도로 printf 형식 폭 지정 문자열과 텍스트의 곱·뺄셈을 이용해 버튼 텍스트의 특정 글자 범위만 잘라 라벨 `#text`로 쓰고, 결과가 비면 숨기는 범위 추출 템플릿도 있다.",
+      "adaptation": "스크립트 쪽에서 버튼 텍스트에 고정 폭 접두 코드(상태/스타일 토큰)를 넣고, JSON UI에서는 \"키 포함 → 변형 표시\" 스위치를 하나의 공용 템플릿으로 만든 뒤 키 변수만 바꿔 스타일·비활성·크기 변형에 재사용하는 설계로 옮긴다. 비활성 상태는 키 조건으로 버튼 셸(입력)과 스타일(그림)을 동시에 교체해야 입력까지 막힌다는 구조를 따르되, 표현식과 변수명은 직접 작성한다. 범위 추출은 글자 수가 고정된 코드 구간에만 쓰고 가변 길이 텍스트에는 쓰지 않는다.",
+      "limitations": [
+        "GPL-3.0: 바인딩 표현식을 그대로 옮기지 말고 원리만 적용",
+        "문자열 빼기/곱 연산과 printf 폭 지정이 현재 핀된 클라이언트에서 동일하게 동작하는지는 이 파일로 증명되지 않음(선언만 확인)",
+        "키가 버튼 텍스트에 남아 있으므로 라벨 쪽에서 키를 지우거나 범위 추출로 잘라내는 추가 처리가 필요하며 그 처리도 런타임 검증 대상",
+        "`#enabled`를 함께 끄는 이유(히트박스 겹침 방지)는 파일에 설명이 없고 추론임"
+      ],
+      "pathScope": "upstream",
+      "screenRoles": [
+        "menu",
+        "shop",
+        "quest",
+        "settings"
+      ],
+      "contextPolicy": "explicit-source-only"
+    },
+    {
+      "id": "starlib-dynamic-sizer-and-sibling-height",
+      "sourceId": "pipangry-starlibv2",
+      "paths": [
+        "starlib2/package_dynamic/dynamic_sizer.jsonc",
+        "starlib2/package_dynamic/dynamic_structure.jsonc",
+        "starlib2/package_dynamic/common_dynamic.jsonc",
+        "starlib2/package_button/button_templates.jsonc"
+      ],
+      "roles": [
+        "dynamic-size",
+        "sizer",
+        "stack-panel",
+        "percent-sibling",
+        "layout-trick"
+      ],
+      "summary": "버튼 폭은 가로 스택 안에 [키 조건 패딩, fill 출력, 키 조건 패딩] 세 칸을 두고 패딩을 1/3·1/2·사용자 지정 크기로 잡는 \"사이저\" 템플릿으로 결정된다(패딩이 보이면 출력이 좁아짐). 1/3 사이저의 출력 슬롯에 1/2 사이저를, 그 출력 슬롯에 세로 처리 패널을 꽂아 세 템플릿을 체인으로 묶은 자동 사이저가 있다. 높이는 세로 처리 패널이 담당하는데, 높이 0인 버퍼 패널 안에 자식 최대 높이(`100%cm`) 패널을 두고 그 안에서 버튼을 형제 합 높이(`100%sm`)로, 옆에 고정 높이 행들을 쌓은 세로 사이저 스택을 두어 버튼이 사이저 행의 합만큼 높이를 받게 한다. 같은 사이저를 바깥 레벨에 한 번 더 두고 키 조건으로 숨겨 부모 스택에서 높이를 차지할지 여부를 제어한다. 동적 아이템 템플릿은 상/하 패딩 이미지(키 조건)와 좌/우 고정 패딩, 그리고 `100%sm`로 자식 합을 덮는 배경을 조합하며, 이미지 유무에 따라 fill 패딩이 자동으로 들어가는 버튼 내용 스택도 있다.",
+      "adaptation": "폼당 버튼 변형이 많을 때 변형마다 컨트롤을 만드는 대신, \"조건부 패딩 + fill 출력\" 폭 사이저와 \"형제 합 높이 + 조건부 행\" 높이 사이저를 각각 하나씩 공용 템플릿으로 만들고 슬롯 체인으로 조합하는 구조를 따른다. 행 높이와 분할 비율은 자체 디자인 카탈로그 측정값으로 정하고, `100%c`/`100%cm`/`100%sm`의 의미는 docs/24 레이아웃 단위 문서와 핀된 바닐라로 재확인한다. 중첩 깊이가 깊으므로 tools 레이어 IR로 정적 바깥 뼈대를 먼저 풀고 동적 내부만 수작업으로 넣는다.",
+      "limitations": [
+        "GPL-3.0: 템플릿 체인 구조만 참고, 수치·변수명·JSON 복사 금지",
+        "`100%sm`/`100%cm`와 높이 0 버퍼 조합이 현재 클라이언트에서 기대대로 계산되는지는 선언만 확인되었고 렌더 결과는 미검증",
+        "소수 비율 패딩은 반올림 오차로 1px 차이가 날 수 있으나 파일에 보정 근거 없음",
+        "HEAD 커밋이 '자식 인덱스 충돌' 수정이라 밝히므로 동일 이름 자식을 여러 변형에서 재사용하는 이 구조는 버전 민감함"
+      ],
+      "pathScope": "upstream",
+      "screenRoles": [
+        "menu",
+        "shop",
+        "inventory"
+      ],
+      "contextPolicy": "explicit-source-only"
+    },
+    {
+      "id": "starlib-screen-form-template-composition",
+      "sourceId": "pipangry-starlibv2",
+      "paths": [
+        "starlib2/package_screen/screen_template.jsonc",
+        "starlib2/package_screen/screen_common.jsonc",
+        "starlib2/global.jsonc",
+        "starlib2/package_button/button_templates.jsonc",
+        "starlib2/package_button/common_button.jsonc"
+      ],
+      "roles": [
+        "screen-template",
+        "server-form",
+        "form-shell",
+        "button-factory",
+        "grid",
+        "scrolling-panel",
+        "close-button"
+      ],
+      "summary": "화면 템플릿은 [선택적 화면보다 큰 페이드 이미지] + [자식 크기(`100%cm`)이면서 화면보다 약간 작은 최대 크기를 가진 중앙 패널] + [fill 배경] 3층이고, 중앙 패널 안의 폼 홀더는 `controls` 자체를 변수로 열어 두어 폼을 여러 개(멀티 폼) 꽂을 수 있으며, 폼 둘레를 형제 합 크기보다 살짝 큰 프레임 이미지가 감싼다. 폼 템플릿은 고정 기본 크기 패널 안에 세로 스택 [헤더(제목 global 바인딩 + 우측 닫기 버튼) / 패딩 / fill 콘텐츠 / 패딩 / 서브 콘텐츠]와 배경 레이어로 구성된다. 콘텐츠는 가로 스택 [선택적 페이퍼돌 / 패딩 / fill 스크롤 패널]이고, 스크롤 내용은 세로 스택 [폼 본문 텍스트(`#form_text`, 비면 숨김) / 추가 콘텐츠 / 버튼 팩토리]다. 버튼 목록은 `form_buttons` 컬렉션에 factory를 건 세로 스택(`#form_button_length`→`#collection_length`) 또는 grid(`#form_button_length`→`#maximum_grid_items`, 가로 리스케일)로 바꿔 끼울 수 있다. 버튼 셸은 바닐라 `common.button`에 `button.form_button_click`과 `collection_details` 바인딩을 걸고 hover/pressed만 레이어 위에 얹는 형태이며, 닫기 버튼은 `button.menu_exit`를 누르는 `common.button`이다. 가로 버튼(높이에서 폭을 받는 정사각 아이콘), 정사각 버튼(`100%x`), 큰 버튼(MinecraftTen 폰트·배율·이미지 fill 옵션), hover 텍스트 버튼(`common.hover_text`에 버튼 텍스트 연결) 등 버튼 템플릿이 함께 제공된다.",
+      "adaptation": "자체 서버 폼 스킨은 \"화면 셸 → 폼 → 헤더/콘텐츠/서브 → 스크롤 내용 → 팩토리\" 5단 슬롯 구조와, 팩토리/grid를 같은 슬롯에 교체 가능하게 두는 설계만 가져온다. 폼 크기·헤더 높이·패딩은 디자인 리서치 카탈로그 측정값으로 새로 정하고 IR로 풀어 solved 좌표를 보존한다. 바닐라 폼 셸을 대체할 때는 docs/26의 \"폼 셸과 두 폼 경로 보존\" 규칙을 지키고, `button.form_button_click`/`button.menu_exit`/`collection_details` 같은 이름은 `node tools/vanilla-name-check.mjs`로 핀된 샘플에서 확인한 뒤 쓴다.",
+      "limitations": [
+        "GPL-3.0: 레이아웃 수치와 JSON 구조를 그대로 옮기지 말 것",
+        "이 파일들은 템플릿만 정의하며, 실제 어떤 화면(server_form 등)의 어느 컨트롤을 수정/대체하는지는 저장소에 포함되지 않아 통합 방법은 미확인",
+        "멀티 폼 홀더가 어떤 조건으로 폼을 전환하는지는 키 스위치 사용으로 추정될 뿐 예시 파일이 없음",
+        "그리드 리스케일·스크롤 패널 변수 기본값은 바닐라 scrolling_panel 구현에 의존하므로 핀된 버전에서 재검증 필요"
+      ],
+      "pathScope": "upstream",
+      "screenRoles": [
+        "menu",
+        "shop",
+        "quest",
+        "settings",
+        "inventory"
+      ],
+      "contextPolicy": "explicit-source-only"
+    },
+    {
+      "id": "starlib-custom-package-search-tabs-player-render",
+      "sourceId": "pipangry-starlibv2",
+      "paths": [
+        "starlib2/package_custom/custom_edit_box.jsonc",
+        "starlib2/package_custom/common_custom.jsonc",
+        "starlib2/package_custom/custom_toggles.jsonc",
+        "starlib2/package_custom/custom_renders.jsonc",
+        "starlib2/package_screen/screen_template.jsonc"
+      ],
+      "roles": [
+        "search-box",
+        "text-edit-box",
+        "toggle-tabs",
+        "paperdoll",
+        "live-render",
+        "input-panel",
+        "custom-renderer"
+      ],
+      "summary": "검색 상자는 바닐라 `common.text_edit_box`를 상속해 텍스트 박스 이름, 텍스트 컨트롤 이름, 플레이스홀더, 지우기 버튼 id(기본 `button.search_bar_clear`) 변수만 채운 얇은 래퍼다. 검색 필터 바인딩 묶음은 `property_bag`에 기본 검색어를 두고 `binding_condition: once`로 한 번 주입한 뒤, `source_control_name`으로 편집 상자의 `#item_name`을 읽어 \"검색어가 비었거나 버튼 텍스트에 포함됨\"을 `#visible`로 만든다(파일 주석에 Theorist의 검색 바 템플릿을 참고했다고 명시). 탭은 `common_toggles.light_text_toggle`을 감싸 라디오 그룹·기본 선택·강제 인덱스·뷰 바인딩 이름을 변수로 열고, 탭 페이지는 토글의 `#toggle_state`를 `source_control_name` view 바인딩으로 받아 표시한다. 플레이어 렌더는 `type: custom` + `paper_doll_renderer`(선택 스킨/UUID 사용 플래그, `#form_text`→`#player_uuid`, `gesture_x` 회전, viewer_panel에서 제스처 델타 수신, 화면 진입/퇴장 애니메이션)와 `player_live_render` 두 종류이고, 회전 입력은 `gesture_tracking_button`을 `button.turn_doll`로 둔 `input_panel`에서 `button.menu_select`를 `button.turn_doll`로 매핑해 처리한다. 콘텐츠 템플릿은 페이퍼돌 슬롯을 기본 비활성으로 포함한다.",
+      "adaptation": "검색·탭·캐릭터 뷰어가 필요한 폼은 바닐라 컨트롤(텍스트 박스, 토글, 렌더러)을 상속하는 얇은 래퍼 + 바인딩 묶음 분리 구조로 설계하고, 각 래퍼가 반드시 채워야 하는 바닐라 변수 목록을 프로젝트 문서에 기록한다. 페이퍼돌을 폼에 넣을 때는 폼 본문 텍스트에 UUID를 실어 보내는 프로토콜(스크립트 ↔ UI)을 자체적으로 정의하고, 제스처 회전용 input_panel의 버튼 매핑 이름은 핀된 바닐라에서 확인한다. 검색 필터는 폼 버튼이 많은 상점/퀘스트 목록에 적합하며, 라벨 쪽 키 제거와 함께 쓴다.",
+      "limitations": [
+        "GPL-3.0: 래퍼 JSON·변수명·바인딩 배열 복사 금지, 구조만 참고",
+        "`#item_name`, `#toggle_state`, `#player_uuid`, `#gesture_*` 바인딩과 `paper_doll_renderer`/`player_live_render`가 현재 클라이언트에서 동일하게 동작하는지는 선언만 확인됨(런타임 미검증)",
+        "`#form_text`를 UUID 통로로 쓰면 본문 텍스트가 사라지므로 두 용도를 동시에 쓸 수 없음(파일 구조에서 유추)",
+        "검색 바 템플릿은 제3자(Theorist) 아이디어를 기반으로 하므로 원 출처의 라이선스도 별도 확인 필요",
+        "live render 템플릿에는 바인딩이 없어 어떤 플레이어를 그리는지 파일만으로 알 수 없음"
+      ],
+      "pathScope": "upstream",
+      "screenRoles": [
+        "menu",
+        "character",
+        "settings",
+        "inventory"
+      ],
+      "contextPolicy": "explicit-source-only"
+    },
+    {
+      "id": "bedrock-samples-branch-and-commit-version-source",
+      "sourceId": "theoristmc-json-ui-dumper",
+      "paths": [
+        "server/main.ts",
+        "src/services/getMetadata.ts",
+        "src/types/metadata.d.ts",
+        "README.md"
+      ],
+      "roles": [
+        "tooling",
+        "version-pinning",
+        "vanilla-discovery",
+        "github-api"
+      ],
+      "summary": "덤퍼의 유일한 데이터 출처는 GitHub REST API로 읽는 Mojang/bedrock-samples 저장소다. Deno 백엔드 프록시는 stable을 main 브랜치로, preview를 preview 브랜치로 매핑하고(그 외 값은 main으로 폴백), 해당 브랜치의 커밋 목록 한 페이지를 받아 {sha, 커밋 메시지} 쌍으로 돌려준다. 프런트엔드는 커밋 메시지가 순수 버전 번호(선택적 -preview 접미사) 형태인 항목만 '버전'으로 남기고, 이후 모든 UI 파일 조회는 그 커밋 sha를 ref로 사용한다. README는 이를 '최신 bedrock samples 기준으로 생성'이라고 설명하며 preview/stable 쿼리 파라미터로 선택한다.",
+      "adaptation": "이 저장소에서는 덤퍼 사이트의 stable/preview 표시를 그대로 인용하지 말고, 덤퍼가 내부적으로 쓰는 단위인 bedrock-samples 커밋 sha로 환산해 references/official/bedrock-samples-ui.lock.json의 고정 리비전과 대조한다. 버전 간 차이가 쟁점이면 덤퍼를 열기 전에 node tools/sync-bedrock-samples-ui.mjs --check와 docs/83의 diff를 먼저 보고, 덤퍼는 특정 커밋에서 어떤 속성 값이 등장하는지 빠르게 훑는 보조 수단으로만 쓴다. 답변에는 '덤퍼 기준 커밋 sha'를 함께 적어 추적 가능하게 한다.",
+      "limitations": [
+        "LICENSE 파일이 없어(NOASSERTION) 코드 재사용 불가; 구조와 아이디어만 참고",
+        "커밋 목록은 한 페이지만 받으므로 오래된 버전은 선택지에 나타나지 않고, 메시지가 버전 번호 형식이 아닌 커밋은 걸러진다",
+        "브랜치 헤드/커밋 기준이지 Bedrock 클라이언트 릴리스 태그가 아니므로 '해당 클라이언트가 이 속성을 지원한다'는 증거가 되지 않는다",
+        "호스팅 백엔드는 프로젝트의 GitHub Pages 오리진에서 온 GET 요청에만 응답하고 GitHub 토큰과 Upstash Redis가 필요해 로컬 재현이 번거롭다(README가 로컬 백엔드 구동을 요구)",
+        "런타임 동작은 미검증: 파일이 선언하는 내용만 확인했다"
+      ],
+      "pathScope": "upstream",
+      "screenRoles": [],
+      "contextPolicy": "explicit-source-only"
+    },
+    {
+      "id": "ui-folder-intake-json5-with-error-bucket",
+      "sourceId": "theoristmc-json-ui-dumper",
+      "paths": [
+        "src/services/getFiles.ts",
+        "src/types/file.d.ts",
+        "package.json"
+      ],
+      "roles": [
+        "tooling",
+        "parsing",
+        "json5",
+        "error-handling"
+      ],
+      "summary": "파일 수집 서비스는 선택한 커밋의 resource_pack/ui 디렉터리 목록을 프록시로 받아 이름이 .json으로 끝나고 타입이 file인 항목만 남긴 뒤 각 파일을 텍스트로 내려받는다. 하위 디렉터리는 코드 주석에서 '나중에' 지원할 과제로 미뤄져 있어 탐색하지 않는다. 내려받은 텍스트는 JSON5로 파싱하며(package.json 의존성 선언), 파싱에 실패한 파일은 버리지 않고 파일명과 오류 메시지를 담은 BadFile 형태로 유지해 최종 결과에 'File Errors' 항목으로 드러낸다. File<T>/BadFile 타입이 이 계약을 정의한다.",
+      "adaptation": "바닐라 UI 파일에는 주석과 후행 쉼표가 섞여 있으므로 이 저장소의 스캐너·검증기도 엄격 JSON이 아닌 JSON5 계열 파서로 읽어야 하고, 파싱 실패를 조용히 건너뛰지 말고 파일명과 오류를 함께 보고하는 관행을 따른다. 다만 덤퍼와 달리 하위 폴더까지 포함해 references/official/bedrock-samples-ui 전체를 대상으로 해야 덤퍼보다 넓은 범위를 보장할 수 있다.",
+      "limitations": [
+        "NOASSERTION 라이선스: 구현을 복사하지 말고 접근 방식만 참고",
+        "최상위 resource_pack/ui 파일만 읽으므로 하위 폴더에 있는 UI 파일은 덤프에 없다",
+        "각 파일을 GitHub download_url에서 개별로 받으므로 GitHub rate limit에 종속되며 README가 토큰을 요구한다",
+        "파싱 성공은 Bedrock이 그 파일을 수용한다는 뜻이 아니다"
+      ],
+      "pathScope": "upstream",
+      "screenRoles": [],
+      "contextPolicy": "explicit-source-only"
+    },
+    {
+      "id": "property-path-flattening-and-value-dedup-contract",
+      "sourceId": "theoristmc-json-ui-dumper",
+      "paths": [
+        "src/utils/parseProperties.ts",
+        "src/types/file.d.ts"
+      ],
+      "roles": [
+        "tooling",
+        "property-discovery",
+        "schema-mining",
+        "data-contract"
+      ],
+      "summary": "파서는 모든 파일의 최상위 키를 순회하면서 객체가 '컨트롤'인지(키에 @ 포함, 또는 type/anim_type 자체 키 보유) 판별하고, 컨트롤이면 요소 이름을 버린 채 그 속성들만 병합한다. controls 배열은 각 자식의 이름을 버리고 재귀한다. 중첩 객체와 객체 배열은 '부모 > 자식' 형태의 경로 키로 평탄화되며, variables 배열만 예외로 requires만을 네이티브 속성으로 취급한다(주석에 명시). $로 시작하는 키는 전부 건너뛴다. 리프 값은 경로 키별로 중복 제거된 배열에 누적되므로 결과는 '속성 경로 → 바닐라에서 관측된 값 목록'이라는 단일 평면 맵이다. _ui_defs.json과 _global_variables.json은 별도 버킷에 그대로 저장되고, 세 개의 최상위 바닐라 요소 이름은 하드코딩된 거부 목록으로 제외된다. 호출마다 공유 상태를 초기화한다.",
+      "adaptation": "이 저장소에서 data/jsonui-spec.json의 속성·바인딩·버튼 id 커버리지를 점검할 때 같은 발상을 자체 구현(코드 복사 없이)으로 고정 샘플에 적용할 수 있다: 컨트롤 판별 규칙, controls 재귀, '부모 > 자식' 경로, 'bindings > binding_name' 같은 객체 배열 평탄화를 설계 원칙으로 삼되, 요소 이름과 파일명을 함께 보존해 '어느 화면의 어느 요소가 그 값을 쓰는지'를 잃지 않게 확장한다. type·anim_type 키에 누적되는 값 목록은 요소/애니메이션 타입 열거를 스펙과 대조하는 데 쓸 수 있다.",
+      "limitations": [
+        "NOASSERTION: 파서 코드를 그대로 가져오지 말 것",
+        "요소 이름이 결과에 남지 않아 '이 속성을 어떤 컨트롤이 쓰는가'는 알 수 없고, 파일 출처도 File Errors를 제외하면 기록되지 않는다",
+        "$ 변수 키를 모두 건너뛰므로 변수 이름과 기본값은 Global Variables 버킷 외에는 보이지 않는다",
+        "속성 경로에 값이 '관측됨'은 바닐라 어딘가에 등장한다는 뜻일 뿐, 특정 클라이언트 버전의 수용 여부나 타입 정보를 보장하지 않는다",
+        "프런트엔드(Vue 컴포넌트) 표시 방식은 범위 밖이라 읽지 않았다"
+      ],
+      "pathScope": "upstream",
+      "screenRoles": [],
+      "contextPolicy": "explicit-source-only"
+    },
+    {
+      "id": "dumper-coverage-gaps-absence-is-not-evidence",
+      "sourceId": "theoristmc-json-ui-dumper",
+      "paths": [
+        "src/utils/parseProperties.ts",
+        "src/services/getFiles.ts",
+        "server/main.ts"
+      ],
+      "roles": [
+        "tooling",
+        "evidence-policy",
+        "coverage-gaps",
+        "discovery-aid"
+      ],
+      "summary": "코드가 선언하는 누락 지점이 여러 곳 있다. 컨트롤 순회 함수는 controls 배열을 만나면 처리 후 즉시 반환하고, 중첩 객체 순회 함수도 첫 배열 값에서 반환하므로 같은 객체에서 그 뒤에 오는 형제 키는 병합되지 않는다. $ 변수 키, 세 개의 거부 목록 요소, resource_pack/ui 하위 디렉터리는 애초에 읽지 않는다. 버전 목록은 커밋 한 페이지와 메시지 정규식에 의존한다. 즉 덤프에 없다고 해서 바닐라에 없는 것이 아니며, 덤프에 있다고 해서 특정 클라이언트가 받아들이는 것도 아니다.",
+      "adaptation": "이 저장소의 '증거 우선' 순서에서 덤퍼는 3단계(등록된 업스트림 도구) 증거로만 취급한다. 속성·바인딩·컨트롤 이름의 존재 여부는 반드시 references/official/bedrock-samples-ui와 node tools/vanilla-name-check.mjs <name>으로 확인하고, 덤퍼는 '어떤 값들이 쓰이는지 후보를 빠르게 훑는 용도'라고 답변에 명시한다. 덤프 결과를 인용할 때는 선택한 커밋 sha와 함께 '덤퍼의 평탄화 규칙상 누락 가능'이라는 단서를 붙인다.",
+      "limitations": [
+        "NOASSERTION: 재배포·코드 복사 금지",
+        "조기 반환 동작은 파일에서 확인한 사실이지만 실제 바닐라 파일의 키 순서에 따라 실질 누락량이 달라지므로 영향 범위는 측정하지 않았다",
+        "호스팅 사이트의 실제 표시 결과는 검증하지 않았고 파서 출력 계약만 읽었다",
+        "README가 '나(미래의 나)를 위한 것'이라 밝혀 유지보수·안정성 보장이 없다"
+      ],
+      "pathScope": "upstream",
+      "screenRoles": [],
+      "contextPolicy": "explicit-source-only"
     }
   ]
 }

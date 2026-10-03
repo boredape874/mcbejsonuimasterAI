@@ -84,6 +84,13 @@ Animation note:
 - use `docs/37-vanilla-dumper-screen-recipes.md` when the task names a vanilla screen such as HUD, chat, chest, inventory, or server form
 - copy the animation reference relationship as well as the animation definition; a standalone `anim_type` block is often not enough
 
+Source-inspected notes (2026-10-03, revision `a6d0d3cf` pinned as `theoristmc-json-ui-dumper`; still no license file, so reuse stays reference-only):
+
+- "stable" is the `main` branch head of `Mojang/bedrock-samples` and "preview" is the `preview` branch head; the selectable versions are one page of commits whose message is a bare version number, so older versions and non-version commits never appear. A dump therefore proves what a branch head contains, not what a Bedrock client release accepts.
+- The intake reads only the top-level files of `resource_pack/ui` (no subdirectories), parses them as JSON5 and reports parse failures in a "File Errors" bucket.
+- The output is a property-path to observed-values map (`parent > key`), not an element browser: element names are dropped, `$` keys are skipped, three vanilla elements are denylisted, only `requires` inside `variables` is treated as native, and the walker returns after the first `controls` array or first array-valued entry so later sibling keys are not merged.
+- Consequently absence from the dump is not evidence that a name is absent from vanilla, and presence is not evidence that the pinned client accepts it. The repository already pins the same upstream, so run `node tools/vanilla-name-check.mjs <name>` against `references/official/bedrock-samples-ui` first and use the dumper only to scan candidate values. `docs/33`, `docs/36` and `docs/37` are grounded in the pinned sample files, not in the hosted site.
+
 ## `pipangry/StarLibV2`
 
 Upstream:

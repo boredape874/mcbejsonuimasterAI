@@ -85,7 +85,7 @@ UI 이름을 확인하던 커밋과 같은 리비전에서 attachable·플레이
 | `mcbe-json-ui-reference` | `skills/mcbe-json-ui-reference/references/official-docs-cross-check.md` | §4·§5의 대조 표와 결과 라벨 |
 | `mcbe-json-ui-samples` | `skills/mcbe-json-ui-samples/references/community-ui-packs.md` | 등록한 JSON UI 애드온·라이브러리·도구의 구조 요약과 재사용 경계 |
 
-`data/bedrock-source-patterns.json`의 카드는 21개에서 늘어났다(검토일 2026-10-03). 새 카드는 모두 `contextPolicy: explicit-source-only`이므로 스타일 문맥에 자동으로 섞이지 않고 `node tools/design-library.mjs patterns --source ID`로만 읽는다. 카드의 `paths`는 lock에 고정된 파일만 가리키며 `node tools/design-library.mjs verify`가 검사한다. 각 카드의 `limitations`에 라이선스와 미검증 범위가 있다.
+`data/bedrock-source-patterns.json`의 카드는 21개에서 85개로 늘어났다(검토일 2026-10-03; 13개 출처를 각각 파일 단위로 읽고 라이선스·증거 줄 번호·한계를 적은 분석 결과를 카드로 옮겼다). 새 카드는 모두 `contextPolicy: explicit-source-only`이므로 스타일 문맥에 자동으로 섞이지 않고 `node tools/design-library.mjs patterns --source ID`로만 읽는다. 카드의 `paths`는 lock에 고정된 파일만 가리키며 `node tools/design-library.mjs verify`가 검사한다. 각 카드의 `limitations`에 라이선스와 미검증 범위가 있다.
 
 ## 7. 바꾸지 않은 것
 
