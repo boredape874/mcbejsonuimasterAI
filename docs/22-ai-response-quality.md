@@ -9,7 +9,12 @@ When relevant, label claims as:
 - confirmed from community reference docs
 - confirmed from official bedrock-samples
 - confirmed from Ztech vanilla pack
+- confirmed from registered upstream source (name the source id from `config/design-research-lock.json` and the file)
+- confirmed from Microsoft docs (name exists) — the creator reference pages are `ai-usage: ai-assisted`, so this label never covers a type, default or enum claim
+- documented name, not in vanilla — an official table lists it but no pinned vanilla file uses it (for example `nine_slice_left`, `slider_range`); never present it as accepted
+- community-documented — Bedrock Wiki or a community list; say whether `node tools/vanilla-name-check.mjs` found the name
 - inferred from working local sample
+- inferred from skill guidance (the skill's own references answered because steps 1–3 of the evidence-first order did not)
 - community pattern
 - not verified
 

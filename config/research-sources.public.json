@@ -11,7 +11,7 @@
   "sources": [
     {"id":"bedrock-core-ui","provider":"github","url":"https://github.com/bedrock-core/ui","kind":"runtime-and-reference-pack","license":"MIT","tier":"pattern","revision":"3c9f62b309a7d5a76797efb9415ebc4050af51f4"},
     {"id":"bedrock-schemas","provider":"github","url":"https://github.com/Mojang/bedrock-schemas","kind":"official-schema","license":"MIT","tier":"authority","revision":"36ef10fcf700e60901f29972e9515f9e88000fef"},
-    {"id":"collect-everything","provider":"github","url":"https://github.com/world-class-engineers/collect-everything-bedrock","kind":"addon","license":"MIT","tier":"pattern","revision":"25776436ef4823fd0f06e29dc419c8a21e8744e9"},
+    {"id":"collect-everything","provider":"github","url":"https://github.com/world-class-engineers/collect-everything-bedrock","kind":"addon","license":"MIT","tier":"pattern","revision":"764757157caf83dbc5820a2404a83d18b07145a7"},
     {"id":"texture-debug","provider":"github","url":"https://github.com/world-class-engineers/mcbe-texture-debug","kind":"addon","license":"MIT","tier":"pattern","revision":"dd5f26c1f3bbdb20855e56b3b8db5ff89ee7d9a5"},
     {"id":"geyser-integrated-pack","provider":"github","url":"https://github.com/GeyserMC/GeyserIntegratedPack","kind":"compatibility-pack","license":"MIT code; Mojang-owned textures excluded","tier":"pattern","revision":"205e3f7bd7828fcc71641c1b2ddbf58ef3511714"},
     {"id":"jsonforge","provider":"github","url":"https://github.com/xRookieFight/jsonforge","kind":"editor","license":"MIT","tier":"research-only","revision":"2e225e5541ecfc3024efee444ae4b4e6309f0682"},
@@ -23,7 +23,7 @@
     {"id":"live-preview","provider":"github","url":"https://github.com/EmirhanOlgn/bedrock-jsonui-live-preview","kind":"preview-study","license":"MIT","tier":"research-only","revision":"926abd3402fce3442e805b643a69d120fd3baeb2"},
     {"id":"avatar-addon","provider":"github","url":"https://github.com/GlitchyTurtle/avatar-addon","kind":"addon","license":"GPL-3.0","tier":"pattern","revision":"c43001f1c11003e211432f4bce275f25c38e317d"},
     {"id":"player-model-renderer","provider":"github","url":"https://github.com/KawEduh-dv/Player-Model-Renderer-JSON-UI","kind":"addon","license":"MIT","tier":"pattern","revision":"cc98c016003d64e76d4a955aff76ba56160a824f"},
-    {"id":"touhou-little-maid","provider":"github","url":"https://github.com/ENIACJushi/TouHouLittleMaidBE","kind":"addon","license":"MIT","tier":"pattern","revision":"1a67b6a13af87beefcd3121fced0a66c2c354f93"},
+    {"id":"touhou-little-maid","provider":"github","url":"https://github.com/ENIACJushi/TouHouLittleMaidBE","kind":"addon","license":"MIT","tier":"pattern","revision":"b6fa8d0c64a6218cfb65732ab9fc26f750ee0aa7"},
     {"id":"fazbears-restocked","provider":"github","url":"https://github.com/Hirxs-Workshop/Fazbears-Restocked-Bedrock","kind":"map-addon","license":"unverified","tier":"quarantine","revision":"e60ef1efa1bd1439ef01dbb668ae4d7b2215a763"},
     {"id":"water-ui-next","provider":"github","url":"https://github.com/kkkzheli/Water-UI-NEXT","kind":"ui-pack","license":"unverified","tier":"quarantine","revision":"79be6a1d927c824706368d22315099c8182b475f"},
     {"id":"collapse-ui","provider":"curseforge","url":"https://www.curseforge.com/minecraft-bedrock/texture-packs/collapse-ui","kind":"ui-pack","license":"GPL-3.0","tier":"pattern","fileId":7997207,"sha256":"c288ad875e84ca3cc90a7e97c29d70c5c37248e0156ca7f65360443bb685d38e"},

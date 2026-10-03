@@ -184,7 +184,7 @@ node tools/sync-bedrock-samples-ui.mjs --check
 node tools/vanilla-name-check.mjs common.close_button '#title_text'   # 바닐라에 있는 이름인지 확인
 ```
 
-공식 샘플의 고정 리비전은 `references/official/bedrock-samples-ui.lock.json`(현재 `v1.26.50.4`)에 기록되며 위 `--check`가 네트워크 없이 커밋된 파일과 lock의 일치를 검사합니다. 이전 고정본과의 차이는 [바닐라 UI 변경 추적](docs/83-vanilla-ui-1.26.50-diff.md)을 참고하세요.
+공식 샘플의 고정 리비전은 `references/official/bedrock-samples-ui.lock.json`(현재 `v1.26.50.4`)에 기록되며 위 `--check`가 네트워크 없이 커밋된 파일과 lock의 일치를 검사합니다. 이전 고정본과의 차이는 [바닐라 UI 변경 추적](docs/83-vanilla-ui-1.26.50-diff.md)을, 2026-10-03에 추가한 공식 문서·스키마·위키·애드온 출처와 바닐라 대조 결과는 [레퍼런스 확장과 근거 우선 정책](docs/84-reference-expansion-and-evidence-first.md)을 참고하세요. `node tools/vanilla-name-check.mjs`는 컨트롤·바인딩·변수·버튼 id·렌더러·텍스처·화면 파일에 더해 factory 이름과 컬렉션 이름도 확인합니다.
 
 개인 팩의 경로는 `config/sources.local.example.json`을 복사한 `config/sources.local.json`에만 둡니다. 로컬 파일을 대상으로 `validate:sources`를 실행한 뒤 `source:scan`, `catalog:build`, `design:search`를 선택합니다. 대규모 로컬 자료와 attachable·geometry 근거 추출은 [로컬 에셋 작업 흐름](docs/77-resource-pack-skills.md#로컬-에셋-활용)을 참고하세요.
 
@@ -192,6 +192,6 @@ node tools/vanilla-name-check.mjs common.close_button '#title_text'   # 바닐�
 
 ## 출처와 검증 원칙
 
-공식 문서는 이름과 계약을, 고정된 Mojang 샘플은 버전별 구현을, 실제 클라이언트와 Content Log는 실행 결과를 확인하는 근거로 사용합니다. 커뮤니티 자료·외부 스킬·로컬 팩은 출처와 적용 한계를 남기며, 공개된 파일이라는 이유만으로 재배포 권한을 가정하지 않습니다.
+공식 문서는 이름과 계약을, 고정된 Mojang 샘플은 버전별 구현을, 실제 클라이언트와 Content Log는 실행 결과를 확인하는 근거로 사용합니다. 스킬은 출발점이 아니라 마지막 수단입니다. 모든 스킬은 대상 팩 → 고정 바닐라 샘플(`node tools/vanilla-name-check.mjs`) → 등록된 외부 출처(`node tools/design-library.mjs sources --source ID`) → 스킬 자체 참조 순서로 조사하고, 스킬 참조로만 답한 내용은 "inferred from skill guidance"로 표시합니다. 커뮤니티 자료·외부 스킬·로컬 팩은 출처와 적용 한계를 남기며, 공개된 파일이라는 이유만으로 재배포 권한을 가정하지 않습니다.
 
 설계 자료는 필요한 파일만 조회합니다. 외부 원본 코드를 자동으로 실행하거나 설치하지 않으며, 이 저장소의 자료 추가가 모델 학습이나 성능 향상을 입증하는 것은 아닙니다. [출처 우선순위](docs/04-source-priority.md) · [자료 조사와 범위](docs/79-resource-source-review.md)

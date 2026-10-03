@@ -30,6 +30,34 @@
     "preview_1_26_60": {
       "source": "Mojang bedrock-samples preview branch v1.26.60.29-preview (commit 602eee34b6f4540ea8569a92736920aa8e897a2e); not in the stable sample and not runtime-verified",
       "renderer_types": ["hotbar_slots_renderer"]
+    },
+    "docs_cross_check_2026_10_03": {
+      "pathScope": "upstream",
+      "source": "Official and community property tables compared against this spec and the pinned vanilla ui files (207 mirror files, revision 46ba6ea985fb); see docs/84-reference-expansion-and-evidence-first.md; page values below are paths inside the pinned upstream sources",
+      "microsoftdocs_minecraft_creator_reference": {
+        "revision": "ba7a3b48",
+        "page": "creator/Reference/Content/JsonUiReference/Examples/JsonUiComponents/ui_element.md (ai-usage: ai-assisted, ms.date 02/11/2025)",
+        "documented_element_properties": 77,
+        "already_in_spec": 72,
+        "documented_but_absent_from_vanilla": ["nine_slice_buttom", "nine_slice_left", "nine_slice_right", "nine_slice_top", "slider_range"],
+        "not_added_reason": "zero occurrences in the pinned vanilla ui files; vanilla uses nineslice_size and slider_steps; nine_slice_buttom is a typo in the page",
+        "type_claims_not_trusted": ["font_scale_factor as boolean", "grid_item_template as integer", "locked_control as boolean", "slider_select_on_hover as string", "size as number[] only"],
+        "binding_entry_keys_documented": ["binding_collection_name", "binding_condition", "binding_name", "binding_name_override", "binding_type", "source_control_name", "source_property_name", "target_property_name"],
+        "button_mapping_entry_keys_documented": ["from_button_id", "input_mode_condition", "mapping_type", "to_button_id"]
+      },
+      "mojang_bedrock_schemas_visual": {
+        "revision": "fc31f9af",
+        "page": "types/rp/ui/UiElement.d.ts and forms/ui/ui_element.form.json",
+        "note": "carries the same five absent names and the same doubtful types as the creator page, and omits nineslice_size; treated as a property-name checklist, never as a type authority"
+      },
+      "bedrock_wiki_entities_visuals": {
+        "revision": "50fc062b",
+        "page": "docs/json-ui/json-ui-documentation.md",
+        "legacy_control_types_kept_for_old_references": ["tab", "carousel_label", "grid_item"],
+        "legacy_properties_kept_for_old_references": ["z_order", "alignment"],
+        "wiki_only_control_type_not_added": "scrollbar_track (vanilla spells the type scroll_track)",
+        "vanilla_usage_1_26_50": { "tab": 0, "carousel_label": 1, "grid_item": 0, "z_order": 0, "alignment": 0, "scroll_track": 1 }
+      }
     }
   },
   "control_types": [
@@ -235,6 +263,11 @@
     "array_name", "control_name", "operation", "value", "where", "target", "target_control"
   ],
   "modification_array_names": ["controls", "bindings", "button_mappings"],
+  "button_mapping_entry_keys": [
+    "from_button_id", "to_button_id", "mapping_type", "scope", "input_mode_condition",
+    "handle_select", "handle_deselect", "ignored", "consume_event", "button_up_right_of_first_refusal", "ignore_input_scope"
+  ],
+  "variables_entry_keys": ["requires"],
   "rules": {
     "layer_warn_above": 100,
     "grid_requires": "grid_item_template OR controls[]",

@@ -209,7 +209,39 @@ Primary files:
 
 `node tools/vanilla-name-check.mjs <name>` reports whether a control, binding, variable, button id, renderer, or screen file occurs in these files (and in the full local mirror when `references/upstreams/bedrock-samples` exists). The folder's `README.md` explains the provenance rules.
 
+The same revision is pinned a second time as `mojang-bedrock-samples` in `config/design-research-lock.json` (322 hash-verified files: 207 ui files plus `resource_pack/attachables`, `entity`, `animations`, `animation_controllers`, `render_controllers`, `models`, `textures/ui` metadata and the `@minecraft/server-ui` script metadata). Attachable, player-rig and render-controller names are therefore checked against the same commit as UI names; the ignored local mirror holds those folders too (`node tools/design-source-sync.mjs --source mojang-bedrock-samples --download`). The 2026-10-03 reference expansion is summarised in `docs/84-reference-expansion-and-evidence-first.md`.
+
 ## External sources
+
+Sources added on 2026-10-03 (all commit-pinned in `config/design-research-lock.json`, summarised in `data/design-sources.json`):
+
+- `MicrosoftDocs/minecraft-creator` (`microsoftdocs-minecraft-creator-reference`, CC-BY-4.0 docs / MIT samples)
+  - <https://github.com/MicrosoftDocs/minecraft-creator>
+  - JSON UI component reference, attachable/client-entity reference, geometry, render-controller and texture-set visual references, Molang query pages, attachables and custom-item tutorials, DDUI introduction; reference pages are `ai-usage: ai-assisted` and prove names only
+- `Bedrock-OSS/bedrock-wiki` entities and visuals snapshot (`bedrock-wiki-entities-visuals`, per-page license)
+  - <https://github.com/Bedrock-OSS/bedrock-wiki>
+  - attachables (two construction methods), player geometry, render controllers, materials, texture atlases, overwriting assets, subpacks and every JSON UI page
+- `Mojang/bedrock-schemas` (`mojang-bedrock-schemas-visual`, MIT)
+  - <https://github.com/Mojang/bedrock-schemas>
+  - official forms, schemas and TypeScript types for attachables, entities, models, render controllers and UI; carries the same typing errors as the creator reference
+- `KawEduh-dv/Player-Model-Renderer-JSON-UI` (`kaweduh-player-model-renderer`, MIT)
+  - <https://github.com/KawEduh-dv/Player-Model-Renderer-JSON-UI>
+  - title-prefix route from a vanilla ActionForm into a custom panel with `live_player_renderer`, `paper_doll_renderer` and `name_tag_renderer`
+- `GlitchyTurtle/avatar-addon` (`glitchyturtle-avatar-addon`, GPL-3.0, analysis-only)
+  - <https://github.com/GlitchyTurtle/avatar-addon>
+  - reusable form kit, cooldown HUD bars, dropdown/edit-box/tab texture metadata and a player-like client entity; structure only, no code or art reuse
+- `ENIACJushi/TouHouLittleMaidBE` (`eniacjushi-touhou-little-maid`, MIT)
+  - <https://github.com/ENIACJushi/TouHouLittleMaidBE>
+  - held and worn attachables, render controllers, custom container screen, book screen and form parts
+- `world-class-engineers/collect-everything-bedrock` (`world-class-engineers-collect-everything`, MIT)
+  - <https://github.com/world-class-engineers/collect-everything-bedrock>
+  - collection browser ActionForm with inventory-slot templates, `hover_text_renderer` and nine-slice metadata
+- `Hawariii/minecraft-bedrock-ui-research` (`hawariii-bedrock-ui-research`, MIT)
+  - <https://github.com/Hawariii/minecraft-bedrock-ui-research>
+  - community binding/button-id/collection/control lists; the 2026-10-03 audit found 19/78 names, 41/47 collections and 8/19 "controls" absent from vanilla 1.26.50, so verify every name with `node tools/vanilla-name-check.mjs`
+- `pipangry/StarLibV2` and `TheoristMC/JSON-UI-Dumper` are now also pinned (`pipangry-starlibv2`, `theoristmc-json-ui-dumper`) in addition to the entries below
+
+Earlier entries:
 
 - `boredape874/mcbe-json-ui-resource`
   - <https://github.com/boredape874/mcbe-json-ui-resource>

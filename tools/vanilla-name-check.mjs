@@ -31,7 +31,7 @@ function usage() {
   process.stdout.write([
     "Usage: node tools/vanilla-name-check.mjs <name> [<name> ...] [--mirror <path>] [--no-mirror] [--json] [--report <path>]",
     "",
-    "Checks control, #binding, $variable, button id, texture, renderer and ui/screen.json names",
+    "Checks control, #binding, $variable, button id, texture, renderer, factory, collection and ui/screen.json names",
     "against the pinned official bedrock-samples UI files (and the full local mirror when present).",
     "Exit 0 when every name is found, 3 when at least one is missing.",
     "",

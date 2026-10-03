@@ -1,5 +1,7 @@
 # Skill Map
 
+Every skill starts with the same evidence-first order: the target pack and Content Log, then the pinned official samples (`references/official/bedrock-samples-ui`, `node tools/vanilla-name-check.mjs`), then the registered upstream sources (`node tools/design-library.mjs sources --source ID`, `config/design-research-lock.json`) and `docs/`, and only then the skill's own references, labelled "inferred from skill guidance". `tests/skill-evidence-first.mjs` checks that each `SKILL.md` carries that section before its own workflow.
+
 ## Resource-pack specialists
 
 - `mcbe-resource-pack-master`: broad RP/addon ownership, one specialist at a time.

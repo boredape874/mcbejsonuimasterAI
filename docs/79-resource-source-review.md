@@ -62,6 +62,20 @@ AI·픽셀·게임 UI 연구는 8개 1차 출처를 5개 선택 주제로 정리
 
 후속 보강의 시작점 `4d38edb`와 비교해서도 28개 스킬의 기본 compact 문맥과 6개 스타일 카드가 모두 같았다. 새 `geoui-project` 및 두 전문 스킬의 `source-patterns` 문맥은 각각 1,037·1,005·1,013자로 도구 하나만 선택한다. 전체 프로젝트/출처 보고서는 명시적으로 요청할 때만 읽는다.
 
+## 2026-10-03 후속: 같은 커밋의 바닐라 팩 파일과 공식·위키 자료
+
+`mojang-bedrock-samples` 출처를 UI 207개 파일에 더해 `attachables`·`entity`·`animations`·`animation_controllers`·`render_controllers`·`models` 115개 파일까지 322개로 넓혔고(UI lock과 같은 커밋 `46ba6ea985fb`), 공식 creator 레퍼런스(`microsoftdocs-minecraft-creator-reference`, 91개), 공식 스키마(`mojang-bedrock-schemas-visual`, 36개), 위키 entities/visuals 스냅샷(`bedrock-wiki-entities-visuals`, 63개)과 애드온 예제 다섯 개를 추가했다. 통합 lock은 38개 출처·1,063개 파일이며 `node tools/design-library.mjs verify`가 크기와 SHA-256을 확인한다.
+
+| 확인한 근거 | 반영 |
+| --- | --- |
+| 바닐라 attachable 55개 전수: `.player` 쌍, `parent_setup`의 `*_layer_visible`, `controller.render.armor` 51개, bow/crossbow 프레임 배열 | attachables 스킬 참조의 구조 통계와 "파일명이 아니라 identifier·item으로 짝을 맞춘다" 규칙 |
+| `humanoid.custom.geo.json`(1.21.0) bone 계층, `player.entity.json`(1.26.0)의 다섯 render controller와 `enable_attachables` | geo-ui·attachables 참조의 리그 표 |
+| 공식 `actor_resource_definition.v1.10.0/.v1.26.0`: `item` Object/String/Molang, `hide_armor`, `queryable_geometry`, `scripts.hide_held_items`, 1.26.0 `{}` 스코프 | 전용 `attachable.md`가 빠뜨린 키를 보완한 키 표 |
+| 공식 `ui_element.md`·스키마 `UiElement.d.ts`의 `nine_slice_*`·`slider_range`는 바닐라 0회, 타입 오류 다수 | 스펙에 추가하지 않고 `_confirmed_extensions.docs_cross_check_2026_10_03`에 기록, 테스트로 고정 |
+| 커뮤니티 이름 목록(`hawariii-bedrock-ui-research`)의 78개 중 19개, 컬렉션 47개 중 41개가 바닐라에 없음 | 발견 보조 자료로 격하하고 `vanilla-name-check` 선행을 의무화 |
+
+세부 표와 라벨은 [84. 레퍼런스 확장과 근거 우선 정책](84-reference-expansion-and-evidence-first.md)에 있다.
+
 ## 검증과 남은 범위
 
 회귀 검사는 누락 경로, JSONC, alias, property 상태, item selector, subpack, material 상속, 텍스처 레이어, 원본 보존과 출력 한도를 다룬다. 독립 검토에서 발견한 잘못된 manifest의 성공 처리, 외부 manifest 링크, 짧은 출력의 오류 누락도 회귀 사례로 고정했다.

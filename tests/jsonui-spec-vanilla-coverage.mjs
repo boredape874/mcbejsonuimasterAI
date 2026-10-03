@@ -31,11 +31,16 @@ const enumSets = {
 };
 const literal = (value) => typeof value === "string" && !value.startsWith("$") && !value.startsWith("#") && !value.startsWith("@");
 const missingEnums = [];
+const unknownEntryKeys = [];
+const buttonMappingKeys = new Set(spec.button_mapping_entry_keys);
+const variablesEntryKeys = new Set([...spec.variables_entry_keys, ...Object.values(spec.properties).flat()]);
 function walk(node, file) {
   if (Array.isArray(node)) { for (const item of node) walk(item, file); return; }
   if (!node || typeof node !== "object") return;
   for (const [key, value] of Object.entries(node)) {
     if (enumSets[key] && literal(value) && !enumSets[key].has(value)) missingEnums.push({ file, key, value });
+    if (key === "button_mappings" && Array.isArray(value)) for (const entry of value) if (entry && typeof entry === "object") for (const entryKey of Object.keys(entry)) if (!buttonMappingKeys.has(entryKey)) unknownEntryKeys.push({ file, array: "button_mappings", key: entryKey });
+    if (key === "variables" && Array.isArray(value)) for (const entry of value) if (entry && typeof entry === "object") for (const entryKey of Object.keys(entry)) if (!entryKey.startsWith("$") && !variablesEntryKeys.has(entryKey)) unknownEntryKeys.push({ file, array: "variables", key: entryKey });
     walk(value, file);
   }
 }
@@ -60,6 +65,15 @@ for (const name of files) {
 assert.deepEqual([...unknownProperties.entries()], [], "pinned vanilla files use properties that data/jsonui-spec.json does not list; add them with evidence");
 assert.deepEqual(invalidValues, [], "pinned vanilla files use enum values that data/jsonui-spec.json rejects");
 assert.deepEqual(missingEnums, [], "pinned vanilla files use enum values missing from data/jsonui-spec.json");
+assert.deepEqual(unknownEntryKeys, [], "pinned vanilla files use button_mappings/variables entry keys that data/jsonui-spec.json does not list");
+
+// Documented-but-unverified names from the official creator reference and the schemas repository
+// (nine_slice_* and slider_range) must stay out of the accepted vocabulary until a vanilla file uses them.
+for (const name of spec._confirmed_extensions.docs_cross_check_2026_10_03.microsoftdocs_minecraft_creator_reference.documented_but_absent_from_vanilla) {
+  assert.ok(!Object.values(spec.properties).flat().includes(name), `${name} is documented by the creator reference but absent from vanilla; it must not be listed as accepted`);
+}
+assert.ok(spec.button_mapping_entry_keys.includes("from_button_id") && spec.button_mapping_entry_keys.includes("ignore_input_scope"));
+assert.deepEqual(spec.variables_entry_keys, ["requires"]);
 
 // Guard the two regressions that the 1.26.50 sync exposed.
 assert.ok(spec.control_types.includes("tooltip_trigger"));

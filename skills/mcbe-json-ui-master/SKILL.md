@@ -7,6 +7,17 @@ description: Route broad or end-to-end Minecraft Bedrock JSON UI work to the sma
 
 Use this only when the request is broad, mixed, or has no clear owner. Exact layout, binding, form, HUD, asset, lookup, or debugging requests go directly to one specialist without loading this router. Keep one primary owner, then expand the ordered supporting route one Skill and one reference at a time.
 
+## Evidence first, skill second
+
+Research the real evidence before applying anything written in this skill, and say which step answered:
+
+1. The target pack itself: its `_ui_defs.json`, manifests, the files the request names, and the current Content Log.
+2. Pinned official vanilla evidence: `references/official/bedrock-samples-ui` at the revision in `references/official/bedrock-samples-ui.lock.json`, `node tools/vanilla-name-check.mjs <name>` for any control, `#binding`, `$variable`, button id, renderer or screen file, the full local mirror under `references/upstreams/bedrock-samples` when present, and `docs/83-vanilla-ui-1.26.50-diff.md` for names that moved or disappeared.
+3. Registered upstream sources and their cards: `node tools/design-library.mjs sources --source ID` and `node tools/design-library.mjs patterns --source ID` for the official docs, Wiki snapshots, schemas and sample addons pinned in `config/design-research-lock.json` (commit-pinned raw URLs for every file), then the repository `docs/`.
+4. Only when steps 1–3 do not answer: this skill's own references. Label such guidance "inferred from skill guidance", never "confirmed".
+
+A name, offset, selector or rule found in steps 1–3 overrides this skill. Older third-party references and example packs stay valid pattern evidence; do not delete or rewrite them because a vanilla name moved. Without this repository checkout, follow the same order with the official samples and docs you can reach and report which steps were unavailable.
+
 For broad resource-pack/addon work use `mcbe-resource-pack-master`. Equipped model UI belongs to `mcbe-attachables-ui`; camera/player geometry UI belongs to `mcbe-geo-ui`; materials, outlines and texture sets belong to `mcbe-resource-pack-rendering`. Preserve the requested surface when a feature spans them.
 
 ## Route by primary need
@@ -46,6 +57,7 @@ When a server form mixes control-reference, collection/search, marker, hover/foc
 - Input: target pack or files, requested behavior, reference material, and runtime constraints that are actually available.
 - Output: `mode`, one `primarySkill`, compatibility `followOnSkill`, ordered `nextRoutes`, one initial reference, intended evidence, and the validation boundary. Do not load all `nextRoutes` together.
 - Success: the work names exact RP/BP files, does not invent properties or assets, and distinguishes static validation from Bedrock runtime proof.
+- Every routed specialist applies the same evidence-first order (target pack → pinned official samples and `node tools/vanilla-name-check.mjs` → registered sources via `node tools/design-library.mjs sources --source ID` → skill references last, labelled "inferred from skill guidance"). Routing to a skill never replaces that research.
 
 When routing data is available, validate structured intent with `node tools/route-task.mjs`; raw prompt classification is advisory and must not auto-execute at low confidence. Unknown or ambiguous ownership fails closed. Escalation is one-way `quick → standard → deep`, at most twice, without repeating the same command and input hash.
 

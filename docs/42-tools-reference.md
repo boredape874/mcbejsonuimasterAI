@@ -131,7 +131,7 @@ Low-level commands remain available for diagnosis:
 | `repository.audit` | `node tools/audit.mjs [--report <path>]` | repository links, JSON, skill, and script integrity |
 | `vanilla.index` | `node tools/build-vanilla-index.mjs [--force]` | local vanilla screen and texture evidence |
 | `vanilla.samples-sync` | `node tools/sync-bedrock-samples-ui.mjs [--check|--diff] [--mirror <path>] [--ref <name>] [--no-profile]` | copy the selected official sample UI files from a local mirror, pin the revision, regenerate the vanilla screen profile, and verify or diff offline |
-| `vanilla.name-check` | `node tools/vanilla-name-check.mjs <name> [...] [--no-mirror]` | confirm a control, binding, variable, button id, renderer, texture, or screen name occurs in the pinned official samples |
+| `vanilla.name-check` | `node tools/vanilla-name-check.mjs <name> [...] [--no-mirror]` | confirm a control, binding, variable, button id, renderer, texture, factory, collection, or screen name occurs in the pinned official samples |
 
 The Go solver remains geometry-only. YAML parsing, auto-sizing, compilation, validation, preview, and reports stay in Node. Both backends preserve descendant anchors when constraints move or resize their parents. Duplicate or reserved element IDs are rejected before solving. If the solver does not converge, `run` stops with exit code 7 and an `ok: false` report; it does not compile that layout.
 

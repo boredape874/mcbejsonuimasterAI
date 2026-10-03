@@ -102,6 +102,16 @@ Confirmed from the pinned official files (`references/official/bedrock-samples-u
 
 Removed in 1.26.50: the HUD root no longer contains `curor_rend@cursor_renderer` (`#show_cursor`), and `inventory_screen.json` no longer defines `tab_offset_anim`/`tab_wait_anim`.
 
+### Entry keys confirmed by Microsoft docs and vanilla (2026-10-03)
+
+| Array | Confirmed from Microsoft docs (`ui_element.md`, ai-assisted page) | Additional keys confirmed from vanilla 1.26.50 (207 mirror files) |
+| --- | --- | --- |
+| `bindings[]` | `binding_collection_name`, `binding_condition`, `binding_name`, `binding_name_override`, `binding_type`, `source_control_name`, `source_property_name`, `target_property_name` | `resolve_ancestor_scope`, `resolve_sibling_scope`, `binding_collection_prefix`, `ignored` |
+| `button_mappings[]` | `from_button_id`, `input_mode_condition`, `mapping_type`, `to_button_id` | `scope` (127), `handle_select` (50), `handle_deselect` (48), `ignored` (46), `button_up_right_of_first_refusal` (25), `consume_event` (9), `ignore_input_scope` (4) |
+| `variables[]` | `requires` (schemas repository) | `requires` (505 uses) plus `$` overrides |
+
+The full vocabulary lives in `data/jsonui-spec.json` (`binding_entry_keys`, `button_mapping_entry_keys`, `variables_entry_keys`). The community repository `hawariii-bedrock-ui-research` lists 19 binding or button-id names that do not occur in vanilla 1.26.50 (for example `#is_hovered`, `#item_count`, `#chat_message`); see `skills/mcbe-json-ui-reference/references/official-docs-cross-check.md` before citing any name from it.
+
 ## Practical workflow
 
 When a binding is needed:

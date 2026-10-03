@@ -25,6 +25,8 @@ If a new vanilla version adds a property:
 4. Record the vanilla file that uses it in `_confirmed_extensions` and mirror the name in `docs/48-json-ui-field-catalogue.md`.
 5. Run `node tests/jsonui-spec-vanilla-coverage.mjs` and `node tools/run.mjs workspace/<any>/ir.yaml` to confirm the validator still loads the spec.
 
+Entry-key arrays (2026-10-03): `binding_entry_keys`, `button_mapping_entry_keys` (eleven keys used by vanilla `button_mappings[]` entries) and `variables_entry_keys` (`requires`) document the keys allowed inside those arrays; the coverage test fails when a pinned vanilla file uses an entry key the spec does not list. `_confirmed_extensions.docs_cross_check_2026_10_03` records the comparison with the Microsoft creator reference, the official schemas repository and the Bedrock Wiki documentation page. A name that an official table documents but no vanilla file uses (`nine_slice_left/right/top/bottom`, `slider_range`) is recorded there and deliberately not added to `properties`; the test asserts it stays out. Legacy names that old references still use (`tab`, `grid_item`, `z_order`, `alignment`) stay accepted.
+
 ## Updating the preset catalog
 
 If a new vanilla preset becomes useful:

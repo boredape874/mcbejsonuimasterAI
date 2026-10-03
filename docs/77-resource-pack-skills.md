@@ -58,3 +58,16 @@ evidence의 `--id`에는 context에서 받은 `asset-`와 20자리 해시를 넣
 GeouiStudio와 제공된 attachables 스킬은 생성 구조와 실패 사례를 분석하는 근거다. 공식 자료와 바닐라 스냅샷은 별도 버전·해시로 고정한다. 외부 코드는 연구만을 위해 실행하거나 설치하지 않는다. 다운로드는 선택한 파일을 `workspace/design-library/upstreams`에 저장하는 기존 `design-source-sync`를 사용한다.
 
 모든 신규 정적 도구는 `runtimeVerified:false`다. 스킬/도구의 검증 결과와 생성한 실제 게임 콘텐츠의 런타임 검증 결과를 구분한다.
+
+## 2026-10-03 보강: 바닐라·공식·위키 근거 참조
+
+네 스킬에 근거 전용 참조를 추가했다. 스킬 본문보다 먼저 대상 팩 → 고정 바닐라 샘플 → 등록 출처 순으로 조사하고, 참조는 그 조사 결과를 라벨과 함께 모아 둔 표다.
+
+| 스킬 | 참조 | 담은 것 |
+| --- | --- | --- |
+| `mcbe-attachables-ui` | `skills/mcbe-attachables-ui/references/vanilla-and-official-evidence.md` | 고정 리비전 attachable 55개의 구조 통계, 플레이어 리그 bone, 슬롯→bone 매핑, context 변수, 공식 description/scripts 키 목록(1.26.0 `hide_held_items` 포함), 포맷 버전 게이트, 위키의 두 제작 방식 |
+| `mcbe-geo-ui` | `skills/mcbe-geo-ui/references/renderer-and-rig-evidence.md` | 바닐라 화면별 렌더러·컨트롤·`property_bag`·바인딩 이름, 세 컨트롤 본문 요약, geometry 1.21.0 `item_display_transforms`, `query.is_in_ui`, MIT 플레이어 모델 폼 예제 |
+| `mcbe-resource-pack-rendering` | `skills/mcbe-resource-pack-rendering/references/render-controller-and-material-evidence.md` | 공식 render controller 키, 바닐라 item/armor/bow 컨트롤러 형태, 방어구 슬롯 쿼리 인덱스, texture set 규칙, 위키 머테리얼 주의점 |
+| `mcbe-resource-pack-master` | `skills/mcbe-resource-pack-master/references/official-and-community-evidence.md` | 파일별 교체/병합 규칙, 동일 identifier의 `min_engine_version` 선택 규칙, Molang 버전 선택, subpack·atlas 제한 |
+
+전체 출처 목록과 감사 결과는 [레퍼런스 확장과 근거 우선 정책](84-reference-expansion-and-evidence-first.md)에 있다. 바닐라 미러의 `attachables`·`entity`·`animations`·`render_controllers`·`models`는 `node tools/design-source-sync.mjs --source mojang-bedrock-samples --download`로 같은 커밋에서 받는다.

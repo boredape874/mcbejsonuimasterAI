@@ -1,6 +1,6 @@
 {
   "schema": "mcbe-design-sources@1",
-  "reviewedAt": "2026-09-28",
+  "reviewedAt": "2026-10-03",
   "sources": [
     {
       "id": "mojang-bedrock-samples",
@@ -11,8 +11,8 @@
       "license": "Mojang-EULA",
       "reuse": "analysis-only",
       "summary": "공식 바닐라 화면, 공통 컨트롤, server-ui 메타데이터. 실제 클라이언트 버전과 별도 비교한다.",
-      "fileCount": 254,
-      "bytes": 6381998,
+      "fileCount": 322,
+      "bytes": 6505683,
       "runtime": "unverified",
       "pathScope": "upstream"
     },
@@ -724,8 +724,8 @@
       "license": "MIT",
       "reuse": "reference-only",
       "summary": "공식 custom item wrench 예제의 아이템 소유자·1/3인칭 애니메이션·geometry 연결. 코드 라이선스와 게임 런타임 검증을 구분한다.",
-      "fileCount": 5,
-      "bytes": 4525,
+      "fileCount": 89,
+      "bytes": 269748,
       "runtime": "unverified",
       "pathScope": "upstream",
       "evidence": [
@@ -746,8 +746,8 @@
       "license": "MIT",
       "reuse": "reference-only",
       "summary": "armor stand용 attachable의 명시적 item selector 사례. identifier와 item ID 동일성을 보편 규칙으로 강제하지 않는다.",
-      "fileCount": 3,
-      "bytes": 2875,
+      "fileCount": 37,
+      "bytes": 72195,
       "runtime": "unverified",
       "pathScope": "upstream",
       "evidence": [
@@ -802,6 +802,146 @@
           "lineEnd": 43
         }
       ]
+    },
+    {
+      "id": "microsoftdocs-minecraft-creator-reference",
+      "kind": "official",
+      "url": "https://github.com/MicrosoftDocs/minecraft-creator",
+      "revision": "ba7a3b48ae80393780766f361b83698361ee3f3e",
+      "revisionDate": "2026-09-30T16:23:15Z",
+      "license": "CC-BY-4.0 (docs) / MIT (code)",
+      "reuse": "reference",
+      "summary": "공식 레퍼런스의 JSON UI 컴포넌트(ui_element·ui_screen·ui_defs·global variables), attachable 정의, render controller·geometry·animation·texture_set visual 레퍼런스, UI·장비 관련 Molang 쿼리 문서. 기존 1dfc5c4 스냅샷(스크립트 API·attachables 가이드)과 별도 리비전이며 문서는 CC-BY-4.0, 코드는 MIT.",
+      "fileCount": 91,
+      "bytes": 472763,
+      "runtime": "unverified",
+      "pathScope": "upstream"
+    },
+    {
+      "id": "bedrock-wiki-entities-visuals",
+      "kind": "community-docs",
+      "url": "https://github.com/Bedrock-OSS/bedrock-wiki",
+      "revision": "50fc062ba61f666dfa9248246f453cca724eeaff",
+      "revisionDate": "2026-10-02T18:38:27Z",
+      "license": "per-page (license: true pages use the wiki default CC-BY-4.0/MIT; others NOASSERTION)",
+      "reuse": "reference-only",
+      "summary": "Bedrock Wiki의 아이템·attachable·엔티티 렌더 컨트롤러·플레이어 geometry·애니메이션·머테리얼·JSON UI·Molang 페이지와 라이선스 안내의 최신 스냅샷. 페이지별 license frontmatter가 있는 페이지만 위키 기본 라이선스를 따르고 나머지는 권리 미확인으로 분석 전용이다.",
+      "fileCount": 63,
+      "bytes": 691981,
+      "runtime": "unverified",
+      "pathScope": "upstream"
+    },
+    {
+      "id": "mojang-bedrock-schemas-visual",
+      "kind": "official",
+      "url": "https://github.com/Mojang/bedrock-schemas",
+      "revision": "fc31f9af6d2076b16985c12911f52f7e0b3f4251",
+      "revisionDate": "2026-09-30T18:09:08Z",
+      "license": "MIT",
+      "reuse": "reference",
+      "summary": "공식 스키마 저장소의 attachable·animation·UI form 정의와 RP attachables·entity·models·render_controllers·ui 스키마, UI 타입 선언의 최신 리비전. 기존 2b84280 스냅샷의 UI 타입과 비교해 속성 타입 불일치를 추적하는 데 쓴다.",
+      "fileCount": 36,
+      "bytes": 149486,
+      "runtime": "unverified",
+      "pathScope": "upstream"
+    },
+    {
+      "id": "kaweduh-player-model-renderer",
+      "kind": "addon",
+      "url": "https://github.com/KawEduh-dv/Player-Model-Renderer-JSON-UI",
+      "revision": "cc98c016003d64e76d4a955aff76ba56160a824f",
+      "revisionDate": "2026-08-23T15:14:43Z",
+      "license": "MIT",
+      "reuse": "optional-reuse",
+      "summary": "서버 폼 제목 접두사로 커스텀 패널을 열고 JSON UI 플레이어 렌더러로 플레이어 모델을 보여 주는 소형 MIT 예제. GeoUI·서버 폼 라우팅의 최소 구조 근거.",
+      "fileCount": 7,
+      "bytes": 21626,
+      "runtime": "unverified",
+      "pathScope": "upstream"
+    },
+    {
+      "id": "glitchyturtle-avatar-addon",
+      "kind": "addon",
+      "url": "https://github.com/GlitchyTurtle/avatar-addon",
+      "revision": "c43001f1c11003e211432f4bce275f25c38e317d",
+      "revisionDate": "2024-12-04T00:44:18Z",
+      "license": "GPL-3.0",
+      "reuse": "analysis-only",
+      "summary": "GPL-3.0 대형 애드온의 glui JSON UI 키트(쿨다운 바·스킬 트리·대화상자·드롭다운·편집창 텍스처 메타), HUD·서버 폼 라우팅, 플레이어형 spirit_player 클라이언트 엔티티. 구조 분석 전용이며 코드·아트·식별자를 복사하지 않는다.",
+      "fileCount": 53,
+      "bytes": 269320,
+      "runtime": "unverified",
+      "pathScope": "upstream"
+    },
+    {
+      "id": "eniacjushi-touhou-little-maid",
+      "kind": "addon",
+      "url": "https://github.com/ENIACJushi/TouHouLittleMaidBE",
+      "revision": "b6fa8d0c64a6218cfb65732ab9fc26f750ee0aa7",
+      "revisionDate": "2026-09-27T15:20:03Z",
+      "license": "MIT",
+      "reuse": "optional-reuse",
+      "summary": "MIT 애드온의 손·머리 attachable(카메라·고헤이·머리장식·워든 해골)과 시점별 처리, 커스텀 컨테이너(메이드 가방)·책 화면·폼 부품 JSON UI. 실제 프로젝트 관례의 근거이며 런타임은 미검증.",
+      "fileCount": 42,
+      "bytes": 254373,
+      "runtime": "unverified",
+      "pathScope": "upstream"
+    },
+    {
+      "id": "world-class-engineers-collect-everything",
+      "kind": "addon",
+      "url": "https://github.com/world-class-engineers/collect-everything-bedrock",
+      "revision": "764757157caf83dbc5820a2404a83d18b07145a7",
+      "revisionDate": "2026-09-16T17:59:11Z",
+      "license": "MIT",
+      "reuse": "optional-reuse",
+      "summary": "MIT 애드온의 수집 도감 서버 폼: ActionForm 안에 인벤토리 슬롯형 항목 템플릿과 nine-slice 텍스처 메타를 둔 구조.",
+      "fileCount": 10,
+      "bytes": 49902,
+      "runtime": "unverified",
+      "pathScope": "upstream"
+    },
+    {
+      "id": "hawariii-bedrock-ui-research",
+      "kind": "community-docs",
+      "url": "https://github.com/Hawariii/minecraft-bedrock-ui-research",
+      "revision": "d0f4bf05850b9ddc5714bc01779bfceddf25be33",
+      "revisionDate": "2026-07-15T12:59:15Z",
+      "license": "MIT",
+      "reuse": "reference",
+      "summary": "커뮤니티가 수집한 바인딩·버튼 id·컬렉션·컨트롤 목록. 고정 바닐라 인벤토리와 교차 확인하는 보조 자료이며 단독 권위가 아니다. 2026-10-03 감사: 바인딩·버튼 id 78개 중 19개, 컬렉션 47개 중 41개, 컨트롤 19개 중 8개가 바닐라 1.26.50에 없으므로(일부는 저장소가 Confirmed로 표기) 인용 전 node tools/vanilla-name-check.mjs로 확인한다.",
+      "fileCount": 6,
+      "bytes": 58996,
+      "runtime": "unverified",
+      "pathScope": "upstream"
+    },
+    {
+      "id": "pipangry-starlibv2",
+      "kind": "addon",
+      "url": "https://github.com/pipangry/StarLibV2",
+      "revision": "6bf787524953550c2b57598ddd1e041348e28a29",
+      "revisionDate": "2025-04-30T08:23:19Z",
+      "license": "GPL-3.0",
+      "reuse": "analysis-only",
+      "summary": "GPL-3.0 JSON UI 폼 라이브러리의 패키지 구조(버튼·커스텀 입력·동적 크기·화면 템플릿·전역 스타일 변수). 구조 분석 전용이며 코드를 재배포하지 않는다.",
+      "fileCount": 18,
+      "bytes": 135541,
+      "runtime": "unverified",
+      "pathScope": "upstream"
+    },
+    {
+      "id": "theoristmc-json-ui-dumper",
+      "kind": "tooling",
+      "url": "https://github.com/TheoristMC/JSON-UI-Dumper",
+      "revision": "a6d0d3cf47d7237934d1fb90625efbe854597219",
+      "revisionDate": "2026-09-15T06:02:07Z",
+      "license": "NOASSERTION",
+      "reuse": "reference-only",
+      "summary": "바닐라 JSON UI 속성 메타데이터를 덤프하는 웹 도구의 파서·데이터 계약. 라이선스 파일이 없어 참조 전용이며 발견 보조 도구로만 인용한다.",
+      "fileCount": 10,
+      "bytes": 16286,
+      "runtime": "unverified",
+      "pathScope": "upstream"
     }
   ]
 }

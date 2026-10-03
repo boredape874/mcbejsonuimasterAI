@@ -53,6 +53,21 @@ Use this for animation tests, StarLib form/search patterns, binding dumps, Rainb
   - <https://github.com/Refaltor77/EasyUIBuilder>
 - `Herobrine643928/Chest-UI`
   - <https://github.com/Herobrine643928/Chest-UI>
+- `KawEduh-dv/Player-Model-Renderer-JSON-UI` (MIT, pinned as `kaweduh-player-model-renderer`)
+  - <https://github.com/KawEduh-dv/Player-Model-Renderer-JSON-UI>
+  - smallest example of a title-prefix route from a vanilla ActionForm to a custom panel with `live_player_renderer`
+- `world-class-engineers/collect-everything-bedrock` (MIT, pinned as `world-class-engineers-collect-everything`)
+  - <https://github.com/world-class-engineers/collect-everything-bedrock>
+  - collection browser ActionForm with inventory-slot item templates and nine-slice texture metadata
+- `ENIACJushi/TouHouLittleMaidBE` (MIT, pinned as `eniacjushi-touhou-little-maid`)
+  - <https://github.com/ENIACJushi/TouHouLittleMaidBE>
+  - held and worn attachables with perspective handling, a custom container screen and form parts
+- `GlitchyTurtle/avatar-addon` (GPL-3.0, analysis-only, pinned as `glitchyturtle-avatar-addon`)
+  - <https://github.com/GlitchyTurtle/avatar-addon>
+  - large addon with a reusable form kit, cooldown HUD bars and a player-like client entity; structure only
+- `Hawariii/minecraft-bedrock-ui-research` (MIT, pinned as `hawariii-bedrock-ui-research`)
+  - <https://github.com/Hawariii/minecraft-bedrock-ui-research>
+  - community binding/button-id/collection lists; 2026-10-03 audit found many names absent from vanilla 1.26.50, so verify each name first
 
 ## Schema repositories
 
@@ -60,6 +75,18 @@ Use this for animation tests, StarLib form/search patterns, binding dumps, Rainb
   - <https://github.com/Blockception/Minecraft-bedrock-json-schemas>
 - `DJStompZone/MCBE-JSON-UI-Schemas`
   - <https://github.com/DJStompZone/MCBE-JSON-UI-Schemas>
+- `Mojang/bedrock-schemas` (MIT, pinned as `mojang-bedrock-schemas-visual`)
+  - <https://github.com/Mojang/bedrock-schemas>
+  - official forms, JSON schemas and TypeScript types for attachables, entities, models, render controllers and UI; a name checklist, not a type authority (see `skills/mcbe-json-ui-reference/references/official-docs-cross-check.md`)
+
+## Official documentation snapshots
+
+- `MicrosoftDocs/minecraft-creator` (CC-BY-4.0 docs, MIT samples, pinned as `microsoftdocs-minecraft-creator-reference`)
+  - <https://github.com/MicrosoftDocs/minecraft-creator>
+  - JSON UI component reference, attachable and client-entity reference, geometry/render-controller/texture-set visual reference, Molang query pages, the attachables and custom-item tutorials and the DDUI introduction
+- Bedrock Wiki entities and visuals snapshot (pinned as `bedrock-wiki-entities-visuals`)
+  - <https://github.com/Bedrock-OSS/bedrock-wiki>
+  - attachables, player geometry, render controllers, materials, texture atlases, overwriting assets and the JSON UI pages at one revision
 
 ## How to use them
 

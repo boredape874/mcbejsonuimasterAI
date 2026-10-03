@@ -56,6 +56,16 @@ assert.equal(index.files.length, SELECTED_FILES.length);
 assert.ok(index.files.every((file) => !file.error), JSON.stringify(index.files.filter((file) => file.error)));
 assert.equal(lookupName(index, "`#form_button_text`").found, true, "backticks and quotes are stripped");
 assert.equal(lookupName(index, "_ui_defs.json").matches.some((match) => match.kind === "file"), true);
+// Factory names come from both vanilla shapes: "factory": {"name": ...} and a nested control of type "factory".
+assert.equal(lookupName(index, "hud_title_text_factory").matches.some((match) => match.kind === "factory"), true);
+assert.equal(lookupName(index, "server_form_factory").matches.some((match) => match.kind === "factory"), true);
+// Collection names come from collection keys and from $...collection_name variables.
+for (const name of ["form_buttons", "custom_form", "armor_items", "offhand_items", "skins_collection"]) {
+  assert.equal(lookupName(index, name).matches.some((match) => match.kind === "collection"), true, `${name} must be indexed as a vanilla collection`);
+}
+assert.equal(lookupName(index, "crafting_items").found, false, "community-only collection names must stay unresolved");
+assert.deepEqual([...collectNames("", { namespace: "demo", panel: { factory: { name: "demo_factory", control_ids: {} } }, list: { type: "factory", control_name: "demo.item" }, grid: { collection_name: "$dynamic", "$item_collection_name|default": "demo_items" } }, "demo.json").factories], ["demo_factory", "list"]);
+assert.deepEqual([...collectNames("", { namespace: "demo", grid: { "$item_collection_name|default": "demo_items", collection_name: "$dynamic" } }, "demo.json").collections], ["demo_items"]);
 
 // CLI contract.
 const ok = await run(["tools/vanilla-name-check.mjs", "common.button", "#form_button_text", "--no-mirror", "--json"]);

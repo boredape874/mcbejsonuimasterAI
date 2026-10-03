@@ -328,7 +328,7 @@
     {
       "id": "vanilla.name-check",
       "status": "implemented",
-      "purpose": "Answer whether a control, #binding, $variable, button id, renderer, texture path, or ui/screen.json exists in the pinned official bedrock-samples UI files (and the full local mirror when present), offline.",
+      "purpose": "Answer whether a control, #binding, $variable, button id, renderer, texture path, factory name, collection name, or ui/screen.json exists in the pinned official bedrock-samples UI files (and the full local mirror when present), offline.",
       "command": { "executable": "node", "script": "tools/vanilla-name-check.mjs", "display": "node tools/vanilla-name-check.mjs <name> [<name> ...] [--mirror <path>] [--no-mirror] [--json] [--report <path>]" },
       "arguments": [
         { "name": "<name>", "kind": "positional", "required": true, "repeatable": true, "valueType": "string", "description": "namespace.control, bare control name (any namespace), #binding, $variable, button.id, textures/... path, renderer name, or ui/screen.json." },

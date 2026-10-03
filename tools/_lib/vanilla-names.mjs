@@ -7,7 +7,24 @@ import { readdir, readFile } from "node:fs/promises";
 import { join, relative, sep } from "node:path";
 import { parseUiSource, DEFAULT_RUNTIME_DIALECT } from "./json-dialect.mjs";
 
-export const NAME_KINDS = Object.freeze(["control", "binding", "variable", "button_id", "renderer", "texture", "screen"]);
+export const NAME_KINDS = Object.freeze(["control", "binding", "variable", "button_id", "renderer", "texture", "screen", "factory", "collection"]);
+const COLLECTION_KEYS = new Set(["collection_name", "binding_collection_name", "toggle_grid_collection_name", "slider_collection_name", "text_edit_box_grid_collection_name"]);
+
+// Factory names exist in two shapes ("factory": {"name": ...} on a panel, and a nested control
+// whose "type" is "factory", such as server_form.main_screen_content/server_form_factory) and
+// collection names only exist as values of collection keys or of $...collection_name variables,
+// so they are read from the parsed document rather than from the raw text.
+function collectStructuredNames(node, names) {
+  if (Array.isArray(node)) { for (const item of node) collectStructuredNames(item, names); return; }
+  if (!node || typeof node !== "object") return;
+  for (const [key, value] of Object.entries(node)) {
+    if (key === "factory" && value && typeof value === "object" && typeof value.name === "string") names.factories.add(value.name);
+    if (value && typeof value === "object" && !Array.isArray(value) && value.type === "factory") names.factories.add(key.split("@")[0]);
+    const bareKey = key.replace(/\|default$/, "");
+    if ((COLLECTION_KEYS.has(bareKey) || /collection_name$/.test(bareKey)) && typeof value === "string" && value && !value.startsWith("$") && !value.startsWith("#")) names.collections.add(value);
+    collectStructuredNames(value, names);
+  }
+}
 
 function portable(path) {
   return path.split(sep).join("/");
@@ -24,7 +41,7 @@ async function walk(dir) {
 }
 
 export function collectNames(text, document, fileName) {
-  const names = { topLevel: new Set(), controls: new Set(), bindings: new Set(), buttonIds: new Set(), variables: new Set(), renderers: new Set(), textures: new Set(), screens: new Set() };
+  const names = { topLevel: new Set(), controls: new Set(), bindings: new Set(), buttonIds: new Set(), variables: new Set(), renderers: new Set(), textures: new Set(), screens: new Set(), factories: new Set(), collections: new Set() };
   if (fileName.endsWith("_ui_defs.json")) {
     for (const entry of document?.ui_defs || []) if (typeof entry === "string") names.screens.add(entry);
     return names;
@@ -41,6 +58,7 @@ export function collectNames(text, document, fileName) {
   for (const match of text.matchAll(/"(\$[A-Za-z0-9_]+)(?:\|default)?"/g)) names.variables.add(match[1]);
   for (const match of text.matchAll(/"renderer"\s*:\s*"([A-Za-z0-9_]+)"/g)) names.renderers.add(match[1]);
   for (const match of text.matchAll(/"(textures\/[A-Za-z0-9_./-]+)"/g)) names.textures.add(match[1]);
+  collectStructuredNames(document, names);
   return names;
 }
 
@@ -52,7 +70,7 @@ export async function parseVanillaFile(path) {
 
 // Index: kind -> name -> sorted list of "source:relative/file.json".
 export async function buildNameIndex(sources) {
-  const index = { controls: new Map(), bindings: new Map(), variables: new Map(), buttonIds: new Map(), renderers: new Map(), textures: new Map(), screens: new Map(), files: [] };
+  const index = { controls: new Map(), bindings: new Map(), variables: new Map(), buttonIds: new Map(), renderers: new Map(), textures: new Map(), screens: new Map(), factories: new Map(), collections: new Map(), files: [] };
   const add = (map, name, location) => { if (!map.has(name)) map.set(name, []); const list = map.get(name); if (!list.includes(location)) list.push(location); };
   for (const source of sources) {
     const files = await walk(source.root);
@@ -71,6 +89,8 @@ export async function buildNameIndex(sources) {
       for (const name of names.renderers) add(index.renderers, name, location);
       for (const name of names.textures) add(index.textures, name, location);
       for (const name of names.screens) add(index.screens, name, location);
+      for (const name of names.factories) add(index.factories, name, location);
+      for (const name of names.collections) add(index.collections, name, location);
     }
   }
   return index;
@@ -93,6 +113,8 @@ export function lookupName(index, rawQuery) {
   } else {
     if (index.controls.has(query)) push("control", query, index.controls.get(query));
     if (index.renderers.has(query)) push("renderer", query, index.renderers.get(query));
+    if (index.factories.has(query)) push("factory", query, index.factories.get(query));
+    if (index.collections.has(query)) push("collection", query, index.collections.get(query));
     if (!query.includes(".")) {
       const suffix = `.${query}`;
       const anyNamespace = [...index.controls.keys()].filter((name) => name.endsWith(suffix));

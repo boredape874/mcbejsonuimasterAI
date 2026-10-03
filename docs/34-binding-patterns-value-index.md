@@ -47,6 +47,8 @@ Confirmed from `references/official/bedrock-samples-ui` at the pinned revision (
 | `$tts_header_binding_type` + `tts_control_header` | `ui_common.json` container item cell | TTS header supplied by a binding instead of a literal |
 | `#controller_fixed_face_*_icon` | `common.gamepad_helper_face_*` | fixed face-button glyphs used by HUD emote tips |
 
+Entry-key vocabulary (2026-10-03): the eight binding sub-keys documented on the Microsoft `ui_element.md` page and the four documented `button_mappings` keys are all in `data/jsonui-spec.json`; vanilla 1.26.50 additionally uses `resolve_ancestor_scope`, `resolve_sibling_scope`, `binding_collection_prefix`, `ignored` on bindings and `scope`, `handle_select`, `handle_deselect`, `ignored`, `consume_event`, `button_up_right_of_first_refusal`, `ignore_input_scope` on button mappings (`button_mapping_entry_keys`), and `requires` inside `variables` arrays (`variables_entry_keys`). The Bedrock Wiki documentation page lists `binding_condition: visibility_changed` and `resolve_sibling_scope` as sibling-only resolution; both occur in vanilla.
+
 ## Practical patterns
 
 ### Title/actionbar protocol parsing

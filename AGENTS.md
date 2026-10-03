@@ -44,6 +44,10 @@ Pick the layer **based on what the user asked for**, not by default.
 
 If unsure, ask the user one short question to disambiguate. Do not silently switch layers.
 
+### Evidence first, skill second (applies to every skill and layer)
+
+Skills are the fallback, not the starting point. Before applying any skill's guidance, research in this order and say which step answered: (1) the target pack, its `_ui_defs.json`/manifests and the current Content Log; (2) the pinned official vanilla evidence (`references/official/bedrock-samples-ui` + `references/official/bedrock-samples-ui.lock.json`, `node tools/vanilla-name-check.mjs <name>`, the local mirror under `references/upstreams/`, `docs/83-vanilla-ui-1.26.50-diff.md`; for attachables/GeoUI the mirror's `resource_pack/attachables|entity|animations|render_controllers|models` and `node tools/attachable-inspect.mjs`); (3) the registered upstream sources and cards (`node tools/design-library.mjs sources --source ID`, `patterns --source ID`, `config/design-research-lock.json`) and `docs/`; (4) only then the skill's own references, labelled "inferred from skill guidance". Evidence from steps 1–3 overrides a skill. Older third-party references stay valid pattern evidence; never delete or rewrite them because a vanilla name moved.
+
 ## 2. Tools layer — when chosen
 
 Workflow:
@@ -118,4 +122,5 @@ When work is done, the AI should hand back:
 - `docs/46-tools-output-to-handcrafted-ui.md` — when to stop at compiler output vs. when to hand-finish the JSON UI; checklist before declaring done
 - `docs/67-production-rpg-ui-architecture.md` — RPG HUD/menu design, protocol, performance, and pack ownership rules
 - `docs/83-vanilla-ui-1.26.50-diff.md` — what changed between the previous and current pinned official sample revision (screens, bindings, spec additions, preview signals) and how to resync
+- `docs/84-reference-expansion-and-evidence-first.md` — the 2026-10-03 reference expansion (official docs, schemas, Wiki, addon examples, vanilla attachables/entity/animations at the same pin), the audits of those tables against vanilla, and the evidence-first order every skill now follows
 - `skills/mcbe-json-ui-self-bootstrap/SKILL.md`, `skills/mcbe-json-ui-ir-authoring/SKILL.md`, `skills/mcbe-json-ui-tools-runner/SKILL.md`, `skills/mcbe-json-ui-vanilla-presets/SKILL.md`
