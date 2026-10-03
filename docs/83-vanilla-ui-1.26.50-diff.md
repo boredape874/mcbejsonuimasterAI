@@ -214,6 +214,13 @@ node tests/presets-catalog-vanilla.mjs
 npm run check
 # 4. 문서가 인용한 바닐라 이름을 다시 확인
 node tools/vanilla-name-check.mjs common.close_button '#title_text' hud.subtitle_container_content
+# 5. (미러에 attachables/entity/animations/animation_controllers/render_controllers/models가 있을 때) 팩 식별자와 문서화 Molang 쿼리 확인
+node tools/vanilla-name-check.mjs minecraft:diamond_helmet.player geometry.humanoid.custom controller.render.armor query.is_in_ui
+# 6. 새 버전의 Molang 문서(bedrock-dot-dev/docs의 stable 태그)를 받은 뒤 쿼리 census를 다시 생성하고 lock의 bedrock-dot-dev-docs 출처를 새 리비전으로 등록
+node tools/design-source-sync.mjs --source bedrock-dot-dev-docs-1-26-50 --download
+node tools/molang-queries-census.mjs --check
 ```
+
+팩 식별자 조회는 미러의 `resource_pack/{attachables,entity,animations,animation_controllers,render_controllers,models}` 폴더를 함께 sparse-checkout했을 때만 동작한다(`git -C references/upstreams/bedrock-samples sparse-checkout set resource_pack/ui resource_pack/attachables resource_pack/entity resource_pack/animations resource_pack/animation_controllers resource_pack/render_controllers resource_pack/models`). 커밋된 15개 UI 파일만으로는 UI 이름만 확인된다.
 
 PowerShell이 없는 환경에서는 `git clone --depth 1 --filter=blob:none --sparse https://github.com/Mojang/bedrock-samples.git references/upstreams/bedrock-samples` 후 `git -C references/upstreams/bedrock-samples sparse-checkout set resource_pack/ui`를 실행하고 `node tools/sync-bedrock-samples-ui.mjs --ref main`을 호출한다. 이어서 이 문서의 1~7절을 새 리비전 기준으로 갱신하고, 바뀐 이름을 `docs/19`, `docs/34`, `docs/16`, `docs/37`에 반영한다. `data/vanilla-screen-profiles.json`의 프로필은 동기화 도구가 lock과 `_ui_defs.json`에서 자동 생성한다. 버전이 `1.26.50`에서 벗어나면 도구가 새 프로필 id(예: `bedrock-1.26.60`)를 만들되 다이얼렉트와 `validate-pack` 기본값은 코드(`tools/_lib/json-dialect.mjs`의 `DEFAULT_*`)에서 올려야 한다는 경고를 출력한다. `tests/official-samples-lock.mjs`는 기본 프로필이 lock의 커밋·`_ui_defs.json` 목록과 일치하는지 검사한다.

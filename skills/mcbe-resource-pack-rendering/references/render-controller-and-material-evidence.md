@@ -19,7 +19,7 @@ Reviewed 2026-10-03 against the pinned Mojang `bedrock-samples` revision (`v1.26
 
 `variable.is_enchanted`, `variable.has_trim`, `variable.trim_path`, `variable.use_baby_geo` and `variable.is_patterned` are set outside these files (engine-provided, not verified); do not rename them.
 
-Materials used by the 55 pinned attachables: `armor`/`armor_enchanted` ×42, `armor_leather`/`armor_leather_enchanted` ×8, `entity_alphatest`/`entity_alphatest_glint` ×4, `elytra`/`elytra_glint` ×1. `player.entity.json` uses `entity_alphatest`, `player_animated`, `player_spectator`.
+Materials used by the 55 pinned attachables: `armor`/`armor_enchanted` ×42, `armor_leather`/`armor_leather_enchanted` ×8, `entity_alphatest`/`entity_alphatest_glint` ×4, `elytra`/`elytra_glint` ×1. `player.entity.json` uses `entity_alphatest`, `player_animated`, `player_spectator`. With the mirror present, `node tools/vanilla-name-check.mjs armor_enchanted` reports every vanilla entity or attachable file that declares a material short name (kind `material_name`), and `controller.render.*` / `geometry.*` / `animation.*` identifiers resolve the same way. The only `.material` definition files pinned in this repository are the Wiki example pack's `material_example_mobs` (`bedrock-oss-bedrock-examples`, MIT); vanilla material files are not in the mirror.
 
 ## Armor queries and dye selection (confirmed from official docs)
 

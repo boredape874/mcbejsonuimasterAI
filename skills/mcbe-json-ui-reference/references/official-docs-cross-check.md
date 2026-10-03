@@ -24,6 +24,20 @@ Label these as "confirmed from Microsoft docs (name exists)". Type, default and 
 
 `types/rp/ui/UiElement.d.ts` and `forms/ui/ui_element.form.json` carry the same five absent names and the same doubtful types as the creator page, omit `nineslice_size`, `property_bag`, the clip properties and the button/toggle state controls, and `schemas:schemas/rp/ui/index.schema.json` validates only `namespace`. Use them as a name checklist and as evidence that both official exports derive from one flawed table.
 
+## Community editor schemas (`blockception-json-schemas-ui`, BSD-3-Clause; `kalmemarq-bugrock-json-ui-schemas`, NOASSERTION)
+
+| Finding | Result |
+| --- | --- |
+| Blockception per-property schema files (`source/resource/ui/elements/properties/*.json` inside that source) | 222 files; 221 names are in the spec, `is_new_nine_slice` is not (zero vanilla uses, not added) |
+| spec names without a Blockception file | 94 (for example `property_bag_for_children`, `focus_container_custom_*`, `use_selected_skin`, `gradient_direction`); all vanilla-confirmed by the coverage test, so editor validation that uses this schema will flag valid vanilla properties |
+| Bugrock `ui.schema.json` | JSON with comments and trailing commas, so it is compared through its README tables (screens, element types, properties, "Unused/No Longer Works"); names only |
+
+Use either schema as an editor convenience and as a name checklist, never as proof that a name is accepted by the client.
+
+## Documented Molang queries at the pinned version (`bedrock-dot-dev-docs-1-26-50`)
+
+`data/molang-queries-1.26.50.json` lists the 323 `query.*` names documented in the Mojang release documentation archived for 1.26.50.4 (the same version as the vanilla pin), flags which of them the pinned vanilla pack folders use (166), and records that every query the vanilla pack uses is documented. `node tools/vanilla-name-check.mjs query.is_in_ui` (or `q.…`) resolves against this list; with the local mirror it also resolves pack identifiers (`minecraft:…` client entities and attachables, `geometry.*`, `animation.*`, `controller.animation.*`, `controller.render.*`, material short names such as `armor_enchanted`). The documentation's license is not stated, so cite names only.
+
 ## Bedrock Wiki documentation (`bedrock-wiki-entities-visuals`, `wiki:docs/json-ui/json-ui-documentation.md`)
 
 | Finding | Result |

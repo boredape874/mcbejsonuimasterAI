@@ -1,0 +1,9 @@
+{
+  "format_version": "1.16.0",
+  "minecraft:geometry": [
+    {
+      "description": { "identifier": "geometry.test_hat", "texture_width": 16, "texture_height": 16 },
+      "bones": [ { "name": "root", "binding": "q.item_slot_to_bone_name(c.item_slot)", "pivot": [0, 0, 0], "cubes": [ { "origin": [-1, 0, -1], "size": [2, 2, 2], "uv": [0, 0] } ] } ]
+    }
+  ]
+}

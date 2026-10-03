@@ -53,7 +53,8 @@ Use only the stages needed by the task. The npm `skill:context` entry returns th
 | Visual preview | `npm run preview -- <ui.json> [<solved.json>] [options]` | coordinates, unsupported-property report, state previews, and contact sheet |
 | Pack validation | `npm run validate:pack -- <pack-root> [options]` | `_ui_defs`, namespace, control, JSONC, and texture report |
 | Official sample sync | `npm run sync:bedrock-samples-ui -- [--check|--diff] [--ref <ref>]` | pinned upstream revision and per-file sha256 in `references/official/bedrock-samples-ui.lock.json`; `--diff` summarizes controls, bindings, button ids, variables, and screens that changed |
-| Vanilla name check | `node tools/vanilla-name-check.mjs <name> [...]` | kind and evidence files for each name in the pinned official samples (plus the local mirror when present); exit 3 when a name is absent |
+| Vanilla name check | `node tools/vanilla-name-check.mjs <name> [...]` | kind and evidence files for each name in the pinned official samples (plus the local mirror when present, which also resolves pack identifiers and material short names); `query.*` names resolve against the documented Molang list; exit 3 when a name is absent |
+| Molang query census | `node tools/molang-queries-census.mjs [--check] [--html <Molang.html>] [--mirror <root>]` | regenerate `data/molang-queries-1.26.50.json` from the pinned release documentation (`bedrock-dot-dev-docs-1-26-50`), the vanilla mirror and the creator query pages; `--check` exits 3 when the committed file is stale |
 | Public-release audit | `npm run audit:public -- [options]` | local path, private source, credential, framework, and redistribution leak findings |
 | Offline evaluation | `npm run eval:offline -- [options]` | deterministic fixed-task and golden-image report |
 | Runtime evidence gate | `npm run eval:live -- [options]` | status of real PC/touch screenshots and Bedrock content logs |
@@ -131,7 +132,7 @@ Low-level commands remain available for diagnosis:
 | `repository.audit` | `node tools/audit.mjs [--report <path>]` | repository links, JSON, skill, and script integrity |
 | `vanilla.index` | `node tools/build-vanilla-index.mjs [--force]` | local vanilla screen and texture evidence |
 | `vanilla.samples-sync` | `node tools/sync-bedrock-samples-ui.mjs [--check|--diff] [--mirror <path>] [--ref <name>] [--no-profile]` | copy the selected official sample UI files from a local mirror, pin the revision, regenerate the vanilla screen profile, and verify or diff offline |
-| `vanilla.name-check` | `node tools/vanilla-name-check.mjs <name> [...] [--no-mirror]` | confirm a control, binding, variable, button id, renderer, texture, factory, collection, or screen name occurs in the pinned official samples |
+| `vanilla.name-check` | `node tools/vanilla-name-check.mjs <name> [...] [--no-mirror]` | confirm a control, binding, variable, button id, renderer, texture, factory, collection, screen, pack identifier (entity, attachable, geometry, animation, controller, material short name; mirror only) or documented Molang query name occurs in the pinned official samples |
 
 The Go solver remains geometry-only. YAML parsing, auto-sizing, compilation, validation, preview, and reports stay in Node. Both backends preserve descendant anchors when constraints move or resize their parents. Duplicate or reserved element IDs are rejected before solving. If the solver does not converge, `run` stops with exit code 7 and an `ok: false` report; it does not compile that layout.
 

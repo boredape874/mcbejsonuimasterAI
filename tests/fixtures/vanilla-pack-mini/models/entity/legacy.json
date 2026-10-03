@@ -1,0 +1,5 @@
+{
+  "format_version": "1.8.0",
+  "geometry.legacy.base": { "bones": [ { "name": "body", "pivot": [0, 0, 0] } ] },
+  "geometry.legacy.child:geometry.legacy.base": { "bones": [ { "name": "head", "parent": "body", "pivot": [0, 2, 0] } ] }
+}

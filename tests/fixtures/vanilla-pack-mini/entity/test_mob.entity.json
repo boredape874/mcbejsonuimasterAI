@@ -1,0 +1,13 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "minecraft:test_mob",
+      "materials": { "default": "entity_alphatest" },
+      "textures": { "default": "textures/entity/test_mob" },
+      "geometry": { "default": "geometry.test_mob" },
+      "render_controllers": [ "controller.render.test_hat" ],
+      "enable_attachables": true
+    }
+  }
+}

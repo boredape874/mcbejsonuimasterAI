@@ -53,8 +53,10 @@ This is the smallest registered example of "title prefix routes a vanilla form t
 - "confirmed from official docs": written on the cited page; reference pages dated 02/11/2025 are `ai-usage: ai-assisted`, so treat them as name evidence only.
 - "community-documented" and "source-observed": Wiki text or an example pack; never runtime proof.
 
+With the local mirror present the same checker resolves `geometry.humanoid.custom`, `minecraft:player`, `controller.render.player.first_person`, `animation.player.first_person.base_pose` and material short names, and `query.is_in_ui` / `query.bone_orientation_trs` resolve against the 323 queries documented for 1.26.50.4 (`data/molang-queries-1.26.50.json`).
+
 ```sh
-node tools/vanilla-name-check.mjs live_player_renderer paper_doll_renderer actor_portrait_renderer "#paper_doll_visible" "#look_at_cursor"
+node tools/vanilla-name-check.mjs live_player_renderer paper_doll_renderer actor_portrait_renderer "#paper_doll_visible" "#look_at_cursor" geometry.humanoid.custom query.is_in_ui
 node tools/design-library.mjs patterns --source kaweduh-player-model-renderer
 node tools/design-library.mjs patterns --source microsoftdocs-minecraft-creator-reference --max-chars 8000
 node tools/geoui-inspect.mjs --input PROJECT.geoui.json --json

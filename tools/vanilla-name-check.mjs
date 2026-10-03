@@ -26,6 +26,7 @@ import { buildNameIndex, lookupName } from "./_lib/vanilla-names.mjs";
 
 const DEFAULT_MIRROR = resolve(PATHS.root, "references", "upstreams", "bedrock-samples");
 const LOCK_PATH = resolve(PATHS.root, "references", "official", "bedrock-samples-ui.lock.json");
+const MOLANG_PATH = resolve(PATHS.root, "data", "molang-queries-1.26.50.json");
 
 function usage() {
   process.stdout.write([
@@ -33,6 +34,9 @@ function usage() {
     "",
     "Checks control, #binding, $variable, button id, texture, renderer, factory, collection and ui/screen.json names",
     "against the pinned official bedrock-samples UI files (and the full local mirror when present).",
+    "With the mirror it also resolves pack identifiers (minecraft:… client entities and attachables, geometry.*,",
+    "animation.*, controller.animation.*, controller.render.*, material short names), and query.* / q.* names are",
+    "checked against the documented Molang list for the pinned version (data/molang-queries-1.26.50.json).",
     "Exit 0 when every name is found, 3 when at least one is missing.",
     "",
   ].join("\n"));
@@ -61,7 +65,13 @@ export async function checkVanillaNames(names, { mirror = DEFAULT_MIRROR, useMir
   const mirrorUi = resolve(mirror, "resource_pack", "ui");
   const mirrorUsed = useMirror && await exists(mirrorUi);
   if (mirrorUsed) sources.push({ label: "mirror", root: mirrorUi });
-  const index = await buildNameIndex(sources);
+  // Pack identifiers (client entities, attachables, geometry, animation, controller ids, material
+  // short names) come from the mirror's resource_pack folders when the mirror is present.
+  const mirrorPack = resolve(mirror, "resource_pack");
+  if (useMirror && await exists(resolve(mirrorPack, "attachables"))) sources.push({ label: "mirror-pack", root: mirrorPack, kind: "pack" });
+  // Documented Molang query names at the pinned version (data/molang-queries-1.26.50.json).
+  const molang = await readJson(MOLANG_PATH).catch(() => null);
+  const index = await buildNameIndex(sources, { molang });
   const lock = await readJson(LOCK_PATH).catch(() => null);
   const results = names.map((name) => lookupName(index, name));
   return {

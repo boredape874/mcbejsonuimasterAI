@@ -184,7 +184,7 @@ node tools/sync-bedrock-samples-ui.mjs --check
 node tools/vanilla-name-check.mjs common.close_button '#title_text'   # 바닐라에 있는 이름인지 확인
 ```
 
-공식 샘플의 고정 리비전은 `references/official/bedrock-samples-ui.lock.json`(현재 `v1.26.50.4`)에 기록되며 위 `--check`가 네트워크 없이 커밋된 파일과 lock의 일치를 검사합니다. 이전 고정본과의 차이는 [바닐라 UI 변경 추적](docs/83-vanilla-ui-1.26.50-diff.md)을, 2026-10-03에 추가한 공식 문서·스키마·위키·애드온 출처와 바닐라 대조 결과는 [레퍼런스 확장과 근거 우선 정책](docs/84-reference-expansion-and-evidence-first.md)을 참고하세요. `node tools/vanilla-name-check.mjs`는 컨트롤·바인딩·변수·버튼 id·렌더러·텍스처·화면 파일에 더해 factory 이름과 컬렉션 이름도 확인합니다.
+공식 샘플의 고정 리비전은 `references/official/bedrock-samples-ui.lock.json`(현재 `v1.26.50.4`)에 기록되며 위 `--check`가 네트워크 없이 커밋된 파일과 lock의 일치를 검사합니다. 이전 고정본과의 차이는 [바닐라 UI 변경 추적](docs/83-vanilla-ui-1.26.50-diff.md)을, 2026-10-03에 추가한 공식 문서·스키마·위키·애드온 출처와 바닐라 대조 결과는 [레퍼런스 확장과 근거 우선 정책](docs/84-reference-expansion-and-evidence-first.md)을 참고하세요. `node tools/vanilla-name-check.mjs`는 컨트롤·바인딩·변수·버튼 id·렌더러·텍스처·화면 파일에 더해 factory 이름, 컬렉션 이름, 미러가 있을 때의 팩 식별자(client entity·attachable·geometry·animation·controller·material 이름)와 1.26.50.4 문서화 Molang 쿼리(`data/molang-queries-1.26.50.json`)도 확인합니다.
 
 개인 팩의 경로는 `config/sources.local.example.json`을 복사한 `config/sources.local.json`에만 둡니다. 로컬 파일을 대상으로 `validate:sources`를 실행한 뒤 `source:scan`, `catalog:build`, `design:search`를 선택합니다. 대규모 로컬 자료와 attachable·geometry 근거 추출은 [로컬 에셋 작업 흐름](docs/77-resource-pack-skills.md#로컬-에셋-활용)을 참고하세요.
 

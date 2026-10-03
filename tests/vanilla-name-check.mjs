@@ -2,6 +2,7 @@
 // files contain, reject names that no longer exist in them, and never report a
 // third-party pack name as vanilla. Runs offline against the 12 committed files.
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -64,6 +65,31 @@ for (const name of ["form_buttons", "custom_form", "armor_items", "offhand_items
   assert.equal(lookupName(index, name).matches.some((match) => match.kind === "collection"), true, `${name} must be indexed as a vanilla collection`);
 }
 assert.equal(lookupName(index, "crafting_items").found, false, "community-only collection names must stay unresolved");
+
+// Documented Molang queries at the pinned version come from data/molang-queries-1.26.50.json.
+const molang = JSON.parse(await readFile(resolve(ROOT, "data", "molang-queries-1.26.50.json"), "utf8"));
+assert.equal(molang.documentedCount, molang.queries.length);
+assert.equal(molang.source.version, "1.26.50.4");
+assert.ok(molang.queries.every((query) => /^query\.[a-z0-9_]+$/.test(query.name)));
+assert.deepEqual(molang.usedInVanillaButNotDocumented, [], "every query the pinned vanilla pack uses must be documented at the same version");
+const molangIndex = await buildNameIndex([], { molang });
+for (const name of ["query.is_in_ui", "q.item_slot_to_bone_name", "query.is_first_person", "query.get_root_locator_offset"]) {
+  assert.equal(lookupName(molangIndex, name).matches.some((match) => match.kind === "molang_query"), true, `${name} must resolve as a documented Molang query`);
+}
+assert.equal(lookupName(molangIndex, "query.not_a_real_query").found, false);
+
+// Pack identifiers resolve only through a resource_pack mirror; the committed sample set is UI-only.
+const packIndex = await buildNameIndex([{ label: "fixture", root: resolve(ROOT, "tests", "fixtures", "vanilla-pack-mini"), kind: "pack" }]);
+assert.equal(packIndex.files.filter((file) => file.error).length, 0, JSON.stringify(packIndex.files.filter((file) => file.error)));
+assert.equal(lookupName(packIndex, "minecraft:test_hat.player").matches[0]?.kind, "attachable");
+assert.equal(lookupName(packIndex, "minecraft:test_mob").matches[0]?.kind, "entity");
+assert.equal(lookupName(packIndex, "geometry.test_hat").matches[0]?.kind, "geometry");
+assert.equal(lookupName(packIndex, "geometry.legacy.base").matches[0]?.kind, "geometry", "legacy geometry.x:geometry.parent keys index the child id");
+assert.equal(lookupName(packIndex, "animation.test_hat.wield").matches[0]?.kind, "animation");
+assert.equal(lookupName(packIndex, "controller.animation.test_hat.wield").matches[0]?.kind, "animation_controller");
+assert.equal(lookupName(packIndex, "controller.render.test_hat").matches[0]?.kind, "render_controller");
+assert.equal(lookupName(packIndex, "armor_enchanted").matches[0]?.kind, "material_name");
+assert.equal(lookupName(packIndex, "geometry.missing").found, false);
 assert.deepEqual([...collectNames("", { namespace: "demo", panel: { factory: { name: "demo_factory", control_ids: {} } }, list: { type: "factory", control_name: "demo.item" }, grid: { collection_name: "$dynamic", "$item_collection_name|default": "demo_items" } }, "demo.json").factories], ["demo_factory", "list"]);
 assert.deepEqual([...collectNames("", { namespace: "demo", grid: { "$item_collection_name|default": "demo_items", collection_name: "$dynamic" } }, "demo.json").collections], ["demo_items"]);
 

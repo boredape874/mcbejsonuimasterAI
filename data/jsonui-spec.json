@@ -50,6 +50,20 @@
         "page": "types/rp/ui/UiElement.d.ts and forms/ui/ui_element.form.json",
         "note": "carries the same five absent names and the same doubtful types as the creator page, and omits nineslice_size; treated as a property-name checklist, never as a type authority"
       },
+      "blockception_json_schemas_ui": {
+        "revision": "30d5bb1f",
+        "page": "source/resource/ui/elements/properties/*.json (222 per-property schemas, BSD-3-Clause)",
+        "property_files": 222,
+        "not_in_spec": ["is_new_nine_slice"],
+        "not_added_reason": "zero occurrences in the pinned vanilla ui files",
+        "spec_properties_without_a_schema_file": 94,
+        "note": "the 94 spec-only names are vanilla-confirmed by tests/jsonui-spec-vanilla-coverage.mjs (for example property_bag_for_children, focus_container_custom_*, use_selected_skin); the schema project is a checklist, not an authority"
+      },
+      "kalmemarq_bugrock_json_ui_schemas": {
+        "revision": "de118a32",
+        "page": "README.md property tables and ui.schema.json (JSON with comments; NOASSERTION)",
+        "note": "community editor schema referenced by example packs; compared through its README tables because the schema file is not strict JSON; names only, never types"
+      },
       "bedrock_wiki_entities_visuals": {
         "revision": "50fc062b",
         "page": "docs/json-ui/json-ui-documentation.md",

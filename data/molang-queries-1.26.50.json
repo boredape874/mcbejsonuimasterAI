@@ -1,0 +1,2124 @@
+{
+  "schema": "mcbe-jsonui-ai-kit/molang-queries@1",
+  "source": {
+    "id": "bedrock-dot-dev-docs-1-26-50",
+    "page": "1.26.0.0/1.26.50.4/Molang.html",
+    "revision": "56440778da1503d1e5d34d73ff57a2a1f9e3607e",
+    "version": "1.26.50.4",
+    "note": "Mojang release documentation archived by bedrock.dev; license not stated, so names only"
+  },
+  "vanillaUsageSource": {
+    "id": "mojang-bedrock-samples",
+    "revision": "46ba6ea985fb5a92d79a9419198f10dda14c199d",
+    "folders": [
+      "attachables",
+      "entity",
+      "animations",
+      "animation_controllers",
+      "render_controllers",
+      "models",
+      "ui"
+    ]
+  },
+  "creatorPagesSource": {
+    "id": "microsoftdocs-minecraft-creator-reference",
+    "revision": "ba7a3b48ae80393780766f361b83698361ee3f3e",
+    "pagesIndexed": 317
+  },
+  "documentedCount": 323,
+  "queries": [
+    {
+      "name": "query.above_top_solid",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.actor_count",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.all",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.all_animations_finished",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.all_tags",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.anger_level",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.anim_time",
+      "usedInVanilla": [
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.any",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.any_animation_finished",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.any_tag",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.approx_eq",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.armor_color_slot",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.armor_damage_slot",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.armor_material_slot",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.armor_texture_slot",
+      "usedInVanilla": [
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.average_frame_time",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.base_swing_duration",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.block_face",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.block_has_all_tags",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.block_has_any_tag",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.block_neighbor_has_all_tags",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.block_neighbor_has_any_tag",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.block_property",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.block_state",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.blocking",
+      "usedInVanilla": [
+        "animation_controllers",
+        "attachables"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.body_x_rotation",
+      "usedInVanilla": [
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.body_y_rotation",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.bone_aabb",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.bone_orientation_matrix",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.bone_orientation_trs",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.bone_origin",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.bone_rotation",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.camera_distance_range_lerp",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.camera_rotation",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.can_climb",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.can_damage_nearby_mobs",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.can_dash",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.can_fly",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.can_power_jump",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.can_swim",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.can_walk",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.cape_flap_amount",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.cardinal_block_face_placed_on",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.cardinal_facing",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.cardinal_facing_2d",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.cardinal_player_facing",
+      "usedInVanilla": [],
+      "creatorPage": false
+    },
+    {
+      "name": "query.client_max_render_distance",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.client_memory_tier",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.combine_entities",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.cooldown_time",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.cooldown_time_remaining",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.count",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.current_squish_value",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.dash_cooldown_progress",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.day",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.death_ticks",
+      "usedInVanilla": [
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.debug_output",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.delta_time",
+      "usedInVanilla": [
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.distance_from_camera",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.effect_emitter_count",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.effect_particle_count",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.entity_biome_has_all_tags",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.entity_biome_has_any_identifier",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.entity_biome_has_any_tags",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.equipment_count",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.equipped_item_all_tags",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.equipped_item_any_tag",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.equipped_item_is_attachable",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.eye_target_x_rotation",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.eye_target_y_rotation",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.facing_target_to_range_attack",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.frame_alpha",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations",
+        "attachables",
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.function_name",
+      "usedInVanilla": [],
+      "creatorPage": false
+    },
+    {
+      "name": "query.fuse_time",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.get_actor_info_id",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.get_animation_frame",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.get_default_bone_pivot",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.get_equipped_item_name",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations",
+        "attachables",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.get_level_seed_based_fraction",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.get_locator_offset",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.get_name",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.get_nearby_entities",
+      "usedInVanilla": [],
+      "creatorPage": false
+    },
+    {
+      "name": "query.get_pack_setting",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.get_relative_block_state",
+      "usedInVanilla": [],
+      "creatorPage": false
+    },
+    {
+      "name": "query.get_root_locator_offset",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.graphics_mode_is_any",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.ground_speed",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.had_component_group",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_all_biome_tags",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_any_biome_tags",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_any_family",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_any_leashed_entity_of_type",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_armor_slot",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_biome_tag",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_block_property",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_block_state",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_cape",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_collision",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_dash_cooldown",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_gravity",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_head_gear",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_owner",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_player_rider",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": false
+    },
+    {
+      "name": "query.has_property",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_rider",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.has_target",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.head_is_in_water",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.head_roll_angle",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.head_x_rotation",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.head_y_rotation",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.health",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.heartbeat_interval",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.heartbeat_phase",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.heightmap",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.hurt_direction",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.hurt_time",
+      "usedInVanilla": [
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.in_range",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.invulnerable_ticks",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_admiring",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_alive",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_angry",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_attached",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_attached_to_entity",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_avoiding_block",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_avoiding_mobs",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_baby",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations",
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_breathing",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_bribed",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_carrying_block",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_casting",
+      "usedInVanilla": [
+        "animation_controllers",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_celebrating",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_celebrating_special",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_charged",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_charging",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_chested",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_cooldown_category",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_crawling",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_critical",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_croaking",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_dancing",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_delayed_attacking",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_digging",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_eating",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_eating_mob",
+      "usedInVanilla": [
+        "animation_controllers",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_elder",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_emerging",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_emoting",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_enchanted",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_feeling_happy",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_fire_immune",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_first_person",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_ghost",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_gliding",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_grazing",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_idling",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_ignited",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_illager_captain",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_in_contact_with_water",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_in_lava",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_in_love",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_in_ui",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_in_water",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_in_water_or_rain",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_interested",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_invisible",
+      "usedInVanilla": [
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_item_equipped",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_item_name_any",
+      "usedInVanilla": [
+        "animation_controllers",
+        "attachables",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_jump_goal_jumping",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": false
+    },
+    {
+      "name": "query.is_jumping",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_laying_down",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_laying_egg",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_leashed",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_levitating",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_lingering",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_local_player",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_moving",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_name_any",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_on_fire",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_on_ground",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_on_screen",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_onfire",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_orphaned",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_owner_identifier_any",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_pack_setting_enabled",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_pack_setting_selected",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_persona_or_premium_skin",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_playing_dead",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_powered",
+      "usedInVanilla": [
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_pregnant",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_ram_attacking",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_resting",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_riding",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_riding_any_entity_of_type",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_rising",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_roaring",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_rolling",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_saddled",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_scared",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_scenting",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_searching",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_selected_item",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_shaking",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_shaking_wetness",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_sheared",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_shield_powered",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_silent",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_sitting",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_sleeping",
+      "usedInVanilla": [
+        "animation_controllers",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_sneaking",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_sneezing",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_sniffing",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_sonic_boom",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_spectator",
+      "usedInVanilla": [
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_sprinting",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_stackable",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_stalking",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_standing",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_stunned",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_swimming",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_tamed",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_transforming",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_using_item",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.is_wall_climbing",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.item_in_use_duration",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.item_is_charged",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.item_max_use_duration",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.item_remaining_use_duration",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.item_slot_to_bone_name",
+      "usedInVanilla": [
+        "models"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.key_frame_lerp_time",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.kinetic_weapon_damage_duration",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.kinetic_weapon_delay",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.kinetic_weapon_dismount_duration",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.kinetic_weapon_knockback_duration",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.last_frame_time",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.last_hit_by_player",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.last_input_mode_is_any",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.leashed_entity_count",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.lie_amount",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.life_span",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.life_time",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations",
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.lod_index",
+      "usedInVanilla": [],
+      "creatorPage": false
+    },
+    {
+      "name": "query.log",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.main_hand_item_max_duration",
+      "usedInVanilla": [
+        "attachables",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.main_hand_item_use_duration",
+      "usedInVanilla": [
+        "animation_controllers",
+        "attachables",
+        "entity",
+        "models"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.mark_variant",
+      "usedInVanilla": [
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.max_durability",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.max_health",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.max_trade_tier",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.maximum_frame_time",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.minimum_frame_time",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.model_scale",
+      "usedInVanilla": [
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.modified_distance_moved",
+      "usedInVanilla": [
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.modified_move_speed",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.modified_swing_duration",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.moo",
+      "usedInVanilla": [],
+      "creatorPage": false
+    },
+    {
+      "name": "query.moon_brightness",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.moon_phase",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.movement_direction",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": false
+    },
+    {
+      "name": "query.noise",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.on_fire_time",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.out_of_control",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.overlay_alpha",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.owner_identifier",
+      "usedInVanilla": [
+        "attachables"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.player_level",
+      "usedInVanilla": [],
+      "creatorPage": false
+    },
+    {
+      "name": "query.position",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.position_delta",
+      "usedInVanilla": [
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.previous_squish_value",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.property",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.relative_block_has_all_tags",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.relative_block_has_any_tag",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.remaining_durability",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.ride_body_x_rotation",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.ride_body_y_rotation",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.ride_head_x_rotation",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.ride_head_y_rotation",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.rider_body_x_rotation",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.rider_body_y_rotation",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.rider_head_x_rotation",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.rider_head_y_rotation",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.roll_counter",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.rotation_to_camera",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.scoreboard",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.server_memory_tier",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.shake_angle",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.shake_time",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.shield_blocking_bob",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.show_bottom",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.sit_amount",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.skin_id",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.sleep_rotation",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.sneeze_counter",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.spellcolor",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.standing_scale",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.state_time",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.structural_integrity",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.surface_particle_color",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.surface_particle_texture_coordinate",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.surface_particle_texture_size",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.swell_amount",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.swelling_dir",
+      "usedInVanilla": [
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.swim_amount",
+      "usedInVanilla": [
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.tail_angle",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.target_x_rotation",
+      "usedInVanilla": [
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.target_y_rotation",
+      "usedInVanilla": [
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.texture_frame_index",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": false
+    },
+    {
+      "name": "query.ticks_since_last_kinetic_weapon_hit",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.time_of_day",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.time_since_last_vibration_detection",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.time_stamp",
+      "usedInVanilla": [
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.timer_flag_1",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.timer_flag_2",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.timer_flag_3",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.total_emitter_count",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.total_particle_count",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.touch_only_affects_hotbar",
+      "usedInVanilla": [],
+      "creatorPage": true
+    },
+    {
+      "name": "query.trade_tier",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.unhappy_counter",
+      "usedInVanilla": [
+        "animation_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.variant",
+      "usedInVanilla": [
+        "animation_controllers",
+        "entity",
+        "render_controllers"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.vertical_speed",
+      "usedInVanilla": [
+        "animation_controllers",
+        "animations",
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.walk_distance",
+      "usedInVanilla": [
+        "animations"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.wing_flap_position",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.wing_flap_speed",
+      "usedInVanilla": [
+        "entity"
+      ],
+      "creatorPage": true
+    },
+    {
+      "name": "query.yaw_speed",
+      "usedInVanilla": [],
+      "creatorPage": true
+    }
+  ],
+  "usedInVanillaButNotDocumented": [],
+  "mathFunctions": [
+    "abs",
+    "acos",
+    "asin",
+    "atan",
+    "atan2",
+    "ceil",
+    "clamp",
+    "copy_sign",
+    "cos",
+    "die_roll",
+    "die_roll_integer",
+    "ease_in_back",
+    "ease_in_bounce",
+    "ease_in_circ",
+    "ease_in_cubic",
+    "ease_in_elastic",
+    "ease_in_expo",
+    "ease_in_out_back",
+    "ease_in_out_bounce",
+    "ease_in_out_circ",
+    "ease_in_out_cubic",
+    "ease_in_out_elastic",
+    "ease_in_out_expo",
+    "ease_in_out_quad",
+    "ease_in_out_quart",
+    "ease_in_out_quint",
+    "ease_in_out_sine",
+    "ease_in_quad",
+    "ease_in_quart",
+    "ease_in_quint",
+    "ease_in_sine",
+    "ease_out_back",
+    "ease_out_bounce",
+    "ease_out_circ",
+    "ease_out_cubic",
+    "ease_out_elastic",
+    "ease_out_expo",
+    "ease_out_quad",
+    "ease_out_quart",
+    "ease_out_quint",
+    "ease_out_sine",
+    "exp",
+    "floor",
+    "function_name",
+    "hermite_blend",
+    "inverse_lerp",
+    "lerp",
+    "lerprotate",
+    "ln",
+    "max",
+    "min",
+    "min_angle",
+    "mod",
+    "pi",
+    "pow",
+    "random",
+    "random_integer",
+    "round",
+    "sign",
+    "sin",
+    "sqrt",
+    "trunc"
+  ]
+}

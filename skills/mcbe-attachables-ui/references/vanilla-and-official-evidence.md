@@ -106,7 +106,10 @@ Do not copy the Wiki example coordinates or the Mojang numbers; measure the pose
 - "community-documented": Bedrock Wiki text without a per-page license; cite structure and names only.
 - "not verified": runtime behavior that only the target client and a fresh Content Log can establish.
 
+With the local mirror present, `node tools/vanilla-name-check.mjs` also resolves pack identifiers: `minecraft:diamond_helmet.player` (attachable), `minecraft:player` (client entity), `geometry.humanoid.custom`, `animation.bow.wield`, `controller.animation.shield.wield`, `controller.render.armor` and material short names such as `armor_enchanted`; `query.*` / `q.*` names resolve against the 323 queries documented for 1.26.50.4 in `data/molang-queries-1.26.50.json` (every query the vanilla pack uses is documented there). Check identifiers this way before writing them into a pack or a card.
+
 ```sh
+node tools/vanilla-name-check.mjs minecraft:diamond_helmet.player geometry.player.armor.helmet controller.render.armor q.item_slot_to_bone_name
 node tools/design-library.mjs sources --source mojang-bedrock-samples
 node tools/design-library.mjs patterns --source mojang-bedrock-samples --max-chars 8000
 node tools/design-library.mjs patterns --source microsoftdocs-minecraft-creator-reference --max-chars 8000
