@@ -8,6 +8,9 @@
     "node": ">=18.17"
   },
   "scripts": {
+    "studio": "node tools/studio.mjs",
+    "studio:mcp": "node tools/studio/mcp.mjs",
+    "test:studio": "node tests/studio.mjs",
     "chest:contract": "node tools/chest-contract.mjs",
     "chest:project": "node tools/chest-project.mjs",
     "setup": "node tools/setup.mjs",

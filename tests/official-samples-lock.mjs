@@ -13,6 +13,7 @@ import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
+import { randomUUID } from "node:crypto";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const SAMPLES = resolve(ROOT, "references", "official", "bedrock-samples-ui");
@@ -86,6 +87,12 @@ assert.equal(usage.code, 64);
 const missing = await run(["tools/sync-bedrock-samples-ui.mjs", "--mirror", "workspace/does-not-exist-mirror", "--json"]);
 assert.equal(missing.code, 2, "sync without a mirror must fail closed instead of downloading");
 assert.equal(JSON.parse(missing.stdout.trim()).blocking[0].code, "MIRROR_UNAVAILABLE");
+// An unpacked source folder inside this repository must not borrow its parent's HEAD.
+const unpacked = resolve(process.env.MCBEKIT_REPO_TEST_ROOT || resolve(ROOT,"workspace"), `unpacked-sample-${randomUUID()}`);
+await mkdir(resolve(unpacked,"resource_pack/ui"),{recursive:true});
+const unpackedCheck = await run(["tools/sync-bedrock-samples-ui.mjs","--diff","--mirror",unpacked,"--json"]);
+assert.equal(unpackedCheck.code,2,unpackedCheck.stderr||unpackedCheck.stdout);
+assert.equal(JSON.parse(unpackedCheck.stdout.trim()).blocking[0].code,"MIRROR_UNAVAILABLE");
 // Profile regeneration is pure and must reproduce the committed profile from the lock + _ui_defs.
 {
   const reproduced = computeProfileUpdate(profiles, { lock, oldDefs: [...defs, ...profile.removedScreens.map((entry) => entry.path)], newDefs: defs });

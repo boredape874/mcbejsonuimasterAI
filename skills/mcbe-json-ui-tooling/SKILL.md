@@ -30,6 +30,8 @@ If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-tooling` 
 
 ## Workflow
 
+For visual editing together with Codex, read `references/json-ui-studio.md` first. The local Studio provides RP screen/layer selection, source edits, watched preview, image import and an App Server chat; use the existing renderer and shared selection rather than requesting full UI trees repeatedly.
+
 1. Read `references/tooling-map.md`.
 2. Decide whether the task is mainly:
    - visual editing

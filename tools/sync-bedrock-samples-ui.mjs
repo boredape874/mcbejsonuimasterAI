@@ -127,6 +127,9 @@ async function hashFile(path) {
 async function describeMirror(mirror, ref) {
   const uiRoot = join(mirror, "resource_pack", "ui");
   if (!(await exists(uiRoot))) return { ok: false, reason: `mirror has no resource_pack/ui: ${portable(relative(PATHS.root, mirror))}` };
+  const checkoutRoot = git(mirror, ["rev-parse", "--show-toplevel"]);
+  const normalized = path => process.platform === "win32" ? resolve(path).toLowerCase() : resolve(path);
+  if (!checkoutRoot || normalized(checkoutRoot) !== normalized(mirror)) return { ok: false, reason: "mirror is not its own git checkout; parent repository metadata is not upstream evidence" };
   const commit = git(mirror, ["rev-parse", "HEAD"]);
   if (!commit) return { ok: false, reason: "mirror is not a git checkout; the lock needs a verifiable commit" };
   const remote = git(mirror, ["config", "--get", "remote.origin.url"]) || null;

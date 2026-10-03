@@ -1,6 +1,7 @@
 {
   "schema": "mcbe-jsonui-ai-kit/test-manifest@1",
   "tests": [
+    {"id":"studio","argv":["tests/studio.mjs"],"timeoutMs":120000},
     {"id":"newui-codex","argv":["examples/newui-codex/verify.mjs"],"timeoutMs":120000},
     {"id":"geoui-project","argv":["tests/geoui-project.mjs"],"timeoutMs":120000},
     {"id":"attachable-recipe","argv":["examples/attachables/quest-map-recipe/verify.mjs"],"timeoutMs":120000},

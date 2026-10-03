@@ -27,6 +27,16 @@
 
 ## 빠른 시작
 
+### Codex와 함께 보는 JSON UI 편집기
+
+```powershell
+npm run studio
+```
+
+`http://127.0.0.1:47832`에서 팩을 열고 화면·레이어를 선택합니다. 요소 이동·크기·텍스트·색상 편집과 PNG 추가를 원본에 저장하고, 같은 미리보기를 Codex에 전달할 수 있습니다. Minecraft 창 공유도 제공합니다. [사용법과 미리보기 한계](docs/86-json-ui-studio.md)를 확인하세요. Studio는 Node.js 20 이상을 사용합니다.
+
+![JSON UI Studio의 화면 목록, 편집 미리보기, 속성 및 Codex 대화 패널](docs/assets/json-ui-studio.png)
+
 ### 1. 저장소와 도구 준비
 
 Git와 **Node.js 18.17 이상**이 필요합니다. 다음 명령은 저장소 루트에서 실행합니다.

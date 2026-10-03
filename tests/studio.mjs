@@ -1,0 +1,85 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile, writeFile, mkdir, cp } from 'node:fs/promises';
+import { join } from 'node:path';
+import { randomUUID } from 'node:crypto';
+import { configuration, root } from '../tools/studio/config.mjs';
+import { startHost } from '../tools/studio/host.mjs';
+import { editObject, jsonSpans } from '../tools/studio/json-edit.mjs';
+import { CodexBridge } from '../tools/studio/codex.mjs';
+
+test('JSONC patch preserves comments, escaped keys, trailing commas and unrelated content',()=>{
+  const text='\uFEFF{\n// retained\n"a/b": {"size": [20, 10], /* sizing */ "text": "old", // keep\n}, "untouched": 1\n}';
+  const updated=editObject(text,'/a~1b',{size:[24,12],offset:[3,4]});
+  assert.match(updated,/\/\/ retained/);assert.match(updated,/\/\* sizing \*\//);assert.match(updated,/\/\/ keep/);assert.match(updated,/"untouched": 1/);
+  assert.equal(jsonSpans(updated).kind,'{');
+  assert.throws(()=>jsonSpans('{"a":1,"a":2}'),/duplicate/);
+});
+
+test('real Studio: source provenance, visual edits, undo, conflict, images, shared context, HTTP boundaries',{timeout:120000},async t=>{
+  const config=await configuration();
+  const dir=join(process.env.MCBEKIT_TEST_ROOT || join(root,'workspace/test-studio'),randomUUID());await mkdir(dir,{recursive:true});
+  const rpRoot=join(dir,'rp');await cp(join(root,'examples/studio-rp'),rpRoot,{recursive:true});
+  const host=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>host.close());
+  const s=host.session;
+  const first=await s.open({rpRoot});assert.equal(first.status,'ready',first.error);assert.equal(s.editor.screens.length,1);
+  let node=s.editor.nodes.find(n=>n.id==='progress');assert.ok(node.source);assert.equal(node.source.pointer,'/screen/controls/4/progress');
+  const original=await s.readSource('ui/live_demo.json'), initialHash=first.report.hash;
+  await s.select({key:node.key});assert.equal(s.context().selection.id,'progress');
+  await s.edit({key:node.key,expectedRevision:s.editorRevision,expectedHash:node.source.sha256,patch:{size:[80,12],offset:[9,35]}});
+  assert.notEqual(s.state.report.hash,initialHash);assert.deepEqual(s.editor.nodes.find(n=>n.id==='progress').props.offset,[9,35]);
+  await assert.rejects(s.edit({key:node.key,expectedRevision:s.editorRevision,expectedHash:original.sha256,patch:{alpha:.5}}),/SOURCE_CONFLICT/);
+  await s.history({direction:'undo'});assert.equal((await s.readSource(original.path)).text,original.text);assert.equal(s.state.report.hash,initialHash);
+  await s.history({direction:'redo'});assert.notEqual(s.state.report.hash,initialHash);
+  await assert.rejects(s.writeSource({path:original.path,text:'{"broken":',expectedHash:(await s.readSource(original.path)).sha256}));
+  await assert.rejects(s.readSource('../outside.json'));
+  const pixel=await readFile(join(rpRoot,'textures/ui/live_pixel.png'));
+  await assert.rejects(s.importImage({name:'broken.png',data:Buffer.from('not-png').toString('base64')}),/PNG/);
+  const uploaded=await s.importImage({name:'../../sprite.png',data:pixel.toString('base64')});assert.match(uploaded.texture,/^textures\/studio\//);
+  await s.render();node=s.editor.nodes[0];
+  await s.add({key:node.key,expectedRevision:s.editorRevision,expectedHash:node.source.sha256,type:'image',texture:uploaded.texture});
+  assert.ok(s.editor.nodes.some(n=>n.props.texture===uploaded.texture));
+  const latest=await s.readSource(original.path);await writeFile(join(rpRoot,original.path),latest.text+'\n// external edit\n');
+  await assert.rejects(s.history({direction:'undo'}),/SOURCE_CONFLICT/);
+  await s.render();
+  await s.acceptFrame({data:pixel.toString('base64'),source:'test window'});assert.equal(s.context().gameFrame.source,'test window');
+  s.clearFrame();assert.equal(s.context().gameFrame,null);
+  const preview=await readFile(s.state.report.outputPath);
+  await s.acceptBrowserFrame({data:preview.toString('base64'),revision:s.state.renderedRevision,fontMode:'approximate'});assert.equal(s.context().previewFontMode,'approximate-system-font');
+  await assert.rejects(s.acceptBrowserFrame({data:pixel.toString('base64'),revision:0}),/PREVIEW_CONFLICT/);
+  await assert.rejects(s.acceptBrowserFrame({data:pixel.toString('base64'),revision:s.state.renderedRevision}),/dimensions/);
+  const changedCatalog = await s.readSource(original.path);
+  await s.writeSource({path:original.path,text:editObject(changedCatalog.text,'',{extra_screen:{type:'panel',size:[32,32]}}),expectedHash:changedCatalog.sha256});
+  await s.render();assert.ok(s.editor.screens.some(screen=>screen.control==='live_demo.extra_screen'));
+  await writeFile(join(rpRoot,'ir.yaml'),'schema_version: 1\n');node=s.editor.nodes[0];
+  await assert.rejects(s.edit({key:node.key,expectedRevision:s.editorRevision,expectedHash:node.source.sha256,patch:{offset:[1,1]}}),/IR_OWNER/);
+  const request=async(path,headers={})=>fetch(host.connection.url+path,{method:path.startsWith('/api/')?'POST':'GET',headers});
+  assert.equal((await request('/api/status')).status,401);
+  assert.equal((await request('/api/status',{Authorization:'Bearer '+host.connection.token,Origin:'https://example.com'})).status,403);
+  const html=await request('/');assert.match(html.headers.get('content-security-policy'),/script-src 'self'/);
+  assert.equal((await request('/app.js')).status,200);assert.equal((await request('/style.css')).status,200);
+  const ctx=await request('/api/studio_context',{Authorization:'Bearer '+host.connection.token});assert.equal((await ctx.json()).runtimeVerified,false);
+});
+
+test('Codex streams actual protocol items, exposes approvals, rejects unsupported requests, and handles completion',()=>{
+  const sent=[],session={config:{},render:async()=>{}};
+  const bridge=new CodexBridge(session);bridge.threadId='thread';bridge.child={stdin:{writable:true,write:line=>sent.push(JSON.parse(line))}};
+  bridge.receive({method:'item/agentMessage/delta',params:{threadId:'thread',itemId:'a',delta:'안녕'}});
+  bridge.receive({method:'item/agentMessage/delta',params:{threadId:'thread',itemId:'a',delta:'하세요'}});
+  assert.equal(bridge.messages[0].text,'안녕하세요');
+  bridge.receive({id:5,method:'item/commandExecution/requestApproval',params:{command:'node verify.mjs'}});
+  assert.equal(bridge.status().requests.length,1);assert.equal(sent.length,0);
+  bridge.reply({id:5,decision:'decline'});assert.equal(sent[0].result.decision,'decline');
+  bridge.receive({id:6,method:'unsupported/test',params:{}});assert.equal(sent[1].error.code,-32601);
+  bridge.receive({id:7,method:'mcpServer/elicitation/request',params:{mode:'form',requestedSchema:{properties:{confirm:{type:'boolean'}}}}});
+  assert.equal(sent.length,2);bridge.reply({id:7,decision:'accept',content:{confirm:true}});assert.deepEqual(sent[2].result,{action:'accept',content:{confirm:true}});
+  bridge.busy=true;bridge.receive({method:'turn/completed',params:{threadId:'thread',turn:{id:'turn',status:'completed'}}});assert.equal(bridge.busy,false);
+});
+test('Codex feedback steers the exact active turn with fresh selection context',async()=>{
+  const bridge=new CodexBridge({config:{},project:{},context:()=>({stale:false,selection:{id:'title'}})});
+  bridge.busy=true;bridge.threadId='thread';bridge.turnId='active';let called;
+  bridge.rpc=async(method,params)=>{called={method,params};return {turnId:'active'};};
+  await bridge.message({text:'제목을 크게',includePreview:false});
+  assert.equal(called.method,'turn/steer');assert.equal(called.params.expectedTurnId,'active');assert.equal(called.params.input[0].text,'제목을 크게');
+  assert.equal(bridge.busy,true);assert.equal(bridge.messages.at(-1).role,'user');
+});
