@@ -9,12 +9,25 @@ import { configuration, root } from '../tools/studio/config.mjs';
 import { startHost } from '../tools/studio/host.mjs';
 import { editObject, jsonSpans } from '../tools/studio/json-edit.mjs';
 import { CodexBridge } from '../tools/studio/codex.mjs';
-import { selectionBounds, alignSelection, distributeSelection, gridSelection, snapMove } from '../studio/geometry.js';
+import { selectionBounds, alignSelection, distributeSelection, gridSelection, matchSelectionSize, snapMove } from '../studio/geometry.js';
+import { DEVICE_PRESETS, normalizeDevice, safeRect, layoutIssues } from '../studio/devices.js';
+
+test('device profiles distinguish physical specs, editable logical coordinates and safe-area test margins',()=>{
+  const consoleProfile=normalizeDevice({presetId:'console-fhd'},[480,270]);
+  assert.deepEqual(safeRect([480,270],consoleProfile),{x:24,y:13.5,w:432,h:243});assert.equal(consoleProfile.runtimeVerified,false);
+  const adjusted=normalizeDevice({presetId:'tablet-ipad',physicalSize:[1000,750]},[400,300]);assert.equal(adjusted.source,null);assert.equal(adjusted.physicalSpecMatches,false);
+  assert.throws(()=>normalizeDevice({presetId:'mobile-iphone',safeInsets:[0,0,0,26]},[584,270]),/안전 여백/);
+  assert.throws(()=>normalizeDevice({presetId:'pc-fhd'},[480.5,270]),/작업 크기/);
+  assert.equal(DEVICE_PRESETS.filter(p=>p.family==='태블릿').length,2);
+  const nodes=[{key:'/',visible:true,type:'panel',rect:{x:0,y:0,w:480,h:270}},{key:'edge',id:'edge',visible:true,type:'label',rect:{x:1,y:1,w:30,h:10}},{key:'outside',id:'outside',visible:true,type:'button',rect:{x:479,y:30,w:20,h:10}},{key:'hidden',visible:false,rect:{x:-100,y:0,w:20,h:10}}];
+  assert.deepEqual(layoutIssues(nodes,[480,270],consoleProfile).map(i=>i.kind),['SAFE_AREA','PREVIEW_BOUNDS']);
+});
 
 test('editor geometry: edge/center guides, equal gaps, grid, axis lock and unequal element sizes',()=>{
   const n=(id,x,y,w=10,h=10,index=0)=>({id,index,rect:{x,y,w,h},props:{offset:[x,y]}});
   const a=n('a',0,0),b=n('b',30,0,20),c=n('c',80,0);
   assert.deepEqual(selectionBounds([a,b,c]),{x:0,y:0,w:90,h:10});
+  assert.deepEqual(matchSelectionSize([a,b]).map(e=>e.patch.size),[[20,10],[20,10]]);
   assert.deepEqual(alignSelection([b],'centerX',{x:0,y:0,w:100,h:100})[0].patch.offset,[40,0]);
   assert.deepEqual(alignSelection([a,b,c],'bottom').map(e=>e.patch.offset),[[0,0],[30,0],[80,0]]);
   assert.deepEqual(distributeSelection([c,a,b],'x').map(e=>e.patch.offset),[[0,0],[35,0],[80,0]]);
@@ -56,6 +69,18 @@ test('real Studio: source provenance, visual edits, undo, conflict, images, shar
   let node=s.editor.nodes.find(n=>n.id==='progress');assert.ok(node.source);assert.equal(node.source.pointer,'/screen/controls/4/progress');
   const original=await s.readSource('ui/live_demo.json'), initialHash=first.report.hash;
   await s.select({key:node.key});assert.equal(s.context().selection.id,'progress');
+  const sourceBeforeProfiles=await s.readSource('ui/live_demo.json');
+  await s.configureViewport({viewport:[584,270],previewDevice:{presetId:'mobile-iphone'}});
+  assert.deepEqual(s.project.viewport,[584,270]);assert.equal(s.selection,node.key);assert.equal(s.context().previewDevice.presetId,'mobile-iphone');
+  await s.configureViewport({viewport:[584,270]});assert.equal(s.context().previewDevice.presetId,'mobile-iphone');
+  const comparisonRevision=s.editorRevision;
+  const comparison=await s.compareViewports({expectedRevision:comparisonRevision,presetIds:['pc-fhd','tablet-ipad','console-fhd','mobile-iphone']});
+  assert.equal(comparison.profiles.length,4);assert.deepEqual(comparison.profiles[1].viewport,[480,360]);assert.ok(comparison.profiles.every(p=>p.nodes.length&&p.layers.length));
+  assert.equal(s.editorRevision,comparisonRevision);assert.equal(s.selection,node.key);assert.equal(s.undoStack.length,0);assert.equal((await s.readSource('ui/live_demo.json')).text,sourceBeforeProfiles.text);
+  await assert.rejects(s.configureViewport({viewport:[0,270],previewDevice:{presetId:'pc-fhd'}}),/작업 크기/);assert.deepEqual(s.project.viewport,[584,270]);
+  await assert.rejects(s.compareViewports({expectedRevision:comparisonRevision-1,presetIds:['pc-fhd']}),/PREVIEW_CONFLICT/);
+  s.ai.busy=true;await assert.rejects(s.compareViewports({expectedRevision:comparisonRevision,presetIds:['pc-fhd']}),/Codex/);s.ai.busy=false;
+  await s.configureViewport({viewport:[480,270],previewDevice:null});node=s.editor.nodes.find(n=>n.id==='progress');
   await s.edit({key:node.key,expectedRevision:s.editorRevision,expectedHash:node.source.sha256,patch:{size:[80,12],offset:[9,35]}});
   const savedRevision=s.editorRevision;
   await new Promise(resolve=>setTimeout(resolve,350));

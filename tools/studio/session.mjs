@@ -7,6 +7,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { nativeStatus, requestNativeReload, requestNativeAction } from './native.mjs';
 import { Reviewer, patchText } from './review.mjs';
+import { normalizeDevice } from '../../studio/devices.js';
 
 export const hash = text => createHash('sha256').update(text).digest('hex');
 export class LiveSession extends EventEmitter {
@@ -43,8 +44,9 @@ export class LiveSession extends EventEmitter {
     const viewport = input.viewport ?? [480, 270];
     if (!Array.isArray(viewport) || viewport.length !== 2 || viewport.some(n => !Number.isInteger(n) || n < 16 || n > 2048)) throw new Error('viewport: two integers, 16..2048');
     if (typeof input.control !== 'string' || !input.control.includes('.')) throw new Error('control must be namespace.control');
+    const previewDevice=normalizeDevice(input.previewDevice,viewport);
     this.watcher?.close(); clearTimeout(this.debounce);
-    this.project = { rpRoot, control: input.control, viewport, fixture: input.fixture ?? {}, interactionState: input.interactionState ?? 'default', ...(input.vanillaRoot ? { vanillaRoot: await realpath(input.vanillaRoot) } : {}) };
+    this.project = { rpRoot, control: input.control, viewport, ...(previewDevice?{previewDevice}:{}), fixture: input.fixture ?? {}, interactionState: input.interactionState ?? 'default', ...(input.vanillaRoot ? { vanillaRoot: await realpath(input.vanillaRoot) } : {}) };
     this.ownWrites.clear();
     this.watcher = watch(rpRoot, { recursive: true }, async (_, name) => {
       if (!name || /\.(json|jsonc|png|tga|txt|lang)$/i.test(name)) {

@@ -33,7 +33,7 @@
 npm run studio
 ```
 
-`http://127.0.0.1:47832`에서 팩을 열고 화면·요소를 선택합니다. 자동 정렬선과 격자 스냅, 다중 선택, 동일 간격·그리드 배치, 복제와 키보드 이동을 제공합니다. 텍스트·색상·이미지 편집을 원본에 저장하고 같은 선택과 미리보기를 Codex에 전달합니다. Minecraft 창 공유도 제공합니다. [사용법과 미리보기 한계](docs/86-json-ui-studio.md), [적용한 디자인 스킬과 정렬 기준](docs/89-studio-editor-design.md)을 확인하세요. Studio는 Node.js 20 이상을 사용합니다.
+`http://127.0.0.1:47832`에서 팩을 열고 화면·요소를 선택합니다. bridge. v2를 참고한 활동 메뉴·팩 탐색기·비주얼/JSON/게임 탭과 밝은/어두운 테마, 너비 조절 패널을 제공합니다. [PC·태블릿·콘솔·모바일 미리보기](docs/90-studio-device-preview.md)에서 해상도·작업 크기·안전 여백을 따로 설정하고 기기별로 비교합니다. 자동 정렬·다중 선택·간격과 크기 통일·그리드 배치·복제·선택 확대·화면 이동·집중 모드·PNG 저장을 제공합니다. 같은 선택과 미리보기를 Codex에 전달하고 Minecraft 창도 공유할 수 있습니다. [사용법과 한계](docs/86-json-ui-studio.md), [디자인 기준](docs/89-studio-editor-design.md)을 확인하세요. Studio는 Node.js 20 이상을 사용합니다.
 
 ![JSON UI Studio의 화면 목록, 편집 미리보기, 속성 및 Codex 대화 패널](docs/assets/json-ui-studio.png)
 

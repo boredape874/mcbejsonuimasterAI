@@ -35,6 +35,11 @@ export function gridSelection(nodes,columns,gap) {
   const box=selectionBounds(nodes),width=Math.max(...nodes.map(n=>n.rect.w)),height=Math.max(...nodes.map(n=>n.rect.h));
   return [...nodes].sort((a,b)=>a.index-b.index).map((node,i)=>({node,patch:offsetPatch(node,box.x+(i%columns)*(width+gap)-node.rect.x,box.y+Math.floor(i/columns)*(height+gap)-node.rect.y)}));
 }
+export function matchSelectionSize(nodes){
+  if(nodes.length<2)throw Error('요소를 2개 이상 선택하세요.');
+  const w=Math.max(...nodes.map(n=>n.rect.w)),h=Math.max(...nodes.map(n=>n.rect.h));
+  return nodes.map(node=>({node,patch:{size:[w,h]}}));
+}
 export function snapMove(rect,dx,dy,{peers=[],parent,grid=1,smart=true,threshold=4,axis=null}={}) {
   const rawX=dx,rawY=dy;
   if(grid>0){dx=Math.round((rect.x+dx)/grid)*grid-rect.x;dy=Math.round((rect.y+dy)/grid)*grid-rect.y;}

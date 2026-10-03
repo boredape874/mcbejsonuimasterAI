@@ -6,62 +6,72 @@
 </head>
 <body>
 <header class="topbar">
-  <div class="brand"><span class="logo" aria-hidden="true">▣</span><div>JSON UI <b>STUDIO</b><small>마인크래프트 UI 작업실</small></div></div>
+  <div class="brand"><span class="logo" aria-hidden="true">▣</span><div>JSON UI <b>STUDIO</b></div></div>
   <span id="projectName" class="project-name">리소스팩을 열어 시작하세요</span>
   <div class="top-actions">
-    <button id="openPack">팩 열기</button><button id="newProject">＋ 새 프로젝트</button>
+    <details class="toolbar-menu main-menu"><summary>프로젝트</summary><div><button id="openPack">팩 열기…</button><button id="newProject">＋ 새 프로젝트</button><button id="exportPng">미리보기 PNG 저장</button></div></details>
     <div class="toolbar-group"><button id="undo" title="실행 취소 · Ctrl+Z" aria-label="실행 취소">↶</button><button id="redo" title="다시 실행 · Ctrl+Shift+Z" aria-label="다시 실행">↷</button></div>
-    <button id="sourceButton" title="선택 요소의 원본 파일">JSON 보기</button><button id="gameShare">Minecraft 연결</button>
+    <button id="sourceButton" title="선택 요소의 원본 파일">{ } 원본 JSON</button><button id="gameShare">게임 창 공유</button>
     <button id="helpButton" aria-label="사용법과 단축키">도움말 ?</button><span id="saveStatus" class="badge" role="status">대기</span>
   </div>
 </header>
 <main class="workspace diagnostics-collapsed">
+  <nav class="activity-bar" aria-label="작업 영역">
+    <button id="activityExplorer" class="active" aria-label="팩 탐색기 표시 또는 숨기기" title="팩 탐색기 · Ctrl+Shift+E" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h7l2 3h9v12H3Z"/></svg><span>탐색</span></button>
+    <button id="activitySearch" aria-label="화면과 요소 검색" title="화면·요소 검색 · Ctrl+P"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg><span>검색</span></button>
+    <button id="activityCodex" aria-label="Codex 패널 열기" title="Codex 패널 열기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5Z"/></svg><span>AI</span></button>
+    <button id="activityProblems" aria-label="검사 결과 펼치기" title="검사 결과"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 10 18H2Z M12 9v5 M12 17v1"/></svg><span>검사</span></button>
+    <div class="activity-spacer"></div>
+    <button id="themeToggle" aria-label="밝은 테마로 전환" title="밝은 테마로 전환"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2 M12 20v2 M2 12h2 M20 12h2 M5 5l2 2 M17 17l2 2 M5 19l2-2 M17 7l2-2"/></svg><span>테마</span></button>
+    <button id="activitySettings" aria-label="편집 설정" title="편집 설정"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16 M4 12h16 M4 18h16 M8 3v6 M16 9v6 M10 15v6"/></svg><span>설정</span></button>
+  </nav>
   <aside class="left">
+    <div class="explorer-heading"><strong>팩 탐색기</strong><button id="explorerOpen" title="다른 리소스팩 열기" aria-label="다른 리소스팩 열기">＋</button></div>
+    <div class="pack-heading"><span class="rp-icon">RP</span><span id="packLabel">리소스팩</span></div>
     <section class="screens">
-      <div class="section-heading">화면 목록 <span id="screenCount">0</span></div>
+      <div class="section-heading">▾ UI 화면 <span id="screenCount">0</span></div>
       <input id="screenSearch" type="search" aria-label="화면 검색" placeholder="폼 · HUD 검색">
       <div id="screens" class="list"></div>
     </section>
     <section class="layers">
-      <div class="section-heading">요소 목록 <span id="layerCount">0</span></div>
+      <div class="section-heading">▾ 화면 구조 <span id="layerCount">0</span></div>
       <div class="add-row"><button id="addLabel">＋ 텍스트</button><button id="addPanel">＋ 패널</button><button id="addImage">＋ 이미지</button></div>
       <input id="layerSearch" type="search" aria-label="요소 검색" placeholder="요소 이름으로 찾기">
       <div id="layers" class="list" aria-label="화면 요소"></div>
     </section>
     <div class="left-note"><strong>여러 요소 선택</strong><br>Shift 또는 Ctrl을 누르고 클릭하세요.</div>
+    <div id="leftResize" class="panel-resize" role="separator" tabindex="0" aria-label="탐색기 너비" aria-orientation="vertical" aria-valuemin="180" aria-valuemax="380" aria-valuenow="224"></div>
   </aside>
   <section class="canvas-area">
+    <div class="editor-tabs" role="tablist" aria-label="편집 방식"><button id="previewTab" class="active" role="tab" aria-selected="true">▧ 비주얼 편집</button><button id="jsonTab" role="tab" aria-selected="false">{ } JSON</button><button id="gameTab" role="tab" aria-selected="false">▷ 게임 화면</button><span id="fileTabName">UI 화면</span></div>
+    <div class="breadcrumbs"><span class="rp-icon">RP</span><span id="fileBreadcrumb">ui / 화면을 선택하세요</span><span id="sourceDirtyBadge" hidden>저장하지 않은 변경</span></div>
     <div class="canvas-toolbar">
-      <div class="segmented"><button id="previewTab" class="active">편집</button><button id="gameTab">게임 화면</button></div>
-      <select id="viewport" aria-label="작업 영역 크기"><option value="480,270">PC · 480 × 270</option><option value="640,360">PC · 640 × 360</option><option value="320,180">터치 · 320 × 180</option></select>
-      <select id="zoom" aria-label="확대 배율"><option value="fit">화면에 맞춤</option><option value="1">100%</option><option value="1.5">150%</option><option value="2">200%</option><option value="3">300%</option></select>
-      <button id="gridToggle" aria-pressed="true" title="작업 영역 격자 표시">격자</button>
-      <select id="interaction" aria-label="버튼 미리보기 상태"><option value="default">기본 상태</option><option value="hover">마우스 올림</option><option value="pressed">누름</option><option value="focused">포커스</option><option value="selected">선택됨</option></select>
-      <button id="editorSettings">정렬 설정</button><button id="fixtureButton" title="폼 버튼 등의 테스트 데이터">데이터</button>
+      <label class="toolbar-field">기기<select id="viewport" aria-label="기기 프리셋"></select></label><button id="deviceSettings">크기 설정</button><button id="compareDevices">기기별 비교</button>
+      <span class="toolbar-spacer"></span><label class="toolbar-field">확대<select id="zoom" aria-label="확대 배율"><option value="fit">전체 맞춤</option><option value="selection">선택 맞춤</option><option value="0.5">50%</option><option value="0.75">75%</option><option value="1">100%</option><option value="1.5">150%</option><option value="2">200%</option><option value="3">300%</option></select></label><button id="focusMode" aria-pressed="false">집중 모드</button>
     </div>
-    <div class="arrange-toolbar" aria-label="정렬 도구">
+    <section id="sourceEditor" class="source-editor" hidden aria-label="원본 JSON 편집"><div class="source-editor-toolbar"><span id="sourceTitle">원본 JSON</span><button id="discardSource">변경 버리기</button><button id="saveSource" class="primary">저장 · Ctrl+S</button></div><div class="code-area"><pre id="sourceLines" aria-hidden="true">1</pre><textarea id="sourceText" spellcheck="false" aria-label="원본 JSON 코드" wrap="off"></textarea></div><div class="source-editor-note">JSONC 원본 · 문법과 원본 해시 확인 · 생성 파일은 원본 IR에서 수정하세요.</div></section>
+    <div class="arrange-toolbar" aria-label="편집 도구">
       <span id="selectionCount" class="selection-count">선택 0</span>
-      <div class="align-tools">
-        <button data-align="left" title="왼쪽 정렬" aria-label="왼쪽 정렬">왼쪽</button><button data-align="centerX" title="가로 가운데 정렬" aria-label="가로 가운데 정렬">가운데</button><button data-align="right" title="오른쪽 정렬" aria-label="오른쪽 정렬">오른쪽</button>
-        <button data-align="top" title="위쪽 정렬" aria-label="위쪽 정렬">위</button><button data-align="centerY" title="세로 가운데 정렬" aria-label="세로 가운데 정렬">중앙</button><button data-align="bottom" title="아래쪽 정렬" aria-label="아래쪽 정렬">아래</button>
-      </div>
-      <button id="distributeX" title="3개 이상 선택 · 양 끝 사이의 빈 간격을 같게">가로 간격</button><button id="distributeY" title="3개 이상 선택 · 양 끝 사이의 빈 간격을 같게">세로 간격</button>
-      <button id="arrangeGrid" title="선택 요소를 열과 간격에 맞춰 배치">그리드 배치</button><button id="duplicate" title="Ctrl+D · 선택한 요소와 하위 구조 복제">복제</button>
+      <button id="arrangeButton">정렬·간격</button><button id="duplicate" title="Ctrl+D · 선택한 요소와 하위 구조 복제">복제</button><button id="selectionZoom" title="F · 선택한 요소 크게 보기">선택 확대</button>
+      <span class="toolbar-spacer"></span><button id="gridToggle" aria-pressed="false" title="작업 좌표의 격자 표시">격자</button><button id="safeToggle" aria-pressed="true" title="기기 설정의 안전 여백 표시">안전 영역</button><button id="editorSettings">스냅 설정</button><button id="checkLayout">배치 검사</button>
+      <details class="toolbar-menu"><summary>상태·데이터</summary><div><label>버튼 상태<select id="interaction" aria-label="버튼 미리보기 상태"><option value="default">기본</option><option value="hover">마우스 올림</option><option value="pressed">누름</option><option value="focused">포커스</option><option value="selected">선택됨</option><option value="locked">사용 불가</option></select></label><button id="fixtureButton">폼 테스트 데이터</button></div></details>
     </div>
+    <div class="preview-summary"><span id="deviceSummary">작업 크기 확인 중</span><span id="deviceEvidence">테스트 미리보기</span></div>
     <div id="canvasViewport" class="canvas-viewport">
       <div id="emptyCanvas" class="welcome"><div class="welcome-icon">▣</div><h1>UI를 직접 움직여 보세요</h1><p>팩을 열고 요소를 선택하면<br>배치하고, 꾸미고, Codex와 수정할 수 있습니다.</p><button id="welcomeNew" class="primary">새 프로젝트 만들기</button><small>기존 팩은 상단의 ‘팩 열기’에서 선택하세요.</small></div>
       <div id="artboard" class="artboard" hidden>
         <img id="preview" alt="JSON UI 정적 미리보기" draggable="false"><div id="fontApproximation"></div>
-        <div id="pixelGrid" class="pixel-grid" aria-hidden="true"></div><svg id="guides" class="guides" aria-hidden="true"></svg><div id="multiSelection" aria-hidden="true"></div>
+        <div id="pixelGrid" class="pixel-grid" aria-hidden="true"></div><svg id="safeArea" class="safe-area" aria-hidden="true"></svg><svg id="guides" class="guides" aria-hidden="true"></svg><div id="multiSelection" aria-hidden="true"></div>
         <div id="selectionBox" class="selection-box" hidden><span class="selection-label"></span><i id="resizeHandle" class="resize-handle"></i></div>
       </div>
       <video id="gameVideo" autoplay muted playsinline hidden></video><img id="remoteGame" alt="공유 중인 Minecraft 화면" hidden>
-      <div id="gameEmpty" class="game-empty" hidden>상단의 ‘Minecraft 연결’에서 게임 창을 선택하세요.</div>
+      <div id="gameEmpty" class="game-empty" hidden>상단의 ‘게임 창 공유’에서 Minecraft 창을 선택하세요.</div>
     </div>
     <div class="canvas-status"><span id="selectedInfo">클릭해서 선택 · 드래그해서 이동</span><span id="zoomInfo">100% · 480 × 270</span><span id="previewKind">게임 검증 전</span></div>
   </section>
   <aside class="right" data-mode="split">
-    <div class="right-toolbar"><strong>속성 · Codex</strong><select id="sidebarMode" aria-label="오른쪽 패널"><option value="split">함께 보기</option><option value="properties">속성만 보기</option><option value="chat">Codex만 보기</option></select></div>
+    <div id="rightResize" class="panel-resize" role="separator" tabindex="0" aria-label="속성 패널 너비" aria-orientation="vertical" aria-valuemin="280" aria-valuemax="460" aria-valuenow="336"></div>
+    <div class="right-toolbar"><div class="inspector-tabs"><button id="propertiesTab" class="active">속성</button><button id="codexTab">✦ Codex</button></div><select id="sidebarMode" aria-label="오른쪽 패널"><option value="split">함께</option><option value="properties">속성</option><option value="chat">Codex</option></select></div>
     <section class="properties">
       <div class="section-heading">요소 속성 <button id="readSelection" title="선택 요소의 원본 JSON 보기">JSON</button></div>
       <div id="noSelection" class="empty small">중앙 화면이나 요소 목록에서 선택하세요.</div>
@@ -91,13 +101,16 @@
   </aside>
   <section class="diagnostics"><div class="diagnostics-heading"><strong>검사 결과</strong><span id="issueCount" class="badge">대기</span><span id="nativeStatus" class="muted">Minecraft 연결 확인 전</span><button id="diagnosticToggle">펼치기</button><button id="refresh">↻ 갱신</button></div><div id="diagnostics" class="diagnostic-list" hidden></div></section>
 </main>
+<dialog id="deviceDialog" class="device-dialog"><form id="deviceForm"><h2>기기와 화면 크기</h2><p>출력 해상도는 기기의 픽셀 크기입니다. 작업 크기는 JSON UI의 좌표 범위입니다. 실제 GUI 배율에 맞는 작업 크기를 입력하세요.</p><label>비교할 기기<select id="devicePreset"></select></label><div class="device-columns"><section><h3>출력 해상도 <small>화면 픽셀</small></h3><div class="property-grid"><label>가로<input id="physicalW" type="number" min="128" max="16384" required></label><label>세로<input id="physicalH" type="number" min="128" max="16384" required></label></div><button id="readScreenshotSize" type="button">전체 화면 캡처에서 읽기</button></section><section><h3>작업 크기 <small>JSON UI 단위</small></h3><div class="property-grid"><label>가로<input id="logicalW" type="number" min="16" max="2048" required></label><label>세로<input id="logicalH" type="number" min="16" max="2048" required></label></div><div class="device-actions"><button id="matchAspect" type="button">출력 비율 맞추기</button><button id="rotateDevice" type="button">가로·세로 교환</button></div><label>UI 크기 비교<select id="densityPreset"><option value="custom">직접 설정</option><option value="180">큰 UI · 세로 180</option><option value="270">보통 UI · 세로 270</option><option value="360">작은 UI · 세로 360</option><option value="540">아주 작은 UI · 세로 540</option></select></label></section></div><details class="property-section"><summary>안전 여백 · 각 변의 비율</summary><p>TV 가장자리나 노치에 가리는 영역을 시험합니다. 실제 설정값을 입력하세요.</p><div class="property-grid safe-inputs"><label>왼쪽 %<input id="safeLeft" type="number" min="0" max="25" step="0.1"></label><label>위 %<input id="safeTop" type="number" min="0" max="25" step="0.1"></label><label>오른쪽 %<input id="safeRight" type="number" min="0" max="25" step="0.1"></label><label>아래 %<input id="safeBottom" type="number" min="0" max="25" step="0.1"></label></div></details><div id="deviceCalculation" class="device-calculation"></div><p class="device-note">기기 사양을 참고한 시험값입니다. Minecraft의 GUI 배율을 자동 측정하지 않습니다. Pocket·Classic 화면과 실제 입력은 해당 팩과 게임에서 확인합니다. <a id="deviceSource" target="_blank" rel="noreferrer" hidden>기기 사양 출처 ↗</a></p><div class="dialog-actions"><button type="button" data-close>취소</button><button type="submit" class="primary">이 크기로 미리보기</button></div></form></dialog>
+<dialog id="arrangeDialog"><h2>선택 요소 정리</h2><p>1개는 부모 기준, 여러 개는 선택 묶음 기준입니다. 간격·크기 도구는 같은 부모의 요소를 선택하세요.</p><h3>가로 정렬</h3><div class="align-tools"><button data-align="left">왼쪽</button><button data-align="centerX">가로 가운데</button><button data-align="right">오른쪽</button></div><h3>세로 정렬</h3><div class="align-tools"><button data-align="top">위쪽</button><button data-align="centerY">세로 가운데</button><button data-align="bottom">아래쪽</button></div><h3>간격과 크기</h3><div class="arrange-options"><button id="distributeX">가로 간격 같게</button><button id="distributeY">세로 간격 같게</button><button id="sameSize">크기 같게</button><button id="arrangeGrid">그리드로 배치</button></div><div class="dialog-actions"><button data-close class="primary">완료</button></div></dialog>
+<dialog id="compareDialog" class="compare-dialog"><h2>기기별 화면 비교</h2><p>같은 원본을 기기별 작업 크기로 다시 계산합니다. 현재 팩·선택·실행 취소 기록은 유지합니다.</p><div id="comparisonGrid" class="comparison-grid"></div><div class="dialog-actions"><button data-close class="primary">닫기</button></div></dialog>
 <dialog id="settingsDialog"><h2>정렬 설정</h2><p>게임 UI 단위로 맞춥니다. Alt를 누르면 드래그 중 스냅을 잠시 끕니다.</p><label class="inline"><input id="smartSnap" type="checkbox" checked> 요소의 가장자리 · 가운데 · 동일 간격에 자동 정렬</label><label class="inline"><input id="snap" type="checkbox" checked> 격자에 맞춰 이동</label><label>격자 간격<select id="gridSize"><option value="1">1 px · 정밀 배치</option><option value="4">4 px</option><option value="8" selected>8 px · 기본 간격</option><option value="16">16 px · 픽셀 블록</option></select></label><div class="dialog-actions"><button type="button" data-close class="primary">완료</button></div></dialog>
 <dialog id="gridDialog"><form id="gridForm"><h2>그리드로 정리</h2><p>같은 부모의 선택 요소를 목록 순서대로 배치합니다. 가장 큰 요소를 기준으로 셀 크기를 정합니다.</p><div class="property-grid"><label>열 수<input id="gridColumns" type="number" min="1" max="16" value="2" required></label><label>요소 사이 간격<input id="arrangeGap" type="number" min="0" max="512" value="8" required></label></div><div class="dialog-actions"><button type="button" data-close>취소</button><button type="submit" class="primary">배치하고 저장</button></div></form></dialog>
-<dialog id="helpDialog"><h2>더 빠르게 편집하기</h2><div class="shortcut-list"><p><kbd>Shift / Ctrl + 클릭</kbd> 여러 요소 선택</p><p><kbd>↑ ↓ ← →</kbd> 1px 이동 · <kbd>Shift</kbd>와 함께 10px</p><p><kbd>Shift + 드래그</kbd> 가로 또는 세로로만 이동</p><p><kbd>Alt + 드래그</kbd> 자동 정렬과 격자 스냅 잠시 끄기</p><p><kbd>Ctrl+D</kbd> 요소 복제</p><p><kbd>Ctrl+S</kbd> 속성 변경 저장</p><p><kbd>Ctrl+Z / Ctrl+Shift+Z</kbd> 실행 취소 / 다시 실행</p><p><kbd>Escape</kbd> 이동 취소 / 선택 해제</p><p><kbd>0</kbd> 화면에 맞춤 · <kbd>+ / −</kbd> 확대 / 축소</p></div><div class="dialog-actions"><button class="primary" data-close>알겠어요</button></div></dialog>
+<dialog id="helpDialog"><h2>더 빠르게 편집하기</h2><div class="shortcut-list"><p><kbd>Shift / Ctrl + 클릭</kbd> 여러 요소 선택</p><p><kbd>↑ ↓ ← →</kbd> 1px 이동 · <kbd>Shift</kbd>와 함께 10px</p><p><kbd>Shift + 드래그</kbd> 가로 또는 세로로만 이동</p><p><kbd>Alt + 드래그</kbd> 자동 정렬과 격자 스냅 잠시 끄기</p><p><kbd>Ctrl+D</kbd> 요소 복제</p><p><kbd>Ctrl+S</kbd> 속성 변경 저장</p><p><kbd>Ctrl+Z / Ctrl+Shift+Z</kbd> 실행 취소 / 다시 실행</p><p><kbd>Escape</kbd> 이동 취소 / 선택 해제</p><p><kbd>Ctrl+P</kbd> 화면 검색 · <kbd>Ctrl+Shift+E</kbd> 탐색기 접기</p><p><kbd>F</kbd> 선택 확대 · <kbd>Space + 드래그</kbd> 작업 화면 이동</p><p><kbd>0</kbd> 화면에 맞춤 · <kbd>+ / −</kbd> 확대 / 축소</p></div><div class="dialog-actions"><button class="primary" data-close>알겠어요</button></div></dialog>
 <dialog id="openDialog"><form id="openForm"><h2>리소스팩 열기</h2><p>manifest.json과 ui 폴더가 있는 팩 경로를 입력하세요.</p><label>RP 폴더<input id="rpPath" required placeholder="C:\...\development_resource_packs\My RP"></label><label>바닐라 RP · 선택<input id="vanillaPath" placeholder="상속된 바닐라 컨트롤을 해석할 미러 경로"></label><div class="dialog-actions"><button type="button" data-close>취소</button><button class="primary" type="submit">화면 불러오기</button></div></form></dialog>
-<dialog id="sourceDialog" class="source-dialog"><h2 id="sourceTitle">원본 JSON</h2><textarea id="sourceText" spellcheck="false"></textarea><div class="dialog-actions"><span class="muted">원본 해시를 확인하고 저장합니다.</span><button type="button" data-close>닫기</button><button id="saveSource" class="primary">저장</button></div></dialog>
 <dialog id="fixtureDialog" class="source-dialog"><h2>미리보기 데이터</h2><p>실제 서버 데이터와 구분되는 테스트 값입니다.</p><textarea id="fixtureText" spellcheck="false"></textarea><div class="dialog-actions"><button type="button" data-close>닫기</button><button id="saveFixture" class="primary">적용</button></div></dialog>
 <input id="imageFile" type="file" accept="image/png" hidden><div id="toast" role="status" hidden></div>
+<input id="screenshotSizeFile" type="file" accept="image/png,image/jpeg,image/webp" hidden>
 <script>window.STUDIO_TOKEN='__TOKEN__';</script><script type="module" src="/app.js"></script>
 </body>
 </html>

@@ -20,6 +20,8 @@ export async function startHost(config) {
       case 'edit': return session.edit(args);
       case 'batch_edit': return session.batchEdit(args);
       case 'duplicate': return session.duplicate(args);
+      case 'configure_viewport': return session.configureViewport(args);
+      case 'compare_viewports': return session.compareViewports(args);
       case 'add': return session.add(args);
       case 'history': return session.history(args);
       case 'import_image': return session.importImage(args);
@@ -57,8 +59,8 @@ export async function startHost(config) {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'" });
         return res.end((await readFile(join(root, 'studio/index.html'), 'utf8')).replace('__TOKEN__', token));
       }
-      if (['/app.js','/geometry.js','/style.css'].includes(url.pathname) && req.method === 'GET') {
-        res.writeHead(200,{'Content-Type':url.pathname.endsWith('.js')?'text/javascript; charset=utf-8':'text/css; charset=utf-8'});
+      if (['/app.js','/geometry.js','/devices.js','/style.css'].includes(url.pathname) && req.method === 'GET') {
+        res.writeHead(200,{'Content-Type':url.pathname.endsWith('.js')?'text/javascript; charset=utf-8':'text/css; charset=utf-8','Cache-Control':'no-store'});
         return res.end(await readFile(join(root,'studio',url.pathname.slice(1))));
       }
       if ((req.headers.authorization ?? `Bearer ${url.searchParams.get('token')}`) !== `Bearer ${token}`) return fail(401, 'Authentication required');

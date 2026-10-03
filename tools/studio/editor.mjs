@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { parseUiSource, DEFAULT_RUNTIME_DIALECT } from '../_lib/json-dialect.mjs';
 import { LiveSession, hash } from './session.mjs';
 import { editObject, jsonSpans, spanAt } from './json-edit.mjs';
+import { DEVICE_PRESETS, normalizeDevice, validateViewport } from '../../studio/devices.js';
 
 const parse = text => parseUiSource(text, { kind: 'runtime', dialect:DEFAULT_RUNTIME_DIALECT }).document;
 const esc = key => key.replaceAll('~', '~0').replaceAll('/', '~1');
@@ -39,7 +40,9 @@ export class StudioSession extends LiveSession {
         }
       } catch(error) { issues.push(`${path}: ${error.message}`); }
     }
-    return {rpRoot:root,screens,issues};
+    let packName;
+    try{packName=String((await safeRead('manifest.json')).header?.name??'').slice(0,100);}catch{}
+    return {rpRoot:root,screens,issues,packName};
   }
   async open(input) {
     if (this.ai?.busy) throw Error('Codex 작업이 끝난 뒤 팩이나 화면을 바꿔 주세요.');
@@ -48,7 +51,7 @@ export class StudioSession extends LiveSession {
     if (!control) throw Error('이 폴더에서 namespace가 있는 JSON UI를 찾지 못했습니다.');
     const changed = this.project?.rpRoot !== catalog.rpRoot;
     if (changed) { this.undoStack = []; this.redoStack = []; await this.ai?.reset(); }
-    this.selection = null; this.selectionKeys=[]; this.selectionInitialized=false; this.catalogDirty = false; this.editor = {screens:catalog.screens,issues:catalog.issues,nodes:[]};
+    this.selection = null; this.selectionKeys=[]; this.selectionInitialized=false; this.catalogDirty = false; this.editor = {screens:catalog.screens,issues:catalog.issues,packName:catalog.packName,nodes:[]};
     const state = await super.open({...input,control});
     await mkdir(this.config.runtime,{recursive:true});
     await writeFile(join(this.config.runtime,'last-project.json'),JSON.stringify(this.project,null,2));
@@ -83,7 +86,7 @@ export class StudioSession extends LiveSession {
         const catalog = this.catalogDirty ? await this.catalog(this.project.rpRoot) : this.editor;
         this.catalogDirty = false;
         if (revision !== this.revision) return this.status();
-        this.editor = {...this.editor,screens:catalog.screens,issues:catalog.issues,nodes,layers:this.previewLayers,unresolved:resolved.unresolved,viewport:resolved.layout.viewport,control:resolved.control};
+        this.editor = {...this.editor,screens:catalog.screens,issues:catalog.issues,packName:catalog.packName,nodes,layers:this.previewLayers,unresolved:resolved.unresolved,viewport:resolved.layout.viewport,control:resolved.control};
         this.editorRevision = revision;
         if (!this.selectionInitialized || (this.selection!==null&&!nodes.some(n => n.key === this.selection))) this.selection = nodes[0]?.key || null;
         this.selectionInitialized=true;
@@ -94,6 +97,30 @@ export class StudioSession extends LiveSession {
     }
     return this.status();
   }
+  async configureViewport({viewport,previewDevice}) {
+    if(!this.project)throw Error('먼저 팩을 여세요.');
+    if(this.ai?.busy)throw Error('Codex 작업이 끝난 뒤 미리보기 크기를 바꿔 주세요.');
+    const size=validateViewport(viewport),device=normalizeDevice(previewDevice===undefined?this.project.previewDevice:previewDevice,size);
+    this.project.viewport=size;
+    if(device)this.project.previewDevice=device;else delete this.project.previewDevice;
+    const result=await this.render();
+    await writeFile(join(this.config.runtime,'last-project.json'),JSON.stringify(this.project,null,2));
+    return result;
+  }
+  async compareViewports({presetIds,expectedRevision}) {
+    if(this.ai?.busy)throw Error('Codex 작업이 끝난 뒤 기기별로 비교하세요.');
+    if(!this.project||this.state.stale||expectedRevision!==this.editorRevision)throw Error('PREVIEW_CONFLICT');
+    if(!Array.isArray(presetIds)||presetIds.length<1||presetIds.length>8)throw Error('비교 기기는 1~8개를 선택하세요.');
+    const presets=presetIds.map(id=>DEVICE_PRESETS.find(p=>p.id===id));
+    if(presets.some(p=>!p)||new Set(presetIds).size!==presetIds.length)throw Error('Unknown or duplicate device preset');
+    const revision=this.revision,project=structuredClone(this.project),result=[];
+    for(const preset of presets){
+      const report=await this.engine('renderScreen',{...project,viewport:preset.viewport,outputDir:join(this.config.runtime,'comparisons',randomUUID()),includeEditor:true});
+      if(this.revision!==revision||this.state.stale)throw Error('PREVIEW_CONFLICT: 비교 중 원본이나 화면 설정이 바뀌었습니다. 다시 비교하세요.');
+      result.push({id:preset.id,viewport:preset.viewport,diagnostics:report.diagnostics??[],layers:report.previewLayers??[],nodes:report.editorLayout?.layout?.nodes.map((n,index)=>({key:n.pointer||'/',id:n.id,qualified:n.qualified,type:n.props.type,props:n.props,rect:n.rect,clip:n.clip,alpha:n.alpha,visible:n.visible!==false,layer:n.layer,index}))??[],runtimeVerified:false});
+    }
+    return {revision,profiles:result,runtimeVerified:false};
+  }
   select({key,keys=key?[key]:[]}) {
     if(!Array.isArray(keys)||keys.length>64||keys.some(k=>!this.editor.nodes.some(n=>n.key===k))||(key!==null&&!keys.includes(key)))throw Error('Element no longer exists');
     this.selection = key;this.selectionKeys=[...new Set(keys)];this.selectionInitialized=true; this.publish({}); return this.context();
@@ -103,7 +130,7 @@ export class StudioSession extends LiveSession {
     const selection = node && {...node,props:Object.fromEntries(Object.entries(node.props).filter(([k])=>editableProps.has(k)||k==='type'))};
     const fixture = this.project?.fixture;
     const group=this.editor.nodes.filter(n=>this.selectionKeys.includes(n.key));
-    return {sessionId:this.id,revision:this.revision,renderedRevision:this.state.renderedRevision,stale:this.state.stale,rpRoot:this.project?.rpRoot,control:this.project?.control,viewport:this.project?.viewport,fixtureSummary:fixture?Object.fromEntries(Object.entries(fixture).map(([k,v])=>[k,Array.isArray(v)?{count:v.length}:typeof v==='string'?v.slice(0,256):typeof v])):null,selection,selectionGroup:group.slice(0,16).map(({key,id,rect,source})=>({key,id,rect,source})),selectionCount:group.length,previewPath:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.path:this.state.report?.outputPath,previewFontMode:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.fontMode:'renderer',previewCaptureScale:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.captureScale:1,diagnostics:(this.state.report?.diagnostics||[]).slice(0,12),unresolved:(this.editor.unresolved||[]).slice(0,12),gameFrame:this.gameFrame ? {path:this.gameFrame.path,capturedAt:this.gameFrame.capturedAt,source:this.gameFrame.source} : null,runtimeVerified:false};
+    return {sessionId:this.id,revision:this.revision,renderedRevision:this.state.renderedRevision,stale:this.state.stale,rpRoot:this.project?.rpRoot,control:this.project?.control,viewport:this.project?.viewport,previewDevice:this.project?.previewDevice??null,fixtureSummary:fixture?Object.fromEntries(Object.entries(fixture).map(([k,v])=>[k,Array.isArray(v)?{count:v.length}:typeof v==='string'?v.slice(0,256):typeof v])):null,selection,selectionGroup:group.slice(0,16).map(({key,id,rect,source})=>({key,id,rect,source})),selectionCount:group.length,previewPath:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.path:this.state.report?.outputPath,previewFontMode:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.fontMode:'renderer',previewCaptureScale:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.captureScale:1,diagnostics:(this.state.report?.diagnostics||[]).slice(0,12),unresolved:(this.editor.unresolved||[]).slice(0,12),gameFrame:this.gameFrame ? {path:this.gameFrame.path,capturedAt:this.gameFrame.capturedAt,source:this.gameFrame.source} : null,runtimeVerified:false};
   }
   requireNode(key, expectedRevision) {
     if (this.state.stale || this.editorRevision !== this.state.renderedRevision || expectedRevision !== this.editorRevision) throw Error('PREVIEW_CONFLICT: 미리보기를 갱신한 뒤 다시 수정하세요.');
@@ -257,6 +284,6 @@ export class StudioSession extends LiveSession {
     const manifest = JSON.parse(await readFile(join(dir,'manifest.json'),'utf8'));
     manifest.header.uuid = randomUUID(); for(const m of manifest.modules) m.uuid=randomUUID();
     await writeFile(join(dir,'manifest.json'),JSON.stringify(manifest,null,2));
-    return this.open({rpRoot:dir,control:'live_demo.screen'});
+    return this.open({rpRoot:dir,control:'live_demo.screen',previewDevice:{presetId:'pc-fhd'}});
   }
 }
