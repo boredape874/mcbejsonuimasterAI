@@ -57,7 +57,10 @@
         "not_in_spec": ["is_new_nine_slice"],
         "not_added_reason": "zero occurrences in the pinned vanilla ui files",
         "spec_properties_without_a_schema_file": 94,
-        "note": "the 94 spec-only names are vanilla-confirmed by tests/jsonui-spec-vanilla-coverage.mjs (for example property_bag_for_children, focus_container_custom_*, use_selected_skin); the schema project is a checklist, not an authority"
+        "note": "the 94 spec-only names are vanilla-confirmed by tests/jsonui-spec-vanilla-coverage.mjs (for example property_bag_for_children, focus_container_custom_*, use_selected_skin); the schema project is a checklist, not an authority",
+        "enum_values_absent_from_vanilla": { "clip_direction": ["top", "bottom"], "anchor": ["bottom", "left", "right", "top", "center_middle"], "font_type": ["MinecraftTenEmoticon"], "texture_file_system": ["RawPath"], "type": ["always_rotate"] },
+        "enum_values_vanilla_uses_that_the_schema_lacks": { "type": ["factory"], "font_size": ["medium"], "grid_rescaling_type": ["vertical"] },
+        "vanilla_literal_census_2026_10_03": { "clip_direction": ["left", "down", "up", "right"], "font_type": ["smooth", "MinecraftTen", "default", "rune"], "backup_font_type": ["UIFont"], "tiled": ["true", "x", "y"], "mapping_type": ["global", "pressed", "focused", "double_pressed"], "input_mode_condition": ["gamepad", "gamepad_and_not_gaze", "not_gamepad"], "button_mappings.scope": ["view", "controller", "global"], "focus_navigation_mode_*": ["contained", "none", "custom", "stop"], "focus_change_*": ["FOCUS_OVERRIDE_STOP", "<control or button id>"], "text_type": ["ExtendedASCII"] }
       },
       "kalmemarq_bugrock_json_ui_schemas": {
         "revision": "de118a32",
@@ -282,6 +285,11 @@
     "handle_select", "handle_deselect", "ignored", "consume_event", "button_up_right_of_first_refusal", "ignore_input_scope"
   ],
   "variables_entry_keys": ["requires"],
+  "mapping_types": ["global", "pressed", "focused", "double_pressed"],
+  "input_mode_conditions": ["gamepad", "not_gamepad", "gamepad_and_not_gaze"],
+  "button_mapping_scopes": ["view", "controller", "global"],
+  "focus_navigation_modes": ["contained", "none", "custom", "stop"],
+  "focus_change_tokens": ["FOCUS_OVERRIDE_STOP"],
   "rules": {
     "layer_warn_above": 100,
     "grid_requires": "grid_item_template OR controls[]",

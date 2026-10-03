@@ -28,8 +28,14 @@ const enumSets = {
   anchor_from: new Set(spec.anchors),
   anchor_to: new Set(spec.anchors),
   operation: new Set(spec.modification_operations),
+  mapping_type: new Set(spec.mapping_types),
+  input_mode_condition: new Set(spec.input_mode_conditions),
+  focus_navigation_mode_left: new Set(spec.focus_navigation_modes),
+  focus_navigation_mode_right: new Set(spec.focus_navigation_modes),
+  focus_navigation_mode_up: new Set(spec.focus_navigation_modes),
+  focus_navigation_mode_down: new Set(spec.focus_navigation_modes),
 };
-const literal = (value) => typeof value === "string" && !value.startsWith("$") && !value.startsWith("#") && !value.startsWith("@");
+const literal = (value) => typeof value === "string" && value !== "" && !value.startsWith("$") && !value.startsWith("#") && !value.startsWith("@");
 const missingEnums = [];
 const unknownEntryKeys = [];
 const buttonMappingKeys = new Set(spec.button_mapping_entry_keys);
@@ -39,7 +45,10 @@ function walk(node, file) {
   if (!node || typeof node !== "object") return;
   for (const [key, value] of Object.entries(node)) {
     if (enumSets[key] && literal(value) && !enumSets[key].has(value)) missingEnums.push({ file, key, value });
-    if (key === "button_mappings" && Array.isArray(value)) for (const entry of value) if (entry && typeof entry === "object") for (const entryKey of Object.keys(entry)) if (!buttonMappingKeys.has(entryKey)) unknownEntryKeys.push({ file, array: "button_mappings", key: entryKey });
+    if (key === "button_mappings" && Array.isArray(value)) for (const entry of value) if (entry && typeof entry === "object") {
+      for (const entryKey of Object.keys(entry)) if (!buttonMappingKeys.has(entryKey)) unknownEntryKeys.push({ file, array: "button_mappings", key: entryKey });
+      if (literal(entry.scope) && !spec.button_mapping_scopes.includes(entry.scope)) missingEnums.push({ file, key: "button_mappings.scope", value: entry.scope });
+    }
     if (key === "variables" && Array.isArray(value)) for (const entry of value) if (entry && typeof entry === "object") for (const entryKey of Object.keys(entry)) if (!entryKey.startsWith("$") && !variablesEntryKeys.has(entryKey)) unknownEntryKeys.push({ file, array: "variables", key: entryKey });
     walk(value, file);
   }

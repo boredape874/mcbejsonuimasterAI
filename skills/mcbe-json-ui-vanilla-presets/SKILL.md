@@ -61,6 +61,8 @@ In the IR, set `extends:` on the element. Layout (`anchor`, `pos`, `size`) is st
 | Text button like vanilla form buttons | `common_buttons.light_text_button` | Set `$button_text` and `$pressed_button_name`; `$button_text_max_size` bounds the label |
 | Close 'X' icon | `common.close_button` | Set `$close_button_to_button_id` (confirmed from official bedrock-samples v1.26.50.4; `common.cancel_button` does not exist in vanilla) |
 | Generic vertical scroll body | `common.scrolling_panel` | Set `$scrolling_content` to a child reference |
+| Search box / text input | `common.text_edit_box` | Set `$text_box_name`, `$text_edit_text_control` and `$place_holder_control`; read the typed text through `#item_name` with `source_control_name` equal to `$text_box_name`; community wrappers (StarLibV2, the Theorist search bar) set `$text_edit_box_clear_to_button_id` to `button.search_bar_clear` |
+| Container slot cell | `common.container_item` | Compose `$item_renderer`, `$cell_image_size`, stack/durability/storage flags and `$background_images`; items only move when the owning screen's `collection_name` is a native collection (`inventory_items`, `hotbar_items`, `armor_items`, `offhand_items`, `container_items`) |
 
 ## Example
 

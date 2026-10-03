@@ -164,6 +164,8 @@ input_mode_condition, ignore_input_scope, consume_event,
 handle_select, handle_deselect, button_up_right_of_first_refusal
 ```
 
+Values confirmed from the pinned vanilla files (2026-10-03 census, `data/jsonui-spec.json`): `mapping_type` is one of `global`, `pressed`, `focused`, `double_pressed`; `scope` is `view`, `controller` or `global`; `input_mode_condition` is `gamepad`, `not_gamepad` or `gamepad_and_not_gaze`. `focus_navigation_mode_*` takes `contained`, `none`, `custom` or `stop`, and `focus_change_*` takes a control name, a button id, or the token `FOCUS_OVERRIDE_STOP`. The official schemas repository's UI types (`mojang-bedrock-schemas-visual`) also list `not_gaze`; no pinned vanilla file uses it.
+
 ### Focus
 
 ```text

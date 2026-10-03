@@ -31,6 +31,20 @@
       "purpose": "Generic scroll_view scaffold with bar/track/viewport sub-controls preconfigured.",
       "fits_kind": "scroll_view",
       "common_variables": ["$scrolling_content", "$scroll_size", "$scrolling_pane_size", "$scroll_box_size", "$show_background"]
+    },
+    {
+      "ref": "common.text_edit_box",
+      "purpose": "Vanilla text input (edit_box) with placeholder control, clear button, magnifying-glass icon and focus overrides; community search bars (StarLibV2, the Theorist search-bar template) wrap it and set only its variables.",
+      "fits_kind": "edit_box",
+      "common_variables": ["$text_box_name", "$text_edit_text_control", "$place_holder_control", "$text_box_enabled_binding_name", "$text_edit_box_text_type", "$text_edit_box_grid_collection_name", "$text_edit_box_clear_to_button_id", "$text_clear_button_enabled", "$magnifying_glass_enabled", "$focus_id"],
+      "note": "Confirmed from official bedrock-samples v1.26.50.4 ui_common.json (2026-10-03). $text_edit_box_clear_to_button_id defaults to button.search_bar_clear in community wrappers; read the typed text through #item_name with source_control_name set to $text_box_name."
+    },
+    {
+      "ref": "common.container_item",
+      "purpose": "Vanilla container slot cell (input_panel) that composes the item renderer, stack count, durability and storage bars, hover/focus overlays and background images; chest, furnace and backpack screens instantiate it per slot.",
+      "fits_kind": "input_panel",
+      "common_variables": ["$item_renderer", "$cell_image_size", "$item_renderer_size", "$button_ref", "$stack_count_required", "$durability_bar_required", "$storage_bar_required", "$background_images", "$focus_id", "$tts_name"],
+      "note": "Confirmed from official bedrock-samples v1.26.50.4 ui_common.json (2026-10-03). Native item movement still depends on the screen's collection_name (inventory_items, hotbar_items, armor_items, offhand_items, container_items); a visual copy of the cell inside a server form does not move items."
     }
   ],
   "common_dialogs_refs": [
