@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile, writeFile, mkdir, cp } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, cp, unlink } from 'node:fs/promises';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { createHash } from 'node:crypto';
@@ -9,6 +9,29 @@ import { configuration, root } from '../tools/studio/config.mjs';
 import { startHost } from '../tools/studio/host.mjs';
 import { editObject, jsonSpans } from '../tools/studio/json-edit.mjs';
 import { CodexBridge } from '../tools/studio/codex.mjs';
+import { selectionBounds, alignSelection, distributeSelection, gridSelection, snapMove } from '../studio/geometry.js';
+
+test('editor geometry: edge/center guides, equal gaps, grid, axis lock and unequal element sizes',()=>{
+  const n=(id,x,y,w=10,h=10,index=0)=>({id,index,rect:{x,y,w,h},props:{offset:[x,y]}});
+  const a=n('a',0,0),b=n('b',30,0,20),c=n('c',80,0);
+  assert.deepEqual(selectionBounds([a,b,c]),{x:0,y:0,w:90,h:10});
+  assert.deepEqual(alignSelection([b],'centerX',{x:0,y:0,w:100,h:100})[0].patch.offset,[40,0]);
+  assert.deepEqual(alignSelection([a,b,c],'bottom').map(e=>e.patch.offset),[[0,0],[30,0],[80,0]]);
+  assert.deepEqual(distributeSelection([c,a,b],'x').map(e=>e.patch.offset),[[0,0],[35,0],[80,0]]);
+  assert.throws(()=>distributeSelection([a,n('b',1,0),n('c',2,0)],'x'),/겹칩니다/);
+  assert.deepEqual(gridSelection([a,b,c],2,8).map(e=>e.patch.offset),[[0,0],[28,0],[0,18]]);
+  assert.throws(()=>gridSelection([a,b],0,8),/열 수/);
+  const edge=snapMove({x:10,y:10,w:10,h:10},17,0,{peers:[n('peer',30,50)],grid:8,threshold:4});
+  assert.equal(edge.dx,20,'smart alignment precedes a coarser grid');assert.equal(edge.guides[0].axis,'x');
+  const spaced=snapMove({x:65,y:0,w:10,h:10},-6,0,{peers:[a,n('peer',30,0)],grid:0,threshold:2});
+  assert.equal(spaced.dx,-5);assert.equal(spaced.guides.find(g=>g.gap!==undefined).gap,20);
+  const left=snapMove({x:-35,y:0,w:10,h:10},6,0,{peers:[a,n('peer',30,0)],grid:0,threshold:2});
+  assert.equal(left.guides.find(g=>g.gap!==undefined).to-left.guides.find(g=>g.gap!==undefined).from,20);
+  assert.deepEqual(snapMove(a.rect,5,7,{smart:false,grid:0}),{dx:5,dy:7,guides:[]});
+  assert.deepEqual(snapMove(a.rect,5,7,{smart:false,grid:8,axis:'x'}),{dx:8,dy:0,guides:[]});
+  assert.equal(snapMove(a.rect,100,100,{peers:[b],grid:0,threshold:2}).guides.length,0);
+  assert.throws(()=>alignSelection([{...a,props:{offset:['$x',0]}}],'left',b.rect),/동적 위치/);
+});
 
 test('JSONC patch preserves comments, escaped keys, trailing commas and unrelated content',()=>{
   const text='\uFEFF{\n// retained\n"a/b": {"size": [20, 10], /* sizing */ "text": "old", // keep\n}, "untouched": 1\n}';
@@ -42,6 +65,27 @@ test('real Studio: source provenance, visual edits, undo, conflict, images, shar
   await assert.rejects(s.edit({key:node.key,expectedRevision:s.editorRevision,expectedHash:original.sha256,patch:{alpha:.5}}),/SOURCE_CONFLICT/);
   await s.history({direction:'undo'});assert.equal((await s.readSource(original.path)).text,original.text);assert.equal(s.state.report.hash,initialHash);
   await s.history({direction:'redo'});assert.notEqual(s.state.report.hash,initialHash);
+  const group=s.editor.nodes.filter(n=>['title','progress'].includes(n.id));
+  await s.select({key:group[0].key,keys:group.map(n=>n.key)});assert.equal(s.context().selectionCount,2);assert.equal(s.context().selectionGroup.length,2);
+  const beforeBatch=await s.readSource(original.path),historyCount=s.undoStack.length;
+  const edits=group.map((n,i)=>({key:n.key,expectedHash:n.source.sha256,patch:{offset:[i*20,20]}}));
+  await assert.rejects(s.batchEdit({expectedRevision:s.editorRevision,edits:edits.map((e,i)=>({...e,expectedHash:i?'stale':e.expectedHash}))}),/SOURCE_CONFLICT/);
+  assert.equal((await s.readSource(original.path)).text,beforeBatch.text,'failed batches must never partially write');
+  await s.batchEdit({expectedRevision:s.editorRevision,edits});assert.equal(s.undoStack.length,historyCount+1);
+  assert.deepEqual(s.editor.nodes.find(n=>n.id==='progress').props.offset,[20,20]);
+  await s.history({direction:'undo'});assert.equal((await s.readSource(original.path)).text,beforeBatch.text);
+  const commented=beforeBatch.text.replace('"progress":{','"progress":{/* clone comment */"custom_extra":{"keep":"value"},');
+  await s.writeSource({path:original.path,text:commented,expectedHash:beforeBatch.sha256});await s.render();
+  let duplicateNode=s.editor.nodes.find(n=>n.id==='progress');
+  await writeFile(join(rpRoot,'ir.yaml'),'version: 1\n');
+  await assert.rejects(s.duplicate({key:duplicateNode.key,expectedRevision:s.editorRevision,expectedHash:duplicateNode.source.sha256}),/IR_OWNER/);
+  await assert.rejects(s.batchEdit({expectedRevision:s.editorRevision,edits:[{key:duplicateNode.key,expectedHash:duplicateNode.source.sha256,patch:{offset:[3,4]}}]}),/IR_OWNER/);
+  assert.equal((await s.readSource(original.path)).text,commented);await unlink(join(rpRoot,'ir.yaml'));
+  const copied=await s.duplicate({key:duplicateNode.key,expectedRevision:s.editorRevision,expectedHash:duplicateNode.source.sha256});
+  const clone=s.editor.nodes.find(n=>n.id===copied.id);assert.deepEqual(clone.props.offset,duplicateNode.props.offset.map(v=>v+8));assert.equal(clone.props.texture,duplicateNode.props.texture);
+  const clonedText=(await s.readSource(original.path)).text;assert.equal((clonedText.match(/clone comment/g)||[]).length,2);assert.equal((clonedText.match(/"custom_extra"/g)||[]).length,2);
+  await s.history({direction:'undo'});assert.equal((await s.readSource(original.path)).text,commented);
+  await s.select({key:null});await s.render();assert.equal(s.context().selectionCount,0);assert.equal(s.context().selection,undefined);
   await assert.rejects(s.writeSource({path:original.path,text:'{"broken":',expectedHash:(await s.readSource(original.path)).sha256}));
   await assert.rejects(s.readSource('../outside.json'));
   const pixel=await readFile(join(rpRoot,'textures/ui/live_pixel.png'));
@@ -75,7 +119,7 @@ test('real Studio: source provenance, visual edits, undo, conflict, images, shar
   assert.equal((await request('/api/status')).status,401);
   assert.equal((await request('/api/status',{Authorization:'Bearer '+host.connection.token,Origin:'https://example.com'})).status,403);
   const html=await request('/');assert.match(html.headers.get('content-security-policy'),/script-src 'self'/);
-  assert.equal((await request('/app.js')).status,200);assert.equal((await request('/style.css')).status,200);
+  assert.equal((await request('/app.js')).status,200);assert.equal((await request('/style.css')).status,200);assert.equal((await request('/geometry.js')).status,200);
   const ctx=await request('/api/studio_context',{Authorization:'Bearer '+host.connection.token});assert.equal((await ctx.json()).runtimeVerified,false);
   const restored=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>restored.close());
   assert.equal(restored.session.project.control,s.project.control,'restart must restore the last screen');

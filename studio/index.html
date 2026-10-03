@@ -1,53 +1,103 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JSON UI Studio · Codex</title><link rel="stylesheet" href="/style.css"></head>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>JSON UI Studio · Codex</title><link rel="stylesheet" href="/style.css">
+</head>
 <body>
-<header class="topbar"><div class="brand"><span class="logo">▣</span><div>JSON UI <b>STUDIO</b><small>MINECRAFT BEDROCK · WITH CODEX</small></div>
-</div><span id="projectName" class="project-name">리소스팩을 열어 시작하세요</span><div class="top-actions"><button id="openPack">▱ 팩 열기</button><button id="newProject">＋ 새 프로젝트</button><button id="undo" title="Ctrl+Z">↶</button><button id="redo" title="Ctrl+Shift+Z">↷</button><button id="sourceButton">〈 〉 원본 JSON</button><button id="gameShare">▣ Minecraft 창 연결</button><span id="saveStatus" class="badge">대기</span></div>
+<header class="topbar">
+  <div class="brand"><span class="logo" aria-hidden="true">▣</span><div>JSON UI <b>STUDIO</b><small>마인크래프트 UI 작업실</small></div></div>
+  <span id="projectName" class="project-name">리소스팩을 열어 시작하세요</span>
+  <div class="top-actions">
+    <button id="openPack">팩 열기</button><button id="newProject">＋ 새 프로젝트</button>
+    <div class="toolbar-group"><button id="undo" title="실행 취소 · Ctrl+Z" aria-label="실행 취소">↶</button><button id="redo" title="다시 실행 · Ctrl+Shift+Z" aria-label="다시 실행">↷</button></div>
+    <button id="sourceButton" title="선택 요소의 원본 파일">JSON 보기</button><button id="gameShare">Minecraft 연결</button>
+    <button id="helpButton" aria-label="사용법과 단축키">도움말 ?</button><span id="saveStatus" class="badge" role="status">대기</span>
+  </div>
 </header>
-<main class="workspace">
-<aside class="left"><section class="screens"><div class="section-heading">화면 <span id="screenCount">0</span></div>
-<input id="screenSearch" type="search" placeholder="폼, HUD, 컨트롤 검색"><div id="screens" class="list"><div class="empty small">팩의 JSON UI 화면이 여기에 표시됩니다.</div>
-</div></section>
-<section class="layers"><div class="section-heading">레이어 <span id="layerCount">0</span></div>
-<div class="add-row"><button id="addLabel">＋ 글자</button><button id="addPanel">＋ 패널</button><button id="addImage">＋ 이미지</button></div>
-<div id="layers" class="list"></div>
-</section>
-<div class="left-note">원본 파일과 연결됩니다.<br>Codex 수정도 저장 즉시 미리보기에 반영됩니다.</div>
-</aside>
-<section class="canvas-area"><div class="canvas-toolbar"><div class="segmented"><button id="previewTab" class="active" title="정적 편집 미리보기">편집</button><button id="gameTab" title="사용자가 공유한 Minecraft 창">게임 화면</button></div>
-<select id="viewport" aria-label="미리보기 크기"><option value="480,270">PC · GUI 480 × 270</option><option value="640,360">PC · 640 × 360</option><option value="320,180">터치 · 320 × 180</option></select><select id="zoom" aria-label="편집 화면 배율"><option value="fit">화면에 맞춤</option><option value="1">100%</option><option value="1.5">150%</option><option value="2">200%</option><option value="3">300%</option></select><button id="gridToggle" aria-label="격자 표시" aria-pressed="true" title="격자 표시">▦</button><select id="interaction" aria-label="버튼 상태"><option value="default">기본 상태</option><option value="hover">Hover</option><option value="pressed">Pressed</option><option value="focused">Focus</option><option value="selected">Selected</option></select><label class="snap"><input id="snap" type="checkbox" checked> 1px 스냅</label><button id="fixtureButton" title="미리보기 데이터 설정">데이터</button></div>
-<div id="canvasViewport" class="canvas-viewport"><div id="emptyCanvas" class="welcome"><div class="welcome-icon">▣</div>
-<h1>보면서 만드는 JSON UI</h1><p>화면을 고르고, 요소를 움직이고,<br>같은 미리보기를 Codex와 함께 보세요.</p><button id="welcomeNew" class="primary">새 프로젝트로 시작</button><small>기존 팩은 상단의 ‘팩 열기’에서 선택하세요.</small></div>
-<div id="artboard" class="artboard" hidden><img id="preview" alt="리소스팩의 정적 JSON UI 미리보기" draggable="false"><div id="fontApproximation"></div>
-<div id="selectionBox" class="selection-box" hidden><span class="selection-label"></span><i id="resizeHandle" class="resize-handle"></i></div>
-</div><video id="gameVideo" autoplay muted playsinline hidden></video><img id="remoteGame" alt="다른 창에서 공유 중인 게임 화면" hidden><div id="gameEmpty" class="game-empty" hidden>상단 ‘Minecraft 창 연결’을 누른 뒤 게임 창을 선택하세요.<br>브라우저가 허용한 창만 공유됩니다.</div>
-</div><div class="canvas-status"><span id="selectedInfo">요소를 선택하면 드래그하거나 오른쪽에서 값을 수정할 수 있습니다.</span><span id="zoomInfo">100% · 480 × 270</span><span id="previewKind">정적 렌더링 · 게임 검증 전</span></div>
-</section>
-<aside class="right" data-mode="split"><div class="right-toolbar"><strong>속성 · AI 도우미</strong><select id="sidebarMode" aria-label="오른쪽 패널 표시"><option value="split">함께 보기</option><option value="properties">속성 크게</option><option value="chat">Codex 크게</option></select></div>
-<section class="properties"><div class="section-heading">선택한 요소 <button id="readSelection">〈 〉</button></div>
-<div id="noSelection" class="empty small">미리보기나 레이어에서 요소를 선택하세요.</div>
-<form id="propertiesForm" hidden><div class="element-title"><strong id="elementId"></strong><span id="elementType" class="badge"></span></div>
-<div id="sourceInfo" class="source-info"></div>
-<fieldset id="propertyFields"><label>텍스트<textarea id="propText" rows="2"></textarea></label><div class="property-grid"><label>X · offset<input id="propX"></label><label>Y · offset<input id="propY"></label><label>가로 · size<input id="propW"></label><label>세로 · size<input id="propH"></label><label>글자 배율<input id="propFont" type="number" step="0.1" min="0.1"></label><label>레이어<input id="propLayer" type="number" step="1"></label><label>색상<input id="propColor" type="color"></label><label>투명도<input id="propAlpha" type="number" min="0" max="1" step="0.05"></label></div>
-<div class="property-grid"><label>anchor_from<select id="propFrom"></select></label><label>anchor_to<select id="propTo"></select></label></div>
-<label>텍스처<input id="propTexture" placeholder="textures/..."></label><label class="inline"><input id="propVisible" type="checkbox"> 표시</label><button class="primary" type="submit">변경 적용</button></fieldset></form></section>
-<section class="chat"><div class="section-heading"><span>✦ Codex <small id="codexStatus">연결 전</small></span><button id="codexConnect">연결</button></div>
-<div class="chat-note">선택 요소·미리보기를 함께 전달합니다. Studio 전용 대화이며 기존 로그인 계정을 사용합니다.</div>
-<div id="chatMessages" class="chat-messages"><div class="chat-placeholder">“제목을 좀 더 크게 해줘”<br>“이 폼에 퀘스트 이미지를 넣어줘”<br><br>수정 요청을 보내고 결과를 확인하세요.</div>
-</div><div id="codexRequests"></div>
-<form id="chatForm"><textarea id="chatInput" rows="2" placeholder="이 화면을 어떻게 바꿀까요?" required></textarea><div class="chat-actions"><label><input id="includePreview" type="checkbox" checked> 미리보기</label><label><input id="includeGame" type="checkbox"> 게임 화면</label><button id="codexStop" type="button" hidden>중단</button><button id="chatSend" class="primary" type="submit">보내기 ↑</button></div>
-</form></section>
-</aside>
-<section class="diagnostics"><div class="diagnostics-heading"><strong>검사 결과</strong><span id="issueCount" class="badge">대기</span><span id="nativeStatus" class="muted">Minecraft 연결 확인 전</span><button id="diagnosticToggle" title="검사 패널 접기 / 펼치기">접기</button><button id="refresh">↻ 갱신</button></div>
-<div id="diagnostics" class="diagnostic-list"><div class="muted">원본 등록, 바인딩, 텍스처와 렌더링 한계를 표시합니다.</div>
-</div></section>
+<main class="workspace diagnostics-collapsed">
+  <aside class="left">
+    <section class="screens">
+      <div class="section-heading">화면 목록 <span id="screenCount">0</span></div>
+      <input id="screenSearch" type="search" aria-label="화면 검색" placeholder="폼 · HUD 검색">
+      <div id="screens" class="list"></div>
+    </section>
+    <section class="layers">
+      <div class="section-heading">요소 목록 <span id="layerCount">0</span></div>
+      <div class="add-row"><button id="addLabel">＋ 텍스트</button><button id="addPanel">＋ 패널</button><button id="addImage">＋ 이미지</button></div>
+      <input id="layerSearch" type="search" aria-label="요소 검색" placeholder="요소 이름으로 찾기">
+      <div id="layers" class="list" aria-label="화면 요소"></div>
+    </section>
+    <div class="left-note"><strong>여러 요소 선택</strong><br>Shift 또는 Ctrl을 누르고 클릭하세요.</div>
+  </aside>
+  <section class="canvas-area">
+    <div class="canvas-toolbar">
+      <div class="segmented"><button id="previewTab" class="active">편집</button><button id="gameTab">게임 화면</button></div>
+      <select id="viewport" aria-label="작업 영역 크기"><option value="480,270">PC · 480 × 270</option><option value="640,360">PC · 640 × 360</option><option value="320,180">터치 · 320 × 180</option></select>
+      <select id="zoom" aria-label="확대 배율"><option value="fit">화면에 맞춤</option><option value="1">100%</option><option value="1.5">150%</option><option value="2">200%</option><option value="3">300%</option></select>
+      <button id="gridToggle" aria-pressed="true" title="작업 영역 격자 표시">격자</button>
+      <select id="interaction" aria-label="버튼 미리보기 상태"><option value="default">기본 상태</option><option value="hover">마우스 올림</option><option value="pressed">누름</option><option value="focused">포커스</option><option value="selected">선택됨</option></select>
+      <button id="editorSettings">정렬 설정</button><button id="fixtureButton" title="폼 버튼 등의 테스트 데이터">데이터</button>
+    </div>
+    <div class="arrange-toolbar" aria-label="정렬 도구">
+      <span id="selectionCount" class="selection-count">선택 0</span>
+      <div class="align-tools">
+        <button data-align="left" title="왼쪽 정렬" aria-label="왼쪽 정렬">왼쪽</button><button data-align="centerX" title="가로 가운데 정렬" aria-label="가로 가운데 정렬">가운데</button><button data-align="right" title="오른쪽 정렬" aria-label="오른쪽 정렬">오른쪽</button>
+        <button data-align="top" title="위쪽 정렬" aria-label="위쪽 정렬">위</button><button data-align="centerY" title="세로 가운데 정렬" aria-label="세로 가운데 정렬">중앙</button><button data-align="bottom" title="아래쪽 정렬" aria-label="아래쪽 정렬">아래</button>
+      </div>
+      <button id="distributeX" title="3개 이상 선택 · 양 끝 사이의 빈 간격을 같게">가로 간격</button><button id="distributeY" title="3개 이상 선택 · 양 끝 사이의 빈 간격을 같게">세로 간격</button>
+      <button id="arrangeGrid" title="선택 요소를 열과 간격에 맞춰 배치">그리드 배치</button><button id="duplicate" title="Ctrl+D · 선택한 요소와 하위 구조 복제">복제</button>
+    </div>
+    <div id="canvasViewport" class="canvas-viewport">
+      <div id="emptyCanvas" class="welcome"><div class="welcome-icon">▣</div><h1>UI를 직접 움직여 보세요</h1><p>팩을 열고 요소를 선택하면<br>배치하고, 꾸미고, Codex와 수정할 수 있습니다.</p><button id="welcomeNew" class="primary">새 프로젝트 만들기</button><small>기존 팩은 상단의 ‘팩 열기’에서 선택하세요.</small></div>
+      <div id="artboard" class="artboard" hidden>
+        <img id="preview" alt="JSON UI 정적 미리보기" draggable="false"><div id="fontApproximation"></div>
+        <div id="pixelGrid" class="pixel-grid" aria-hidden="true"></div><svg id="guides" class="guides" aria-hidden="true"></svg><div id="multiSelection" aria-hidden="true"></div>
+        <div id="selectionBox" class="selection-box" hidden><span class="selection-label"></span><i id="resizeHandle" class="resize-handle"></i></div>
+      </div>
+      <video id="gameVideo" autoplay muted playsinline hidden></video><img id="remoteGame" alt="공유 중인 Minecraft 화면" hidden>
+      <div id="gameEmpty" class="game-empty" hidden>상단의 ‘Minecraft 연결’에서 게임 창을 선택하세요.</div>
+    </div>
+    <div class="canvas-status"><span id="selectedInfo">클릭해서 선택 · 드래그해서 이동</span><span id="zoomInfo">100% · 480 × 270</span><span id="previewKind">게임 검증 전</span></div>
+  </section>
+  <aside class="right" data-mode="split">
+    <div class="right-toolbar"><strong>속성 · Codex</strong><select id="sidebarMode" aria-label="오른쪽 패널"><option value="split">함께 보기</option><option value="properties">속성만 보기</option><option value="chat">Codex만 보기</option></select></div>
+    <section class="properties">
+      <div class="section-heading">요소 속성 <button id="readSelection" title="선택 요소의 원본 JSON 보기">JSON</button></div>
+      <div id="noSelection" class="empty small">중앙 화면이나 요소 목록에서 선택하세요.</div>
+      <form id="propertiesForm" hidden>
+        <div class="element-title"><strong id="elementId"></strong><span id="elementType" class="badge"></span></div><div id="sourceInfo" class="source-info"></div>
+        <fieldset id="propertyFields">
+          <label>텍스트<textarea id="propText" rows="2"></textarea></label>
+          <details class="property-section" open><summary>위치와 크기 <small>게임 UI 단위</small></summary>
+            <div class="property-grid"><label>가로 위치 X<input id="propX" inputmode="decimal"></label><label>세로 위치 Y<input id="propY" inputmode="decimal"></label><label>너비<input id="propW"></label><label>높이<input id="propH"></label></div>
+            <label>글자 크기 배율<input id="propFont" type="number" step="0.1" min="0.1"></label>
+          </details>
+          <details class="property-section" open><summary>모양</summary>
+            <div class="property-grid"><label>색상<input id="propColor" type="color"></label><label>불투명도<input id="propAlpha" type="number" min="0" max="1" step="0.05"></label></div>
+            <label>이미지 경로<input id="propTexture" placeholder="textures/..."></label><label class="inline"><input id="propVisible" type="checkbox"> 게임에서 표시</label>
+          </details>
+          <details class="property-section"><summary>고급 배치</summary><label>겹침 순서<input id="propLayer" type="number" step="1"></label><div class="property-grid"><label>내 기준점<select id="propFrom"></select></label><label>부모 기준점<select id="propTo"></select></label></div></details>
+          <button class="primary" type="submit">변경 저장 <span class="key-hint">Ctrl+S</span></button>
+        </fieldset>
+      </form>
+    </section>
+    <section class="chat">
+      <div class="section-heading"><span>✦ Codex <small id="codexStatus">연결 전</small></span><button id="codexConnect">연결</button></div>
+      <div class="chat-note">선택 요소와 같은 화면을 보고 함께 수정합니다.</div>
+      <div id="chatMessages" class="chat-messages"><div class="chat-placeholder">“버튼 사이 간격을 맞춰줘”<br>“이 HUD를 아기자기하게 바꿔줘”</div></div><div id="codexRequests"></div>
+      <form id="chatForm"><textarea id="chatInput" rows="2" aria-label="Codex 수정 요청" placeholder="선택한 요소를 어떻게 바꿀까요?" required></textarea><div class="chat-actions"><label><input id="includePreview" type="checkbox" checked> 편집 화면</label><label><input id="includeGame" type="checkbox"> 게임 화면</label><button id="codexStop" type="button" hidden>중단</button><button id="chatSend" class="primary" type="submit">보내기 ↑</button></div></form>
+    </section>
+  </aside>
+  <section class="diagnostics"><div class="diagnostics-heading"><strong>검사 결과</strong><span id="issueCount" class="badge">대기</span><span id="nativeStatus" class="muted">Minecraft 연결 확인 전</span><button id="diagnosticToggle">펼치기</button><button id="refresh">↻ 갱신</button></div><div id="diagnostics" class="diagnostic-list" hidden></div></section>
 </main>
-<dialog id="openDialog"><form id="openForm"><h2>리소스팩 열기</h2><p>manifest.json과 ui 폴더가 있는 팩 경로를 입력하세요.</p><label>RP 폴더<input id="rpPath" required placeholder="C:\...\development_resource_packs\My RP"></label><label>바닐라 RP · 선택<input id="vanillaPath" placeholder="상속된 바닐라 컨트롤을 해석할 미러 경로"></label><div class="dialog-actions"><button type="button" data-close>취소</button><button class="primary" type="submit">화면 불러오기</button></div>
-</form></dialog>
-<dialog id="sourceDialog" class="source-dialog"><h2 id="sourceTitle">원본 JSON</h2><textarea id="sourceText" spellcheck="false"></textarea><div class="dialog-actions"><span class="muted">원본 해시를 확인하고 저장합니다.</span><button type="button" data-close>닫기</button><button id="saveSource" class="primary">저장</button></div>
-</dialog>
-<dialog id="fixtureDialog" class="source-dialog"><h2>미리보기 데이터</h2><p>실제 서버 데이터와 구분되는 테스트 값입니다. form_buttons 등 필요한 fixture를 설정하세요.</p><textarea id="fixtureText" spellcheck="false"></textarea><div class="dialog-actions"><button type="button" data-close>닫기</button><button id="saveFixture" class="primary">적용</button></div>
-</dialog>
+<dialog id="settingsDialog"><h2>정렬 설정</h2><p>게임 UI 단위로 맞춥니다. Alt를 누르면 드래그 중 스냅을 잠시 끕니다.</p><label class="inline"><input id="smartSnap" type="checkbox" checked> 요소의 가장자리 · 가운데 · 동일 간격에 자동 정렬</label><label class="inline"><input id="snap" type="checkbox" checked> 격자에 맞춰 이동</label><label>격자 간격<select id="gridSize"><option value="1">1 px · 정밀 배치</option><option value="4">4 px</option><option value="8" selected>8 px · 기본 간격</option><option value="16">16 px · 픽셀 블록</option></select></label><div class="dialog-actions"><button type="button" data-close class="primary">완료</button></div></dialog>
+<dialog id="gridDialog"><form id="gridForm"><h2>그리드로 정리</h2><p>같은 부모의 선택 요소를 목록 순서대로 배치합니다. 가장 큰 요소를 기준으로 셀 크기를 정합니다.</p><div class="property-grid"><label>열 수<input id="gridColumns" type="number" min="1" max="16" value="2" required></label><label>요소 사이 간격<input id="arrangeGap" type="number" min="0" max="512" value="8" required></label></div><div class="dialog-actions"><button type="button" data-close>취소</button><button type="submit" class="primary">배치하고 저장</button></div></form></dialog>
+<dialog id="helpDialog"><h2>더 빠르게 편집하기</h2><div class="shortcut-list"><p><kbd>Shift / Ctrl + 클릭</kbd> 여러 요소 선택</p><p><kbd>↑ ↓ ← →</kbd> 1px 이동 · <kbd>Shift</kbd>와 함께 10px</p><p><kbd>Shift + 드래그</kbd> 가로 또는 세로로만 이동</p><p><kbd>Alt + 드래그</kbd> 자동 정렬과 격자 스냅 잠시 끄기</p><p><kbd>Ctrl+D</kbd> 요소 복제</p><p><kbd>Ctrl+S</kbd> 속성 변경 저장</p><p><kbd>Ctrl+Z / Ctrl+Shift+Z</kbd> 실행 취소 / 다시 실행</p><p><kbd>Escape</kbd> 이동 취소 / 선택 해제</p><p><kbd>0</kbd> 화면에 맞춤 · <kbd>+ / −</kbd> 확대 / 축소</p></div><div class="dialog-actions"><button class="primary" data-close>알겠어요</button></div></dialog>
+<dialog id="openDialog"><form id="openForm"><h2>리소스팩 열기</h2><p>manifest.json과 ui 폴더가 있는 팩 경로를 입력하세요.</p><label>RP 폴더<input id="rpPath" required placeholder="C:\...\development_resource_packs\My RP"></label><label>바닐라 RP · 선택<input id="vanillaPath" placeholder="상속된 바닐라 컨트롤을 해석할 미러 경로"></label><div class="dialog-actions"><button type="button" data-close>취소</button><button class="primary" type="submit">화면 불러오기</button></div></form></dialog>
+<dialog id="sourceDialog" class="source-dialog"><h2 id="sourceTitle">원본 JSON</h2><textarea id="sourceText" spellcheck="false"></textarea><div class="dialog-actions"><span class="muted">원본 해시를 확인하고 저장합니다.</span><button type="button" data-close>닫기</button><button id="saveSource" class="primary">저장</button></div></dialog>
+<dialog id="fixtureDialog" class="source-dialog"><h2>미리보기 데이터</h2><p>실제 서버 데이터와 구분되는 테스트 값입니다.</p><textarea id="fixtureText" spellcheck="false"></textarea><div class="dialog-actions"><button type="button" data-close>닫기</button><button id="saveFixture" class="primary">적용</button></div></dialog>
 <input id="imageFile" type="file" accept="image/png" hidden><div id="toast" role="status" hidden></div>
 <script>window.STUDIO_TOKEN='__TOKEN__';</script><script type="module" src="/app.js"></script>
-</body></html>
+</body>
+</html>

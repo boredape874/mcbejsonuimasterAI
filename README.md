@@ -33,7 +33,7 @@
 npm run studio
 ```
 
-`http://127.0.0.1:47832`에서 팩을 열고 화면·레이어를 선택합니다. 요소 이동·크기·텍스트·색상 편집과 PNG 추가를 원본에 저장하고, 같은 미리보기를 Codex에 전달할 수 있습니다. Minecraft 창 공유도 제공합니다. [사용법과 미리보기 한계](docs/86-json-ui-studio.md)를 확인하세요. Studio는 Node.js 20 이상을 사용합니다.
+`http://127.0.0.1:47832`에서 팩을 열고 화면·요소를 선택합니다. 자동 정렬선과 격자 스냅, 다중 선택, 동일 간격·그리드 배치, 복제와 키보드 이동을 제공합니다. 텍스트·색상·이미지 편집을 원본에 저장하고 같은 선택과 미리보기를 Codex에 전달합니다. Minecraft 창 공유도 제공합니다. [사용법과 미리보기 한계](docs/86-json-ui-studio.md), [적용한 디자인 스킬과 정렬 기준](docs/89-studio-editor-design.md)을 확인하세요. Studio는 Node.js 20 이상을 사용합니다.
 
 ![JSON UI Studio의 화면 목록, 편집 미리보기, 속성 및 Codex 대화 패널](docs/assets/json-ui-studio.png)
 
