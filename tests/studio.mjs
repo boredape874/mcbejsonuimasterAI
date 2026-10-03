@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir, cp } from 'node:fs/promises';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { createHash } from 'node:crypto';
+import { createCanvas, loadImage } from '@napi-rs/canvas';
 import { configuration, root } from '../tools/studio/config.mjs';
 import { startHost } from '../tools/studio/host.mjs';
 import { editObject, jsonSpans } from '../tools/studio/json-edit.mjs';
@@ -23,10 +25,19 @@ test('real Studio: source provenance, visual edits, undo, conflict, images, shar
   const host=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>host.close());
   const s=host.session;
   const first=await s.open({rpRoot});assert.equal(first.status,'ready',first.error);assert.equal(s.editor.screens.length,1);
+  const workerPid = s.worker.pid;
+  const composite = createCanvas(...s.project.viewport), compositeCtx = composite.getContext('2d');
+  compositeCtx.imageSmoothingEnabled = false;
+  for (const sprite of s.editor.layers) { const b=sprite.bounds; compositeCtx.drawImage(await loadImage(Buffer.from(sprite.data.split(',')[1],'base64')),b.x,b.y,b.w,b.h); }
+  assert.equal(createHash('sha256').update(await composite.encode('png')).digest('hex'),first.report.hash,'editor layers must composite to the exact engine preview');
   let node=s.editor.nodes.find(n=>n.id==='progress');assert.ok(node.source);assert.equal(node.source.pointer,'/screen/controls/4/progress');
   const original=await s.readSource('ui/live_demo.json'), initialHash=first.report.hash;
   await s.select({key:node.key});assert.equal(s.context().selection.id,'progress');
   await s.edit({key:node.key,expectedRevision:s.editorRevision,expectedHash:node.source.sha256,patch:{size:[80,12],offset:[9,35]}});
+  const savedRevision=s.editorRevision;
+  await new Promise(resolve=>setTimeout(resolve,350));
+  assert.equal(s.revision,savedRevision,'a GUI save must not schedule a second watcher render');
+  assert.equal(s.worker.pid,workerPid,'edits must reuse the renderer worker');
   assert.notEqual(s.state.report.hash,initialHash);assert.deepEqual(s.editor.nodes.find(n=>n.id==='progress').props.offset,[9,35]);
   await assert.rejects(s.edit({key:node.key,expectedRevision:s.editorRevision,expectedHash:original.sha256,patch:{alpha:.5}}),/SOURCE_CONFLICT/);
   await s.history({direction:'undo'});assert.equal((await s.readSource(original.path)).text,original.text);assert.equal(s.state.report.hash,initialHash);
@@ -41,13 +52,20 @@ test('real Studio: source provenance, visual edits, undo, conflict, images, shar
   assert.ok(s.editor.nodes.some(n=>n.props.texture===uploaded.texture));
   const latest=await s.readSource(original.path);await writeFile(join(rpRoot,original.path),latest.text+'\n// external edit\n');
   await assert.rejects(s.history({direction:'undo'}),/SOURCE_CONFLICT/);
-  await s.render();
+  const externalDeadline=Date.now()+5000;
+  while((s.editorRevision===savedRevision||s.state.stale||s.editor.nodes[0].source.sha256!==createHash('sha256').update(latest.text+'\n// external edit\n').digest('hex'))&&Date.now()<externalDeadline)await new Promise(resolve=>setTimeout(resolve,40));
+  assert.equal(s.editor.nodes[0].source.sha256,createHash('sha256').update(latest.text+'\n// external edit\n').digest('hex'),'external writes must still refresh the shared source evidence');
   await s.acceptFrame({data:pixel.toString('base64'),source:'test window'});assert.equal(s.context().gameFrame.source,'test window');
   s.clearFrame();assert.equal(s.context().gameFrame,null);
   const preview=await readFile(s.state.report.outputPath);
   await s.acceptBrowserFrame({data:preview.toString('base64'),revision:s.state.renderedRevision,fontMode:'approximate'});assert.equal(s.context().previewFontMode,'approximate-system-font');
   await assert.rejects(s.acceptBrowserFrame({data:pixel.toString('base64'),revision:0}),/PREVIEW_CONFLICT/);
   await assert.rejects(s.acceptBrowserFrame({data:pixel.toString('base64'),revision:s.state.renderedRevision}),/dimensions/);
+  const sharp = createCanvas(s.project.viewport[0]*2,s.project.viewport[1]*2);
+  sharp.getContext('2d').drawImage(await loadImage(preview),0,0,sharp.width,sharp.height);
+  await s.acceptBrowserFrame({data:(await sharp.encode('png')).toString('base64'),revision:s.state.renderedRevision,captureScale:2,fontMode:'approximate'});
+  assert.equal(s.context().previewCaptureScale,2);
+  await assert.rejects(s.acceptBrowserFrame({data:preview.toString('base64'),revision:s.state.renderedRevision,captureScale:2}),/dimensions/);
   const changedCatalog = await s.readSource(original.path);
   await s.writeSource({path:original.path,text:editObject(changedCatalog.text,'',{extra_screen:{type:'panel',size:[32,32]}}),expectedHash:changedCatalog.sha256});
   await s.render();assert.ok(s.editor.screens.some(screen=>screen.control==='live_demo.extra_screen'));
@@ -59,6 +77,9 @@ test('real Studio: source provenance, visual edits, undo, conflict, images, shar
   const html=await request('/');assert.match(html.headers.get('content-security-policy'),/script-src 'self'/);
   assert.equal((await request('/app.js')).status,200);assert.equal((await request('/style.css')).status,200);
   const ctx=await request('/api/studio_context',{Authorization:'Bearer '+host.connection.token});assert.equal((await ctx.json()).runtimeVerified,false);
+  const restored=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>restored.close());
+  assert.equal(restored.session.project.control,s.project.control,'restart must restore the last screen');
+  assert.equal(restored.session.state.status,'ready');
 });
 
 test('Codex streams actual protocol items, exposes approvals, rejects unsupported requests, and handles completion',()=>{

@@ -89,6 +89,8 @@ export async function startHost(config) {
   const connection = { url: `http://127.0.0.1:${server.address().port}`, token, pid: process.pid, sessionId: session.id };
   await mkdir(config.runtime, { recursive: true });
   await writeFile(join(config.runtime, 'connection.json'), JSON.stringify(connection, null, 2));
+  try { await session.open(JSON.parse(await readFile(join(config.runtime,'last-project.json'),'utf8'))); }
+  catch(error) { if(error.code !== 'ENOENT') session.publish({restoreError:error.message}); }
   return { session, server, connection, codex, async close() { codex.close(); session.close(); for (const client of clients) client.end(); server.closeAllConnections(); await new Promise(r => server.close(r)); } };
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

@@ -209,7 +209,7 @@ export async function renderScreen(args) {
   const state = args.interactionState ?? "default", outputPath = resolve(args.outputPath ?? join(outputDir, `${safeName(bundle.control)}-${state}.png`));
   if (inside(bundle.rpRoot, outputPath)) throw new Error("final-RP render output must remain outside the source resource pack");
   await mkdir(dirname(outputPath), { recursive: true });
-  const render = await renderDisplayList({ canvasMod, displayList: bundle.displayList, targetRoot: bundle.rpRoot, vanillaRoot: bundle.vanillaRoot, outputPath, analyzeControls: args.analyzeControls !== false });
+  const render = await renderDisplayList({ canvasMod, displayList: bundle.displayList, targetRoot: bundle.rpRoot, vanillaRoot: bundle.vanillaRoot, outputPath, analyzeControls: args.analyzeControls !== false, includeLayers: args.includeEditor === true });
   if (!render.outputAlpha?.pixels) render.diagnostics.push({ kind: "EMPTY_RENDER_OUTPUT", impact: "blocking", control: bundle.control, message: "No visible pixels were produced; this render cannot establish visual correctness" });
   const validation = validateDisplayList(render, { constraints: args.constraints ?? [], toleranceUi: args.toleranceUi ?? 1 });
   const reportPath = outputPath.replace(/\.png$/i, ".report.json");
@@ -217,7 +217,7 @@ export async function renderScreen(args) {
   const compactRender = { viewport: render.viewport, hash: render.hash, outputPath: render.outputPath, outputAlpha:render.outputAlpha, renderedTextures:render.renderedTextures, controls: compactControls, diagnostics: render.diagnostics };
   const report = { schemaVersion: 2, engine: "final-rp-v2", ok: bundle.unresolved.length === 0 && validation.ok, control: bundle.control, state, outputPath, hash: render.hash, viewport: render.viewport, outputAlpha:render.outputAlpha, renderedTextures:render.renderedTextures, unresolved: bundle.unresolved, unresolvedImpact:bundle.unresolvedImpact, warnings: bundle.warnings, diagnostics: [...bundle.diagnostics, ...render.diagnostics], controls: compactControls, routeTrace:bundle.route, bindingGraph:bundle.bindingGraph, collectionProvenance:bundle.collectionProvenance, stateModel:bundle.layout.nodes.filter(node=>node.interaction).map(node=>({control:node.qualified||node.id,pointer:node.pointer,...node.interaction})), hitAnalysis:bundle.hitAnalysis, sourceAttribution:bundle.index.files.map(({relative,namespace,hash,layer})=>({relative,namespace,hash,layer})), validation, vanillaProfile: publicProfile(bundle.profile) };
   if(args.writeReport!==false)await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
-  return { ...report, reportPath:args.writeReport===false?null:reportPath, render: compactRender };
+  return { ...report, reportPath:args.writeReport===false?null:reportPath, render: compactRender, ...(args.includeEditor ? {editorLayout:{control:bundle.control,layout:bundle.layout,unresolved:bundle.structure.blocking},previewLayers:render.layers}: {}) };
 }
 
 async function contactSheet(canvasMod, reports, outputPath) {

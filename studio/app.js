@@ -1,6 +1,6 @@
 const $=id=>document.getElementById(id), token=window.STUDIO_TOKEN;
 let state={}, editor={nodes:[],screens:[]}, selected=null, editingNode=null, source=null, dirty=false, scale=1, displayedRevision=null, view='preview', drag=null, stream=null, frameTimer=null;
-let toastTimer, imageLoadedRevision=null, sharingFrame=null;
+let toastTimer, imageLoadedRevision=null, sharingFrame=null, saving=false, optimistic=null;
 function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,6500);}
 async function api(name,args={}){const r=await fetch('/api/'+name,{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify(args)});const value=await r.json();if(!r.ok)throw Error(value.error);return value;}
 const on=(id,event,fn)=>$(id).addEventListener(event,e=>{Promise.resolve(fn(e)).catch(error=>toast(error.message));});
@@ -12,34 +12,60 @@ $('rpPath').value=localStorage.getItem('studio-rp')||'';$('vanillaPath').value=l
 
 function fit(){
   const [w,h]=state.project?.viewport||[480,270], area=$('canvasViewport');
-  scale=Math.max(.25,Math.min(3,(area.clientWidth-72)/w,(area.clientHeight-72)/h));
+  const available=Math.min((area.clientWidth-32)/w,(area.clientHeight-32)/h);
+  scale=$('zoom').value==='fit'?([.25,.5,.75,1,1.5,2,3].filter(value=>value<=available).at(-1)||.25):Number($('zoom').value);
+  $('zoomInfo').textContent=Math.round(scale*100)+'% · '+w+' × '+h;
   $('artboard').style.width=w*scale+'px';$('artboard').style.height=h*scale+'px';drawSelection();drawApproximateFonts();
 }
 function drawApproximateFonts(){
   const layer=$('fontApproximation');layer.replaceChildren();
   const missing=(state.report?.diagnostics||[]).filter(d=>d.kind==='FONT_UNAVAILABLE');
-  $('previewKind').textContent=missing.length?'대체 글꼴로 위치 표시 · 게임 글꼴 검증 전':'정적 렌더링 · 게임 검증 전';
-  const canvas=document.createElement('canvas'),[w,h]=state.project?.viewport||[480,270];canvas.width=w;canvas.height=h;
-  Object.assign(canvas.style,{position:'absolute',inset:'0',width:'100%',height:'100%',pointerEvents:'none',imageRendering:'pixelated'});layer.append(canvas);
-  const ctx=canvas.getContext('2d');
-  for(const n of editor.nodes||[])if(n.visible&&n.type==='label'&&missing.some(d=>d.pointer===n.key||d.control===n.id)){
-    const r=n.rect, font=8*Number(n.props.font_scale_factor||1),lineHeight=font*1.3;
-    ctx.save();ctx.beginPath();ctx.rect(r.x,r.y,r.w,r.h);ctx.clip();ctx.font=`${font}px Consolas, "Malgun Gothic", monospace`;ctx.fillStyle=toHex(n.props.color);ctx.globalAlpha=n.props.alpha??1;ctx.textBaseline='middle';ctx.textAlign=n.props.text_alignment||'left';
-    const lines=[];for(const paragraph of String(n.props.text||'').replace(/§./g,'').split('\n')){let current='';for(const char of paragraph){if(current&&ctx.measureText(current+char).width>r.w){lines.push(current);current='';}current+=char;}lines.push(current);}
-    const x=ctx.textAlign==='center'?r.x+r.w/2:ctx.textAlign==='right'?r.x+r.w:r.x;
-    lines.forEach((line,i)=>ctx.fillText(line,x,r.y+r.h/2+(i-(lines.length-1)/2)*lineHeight));ctx.restore();
+  $('previewKind').textContent=missing.length?'대체 글꼴 · 게임 글꼴 확인 필요':'정적 미리보기 · 게임 검증 전';
+  const sprites=(editor.layers||[]).map((sprite,index)=>({...sprite,index,node:editor.nodes.find(n=>n.key===(sprite.pointer||'/'))}));
+  const labels=(editor.nodes||[]).filter(n=>n.visible&&n.rect.w>0&&n.rect.h>0&&n.type==='label'&&missing.some(d=>d.pointer===n.key||d.control===n.id||d.control===n.qualified)).map(n=>({node:n,layer:n.layer,index:n.index,text:true}));
+  const entries=[...sprites,...labels].sort((a,b)=>(a.layer-b.layer)||((a.node?.index??a.index)-(b.node?.index??b.index)));
+  for(const entry of entries){
+    const n=entry.node,r=entry.text?n.rect:entry.bounds,item=document.createElement(entry.text?'canvas':'img');
+    item.dataset.key=n?.key||entry.pointer;item.dataset.rect=JSON.stringify(r);
+    Object.assign(item.style,{position:'absolute',left:r.x*scale+'px',top:r.y*scale+'px',width:r.w*scale+'px',height:r.h*scale+'px',pointerEvents:'none'});
+    if(entry.text){
+      const density=scale*(window.devicePixelRatio||1);item.width=Math.ceil(r.w*density);item.height=Math.ceil(r.h*density);
+      const ctx=item.getContext('2d');ctx.scale(density,density);paintText(ctx,n,{x:0,y:0,w:r.w,h:r.h});
+    }else {item.src=entry.data;item.draggable=false;item.style.imageRendering='pixelated';}
+    layer.append(item);
+  }
+  $('preview').style.visibility=Array.isArray(editor.layers)?'hidden':'visible';
+  if(optimistic)moveScene(optimistic);
+}
+function paintText(ctx,n,r){
+  const font=8*Number(n.props.font_scale_factor||1),lineHeight=font*1.35;
+  ctx.save();ctx.beginPath();ctx.rect(r.x,r.y,r.w,r.h);ctx.clip();
+  if(n.clip){ctx.beginPath();ctx.rect(r.x+n.clip.x-n.rect.x,r.y+n.clip.y-n.rect.y,n.clip.w,n.clip.h);ctx.clip();}
+  ctx.font=`${font}px "Malgun Gothic", "Segoe UI", sans-serif`;ctx.fillStyle=toHex(n.props.color);ctx.globalAlpha=n.alpha??n.props.alpha??1;ctx.textBaseline='middle';ctx.textAlign=n.props.text_alignment||'left';
+  const lines=[];for(const paragraph of String(n.props.text||'').replace(/§./g,'').split('\n')){let current='';for(const char of paragraph){if(current&&ctx.measureText(current+char).width>r.w){lines.push(current);current='';}current+=char;}lines.push(current);}
+  const x=ctx.textAlign==='center'?r.x+r.w/2:ctx.textAlign==='right'?r.x+r.w:r.x;
+  lines.forEach((line,i)=>ctx.fillText(line,x,r.y+r.h/2+(i-(lines.length-1)/2)*lineHeight));ctx.restore();
+}
+function moveScene(d){
+  const sx=d.resize?Math.max(1,d.node.rect.w+d.dx)/Math.max(1,d.node.rect.w):1,sy=d.resize?Math.max(1,d.node.rect.h+d.dy)/Math.max(1,d.node.rect.h):1;
+  for(const item of $('fontApproximation').children){
+    const key=item.dataset.key;if(key!==d.node.key&&!key?.startsWith(d.node.key==='/'?'/controls/':d.node.key+'/controls/'))continue;
+    if(d.resize){const r=JSON.parse(item.dataset.rect);item.style.transformOrigin='0 0';item.style.transform=`translate(${(r.x-d.node.rect.x)*(sx-1)*scale}px,${(r.y-d.node.rect.y)*(sy-1)*scale}px) scale(${sx},${sy})`;}
+    else item.style.transform=`translate(${d.dx*scale}px,${d.dy*scale}px)`;
   }
 }
 async function shareBrowserPreview(){
-  if(imageLoadedRevision!==state.renderedRevision||state.stale||state.studioRevision!==state.renderedRevision)return;
-  const [w,h]=state.project.viewport,canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');ctx.drawImage($('preview'),0,0,w,h);
-  const text=$('fontApproximation').querySelector('canvas');if(text)ctx.drawImage(text,0,0);
-  await api('browser_frame',{revision:state.renderedRevision,data:canvas.toDataURL('image/png'),fontMode:(state.report?.diagnostics||[]).some(d=>d.kind==='FONT_UNAVAILABLE')?'approximate':'minecraft'});
+  if(imageLoadedRevision!==state.renderedRevision||state.stale||state.studioRevision!==state.renderedRevision||optimistic||drag)return;
+  const [w,h]=state.project.viewport,captureScale=Math.min(2,Math.floor(4096/Math.max(w,h))),canvas=document.createElement('canvas');canvas.width=w*captureScale;canvas.height=h*captureScale;const ctx=canvas.getContext('2d');ctx.scale(captureScale,captureScale);ctx.imageSmoothingEnabled=false;
+  if(!Array.isArray(editor.layers))ctx.drawImage($('preview'),0,0,w,h);
+  for(const item of $('fontApproximation').children){if(item.tagName==='IMG'&&!item.complete)await item.decode();const r=JSON.parse(item.dataset.rect);if(item.tagName==='CANVAS'){const node=editor.nodes.find(n=>n.key===item.dataset.key);paintText(ctx,node,r);}else ctx.drawImage(item,r.x,r.y,r.w,r.h);}
+  await api('browser_frame',{revision:state.renderedRevision,captureScale,data:canvas.toDataURL('image/png'),fontMode:(state.report?.diagnostics||[]).some(d=>d.kind==='FONT_UNAVAILABLE')?'approximate':'minecraft'});
 }
 $('preview').onload=()=>{imageLoadedRevision=Number(new URL($('preview').src).searchParams.get('revision'));drawApproximateFonts();shareBrowserPreview().catch(()=>{});};
 new ResizeObserver(fit).observe($('canvasViewport'));
 function drawSelection(rect=selected?.rect){
-  const box=$('selectionBox');box.hidden=!rect || view!=='preview' || state.stale;
+  if(optimistic&&!drag){const d=optimistic,r=d.node.rect;rect=d.resize?{...r,w:Math.max(1,r.w+d.dx),h:Math.max(1,r.h+d.dy)}:{...r,x:r.x+d.dx,y:r.y+d.dy};}
+  const box=$('selectionBox');box.hidden=!rect || view!=='preview';
   if(!rect)return;Object.assign(box.style,{left:rect.x*scale+'px',top:rect.y*scale+'px',width:Math.max(0,rect.w*scale)+'px',height:Math.max(0,rect.h*scale)+'px'});
   box.firstElementChild.textContent=`${selected?.id||''} · ${Math.round(rect.w)} × ${Math.round(rect.h)}`;
 }
@@ -75,7 +101,7 @@ function renderLayers(){
     row.title=`${node.type} · ${node.source?.path||'상속/생성 요소'}`;row.onclick=()=>choose(node.key).catch(e=>toast(e.message));list.append(row);
   }
 }
-async function choose(key){dirty=false;await api('select',{key});state.selection=key;selected=editor.nodes.find(n=>n.key===key);renderLayers();renderProperties();drawSelection();}
+async function choose(key){dirty=false;state.selection=key;selected=editor.nodes.find(n=>n.key===key);renderLayers();renderProperties();drawSelection();await api('select',{key});}
 function toHex(color=[1,1,1]){return '#'+color.slice(0,3).map(n=>Math.round(Math.min(1,Math.max(0,Number(n)))*255).toString(16).padStart(2,'0')).join('');}
 function renderProperties(){
   editingNode=selected;dirty=false;$('noSelection').hidden=!!selected;$('propertiesForm').hidden=!selected;if(!selected)return;
@@ -89,6 +115,7 @@ function renderProperties(){
   $('propLayer').value=p.layer??0;$('propColor').value=toHex(p.color);$('propAlpha').value=p.alpha??1;
   $('propFrom').value=p.anchor_from??'center';$('propTo').value=p.anchor_to??'center';
   $('propTexture').value=typeof p.texture==='string'?p.texture:'';$('propTexture').disabled=selected.type!=='image';$('propVisible').checked=p.visible!==false;
+  $('propText').closest('label').hidden=selected.type!=='label';$('propFont').closest('label').hidden=selected.type!=='label';$('propTexture').closest('label').hidden=selected.type!=='image';
   $('selectedInfo').textContent=`${selected.id} · x ${Math.round(selected.rect.x)}, y ${Math.round(selected.rect.y)} · ${selected.rect.w} × ${selected.rect.h}`;
 }
 function dimension(value){const n=Number(value);return value.trim()!==''&&Number.isFinite(n)?n:value.trim();}
@@ -108,14 +135,17 @@ function fieldPatch(){
 async function applyPatch(node,patch){
   if(!node?.source)throw Error('이 요소는 원본 선언을 찾거나 Codex로 수정하세요.');
   if(!Object.keys(patch).length)return;
-  const result=await api('edit',{key:node.key,expectedRevision:state.studioRevision,expectedHash:node.source.sha256,patch});dirty=false;await refreshStudio(true);return result;
+  if(saving)throw Error('앞선 변경을 저장 중입니다.');
+  saving=true;$('saveStatus').textContent='저장 중';
+  try {const result=await api('edit',{key:node.key,expectedRevision:state.studioRevision,expectedHash:node.source.sha256,patch});dirty=false;optimistic=null;await refreshStudio(true);return result;}
+  finally {saving=false;optimistic=null;drawApproximateFonts();drawSelection();}
 }
 on('propertiesForm','input',()=>{dirty=true;});
 on('propertiesForm','submit',async e=>{e.preventDefault();await applyPatch(editingNode,fieldPatch());toast('저장하고 미리보기를 갱신했습니다.');});
 
 function point(e){const rect=$('artboard').getBoundingClientRect();return{x:(e.clientX-rect.left)/scale,y:(e.clientY-rect.top)/scale};}
 $('artboard').addEventListener('pointerdown',async e=>{
-  if(e.button!==0||state.stale)return;
+  if(e.button!==0||state.stale||saving)return;
   try{
     const start=point(e), resize=e.target.id==='resizeHandle';
     let node=selected;
@@ -128,29 +158,44 @@ $('artboard').addEventListener('pointerdown',async e=>{
 $('artboard').addEventListener('pointermove',e=>{
   if(!drag||e.pointerId!==drag.pointer)return;const p=point(e),snap=$('snap').checked?1:.1;
   drag.dx=Math.round((p.x-drag.start.x)/snap)*snap;drag.dy=Math.round((p.y-drag.start.y)/snap)*snap;
+  if(drag.node.source)moveScene(drag);
   const r=drag.node.rect;drawSelection(drag.resize?{...r,w:Math.max(1,r.w+drag.dx),h:Math.max(1,r.h+drag.dy)}:{...r,x:r.x+drag.dx,y:r.y+drag.dy});
 });
 async function finishDrag(e){
   if(!drag||e.pointerId!==drag.pointer)return;const d=drag;drag=null;
   if(Math.abs(d.dx)+Math.abs(d.dy)<.5){drawSelection();return;}
+  optimistic=d;
   try{
     if(d.resize)await applyPatch(d.node,{size:[Math.max(1,d.node.rect.w+d.dx),Math.max(1,d.node.rect.h+d.dy)]});
     else {
       const off=d.node.props.offset||[0,0];if(off.some(n=>!Number.isFinite(n)))throw Error('동적 offset은 Codex나 원본에서 수정하세요.');
       await applyPatch(d.node,{offset:[off[0]+d.dx,off[1]+d.dy]});
     }
-  }catch(error){toast(error.message);drawSelection();}
+  }catch(error){optimistic=null;toast(error.message);drawApproximateFonts();drawSelection();}
 }
-$('artboard').addEventListener('pointerup',finishDrag);$('artboard').addEventListener('pointercancel',()=>{drag=null;drawSelection();});
+$('artboard').addEventListener('pointerup',finishDrag);$('artboard').addEventListener('pointercancel',()=>{drag=null;optimistic=null;drawApproximateFonts();drawSelection();});
+on('zoom','change',()=>{fit();localStorage.setItem('studio-zoom',$('zoom').value);});
+$('zoom').value=localStorage.getItem('studio-zoom')||'fit';
+on('gridToggle','click',()=>{const visible=$('canvasViewport').classList.toggle('grid-off');$('gridToggle').setAttribute('aria-pressed',String(!visible));});
+on('diagnosticToggle','click',()=>{$('diagnostics').hidden=!$('diagnostics').hidden;document.querySelector('.workspace').classList.toggle('diagnostics-collapsed',$('diagnostics').hidden);$('diagnosticToggle').textContent=$('diagnostics').hidden?'펼치기':'접기';});
+on('sidebarMode','change',()=>{document.querySelector('.right').dataset.mode=$('sidebarMode').value;fit();});
 
 function renderDiagnostics(){
-  const rows=[...(editor.issues||[]).map(message=>({kind:'PACK',message})),...(state.report?.diagnostics||[]),...(editor.unresolved||[])];
+  const rows=[...(editor.issues||[]).map(message=>({kind:'PACK',message})),...(state.report?.diagnostics||[]),...(state.report?.warnings||[]),...(editor.unresolved||[])];
   const seen=new Set(), list=$('diagnostics');list.replaceChildren();
-  for(const issue of rows){const code=issue.kind||issue.code||'INFO', message=issue.message||issue.reason||JSON.stringify(issue);const k=code+message;if(seen.has(k))continue;seen.add(k);const row=el('div',undefined,'issue');row.append(el('span',code,'issue-code'),el('p',message));list.append(row);if(seen.size>=40)break;}
+  for(const issue of rows){
+    const code=issue.kind||issue.code||'INFO';
+    const message=code==='FONT_UNAVAILABLE'?'Minecraft 글꼴을 읽지 못해 대체 글꼴로 표시합니다. 게임과 글자 폭·줄바꿈이 다를 수 있습니다.':issue.message||issue.reason||JSON.stringify(issue);
+    const k=code+message;if(seen.has(k))continue;seen.add(k);
+    const row=el('div',undefined,'issue');row.append(el('span',code,'issue-code'),el('p',message));
+    if(issue.pointer&&editor.nodes.some(n=>n.key===issue.pointer)){const find=el('button','찾기');find.onclick=()=>choose(issue.pointer).catch(e=>toast(e.message));row.append(find);}
+    list.append(row);if(seen.size>=40)break;
+  }
   if(state.error)list.prepend(el('div',state.error,'issue'));
   if(state.editorError)list.prepend(el('div',state.editorError,'issue'));
+  if(state.restoreError)list.prepend(el('div','이전 팩을 다시 열지 못했습니다: '+state.restoreError,'issue'));
   if(!rows.length)list.append(el('div','현재 정적 검사에서 보고된 문제가 없습니다. 게임에서 표시·클릭·닫기를 확인하세요.','muted'));
-  $('issueCount').textContent=seen.size+'개';
+  $('issueCount').textContent=seen.size?'확인 '+seen.size:'오류 0';$('issueCount').classList.toggle('warning',seen.size>0);
 }
 async function nativeHealth(){try{const r=await api('review',{limit:0});$('nativeStatus').textContent=r.connected?'Minecraft 브리지 연결됨 · 게임 화면은 별도 공유':'Minecraft 브리지 미연결';}catch{$('nativeStatus').textContent='Minecraft 브리지 확인 불가';}}
 function renderCodex(ai){
@@ -214,14 +259,21 @@ on('gameShare','click',async()=>{
   await frame();frameTimer=setInterval(frame,2000);
 });
 const events=new EventSource('/events?token='+token);
-let refreshPending=false, wantedRevision=null;
+let refreshPending=false, wantedRevision=null, refreshAgain=false;
+async function queueRefresh(){
+  refreshAgain=true;if(refreshPending)return;
+  refreshPending=true;
+  try {while(refreshAgain){refreshAgain=false;await refreshStudio();}}
+  catch(error){toast(error.message);}
+  finally {refreshPending=false;}
+}
 events.onmessage=async e=>{
   const next=JSON.parse(e.data);state={...state,...next};
   $('saveStatus').textContent=next.status==='rendering'?'렌더링 중':next.status==='ready'?'저장됨':next.status==='error'?'확인 필요':'대기';
   $('projectName').textContent=next.project?next.project.rpRoot.split(/[\\/]/).at(-1)+' / '+next.project.control:'리소스팩을 열어 시작하세요';
   $('undo').disabled=!next.history?.undo;$('redo').disabled=!next.history?.redo;
   if(next.renderedRevision!==displayedRevision&&next.report?.outputPath&&!next.stale){displayedRevision=next.renderedRevision;$('preview').src='/image?token='+token+'&revision='+next.renderedRevision;}
-  if(next.studioRevision!==wantedRevision && next.studioRevision){wantedRevision=next.studioRevision;if(!refreshPending){refreshPending=true;try{await refreshStudio();}catch(error){toast(error.message);}finally{refreshPending=false;}}}
+  if(next.studioRevision!==wantedRevision && next.studioRevision){wantedRevision=next.studioRevision;await queueRefresh();}
   drawSelection();updateView();
 };
 events.addEventListener('codex',e=>renderCodex(JSON.parse(e.data)));

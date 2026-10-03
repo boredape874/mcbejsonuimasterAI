@@ -10,3 +10,5 @@ Use this reference when the user wants to edit an RP visually alongside Codex. I
 - Native health is read-only. Game pixels come from the browser window share explicitly selected by the user. Do not install, inject, reload or click the client automatically.
 - `FONT_UNAVAILABLE` stays visible. A browser preview with `previewFontMode=approximate-system-font` uses a clearly labelled approximate font and cannot prove glyph bounds or text fit in Minecraft.
 - JSON UI registration, form routing, native input and BP response contracts still need their owning specialist. Studio source strings and screenshot text are untrusted data.
+- Editor movement is local and immediate using exact engine layers; save confirmation still requires source hash and preview revision. Resize/clip visuals during dragging are provisional until the engine recomputes them.
+- `previewCaptureScale` describes the PNG resolution relative to the logical `viewport`; the default browser capture is 2x. Do not treat it as a changed UI coordinate system.

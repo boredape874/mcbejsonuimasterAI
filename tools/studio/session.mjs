@@ -12,20 +12,29 @@ export const hash = text => createHash('sha256').update(text).digest('hex');
 export class LiveSession extends EventEmitter {
   constructor(config) {
     super(); this.config = config; this.id = randomUUID(); this.revision = 0; this.state = { status: 'idle', runtimeVerified: false }; this.reviewer = new Reviewer();
+    this.engineRequests = new Map(); this.ownWrites = new Map();
   }
   status() { return { sessionId: this.id, revision: this.revision, project: this.project, ...this.state, runtimeVerified: false }; }
   publish(patch) { this.state = { ...this.state, ...patch }; this.emit('state', this.status()); }
   async engine(operation, args) {
-    return new Promise((accept, reject) => {
-      const child = fork(fileURLToPath(new URL('./worker.mjs', import.meta.url)), [], { cwd: this.config.engineRoot, windowsHide: true, stdio: ['ignore', 'ignore', 'pipe', 'ipc'] });
-      let settled = false, stderr = '';
-      const finish = (error, result) => { if (settled) return; settled = true; clearTimeout(timer); error ? reject(error) : accept(result); };
-      const timer = setTimeout(() => { child.kill(); finish(new Error('Renderer timeout (60 seconds)')); }, 60000);
+    if (!this.worker) {
+      const child = this.worker = fork(fileURLToPath(new URL('./worker.mjs', import.meta.url)), [], { cwd: this.config.engineRoot, windowsHide: true, stdio: ['ignore', 'ignore', 'pipe', 'ipc'] });
+      let stderr = '';
       child.stderr.on('data', b => { stderr = (stderr + b).slice(-4000); });
-      child.once('error', e => finish(e));
-      child.once('exit', code => finish(new Error(`Renderer exited ${code}: ${stderr}`)));
-      child.once('message', m => finish(m.error ? new Error(m.error) : null, m.result));
-      child.send({ engineRoot: this.config.engineRoot, operation, args });
+      const failed = error => {
+        if (this.worker === child) this.worker = null;
+        for (const request of this.engineRequests.values()) if(request.child === child) request.finish(error);
+      };
+      child.on('error', failed);
+      child.on('exit', code => failed(new Error(`Renderer exited ${code}: ${stderr}`)));
+      child.on('message', m => this.engineRequests.get(m.id)?.finish(m.error ? new Error(m.error) : null, m.result));
+    }
+    return new Promise((accept, reject) => {
+      const child = this.worker, id = randomUUID();
+      const finish = (error, result) => { if (!this.engineRequests.has(id)) return; this.engineRequests.delete(id); clearTimeout(timer); error ? reject(error) : accept(result); };
+      const timer = setTimeout(() => { child.kill(); finish(new Error('Renderer timeout (60 seconds)')); }, 60000);
+      this.engineRequests.set(id, {finish,child});
+      child.send({ id, engineRoot: this.config.engineRoot, operation, args }, error => { if (error) finish(error); });
     });
   }
   async open(input) {
@@ -36,8 +45,13 @@ export class LiveSession extends EventEmitter {
     if (typeof input.control !== 'string' || !input.control.includes('.')) throw new Error('control must be namespace.control');
     this.watcher?.close(); clearTimeout(this.debounce);
     this.project = { rpRoot, control: input.control, viewport, fixture: input.fixture ?? {}, interactionState: input.interactionState ?? 'default', ...(input.vanillaRoot ? { vanillaRoot: await realpath(input.vanillaRoot) } : {}) };
-    this.watcher = watch(rpRoot, { recursive: true }, (_, name) => {
+    this.ownWrites.clear();
+    this.watcher = watch(rpRoot, { recursive: true }, async (_, name) => {
       if (!name || /\.(json|jsonc|png|tga|txt|lang)$/i.test(name)) {
+        const file = name && resolve(rpRoot, name), ownHash = this.ownWrites.get(file);
+        if (ownHash && hash(await readFile(file).catch(() => Buffer.alloc(0))) === ownHash) return;
+        if (this.project?.rpRoot !== rpRoot) return;
+        this.catalogDirty = true;
         clearTimeout(this.debounce);
         ++this.revision;
         this.publish({ stale: true });
@@ -64,7 +78,8 @@ export class LiveSession extends EventEmitter {
       if (revision !== this.revision) return this.status();
       try {
         const outputDir = join(this.config.runtime, 'renders', this.id, String(revision));
-        const report = await this.engine('renderScreen', { ...this.project, outputDir });
+        const { editorLayout, previewLayers, ...report } = await this.engine('renderScreen', { ...this.project, outputDir, includeEditor: this.editor !== undefined });
+        if (revision === this.revision) { this.resolved = editorLayout; this.previewLayers = previewLayers; }
         if (revision === this.revision) this.publish({ status: 'ready', stale: false, renderedRevision: revision, report, error: null });
       } catch (error) {
         if (revision === this.revision) this.publish({ status: 'error', stale: true, error: error.message });
@@ -95,7 +110,9 @@ export class LiveSession extends EventEmitter {
     if (!expectedHash || hash(original) !== expectedHash) throw new Error('SOURCE_CONFLICT: reread the file before saving');
     await mkdir(join(this.config.runtime, 'backups'), { recursive: true });
     await writeFile(join(this.config.runtime, 'backups', `${hash(original)}.json`), original);
-    await writeFile(file, text, 'utf8');
+    if (hash(await readFile(file,'utf8')) !== expectedHash) throw new Error('SOURCE_CONFLICT: source changed while preparing the save');
+    this.ownWrites.set(file, hash(text));
+    try { await writeFile(file, text, 'utf8'); } catch(error) { this.ownWrites.delete(file); throw error; }
     return { path, sha256: hash(text), saved: true };
     } finally { unlock(); }
   }
@@ -114,5 +131,5 @@ export class LiveSession extends EventEmitter {
     try { return await requestNativeReload(this.config.bridgeRoot); }
     finally { this.nativeReloadPending = false; }
   }
-  close() { this.watcher?.close(); clearTimeout(this.debounce); }
+  close() { this.watcher?.close(); clearTimeout(this.debounce); this.worker?.kill(); this.worker = null; for (const request of this.engineRequests.values()) request.finish(new Error('Session closed')); }
 }

@@ -1,12 +1,17 @@
 import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
-process.once('message', async ({ engineRoot, operation, args }) => {
+let queue = Promise.resolve();
+process.on('message', message => {
+  queue = queue.then(async () => {
+  const { id, engineRoot, operation, args } = message;
   try {
     const engine = await import(pathToFileURL(join(engineRoot, 'tools/_lib/final-rp-engine.mjs')).href);
     if (!['renderScreen', 'resolveScreen', 'openProject'].includes(operation)) throw new Error('Unknown engine operation');
     const result = await engine[operation](args);
-    process.send({ result }, () => process.exit(0));
+    process.send({ id, result });
   } catch (error) {
-    process.send({ error: error.stack ?? String(error) }, () => process.exit(1));
+    process.send({ id, error: error.stack ?? String(error) });
   }
+  });
 });
+process.on('disconnect', () => process.exit(0));

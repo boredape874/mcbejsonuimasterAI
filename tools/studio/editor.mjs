@@ -48,14 +48,18 @@ export class StudioSession extends LiveSession {
     if (!control) throw Error('이 폴더에서 namespace가 있는 JSON UI를 찾지 못했습니다.');
     const changed = this.project?.rpRoot !== catalog.rpRoot;
     if (changed) { this.undoStack = []; this.redoStack = []; await this.ai?.reset(); }
-    this.selection = null; this.editor = {screens:catalog.screens,issues:catalog.issues,nodes:[]};
-    return super.open({...input,control});
+    this.selection = null; this.catalogDirty = false; this.editor = {screens:catalog.screens,issues:catalog.issues,nodes:[]};
+    const state = await super.open({...input,control});
+    await mkdir(this.config.runtime,{recursive:true});
+    await writeFile(join(this.config.runtime,'last-project.json'),JSON.stringify(this.project,null,2));
+    this.publish({restoreError:null});
+    return this.status();
   }
   async render(changes = {}) {
     const state = await super.render(changes), revision = state.renderedRevision;
     if (state.status === 'ready' && !state.stale && revision === this.revision) {
       try {
-        const resolved = await this.inspect();
+        const resolved = this.resolved;
         if (revision !== this.revision) return this.status();
         const nodes = resolved.layout.nodes.map((node, index) => {
           let own = node.provenance?.[node.pointer];
@@ -74,14 +78,15 @@ export class StudioSession extends LiveSession {
           let source = origin?.relative && origin?.pointer !== undefined ? {path:origin.relative,pointer:origin.pointer,sha256:origin.hash,layer:origin.layer} : null;
           if (source?.layer !== 'target') source = null;
           const parentPointer = node.pointer.replace(/\/controls\/\d+$/, '');
-          return {key:node.pointer || '/',id:node.id,qualified:node.qualified,type:node.props.type,props:node.props,rect:node.rect,layer:node.layer,visible:node.visible !== false && node.props.visible !== false,depth:(node.pointer.match(/\/controls\//g)||[]).length,parent:node.pointer ? parentPointer || '/' : null,source,index};
+          return {key:node.pointer || '/',id:node.id,qualified:node.qualified,type:node.props.type,props:node.props,rect:node.rect,clip:node.clip,alpha:node.alpha,layer:node.layer,visible:node.visible !== false && node.props.visible !== false,depth:(node.pointer.match(/\/controls\//g)||[]).length,parent:node.pointer ? parentPointer || '/' : null,source,index};
         });
-        const catalog = await this.catalog(this.project.rpRoot);
+        const catalog = this.catalogDirty ? await this.catalog(this.project.rpRoot) : this.editor;
+        this.catalogDirty = false;
         if (revision !== this.revision) return this.status();
-        this.editor = {...this.editor,screens:catalog.screens,issues:catalog.issues,nodes,unresolved:resolved.unresolved,viewport:resolved.layout.viewport,control:resolved.control};
+        this.editor = {...this.editor,screens:catalog.screens,issues:catalog.issues,nodes,layers:this.previewLayers,unresolved:resolved.unresolved,viewport:resolved.layout.viewport,control:resolved.control};
         this.editorRevision = revision;
         if (!nodes.some(n => n.key === this.selection)) this.selection = nodes[0]?.key || null;
-        this.publish({});
+        this.publish({editorError:null});
       } catch(error) { this.publish({editorError:error.message}); }
     }
     return this.status();
@@ -94,7 +99,7 @@ export class StudioSession extends LiveSession {
     const node = this.editor.nodes.find(n => n.key === this.selection);
     const selection = node && {...node,props:Object.fromEntries(Object.entries(node.props).filter(([k])=>editableProps.has(k)||k==='type'))};
     const fixture = this.project?.fixture;
-    return {sessionId:this.id,revision:this.revision,renderedRevision:this.state.renderedRevision,stale:this.state.stale,rpRoot:this.project?.rpRoot,control:this.project?.control,viewport:this.project?.viewport,fixtureSummary:fixture?Object.fromEntries(Object.entries(fixture).map(([k,v])=>[k,Array.isArray(v)?{count:v.length}:typeof v==='string'?v.slice(0,256):typeof v])):null,selection,previewPath:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.path:this.state.report?.outputPath,previewFontMode:this.browserFrame?.fontMode||'renderer',diagnostics:(this.state.report?.diagnostics||[]).slice(0,12),unresolved:(this.editor.unresolved||[]).slice(0,12),gameFrame:this.gameFrame ? {path:this.gameFrame.path,capturedAt:this.gameFrame.capturedAt,source:this.gameFrame.source} : null,runtimeVerified:false};
+    return {sessionId:this.id,revision:this.revision,renderedRevision:this.state.renderedRevision,stale:this.state.stale,rpRoot:this.project?.rpRoot,control:this.project?.control,viewport:this.project?.viewport,fixtureSummary:fixture?Object.fromEntries(Object.entries(fixture).map(([k,v])=>[k,Array.isArray(v)?{count:v.length}:typeof v==='string'?v.slice(0,256):typeof v])):null,selection,previewPath:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.path:this.state.report?.outputPath,previewFontMode:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.fontMode:'renderer',previewCaptureScale:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.captureScale:1,diagnostics:(this.state.report?.diagnostics||[]).slice(0,12),unresolved:(this.editor.unresolved||[]).slice(0,12),gameFrame:this.gameFrame ? {path:this.gameFrame.path,capturedAt:this.gameFrame.capturedAt,source:this.gameFrame.source} : null,runtimeVerified:false};
   }
   requireNode(key, expectedRevision) {
     if (this.state.stale || this.editorRevision !== this.state.renderedRevision || expectedRevision !== this.editorRevision) throw Error('PREVIEW_CONFLICT: 미리보기를 갱신한 뒤 다시 수정하세요.');
@@ -109,7 +114,13 @@ export class StudioSession extends LiveSession {
     if (this.undoStack.length > 60) this.undoStack.shift(); this.redoStack = [];
     await this.render(); return {...result,state:this.status()};
   }
-  async writeSource(args) { parse(args.text); jsonSpans(args.text); return super.writeSource(args); }
+  async writeSource(args) {
+    const next = parse(args.text); jsonSpans(args.text);
+    const before = parse((await this.readSource(args.path)).text);
+    const signature = doc => JSON.stringify([doc.namespace,Object.keys(doc).sort(),doc.ui_defs]);
+    if (signature(before) !== signature(next)) this.catalogDirty = true;
+    return super.writeSource(args);
+  }
   async edit({key,expectedRevision,expectedHash,patch}) {
     const node = this.requireNode(key,expectedRevision);
     if (!patch || !Object.keys(patch).length || Object.keys(patch).some(k => !editableProps.has(k))) throw Error('Unsupported visual property');
@@ -174,7 +185,8 @@ export class StudioSession extends LiveSession {
     const dir = join(this.project.rpRoot,'textures','studio'); await mkdir(dir,{recursive:true});
     const actual = await realpath(dir); if (relative(this.project.rpRoot,actual).startsWith('..')) throw Error('Texture path escapes RP');
     const stem = `${safe}_${hash(bytes).slice(0,12)}`;
-    try { await writeFile(join(actual,stem+'.png'),bytes,{flag:'wx'}); } catch(error) { if(error.code!=='EEXIST') throw error; }
+    const file = join(actual,stem+'.png'); this.ownWrites.set(file,hash(bytes));
+    try { await writeFile(file,bytes,{flag:'wx'}); } catch(error) { if(error.code!=='EEXIST') throw error; }
     return {texture:`textures/studio/${stem}`,path:`textures/studio/${stem}.png`};
   }
   async validatePng(bytes) {
@@ -191,14 +203,14 @@ export class StudioSession extends LiveSession {
     this.emit('game-frame',{capturedAt,source:this.gameFrame.source}); return {capturedAt};
   }
   clearFrame() { this.gameFrame=null;this.emit('game-frame',null);return {shared:false}; }
-  async acceptBrowserFrame({data,revision,fontMode}) {
+  async acceptBrowserFrame({data,revision,fontMode,captureScale=1}) {
     if(revision!==this.state.renderedRevision || this.state.stale)throw Error('PREVIEW_CONFLICT');
     if(typeof data!=='string'||data.length>6*1024*1024)throw Error('Invalid preview frame');
     const bytes=Buffer.from(data.replace(/^data:image\/png;base64,/,''),'base64');await this.validatePng(bytes);
-    if(bytes.readUInt32BE(16)!==this.project.viewport[0]||bytes.readUInt32BE(20)!==this.project.viewport[1])throw Error('Preview frame dimensions must match the viewport');
+    if(!Number.isInteger(captureScale)||captureScale<1||captureScale>4||bytes.readUInt32BE(16)!==this.project.viewport[0]*captureScale||bytes.readUInt32BE(20)!==this.project.viewport[1]*captureScale)throw Error('Preview frame dimensions must match the viewport and capture scale');
     const dir=join(this.config.runtime,'browser-preview');await mkdir(dir,{recursive:true});
     const path=join(dir,`${this.id}-${revision}.png`);await writeFile(path,bytes);
-    if(revision===this.state.renderedRevision)this.browserFrame={path,revision,fontMode:fontMode==='approximate'?'approximate-system-font':'minecraft-renderer'};
+    if(revision===this.state.renderedRevision)this.browserFrame={path,revision,captureScale,fontMode:fontMode==='approximate'?'approximate-system-font':'minecraft-renderer'};
     return {saved:true,revision};
   }
   async newProject() {

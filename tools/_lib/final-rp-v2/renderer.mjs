@@ -26,11 +26,12 @@ function normalizeDisplayList(input) {
   return{viewport:input?.viewport||input?.logicalViewport||inferred,commands,unresolved:input?.unresolved||[]};
 }
 
-export async function renderDisplayList({ canvasMod, displayList, targetRoot, vanillaRoot = null, outputPath = null, textureEngine = null, analyzeControls = true }) {
+export async function renderDisplayList({ canvasMod, displayList, targetRoot, vanillaRoot = null, outputPath = null, textureEngine = null, analyzeControls = true, includeLayers = false }) {
   const normalized=normalizeDisplayList(displayList),viewport=normalized.viewport,engine=textureEngine||sharedTextureEngine(canvasMod,targetRoot,vanillaRoot),canvas=canvasMod.createCanvas(...viewport),ctx=canvas.getContext("2d"),diagnostics=[...normalized.unresolved],controls={},textureEvidence=new Map();ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,...viewport);
+  const layers = [];
   const commands=normalized.commands.map((command,index)=>({command,index})).sort((a,b)=>(Number(a.command.layer??0)-Number(b.command.layer??0))||(a.index-b.index)).map(item=>item.command);
   for(const command of commands){
-    const useLayer=analyzeControls||Boolean(command.color)||command.grayscale===true;
+    const useLayer=includeLayers||analyzeControls||Boolean(command.color)||command.grayscale===true;
     const layer=useLayer?canvasMod.createCanvas(...viewport):null,lc=useLayer?layer.getContext("2d"):ctx,clip=effectiveClip(command,viewport),alpha=effectiveAlpha(command);
     let sourceAlpha=null,sourceRect=null,drawRect=null,hasNineSlice=false;
     if(alpha<=0||!clip)continue;
@@ -81,9 +82,19 @@ export async function renderDisplayList({ canvasMod, displayList, targetRoot, va
     else if(command.type==="blockedText") diagnostics.push({kind:"GLYPH_RUN_UNAVAILABLE",control:command.id});
     else if(command.type!=="group") diagnostics.push({kind:"unsupported_display_command",control:command.id,type:command.type});
     lc.restore();
+    // Reuse the exact renderer pixels for browser editing; never cut sprites out of
+    // the flattened preview, which would lose surfaces hidden behind a dragged item.
+    if (includeLayers) {
+      const { bbox } = scanAlpha(lc.getImageData(0,0,...viewport));
+      if (bbox) {
+        const sprite = canvasMod.createCanvas(bbox.w, bbox.h);
+        sprite.getContext('2d').drawImage(layer,bbox.x,bbox.y,bbox.w,bbox.h,0,0,bbox.w,bbox.h);
+        layers.push({pointer:command.pointer, rect:command.rect, bounds:bbox, layer:command.layer, data:'data:image/png;base64,'+(await sprite.encode('png')).toString('base64')});
+      }
+    }
     if(analyzeControls){const imageData=lc.getImageData(0,0,...viewport),scan=scanAlpha(imageData),mask=scan.bbox?{origin:{x:scan.bbox.x,y:scan.bbox.y},width:scan.bbox.w,height:scan.bbox.h,data:extractMask(imageData,scan.bbox)}:null;controls[command.id]={id:command.id,control:command.control??null,pointer:command.pointer??null,source:command.source??null,provenance:command.provenance??null,type:command.type,rect:command.rect,sourceRect,drawRect,keepRatio:command.keep_ratio!==false,hasNineSlice,sourceAlphaBBox:sourceAlpha?.bbox||null,sourceVisualCentroid:sourceAlpha?.centroid||null,alphaBBox:scan.bbox,visualCentroid:scan.centroid,alphaPixels:scan.pixels,alphaWeight:scan.alphaWeight,silhouetteHash:alphaSignature(imageData,scan),baseline:command.baseline??null,groups:command.groups||[],collisionGroups:command.collisionGroups||[],allowOverlap:command.allowOverlap===true,mask};}
     if(useLayer)ctx.drawImage(layer,0,0);
   }
-  const outputScan=scanAlpha(ctx.getImageData(0,0,...viewport)),outputAlpha={bbox:outputScan.bbox,pixels:outputScan.pixels,alphaWeight:outputScan.alphaWeight},renderedTextures=[...textureEvidence.values()];const png=await canvas.encode("png"),hash=createHash("sha256").update(png).digest("hex");if(outputPath)await writeFile(outputPath,png);return{viewport,hash,outputPath,controls,diagnostics,outputAlpha,renderedTextures,png,evidenceLevel:"final-pack-static-visual",runtimeVerified:false};
+  const outputScan=scanAlpha(ctx.getImageData(0,0,...viewport)),outputAlpha={bbox:outputScan.bbox,pixels:outputScan.pixels,alphaWeight:outputScan.alphaWeight},renderedTextures=[...textureEvidence.values()];const png=await canvas.encode("png"),hash=createHash("sha256").update(png).digest("hex");if(outputPath)await writeFile(outputPath,png);return{viewport,hash,outputPath,controls,diagnostics,outputAlpha,renderedTextures,png,...(includeLayers?{layers}:{}),evidenceLevel:"final-pack-static-visual",runtimeVerified:false};
 }
 function extractMask(imageData,bbox){const data=new Uint8Array(bbox.w*bbox.h);for(let y=0;y<bbox.h;y++)for(let x=0;x<bbox.w;x++)data[y*bbox.w+x]=imageData.data[((bbox.y+y)*imageData.width+bbox.x+x)*4+3];return data;}
