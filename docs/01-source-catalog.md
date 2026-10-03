@@ -241,6 +241,26 @@ Sources added on 2026-10-03 (all commit-pinned in `config/design-research-lock.j
   - community binding/button-id/collection/control lists; the 2026-10-03 audit found 19/78 names, 41/47 collections and 8/19 "controls" absent from vanilla 1.26.50, so verify every name with `node tools/vanilla-name-check.mjs`
 - `pipangry/StarLibV2` and `TheoristMC/JSON-UI-Dumper` are now also pinned (`pipangry-starlibv2`, `theoristmc-json-ui-dumper`) in addition to the entries below
 
+Sources added later on 2026-10-03 (second expansion; 45 sources / 1,704 files in the lock):
+
+- `bedrock-dot-dev/docs` at the `1.26.50.4` stable tag (`bedrock-dot-dev-docs-1-26-50`, license not stated, reference-only)
+  - <https://github.com/bedrock-dot-dev/docs>
+  - the Mojang release documentation pages for the same version as the vanilla pin: Molang (323 `query.*` names, exported to `data/molang-queries-1.26.50.json`), Animations, Schemas (geometry, texture_set), Texture Sets, Item, Addons (identifier tables), Entities
+- `Bedrock-OSS/bedrock-examples` (`bedrock-oss-bedrock-examples`, MIT)
+  - <https://github.com/Bedrock-OSS/bedrock-examples>
+  - the JSON bodies behind the Wiki pages: custom armor (baby geometry, `controller.render.armor.v2`, texture sets), both attachable construction methods and the rotation guide, the Geyser-style slot-aware attachable, steve/alex/cape geometry, the UV-animated material, custom heads and sword, dummy entity
+- `Blockception/Minecraft-bedrock-json-schemas` UI part (`blockception-json-schemas-ui`, BSD-3-Clause)
+  - <https://github.com/Blockception/Minecraft-bedrock-json-schemas>
+  - 222 per-property source schemas and the compiled `ui.json`; compared with the spec (only `is_new_nine_slice` is outside it) and with vanilla enums
+- `kalmemarq/Bugrock-JSON-UI-Schemas` (`kalmemarq-bugrock-json-ui-schemas`, no license file, reference-only)
+  - <https://github.com/kalmemarq/Bugrock-JSON-UI-Schemas>
+  - the editor schema community packs reference, with README tables of screens, element types and properties
+- `LeGend077/json-ui-examples` (`legend077-json-ui-examples`, MIT) and `Refaltor77/EasyUIBuilder` example pack (`refaltor77-easyuibuilder`, MIT)
+  - pattern snippets and one generated example screen per element type
+- `boredape874/mcbe-json-ui-resource` tutorial folders (`boredape874-json-ui-tutorials`, mixed third-party material, analysis-only)
+  - the owner's archive of community tutorials (settings tab template, custom text button and toggle, progress bars, element factories, string length and splitting, search bar, preserved titles, NPC form, inventory and server_form edits, chunk display) plus the dumper screen list
+- extended: `microsoftdocs-minecraft-creator-reference` now also pins the 51 `@minecraft/server-ui` Script API pages; `bedrock-wiki-entities-visuals` adds `textures-list`, `shaders`, `namespaces`, `sounds`, `numerical-item-ids`, `item-format-history` and `dummy-entities`
+
 Earlier entries:
 
 - `boredape874/mcbe-json-ui-resource`

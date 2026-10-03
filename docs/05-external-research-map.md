@@ -79,6 +79,19 @@ Use this for animation tests, StarLib form/search patterns, binding dumps, Rainb
   - <https://github.com/Mojang/bedrock-schemas>
   - official forms, JSON schemas and TypeScript types for attachables, entities, models, render controllers and UI; a name checklist, not a type authority (see `skills/mcbe-json-ui-reference/references/official-docs-cross-check.md`)
 
+## Example packs and schema projects added in the second 2026-10-03 expansion
+
+- `Bedrock-OSS/bedrock-examples` (MIT, pinned as `bedrock-oss-bedrock-examples`)
+  - <https://github.com/Bedrock-OSS/bedrock-examples>
+  - the actual JSON behind the Wiki custom-armor, attachable, player-geometry, material and custom-head pages
+- `Blockception/Minecraft-bedrock-json-schemas` UI schemas (BSD-3-Clause, pinned as `blockception-json-schemas-ui`) and `kalmemarq/Bugrock-JSON-UI-Schemas` (no license file, pinned as `kalmemarq-bugrock-json-ui-schemas`)
+  - editor validation; compared against the spec and vanilla in `skills/mcbe-json-ui-reference/references/official-docs-cross-check.md`
+- `LeGend077/json-ui-examples` (MIT, pinned as `legend077-json-ui-examples`) and `Refaltor77/EasyUIBuilder` example pack (MIT, pinned as `refaltor77-easyuibuilder`)
+- `boredape874/mcbe-json-ui-resource` tutorial folders (mixed third-party material, pinned as `boredape874-json-ui-tutorials`, analysis-only)
+- `bedrock-dot-dev/docs` at the `1.26.50.4` stable tag (license not stated, pinned as `bedrock-dot-dev-docs-1-26-50`)
+  - <https://github.com/bedrock-dot-dev/docs>
+  - same-version Mojang release documentation: Molang query list (`data/molang-queries-1.26.50.json`), Animations, Schemas, Texture Sets, Item, Addons, Entities
+
 ## Official documentation snapshots
 
 - `MicrosoftDocs/minecraft-creator` (CC-BY-4.0 docs, MIT samples, pinned as `microsoftdocs-minecraft-creator-reference`)
