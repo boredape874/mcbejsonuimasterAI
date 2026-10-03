@@ -62,3 +62,24 @@ export function editObject(text, pointer, patch) {
   }
   return text;
 }
+
+export function removeArrayItems(text,pointer,indices){
+  const triviaEnd=at=>{for(;;){while(/\s/.test(text[at]||'')&&at<text.length)at++;if(text.slice(at,at+2)==='//'){const end=text.indexOf('\n',at);at=end<0?text.length:end;}else if(text.slice(at,at+2)==='/*'){const end=text.indexOf('*/',at+2);if(end<0)throw Error('Unclosed comment');at=end+2;}else return at;}};
+  for(const index of [...new Set(indices)].sort((a,b)=>b-a)){
+    const array=spanAt(jsonSpans(text),pointer),item=array.members.get(String(index));if(array.kind!=='['||!item)throw Error('Missing array item');
+    const after=triviaEnd(item.end),previous=array.members.get(String(index-1));
+    const comma=text[after]===','?after:previous?triviaEnd(previous.end):null;
+    const ranges=[[item.start,item.end],...(comma!==null?[[comma,comma+1]]:[])].sort((a,b)=>b[0]-a[0]);
+    for(const [start,end]of ranges)text=text.slice(0,start)+text.slice(end);
+  }
+  jsonSpans(text);return text;
+}
+
+export function appendControlBodies(text,pointer,entries){
+  let target=spanAt(jsonSpans(text),pointer),controls=target.members.get('controls');
+  if(!controls){text=editObject(text,pointer,{controls:[]});controls=spanAt(jsonSpans(text),pointer+'/controls');}
+  if(controls.kind!=='[')throw Error('controls must be an array');
+  const last=[...controls.members.values()].at(-1);if(last&&!controls.trailingComma)text=text.slice(0,last.end)+','+text.slice(last.end);
+  const current=spanAt(jsonSpans(text),pointer+'/controls'),newline=text.includes('\r\n')?'\r\n':'\n';
+  return text.slice(0,current.end-1)+newline+entries.map(({declaration,body})=>'{'+JSON.stringify(declaration)+':'+body+'}').join(','+newline)+newline+text.slice(current.end-1);
+}

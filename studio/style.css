@@ -290,6 +290,13 @@ kbd { display:inline-block; padding:2px 6px; background:var(--input); border:1px
 #sourceText { flex:1; min-height:0; resize:none; background:transparent; border:0; border-radius:0; padding:0 12px 16px; margin:0; white-space:pre; font:13px/22px Consolas,"Malgun Gothic",monospace; tab-size:2; color:var(--text); outline:none; }
 #sourceText:focus { outline:none; box-shadow:inset 2px 0 var(--blue); }
 .source-editor-note { padding:7px 12px; font-size:11px; color:var(--muted); border-top:1px solid var(--line); }
+.view-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0; }.view-options button { white-space:normal; }
+.edit-menu>div { width:230px; padding:8px; }.edit-menu button { margin:0; border:0; text-align:left; background:transparent; }.edit-menu kbd { float:right; }
+.session-pill { display:flex; align-items:center; gap:7px; max-width:190px; }.session-pill i { width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0; }.session-pill span { overflow:hidden; text-overflow:ellipsis; }
+.session-pill[data-state=connected] i { background:var(--green); }.session-pill[data-state=busy] i,.session-pill[data-state=connecting] i { background:var(--blue); }.session-pill[data-state=waiting] i { background:var(--warning-text); }
+.codex-session { margin:0 12px 12px; padding:12px; background:var(--raised); border:1px solid var(--line); border-radius:6px; font-size:12px; }
+.codex-session>strong { display:block; font-size:13px; overflow-wrap:anywhere; }.codex-session>span { display:block; margin:5px 0; color:var(--muted); }.codex-session summary { cursor:pointer; color:var(--blue); font-size:11px; }.codex-session dl { margin:10px 0; }.codex-session dt { color:var(--muted); margin-top:8px; }.codex-session dd { margin:2px 0; font:11px/1.6 Consolas,"Malgun Gothic",monospace; overflow-wrap:anywhere; user-select:text; }.codex-session small { display:block; margin-top:10px; font-size:11px; line-height:1.7; color:var(--muted); }.codex-session button { min-height:28px; padding:4px 8px; font-size:11px; }
+.right[data-mode=chat] .codex-session { flex-shrink:0; max-height:35%; overflow:auto; }
 @media(max-width:900px) {
   .activity-bar { position:sticky; top:0; z-index:10; grid-row:1; grid-column:1; flex-direction:row; padding:3px 8px; border-bottom:1px solid var(--line); }.activity-bar button { width:45px; min-height:41px; }.activity-bar svg { width:19px; height:19px; }
   .workspace,.workspace.diagnostics-collapsed,.workspace.explorer-hidden { grid-template-columns:minmax(0,1fr); grid-template-rows:48px minmax(520px,80dvh) 320px 650px auto; }

@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 import { createCanvas, loadImage } from '@napi-rs/canvas';
 import { configuration, root } from '../tools/studio/config.mjs';
 import { startHost } from '../tools/studio/host.mjs';
-import { editObject, jsonSpans } from '../tools/studio/json-edit.mjs';
+import { editObject, jsonSpans, spanAt, removeArrayItems, appendControlBodies } from '../tools/studio/json-edit.mjs';
 import { CodexBridge } from '../tools/studio/codex.mjs';
 import { selectionBounds, alignSelection, distributeSelection, gridSelection, matchSelectionSize, snapMove } from '../studio/geometry.js';
 import { DEVICE_PRESETS, normalizeDevice, safeRect, layoutIssues } from '../studio/devices.js';
@@ -172,4 +172,65 @@ test('Codex feedback steers the exact active turn with fresh selection context',
   await bridge.message({text:'제목을 크게',includePreview:false});
   assert.equal(called.method,'turn/steer');assert.equal(called.params.expectedTurnId,'active');assert.equal(called.params.input[0].text,'제목을 크게');
   assert.equal(bridge.busy,true);assert.equal(bridge.messages.at(-1).role,'user');
+});
+
+test('JSONC structural edits retain surrounding comments with first, middle, last and all controls',()=>{
+  for(const trailing of ['',','])for(const indices of [[0],[1],[2],[0,2],[0,1,2]]){
+    const source='{"controls":[/* before */{"a":{}}/* a */, // between\n{"b":{}},{"c":{}}/* last */'+trailing+'],"untouched":17}';
+    const result=removeArrayItems(source,'/controls',indices);
+    const array=spanAt(jsonSpans(result),'/controls');assert.equal(array.members.size,3-indices.length);
+    for(const comment of ['/* before */','/* a */','// between','/* last */'])assert.ok(result.includes(comment));
+    const restored=appendControlBodies(result,'',[{declaration:'p@base.panel',body:'{/* copied */"type":"panel"}'}]);
+    assert.equal(spanAt(jsonSpans(restored),'/controls').members.size,4-indices.length);assert.match(restored,/copied/);assert.match(restored,/"untouched":17/);
+  }
+  assert.equal(spanAt(jsonSpans(appendControlBodies('{"type":"panel"}','',[{declaration:'child',body:'{}'}])),'/controls').members.size,1);
+});
+
+test('Studio clipboard freezes originals, preserves JSONC subtrees, guards ownership and supports atomic undo',{timeout:120000},async t=>{
+  const config=await configuration(),dir=join(process.env.MCBEKIT_TEST_ROOT||join(root,'workspace/test-studio'),randomUUID());
+  const rpRoot=join(dir,'rp');await mkdir(dir,{recursive:true});await cp(join(root,'examples/studio-rp'),rpRoot,{recursive:true});
+  const file=join(rpRoot,'ui/live_demo.json');
+  await writeFile(file,'{"namespace":"live_demo","screen":{"type":"panel","size":[480,270],"controls":[{"group":{"type":"panel","offset":[4,6],"controls":[{"nested":{"type":"label","text":"nested","size":[50,20]}}]}},{"title":{/* original comment */"type":"label","text":"frozen","size":[100,24],"offset":[10,20]}},{"last":{"type":"panel","size":[10,10]}}]}}');
+  const host=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>host.close());const s=host.session;await s.open({rpRoot});
+  const node=id=>id==='screen'?s.editor.nodes[0]:s.editor.nodes.find(n=>n.id===id),copy=ids=>s.copy({keys:ids.map(id=>node(id).key),expectedRevision:s.editorRevision});
+  const paste=clip=>{const parent=node('screen');return s.paste({...clip,key:parent.key,expectedRevision:s.editorRevision,expectedHash:parent.source.sha256});};
+  const original=await s.readSource('ui/live_demo.json'),history=s.undoStack.length;
+  await assert.rejects(s.copy({keys:[node('title').key],expectedRevision:s.editorRevision,cut:'false'}),/boolean/);
+  await assert.rejects(copy(['screen']),/루트/);await assert.rejects(copy(['group','nested']),/부모와 자식/);
+  const clip=await copy(['title','group']);assert.equal(s.undoStack.length,history);assert.equal((await s.readSource(original.path)).text,original.text);
+  await s.edit({key:node('title').key,expectedRevision:s.editorRevision,expectedHash:node('title').source.sha256,patch:{text:'changed'}});
+  const beforePaste=await s.readSource(original.path),h=s.undoStack.length;
+  await assert.rejects(paste({...clip,sessionId:'expired'}),/만료/);
+  const result=await paste(clip);assert.equal(s.undoStack.length,h+1);assert.equal(result.ids.length,2);
+  assert.equal(node(result.ids[0]).props.text,'frozen');assert.deepEqual(node(result.ids[0]).props.offset,[18,28]);assert.deepEqual(node(result.ids[1]).props.offset,[12,14]);
+  assert.ok(s.editor.nodes.some(n=>n.id==='nested'&&n.parent===node(result.ids[1]).key));assert.equal(((await s.readSource(original.path)).text.match(/original comment/g)||[]).length,2);
+  const again=await paste(clip);assert.notEqual(again.ids[0],result.ids[0]);assert.deepEqual(node(again.ids[0]).props.offset,[26,36]);
+  await s.history({direction:'undo'});await s.history({direction:'undo'});assert.equal((await s.readSource(original.path)).text,beforePaste.text);
+  const cutBefore=await s.readSource(original.path);const cut=await s.copy({keys:[node('title').key,node('last').key],expectedRevision:s.editorRevision,cut:true});assert.equal(node('title'),undefined);assert.equal(node('last'),undefined);
+  const moved=await paste(cut);assert.deepEqual(node(moved.ids[0]).props.offset,[10,20]);
+  await s.history({direction:'undo'});await s.history({direction:'undo'});assert.equal((await s.readSource(original.path)).text,cutBefore.text);
+  await s.remove({keys:[node('nested').key,node('last').key],expectedRevision:s.editorRevision});assert.equal(node('nested'),undefined);assert.equal(node('last'),undefined);
+  await s.history({direction:'undo'});assert.equal((await s.readSource(original.path)).text,cutBefore.text);
+  const key=node('title').key;await assert.rejects(s.copy({keys:[key],expectedRevision:s.editorRevision-1}),/PREVIEW_CONFLICT/);
+  await writeFile(join(rpRoot,'ir.yaml'),'version: 1');await copy(['title']);await assert.rejects(paste(clip),/IR_OWNER/);await assert.rejects(s.remove({keys:[key],expectedRevision:s.editorRevision}),/IR_OWNER/);await unlink(join(rpRoot,'ir.yaml'));
+  const live=node('title');await s.edit({key:live.key,expectedRevision:s.editorRevision,expectedHash:live.source.sha256,patch:{offset:['$dynamic',0]}});
+  const dynamic=await copy(['title']);const unchanged=await s.readSource(original.path);await assert.rejects(paste(dynamic),/동적 위치/);assert.equal((await s.readSource(original.path)).text,unchanged.text);
+  s.ai.busy=true;await assert.rejects(paste(clip),/CODEX_BUSY/);await assert.rejects(s.copy({keys:[node('group').key],expectedRevision:s.editorRevision,cut:true}),/CODEX_BUSY/);s.ai.busy=false;
+  const beforeInherited=await s.readSource(original.path);
+  const inheritedText=appendControlBodies(editObject(beforeInherited.text,'',{preset:{type:'label',offset:[40,50],size:[50,20]}}),'/screen',[{declaration:'inherited@live_demo.preset',body:'{"text":"inherited","size":[50,20]}'}]);
+  await s.writeSource({path:original.path,text:inheritedText,expectedHash:beforeInherited.sha256});await s.render();
+  await assert.rejects(copy(['inherited']),/공통 템플릿/);assert.equal((await s.readSource(original.path)).text,inheritedText);
+  const response=await fetch(host.connection.url+'/api/copy',{method:'POST',headers:{Authorization:'Bearer '+host.connection.token,'Content-Type':'application/json'},body:JSON.stringify({keys:[node('group').key],expectedRevision:s.editorRevision})});
+  assert.equal(response.status,200);assert.equal((await response.json()).format,'json-ui-studio/clipboard@1');
+  const other=join(dir,'other');await cp(join(root,'examples/studio-rp'),other,{recursive:true});await s.open({rpRoot:other});await assert.rejects(paste(clip),/같은 리소스팩/);
+});
+
+test('Codex session display follows real thread/turn results and clears on reset',async()=>{
+  const bridge=new CodexBridge({config:{engineRoot:root,runtime:root},project:{rpRoot:root},context:()=>({stale:false,renderedRevision:7})});
+  bridge.connect=async()=>{bridge.state='connected';bridge.account='signed-in';};
+  bridge.rpc=async method=>method==='thread/start'?{thread:{id:'returned-thread'}}:{turn:{id:'returned-turn'}};
+  const result=await bridge.message({text:'  제목을 정렬해줘  ',includePreview:false});
+  assert.equal(result.threadId,'returned-thread');assert.equal(result.turnId,'returned-turn');assert.equal(result.sessionTitle,'제목을 정렬해줘');assert.equal(result.messageCount,1);assert.ok(result.sessionStartedAt<=Date.now());
+  await assert.rejects(bridge.reset(),/CODEX_BUSY/);bridge.busy=false;await bridge.reset();
+  assert.equal(bridge.status().threadId,null);assert.equal(bridge.status().sessionTitle,null);assert.equal(bridge.status().sessionStartedAt,null);assert.equal(bridge.status().messageCount,0);assert.equal(bridge.status().state,'connected');
 });

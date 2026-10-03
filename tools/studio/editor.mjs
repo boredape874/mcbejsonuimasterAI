@@ -3,14 +3,14 @@ import { resolve, join, relative, isAbsolute, dirname } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { parseUiSource, DEFAULT_RUNTIME_DIALECT } from '../_lib/json-dialect.mjs';
 import { LiveSession, hash } from './session.mjs';
-import { editObject, jsonSpans, spanAt } from './json-edit.mjs';
+import { editObject, jsonSpans, spanAt, removeArrayItems, appendControlBodies } from './json-edit.mjs';
 import { DEVICE_PRESETS, normalizeDevice, validateViewport } from '../../studio/devices.js';
 
 const parse = text => parseUiSource(text, { kind: 'runtime', dialect:DEFAULT_RUNTIME_DIALECT }).document;
 const esc = key => key.replaceAll('~', '~0').replaceAll('/', '~1');
 const editableProps = new Set(['offset','size','text','font_scale_factor','color','alpha','layer','anchor_from','anchor_to','visible','texture','keep_ratio']);
 export class StudioSession extends LiveSession {
-  constructor(config) { super(config); this.undoStack = []; this.redoStack = []; this.selection = null; this.selectionKeys=[]; this.selectionInitialized=false; this.editor = { nodes: [], screens: [] }; }
+  constructor(config) { super(config); this.undoStack = []; this.redoStack = []; this.selection = null; this.selectionKeys=[]; this.selectionInitialized=false; this.editor = { nodes: [], screens: [] }; this.clips=new Map(); }
   status() { return { ...super.status(), studio: true, selection: this.selection, selectionKeys:this.selectionKeys, history: {undo:this.undoStack.length,redo:this.redoStack.length}, studioRevision:this.editorRevision, gameFrame:this.gameFrame && {capturedAt:this.gameFrame.capturedAt,source:this.gameFrame.source} }; }
   async catalog(rpRoot) {
     const root = await realpath(rpRoot), screens = [], issues = [];
@@ -205,6 +205,61 @@ export class StudioSession extends LiveSession {
     array=spanAt(jsonSpans(text),match[1]);
     text=text.slice(0,array.end-1)+'\n{'+JSON.stringify(newDeclaration)+':'+body+'}\n'+text.slice(array.end-1);
     const result=await this.commit(source,text,'요소 복제');return {...result,id};
+  }
+  async structureOwner(node){
+    for(const owner of [join(this.project.rpRoot,'ir.yaml'),join(dirname(await this.sourcePath(node.source.path)),'ir.yaml')])if(await stat(owner).catch(()=>null))throw Error('IR_OWNER: 원본 IR에서 구조를 수정하세요.');
+  }
+  async clipboardNodes(keys,expectedRevision){
+    if(!Array.isArray(keys)||!keys.length||keys.length>64||new Set(keys).size!==keys.length)throw Error('1~64개 요소를 선택하세요.');
+    const nodes=keys.map(key=>this.requireNode(key,expectedRevision)),origins=new Set();
+    if(nodes.some(n=>nodes.some(other=>n!==other&&n.key.startsWith(other.key+'/controls/'))))throw Error('부모와 자식을 함께 선택할 수 없습니다.');
+    const entries=[];
+    for(const node of nodes){
+      const match=node.source.pointer.match(/^(.*\/controls)\/(\d+)\/([^/]+)$/);if(!match)throw Error('루트나 공통 템플릿 대신 하위 원본 요소를 선택하세요.');
+      const origin=node.source.path+'|'+node.source.pointer;if(origins.has(origin))throw Error('공통 원본 인스턴스는 하나만 선택하세요.');origins.add(origin);
+      const source=await this.readSource(node.source.path);if(source.sha256!==node.source.sha256)throw Error('SOURCE_CONFLICT');
+      const target=spanAt(jsonSpans(source.text),node.source.pointer),wrapper=spanAt(jsonSpans(source.text),match[1]+'/'+match[2]);
+      if(target.kind!=='{'||wrapper.members.size!==1)throw Error('독립된 inline 요소만 지원합니다.');
+      entries.push({node,source,array:match[1],index:Number(match[2]),declaration:match[3].replaceAll('~1','/').replaceAll('~0','~'),body:source.text.slice(target.start,target.end)});
+    }
+    if(entries.reduce((sum,e)=>sum+Buffer.byteLength(e.body),0)>2*1024*1024)throw Error('선택 내용은 최대 2 MiB입니다.');
+    this.requireNode(keys[0],expectedRevision);
+    return entries;
+  }
+  async copy({keys,expectedRevision,cut=false}){
+    if(typeof cut!=='boolean')throw Error('cut must be a boolean');
+    if(cut&&this.ai?.busy)throw Error('CODEX_BUSY');
+    const entries=await this.clipboardNodes(keys,expectedRevision);
+    if(cut){if(new Set(entries.map(e=>e.source.path)).size!==1)throw Error('잘라내기는 같은 파일의 요소만 지원합니다.');for(const e of entries)await this.structureOwner(e.node);}
+    const clipId=randomUUID(),clip={rpRoot:this.project.rpRoot,entries:entries.map(({declaration,body,node})=>({declaration,body,offset:node.props.offset??[0,0],offsetBound:Array.isArray(node.props.bindings)&&node.props.bindings.some(b=>['offset','#offset'].includes(b.target_property_name))})),pastes:cut?-1:0};
+    if(cut)await this.removeEntries(entries,'요소 잘라내기');
+    this.clips.set(clipId,clip);if(this.clips.size>16)this.clips.delete(this.clips.keys().next().value);
+    return {format:'json-ui-studio/clipboard@1',sessionId:this.id,clipId,count:entries.length,cut};
+  }
+  async removeEntries(entries,label){
+    const source=entries[0].source;let text=source.text;const groups=new Map();
+    for(const e of entries){if(e.source.path!==source.path||e.source.sha256!==source.sha256)throw Error('SOURCE_CONFLICT');const indices=groups.get(e.array)||[];indices.push(e.index);groups.set(e.array,indices);}
+    for(const [pointer,indices]of [...groups].sort((a,b)=>b[0].localeCompare(a[0],undefined,{numeric:true})))text=removeArrayItems(text,pointer,indices);
+    return this.commit(source,text,label);
+  }
+  async remove({keys,expectedRevision}){
+    if(this.ai?.busy)throw Error('CODEX_BUSY');const entries=await this.clipboardNodes(keys,expectedRevision);
+    if(new Set(entries.map(e=>e.source.path)).size!==1)throw Error('같은 파일의 요소만 삭제하세요.');
+    for(const e of entries)await this.structureOwner(e.node);
+    return this.removeEntries(entries,'요소 삭제');
+  }
+  async paste({clipId,sessionId,key,expectedRevision,expectedHash}){
+    if(this.ai?.busy)throw Error('CODEX_BUSY');const clip=this.clips.get(clipId);if(sessionId!==this.id||!clip)throw Error('복사 내용이 만료되었습니다. 요소를 다시 복사하세요.');
+    if(clip.rpRoot!==this.project?.rpRoot)throw Error('같은 리소스팩 안에서 붙여넣으세요. 다른 팩의 에셋은 자동 복사하지 않습니다.');
+    const parent=this.requireNode(key,expectedRevision);if(!['panel','screen','stack_panel','grid'].includes(parent.type))throw Error('부모 패널을 선택하세요.');
+    const source=await this.readSource(parent.source.path);if(source.sha256!==expectedHash||parent.source.sha256!==expectedHash)throw Error('SOURCE_CONFLICT');await this.structureOwner(parent);
+    const ids=[],entries=clip.entries.map(e=>{
+      const [name,...base]=e.declaration.split('@'),id=name+'_copy_'+randomUUID().slice(0,8),props=parse(e.body),offset=props.offset??e.offset;
+      if(!Array.isArray(offset)||offset.length!==2||offset.some(v=>!Number.isFinite(v))||e.offsetBound)throw Error('동적 위치는 원본이나 Codex에서 복사하세요.');
+      ids.push(id);return {declaration:[id,...base].join('@'),body:editObject(e.body,'',{offset:offset.map(v=>v+8*(clip.pastes+1))})};
+    });
+    const result=await this.commit(source,appendControlBodies(source.text,parent.source.pointer,entries),'요소 붙여넣기');clip.pastes++;
+    return {...result,ids};
   }
   async add({key,expectedRevision,expectedHash,type='label',texture}) {
     if (!['label','image','panel'].includes(type)) throw Error('Unsupported element type');

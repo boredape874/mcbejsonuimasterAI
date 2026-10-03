@@ -20,6 +20,9 @@ export async function startHost(config) {
       case 'edit': return session.edit(args);
       case 'batch_edit': return session.batchEdit(args);
       case 'duplicate': return session.duplicate(args);
+      case 'copy': return session.copy(args);
+      case 'paste': return session.paste(args);
+      case 'remove': return session.remove(args);
       case 'configure_viewport': return session.configureViewport(args);
       case 'compare_viewports': return session.compareViewports(args);
       case 'add': return session.add(args);

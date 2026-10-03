@@ -6,6 +6,8 @@ let toastTimer, imageLoadedRevision=null, sharingFrame=null, saving=false, optim
 let picked=new Set(),locked=new Set(),collapsed=new Set(),layerScope='';
 let pan=null,spaceHeld=false;
 let sourceDirty=false;
+let clipboard=null,clipboardSynced=null,copyScope=null,lastPasteParent=null,lastAi=null,pasteEventSerial=0;
+try{clipboard=JSON.parse(localStorage.getItem('studio-clipboard'));}catch{}
 const pickedNodes=()=>editor.nodes.filter(n=>picked.has(n.key));
 const isLocked=key=>[...locked].some(k=>key===k||key?.startsWith(k==='/'?'/controls/':k+'/controls/'));
 function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,6500);}
@@ -114,6 +116,9 @@ function updateArrange(){
   $('distributeX').disabled=$('distributeY').disabled=!ready||nodes.length<3;
   $('arrangeGrid').disabled=!ready||nodes.length<2;$('duplicate').disabled=!ready||nodes.length!==1||selected?.key==='/';
   $('sameSize').disabled=!ready||nodes.length<2;$('arrangeButton').disabled=!ready;$('selectionZoom').disabled=!nodes.length;
+  const inline=nodes.length&&nodes.every(n=>n.source?.pointer?.match(/\/controls\/\d+\/[^/]+$/));
+  $('copyElements').disabled=!inline||state.stale||saving;$('cutElements').disabled=$('deleteElements').disabled=!inline||!ready;
+  $('pasteElements').disabled=!clipboard||!state.project||state.stale||saving||!parentNode()?.source;
 }
 function updateView(){
   for(const [id,mode]of [['previewTab','preview'],['jsonTab','json'],['gameTab','game']]){$(id).classList.toggle('active',view===mode);$(id).setAttribute('aria-selected',String(view===mode));}
@@ -124,7 +129,7 @@ function updateView(){
   $('gameEmpty').hidden=view!=='game'||!!stream||!!state.gameFrame;drawSelection();
 }
 async function refreshStudio(force=false){
-  const value=await api('studio'),scope=value.project?.rpRoot+'|'+value.project?.control;if(scope!==layerScope){locked.clear();collapsed.clear();layerScope=scope;if(!sourceDirty){source=null;if(view==='json')view='preview';}}state=value;editor=value.editor;
+  const value=await api('studio'),scope=value.project?.rpRoot+'|'+value.project?.control;if(scope!==layerScope){locked.clear();collapsed.clear();lastPasteParent=null;layerScope=scope;if(!sourceDirty){source=null;if(view==='json')view='preview';}}state=value;editor=value.editor;
   picked=new Set(value.selectionKeys||[value.selection].filter(Boolean));
   renderScreens();renderLayers();
   selected=editor.nodes.find(n=>n.key===value.selection)||null;
@@ -158,6 +163,7 @@ function renderLayers(){
   }
 }
 async function choose(key,extend=false){
+  lastPasteParent=null;
   dirty=false;if(key===null)picked=new Set();else if(!extend)picked=new Set([key]);else if(picked.has(key))picked.delete(key);else {
     for(const old of picked)if(old==='/'||key==='/'||old.startsWith(key+'/controls/')||key.startsWith(old+'/controls/'))picked.delete(old);
     picked.add(key);
@@ -276,14 +282,47 @@ async function duplicateSelected(){
   saving=true;try{const result=await api('duplicate',{key:selected.key,expectedRevision:state.studioRevision,expectedHash:selected.source.sha256});await refreshStudio(true);const node=editor.nodes.find(n=>n.id===result.id);if(node)await choose(node.key);toast('하위 구조와 함께 복제했습니다.');}finally{saving=false;updateArrange();}
 }
 on('duplicate','click',duplicateSelected);
+function closeEditMenu(){document.querySelector('.edit-menu').open=false;}
+for(const menu of document.querySelectorAll('.toolbar-menu'))menu.addEventListener('click',e=>{if(e.target.closest('button'))menu.open=false;});
+function canvasClipboardTarget(e){return view==='preview'&&!document.querySelector('dialog[open]')&&!e.target.closest('input,textarea,select,[contenteditable=true]');}
+async function copyElements(cut=false){
+  if(saving||state.stale||!picked.size)throw Error('요소를 선택하고 미리보기 갱신을 기다리세요.');
+  const nodes=pickedNodes();if(cut&&nodes.some(n=>isLocked(n.key)))throw Error('요소 잠금을 먼저 풀어 주세요.');
+  const request={keys:[...picked],expectedRevision:state.studioRevision,cut};copyScope={scope:layerScope,keys:[...picked],parent:nodes[0].parent};
+  saving=true;try{clipboard=await api('copy',request);localStorage.setItem('studio-clipboard',JSON.stringify(clipboard));if(cut)await refreshStudio(true);
+    let system=false;try{await navigator.clipboard.writeText(JSON.stringify(clipboard));system=true;}catch{}clipboardSynced=system;
+    toast(`${clipboard.count}개 ${cut?'잘라냈습니다':'복사했습니다'}. ${system?'Ctrl+V로 붙여넣으세요.':'편집기 안에서 Ctrl+V로 붙여넣을 수 있습니다.'}`);
+  }finally{saving=false;closeEditMenu();updateArrange();}
+}
+async function pasteElements(payload=clipboard){
+  if(!payload||payload.format!=='json-ui-studio/clipboard@1')throw Error('이 편집기에서 요소를 먼저 복사하세요.');
+  if(saving||state.stale)throw Error('앞선 편집이 끝날 때까지 기다리세요.');
+  let parent=lastPasteParent&&editor.nodes.find(n=>n.key===lastPasteParent);
+  if(!parent&&copyScope?.scope===layerScope&&[...picked].every(k=>copyScope.keys.includes(k)))parent=editor.nodes.find(n=>n.key===copyScope.parent);
+  parent=parent||parentNode();if(!parent?.source||isLocked(parent.key))throw Error('편집 가능한 부모 패널을 선택하세요.');
+  saving=true;try{const result=await api('paste',{clipId:payload.clipId,sessionId:payload.sessionId,key:parent.key,expectedRevision:state.studioRevision,expectedHash:parent.source.sha256});await refreshStudio(true);
+    const nodes=editor.nodes.filter(n=>result.ids.includes(n.id));for(let i=0;i<nodes.length;i++)await choose(nodes[i].key,i>0);lastPasteParent=parent.key;
+    clipboard=payload;localStorage.setItem('studio-clipboard',JSON.stringify(payload));toast(result.ids.length+'개를 붙여넣었습니다. Ctrl+Z로 되돌릴 수 있습니다.');
+  }finally{saving=false;closeEditMenu();updateArrange();}
+}
+async function deleteElements(){
+  if(saving||state.stale||!picked.size)throw Error('편집 가능한 요소를 선택하세요.');if(pickedNodes().some(n=>isLocked(n.key)))throw Error('요소 잠금을 먼저 풀어 주세요.');
+  saving=true;try{await api('remove',{keys:[...picked],expectedRevision:state.studioRevision});await refreshStudio(true);toast('요소를 삭제했습니다. Ctrl+Z로 되돌릴 수 있습니다.');}finally{saving=false;closeEditMenu();updateArrange();}
+}
+on('copyElements','click',()=>copyElements());on('cutElements','click',()=>copyElements(true));on('pasteElements','click',()=>pasteElements());on('deleteElements','click',deleteElements);
+document.addEventListener('paste',e=>{if(!canvasClipboardTarget(e))return;pasteEventSerial++;e.preventDefault();let payload;try{payload=JSON.parse(e.clipboardData.getData('text/plain'));}catch{}pasteElements(payload||(clipboardSynced===false?clipboard:{})).catch(err=>toast(err.message));});
 on('layerSearch','input',renderLayers);
-on('helpButton','click',()=>$('helpDialog').showModal());on('editorSettings','click',()=>$('settingsDialog').showModal());
+on('helpButton','click',()=>$('helpDialog').showModal());on('editorSettings','click',()=>{$('viewDialog').close();$('settingsDialog').showModal();});
 for(const id of ['gridSize','snap','smartSnap'])on(id,'change',()=>{updateGrid();localStorage.setItem('studio-grid',JSON.stringify({size:$('gridSize').value,snap:$('snap').checked,smart:$('smartSnap').checked}));});
 try{const settings=JSON.parse(localStorage.getItem('studio-grid'));if(settings){if(['1','4','8','16'].includes(settings.size))$('gridSize').value=settings.size;$('snap').checked=settings.snap!==false;$('smartSnap').checked=settings.smart!==false;}}catch{}
 document.addEventListener('keydown',e=>{
-  if(view==='json'||e.target.closest('.panel-resize')||document.querySelector('dialog[open]')||['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;
+  if(view!=='preview'||e.target.isContentEditable||e.target.closest('.panel-resize')||document.querySelector('dialog[open]')||['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;
   const ctrl=e.ctrlKey||e.metaKey;
   if(ctrl&&e.key.toLowerCase()==='s'){e.preventDefault();if(editingNode)applyPatch(editingNode,fieldPatch()).catch(err=>toast(err.message));}
+  else if(ctrl&&['c','x'].includes(e.key.toLowerCase())){e.preventDefault();copyElements(e.key.toLowerCase()==='x').catch(err=>toast(err.message));}
+  else if(ctrl&&e.key.toLowerCase()==='v'){const serial=pasteEventSerial;setTimeout(()=>{if(serial===pasteEventSerial&&canvasClipboardTarget(e))pasteElements().catch(err=>toast(err.message));},100);}
+  else if(ctrl&&e.key.toLowerCase()==='a'){e.preventDefault();const parent=selected?.parent??selected?.key,nodes=editor.nodes.filter(n=>n.parent===parent&&n.source&&n.visible).slice(0,64);if(nodes.length){picked=new Set(nodes.map(n=>n.key));const key=nodes.at(-1).key;state.selection=key;selected=nodes.at(-1);lastPasteParent=null;renderLayers();renderProperties();drawSelection();api('select',{key,keys:[...picked]}).catch(err=>toast(err.message));}}
+  else if(e.key==='Delete'){e.preventDefault();deleteElements().catch(err=>toast(err.message));}
   else if(ctrl&&e.key.toLowerCase()==='d'){e.preventDefault();duplicateSelected().catch(err=>toast(err.message));}
   else if(e.key==='Escape'){e.preventDefault();if(drag)cancelDrag();else {picked.clear();selected=null;choose(null).catch(err=>toast(err.message));}}
   else if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)&&picked.size){
@@ -313,9 +352,13 @@ function renderDiagnostics(){
 }
 async function nativeHealth(){try{const r=await api('review',{limit:0});$('nativeStatus').textContent=r.connected?'Minecraft 브리지 연결됨 · 게임 화면은 별도 공유':'Minecraft 브리지 미연결';}catch{$('nativeStatus').textContent='Minecraft 브리지 확인 불가';}}
 function renderCodex(ai){
-  if(!ai)return;$('codexStatus').textContent=ai.busy?'작업 중':ai.state==='connected'?'연결됨':ai.error?'연결 오류':'연결 전';
+  if(!ai)return;lastAi=ai;const waiting=ai.requests?.length,status=waiting?'답변·승인 대기':ai.busy?'작업 중':ai.state==='connecting'?'연결 중':ai.error?'오류 확인':ai.state==='connected'?'연결됨':'연결 전';$('codexStatus').textContent=status;
+  $('codexSessionChip').textContent='Codex · '+status;$('codexSessionButton').dataset.state=waiting?'waiting':ai.busy?'busy':ai.state;$('codexSessionButton').title=(ai.sessionTitle||'Studio 대화')+(ai.threadId?' · '+ai.threadId:' · 메시지를 보내면 새 세션을 시작합니다.');
+  $('codexSessionTitle').textContent=ai.sessionTitle||'Studio 대화 · 시작 전';$('codexSessionMeta').textContent=ai.threadId?`${status} · 메시지 ${ai.messageCount??ai.messages?.length??0}개${waiting?' · 확인 요청 '+waiting+'개':''}`:'메시지를 보내면 대화 세션이 만들어집니다.';
+  $('codexThreadId').textContent=ai.threadId||'아직 없음';$('codexTurnId').textContent=ai.turnId||'대기';$('codexAccount').textContent=ai.account||'확인 전';$('copyCodexSession').disabled=!ai.threadId;
+  $('codexStartedAt').textContent=ai.sessionStartedAt?new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(ai.sessionStartedAt):'아직 없음';
   $('codexConnect').disabled=ai.state==='connecting';$('chatSend').disabled=ai.busy&&!ai.turnId;$('chatSend').textContent=ai.busy?'피드백 ↑':'보내기 ↑';$('codexStop').hidden=!ai.busy;
-  const list=$('chatMessages');if(ai.messages?.length){const atBottom=list.scrollHeight-list.scrollTop-list.clientHeight<80;list.replaceChildren();for(const m of ai.messages){const block=el('div',undefined,'message '+m.role);block.append(el('small',m.role==='user'?'YOU':'CODEX'),el('span',m.text));list.append(block);}if(atBottom)list.scrollTop=list.scrollHeight;}
+  const list=$('chatMessages');if(ai.messages?.length){const atBottom=list.scrollHeight-list.scrollTop-list.clientHeight<80;list.replaceChildren();for(const m of ai.messages){const block=el('div',undefined,'message '+m.role);block.append(el('small',m.role==='user'?'YOU':'CODEX'),el('span',m.text));list.append(block);}if(atBottom)list.scrollTop=list.scrollHeight;}else list.replaceChildren(el('div','요소를 선택하고 “이 버튼 간격을 맞춰줘”처럼 요청하세요.','chat-placeholder'));
   const requests=$('codexRequests');requests.replaceChildren();
   for(const request of ai.requests||[]){
     const box=el('div',undefined,'request');box.append(el('strong',request.method.endsWith('requestUserInput')?'Codex 질문':'Codex 실행 승인'),el('pre',JSON.stringify(request.params,null,2)));
@@ -344,7 +387,7 @@ async function newProject(){guardSourceBuffer();await api('new_project');source=
 on('newProject','click',newProject);on('welcomeNew','click',newProject);
 on('screenSearch','input',renderScreens);
 for(const [id,direction]of [['undo','undo'],['redo','redo']])on(id,'click',async()=>{await api('history',{direction});await refreshStudio(true);});
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'&&!document.querySelector('dialog[open]')&&!['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)){e.preventDefault();if(saving)return;api('history',{direction:e.shiftKey?'redo':'undo'}).then(()=>refreshStudio(true)).catch(error=>toast(error.message));}});
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'&&!document.querySelector('dialog[open]')&&!e.target.isContentEditable&&!['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)){e.preventDefault();if(saving)return;api('history',{direction:e.shiftKey?'redo':'undo'}).then(()=>refreshStudio(true)).catch(error=>toast(error.message));}});
 on('viewport','change',async()=>{if(!state.project)return;if($('viewport').value==='custom'){openDeviceDialog();return;}await useDevice($('viewport').value);});
 on('interaction','change',async()=>{await api('render',{interactionState:$('interaction').value});await refreshStudio(true);});
 on('refresh','click',async()=>{await api('render');await refreshStudio(true);await nativeHealth();});
@@ -361,7 +404,7 @@ async function saveSource(){if(!source||source.rpRoot!==state.project?.rpRoot)th
 on('saveSource','click',saveSource);
 window.addEventListener('beforeunload',e=>{if(sourceDirty){e.preventDefault();e.returnValue='';}});
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'&&view==='json'){e.preventDefault();saveSource().catch(err=>toast(err.message));}});
-on('fixtureButton','click',()=>{$('fixtureText').value=JSON.stringify(state.project?.fixture||{},null,2);$('fixtureDialog').showModal();});
+on('fixtureButton','click',()=>{$('viewDialog').close();$('fixtureText').value=JSON.stringify(state.project?.fixture||{},null,2);$('fixtureDialog').showModal();});
 on('saveFixture','click',async()=>{const fixture=JSON.parse($('fixtureText').value);if(!fixture||Array.isArray(fixture)||typeof fixture!=='object')throw Error('fixture는 JSON object여야 합니다.');await api('render',{fixture});$('fixtureDialog').close();await refreshStudio(true);});
 function parentNode(){let node=selected;while(node&&!['panel','screen','stack_panel','grid'].includes(node.type))node=editor.nodes.find(n=>n.key===node.parent);return node||editor.nodes[0];}
 async function add(type,texture){const node=parentNode();if(!node?.source)throw Error('편집 가능한 부모 패널을 선택하세요.');await api('add',{key:node.key,expectedRevision:state.studioRevision,expectedHash:node.source.sha256,type,...(texture?{texture}:{})});await refreshStudio(true);}
@@ -370,6 +413,9 @@ on('imageFile','change',async()=>{const file=$('imageFile').files[0];if(!file)re
 on('codexConnect','click',async()=>{renderCodex(await api('codex_connect'));toast('Codex 연결을 확인했습니다.');});
 on('chatForm','submit',async e=>{e.preventDefault();const text=$('chatInput').value.trim();if(!text)return;if($('includePreview').checked)await shareBrowserPreview();renderCodex(await api('codex_message',{text,includePreview:$('includePreview').checked,includeGame:$('includeGame').checked}));$('chatInput').value='';});
 on('codexStop','click',async()=>renderCodex(await api('codex_interrupt')));
+on('codexSessionButton','click',()=>setSidebar('chat'));
+on('copyCodexSession','click',async()=>{if(!lastAi?.threadId)return;try{await navigator.clipboard.writeText(lastAi.threadId);toast('Codex 세션 ID를 복사했습니다.');}catch{toast('브라우저가 클립보드 쓰기를 막았습니다. 세션 ID를 직접 선택해 복사하세요.');}});
+on('viewOptions','click',()=>$('viewDialog').showModal());
 
 async function stopShare(){clearInterval(frameTimer);for(const track of stream?.getTracks()||[])track.stop();stream=null;$('gameVideo').srcObject=null;$('gameShare').textContent='▣ Minecraft 창 연결';await sharingFrame?.catch(()=>{});await api('game_stop');state.gameFrame=null;updateView();}
 on('gameShare','click',async()=>{
@@ -412,6 +458,7 @@ function updateDeviceCalculation(){
   const source=DEVICE_PRESETS.find(p=>p.id===$('devicePreset').value)?.source;$('deviceSource').hidden=!source;if(source)$('deviceSource').href=source;
 }
 function openDeviceDialog(){
+  $('viewDialog').close();
   $('devicePreset').value=state.project?.previewDevice?.presetId??'custom';populateDeviceForm();$('deviceDialog').showModal();
 }
 on('deviceSettings','click',openDeviceDialog);
@@ -430,7 +477,7 @@ on('screenshotSizeFile','change',async()=>{const file=$('screenshotSizeFile').fi
 on('safeToggle','click',()=>{$('safeToggle').setAttribute('aria-pressed',String($('safeToggle').getAttribute('aria-pressed')!=='true'));drawSafeArea();});
 on('selectionZoom','click',()=>{$('zoom').value='selection';fit();});
 function setFocusMode(active){$('focusMode').setAttribute('aria-pressed',String(active));$('focusMode').textContent=active?'패널 복원':'집중 모드';document.querySelector('.workspace').classList.toggle('focus-mode',active);fit();}
-on('focusMode','click',()=>setFocusMode($('focusMode').getAttribute('aria-pressed')!=='true'));
+on('focusMode','click',()=>{$('viewDialog').close();setFocusMode($('focusMode').getAttribute('aria-pressed')!=='true');});
 function setSidebar(mode){setFocusMode(false);$('sidebarMode').value=mode;document.querySelector('.right').dataset.mode=mode;$('propertiesTab').classList.toggle('active',mode!=='chat');$('codexTab').classList.toggle('active',mode!=='properties');fit();}
 on('propertiesTab','click',()=>setSidebar('properties'));on('codexTab','click',()=>setSidebar('chat'));
 on('activityCodex','click',()=>{setSidebar('chat');$('chatInput').focus();});
@@ -478,6 +525,7 @@ async function comparisonCanvas(profile){
   return canvas;
 }
 on('compareDevices','click',async()=>{
+  $('viewDialog').close();
   if(!state.project||state.stale||saving||drag)throw Error('미리보기 갱신을 마친 뒤 비교하세요.');
   const revision=state.studioRevision,grid=$('comparisonGrid');grid.replaceChildren(el('div','같은 원본으로 4개 기기를 계산 중입니다…','empty'));$('compareDialog').showModal();
   try{const result=await api('compare_viewports',{expectedRevision:revision,presetIds:['pc-fhd','tablet-ipad','console-fhd','mobile-iphone']});if(result.revision!==state.studioRevision||state.stale)throw Error('비교 중 화면이 바뀌었습니다. 다시 비교하세요.');grid.replaceChildren();
