@@ -30,6 +30,8 @@ For text, input, controller focus or touch accessibility research, retrieve `nod
 
 For style selection or game UI design, first read [references/style-selection.md](references/style-selection.md). It provides a small context query and a portable fallback. Read [references/design-skill-adapters.md](references/design-skill-adapters.md) only when a reviewed external design method helps the specific decision.
 
+For Game UI Database links or requests to find real game interface examples, read [references/game-ui-database.md](references/game-ui-database.md). It indexes the supplied Minecraft Dungeons page for human reference, explains focused screen lookup, and records the site's explicit restrictions on AI asset generation and machine learning. Do not load its image archive into an asset-generation or learning pipeline.
+
 For a direction or brief only, return the selected style and relevant game UI decisions here. Continue into the numbered measurement/implementation workflow only when actual layout, assets or validation are requested.
 
 When choosing a pixel-art production method, query `design.library methods`, then `method --method ID --style ID` from the checkout. The method is an optional authored adaptation; keep layout decisions here and hand actual asset work to `mcbe-json-ui-texture-design`.
