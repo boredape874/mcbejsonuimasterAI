@@ -4,7 +4,7 @@
 // Usage: node tools/build-vanilla-index.mjs [--force]
 
 import { readdir, readFile } from "node:fs/promises";
-import { join, relative, sep } from "node:path";
+import { join, relative, resolve, sep } from "node:path";
 import { log } from "./_lib/log.mjs";
 import { PATHS, VANILLA_INDEX_SCHEMAS } from "./_lib/paths.mjs";
 import { exists, writeJson, ensureDir, readJson } from "./_lib/fsx.mjs";
@@ -103,15 +103,27 @@ async function main() {
     log.warn("no vanilla UI screens found", { hint: "run scripts/sync-ztech-vanilla.ps1" });
   }
 
+  // Record which upstream revision the official sample evidence comes from so
+  // index consumers can cite it (the Ztech mirror carries no pinned revision).
+  const sources = {};
+  const lockPath = resolve(PATHS.root, "references", "official", "bedrock-samples-ui.lock.json");
+  if (await exists(PATHS.bedrockSamplesUi) && await exists(lockPath)) {
+    const lock = await readJson(lockPath).catch(() => null);
+    if (lock?.upstream) sources["bedrock-samples-ui"] = { url: lock.upstream.url, tag: lock.upstream.tag ?? null, commit: lock.upstream.commit ?? null, version: lock.upstream.version?.version ?? null, lock: "references/official/bedrock-samples-ui.lock.json" };
+  }
+  if (await exists(PATHS.ztechMirror)) sources.ztech = { path: "references/upstreams/MCBVanillaResourcePack", revision: null, note: "comparison mirror without a pinned revision" };
+
   await writeJson(PATHS.vanillaIndexScreens, {
     schema: VANILLA_INDEX_SCHEMAS.screens,
     builtAt: new Date().toISOString(),
+    sources,
     count: Object.keys(screens).length,
     screens,
   });
   await writeJson(PATHS.vanillaIndexTextures, {
     schema: VANILLA_INDEX_SCHEMAS.textures,
     builtAt: new Date().toISOString(),
+    sources,
     count: Object.keys(textures).length,
     textures,
   });

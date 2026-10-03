@@ -2,7 +2,8 @@
   "$schema": "mcbe-jsonui-ai-kit/presets-catalog@1",
   "_attribution": {
     "note": "Independently authored. Reference patterns observed in SebTheSigma/JSON-UI-Maker (no LICENSE declared upstream); no source code copied. Names and shapes match Mojang vanilla packs (common.json, common_dialogs.json, common_buttons.json, server_form.json, ui_screens.json, ui_defs.json) which are the de facto vanilla preset surface.",
-    "upstream_inspiration": "https://github.com/SebTheSigma/JSON-UI-Maker"
+    "upstream_inspiration": "https://github.com/SebTheSigma/JSON-UI-Maker",
+    "verified": "Preset names and consumed $variables re-checked on 2026-10-02 against the pinned Mojang bedrock-samples v1.26.50.4 inheritance chains (references/official/bedrock-samples-ui, ui_template_dialogs.json / ui_template_buttons.json / ui_common.json / server_form.json). tests/presets-catalog-vanilla.mjs keeps every ref and variable traceable to those files."
   },
   "namespace_examples": ["my_pack", "common", "common_dialogs", "common_buttons", "server_form", "achievement", "settings"],
   "common_refs": [
@@ -13,15 +14,17 @@
     },
     {
       "ref": "common.button",
-      "purpose": "Vanilla generic button skeleton; override $pressed_button_name and content variables.",
+      "purpose": "Vanilla generic button skeleton (no textures or text of its own); override $pressed_button_name, supply default/hover/pressed child controls, or extend a common_buttons.* text button instead.",
       "fits_kind": "button",
-      "common_variables": ["$button_text", "$button_text_max_size", "$pressed_button_name", "$default_button_texture", "$hover_button_texture", "$pressed_button_texture"]
+      "common_variables": ["$pressed_button_name", "$button_bindings", "$focus_id", "$button_tts_header", "$button_tts_name"],
+      "note": "Confirmed from official bedrock-samples v1.26.50.4: $button_text, $button_text_max_size and the *_button_texture variables are consumed by common_buttons.light_text_button / dark_text_button, not by common.button itself."
     },
     {
-      "ref": "common.cancel_button",
-      "purpose": "Standard 'X' close button; pair with $pressed_button_name to handle close action.",
+      "ref": "common.close_button",
+      "purpose": "Standard 'X' close button used by vanilla dialogs; set $close_button_to_button_id to the button id the close should raise (vanilla dialogs use button.menu_exit).",
       "fits_kind": "button",
-      "common_variables": ["$pressed_button_name"]
+      "common_variables": ["$close_button_to_button_id", "$close_button_offset", "$close_button_panel_size", "$close_button_default_texture", "$close_button_visible_binding_name"],
+      "note": "Confirmed from official bedrock-samples v1.26.50.4. There is no common.cancel_button in vanilla (an earlier catalog entry listed that name); common.light_close_button is the light-themed variant with the same variables."
     },
     {
       "ref": "common.scrolling_panel",
@@ -33,15 +36,17 @@
   "common_dialogs_refs": [
     {
       "ref": "common_dialogs.main_panel_no_buttons",
-      "purpose": "Title-bar + body modal frame without OK/Cancel; use for forms or custom dialogs.",
+      "purpose": "Title-bar + body modal frame without OK/Cancel; use for forms or custom dialogs (vanilla server_form.long_form and custom_form extend it).",
       "fits_kind": "panel",
-      "common_variables": ["$title_panel", "$child_control", "$title_size", "$title_max_size", "$text_name", "$title_text_binding_type"]
+      "common_variables": ["$child_control", "$text_name", "$title_size", "$title_max_size", "$title_text_binding_type", "$custom_background", "$panel_indent_size"],
+      "note": "Confirmed from official bedrock-samples v1.26.50.4. Vanilla server_form.long_form still sets $title_panel, but no template in the 1.26.50 inheritance chain consumes it; the title is driven by $text_name."
     },
     {
       "ref": "common_dialogs.main_panel_two_buttons",
-      "purpose": "Title-bar + body + OK/Cancel pair; standard confirm dialog frame.",
+      "purpose": "Title-bar + body + two stacked button slots; standard confirm dialog frame.",
       "fits_kind": "panel",
-      "common_variables": ["$title_panel", "$child_control", "$button1_panel", "$button2_panel"]
+      "common_variables": ["$child_control", "$text_name", "$top_button_panel", "$bottom_button_panel", "$dialog_background"],
+      "note": "Confirmed from official bedrock-samples v1.26.50.4: the button slots are $top_button_panel and $bottom_button_panel (an earlier catalog entry listed $button1_panel / $button2_panel, which vanilla never consumed)."
     },
     {
       "ref": "common_dialogs.standard_title_label",
@@ -61,6 +66,13 @@
       "ref": "common_buttons.dark_content_button",
       "purpose": "Dark-themed counterpart to light_content_button.",
       "fits_kind": "button"
+    },
+    {
+      "ref": "common_buttons.light_text_button",
+      "purpose": "Light text button that vanilla server_form.dynamic_button extends; supply $button_text (literal or binding) and $pressed_button_name.",
+      "fits_kind": "button",
+      "common_variables": ["$button_text", "$pressed_button_name", "$button_text_binding_type", "$button_text_grid_collection_name", "$button_text_max_size", "$default_button_texture", "$hover_button_texture", "$pressed_button_texture", "$button_font_scale_factor"],
+      "note": "Confirmed from official bedrock-samples v1.26.50.4 (ui_template_buttons.json; $button_text_max_size is read by the common_buttons.new_ui_binding_button_label it places)."
     }
   ],
   "server_form_refs": [
@@ -71,7 +83,8 @@
     },
     {
       "ref": "server_form.long_form_panel",
-      "purpose": "Inner body grid for long_form; pair with #form_buttons collection bindings."
+      "purpose": "Inner scrolling body for long_form; the buttons come from the form_buttons collection (server_form.long_form_dynamic_buttons_panel binds #form_button_contents to #collection_length and each server_form.dynamic_button reads #form_button_text / #form_button_texture).",
+      "common_variables": ["$scrolling_content", "$scroll_size", "$scrolling_pane_size", "$scrolling_pane_offset", "$show_background"]
     }
   ],
   "ir_extends_usage": {

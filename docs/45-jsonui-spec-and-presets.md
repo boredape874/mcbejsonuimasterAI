@@ -5,7 +5,7 @@ The kit ships two machine-readable catalogs the AI must consult before authoring
 | File | Purpose | Source / License |
 |---|---|---|
 | [data/jsonui-spec.json](../data/jsonui-spec.json) | Authoritative list of control types, anchors, properties, binding/animation/renderer enums, plus rule thresholds. | Ported from gamezaSRC/JSON-UI-Web-Editor (MIT) — see `_attribution` block in the file. |
-| [data/presets-catalog.json](../data/presets-catalog.json) | Vanilla preset references (`common_dialogs.*`, `common_buttons.*`, `server_form.*`) with the `$variables` each one consumes. | Independently authored, inspired by patterns observed in SebTheSigma/JSON-UI-Maker (no upstream LICENSE; no source code copied). |
+| [data/presets-catalog.json](../data/presets-catalog.json) | Vanilla preset references (`common.*`, `common_dialogs.*`, `common_buttons.*`, `server_form.*`) with the `$variables` each one consumes. | Independently authored, inspired by patterns observed in SebTheSigma/JSON-UI-Maker (no upstream LICENSE; no source code copied). Names and variables verified against the pinned bedrock-samples v1.26.50.4 templates on 2026-10-03 (`tests/presets-catalog-vanilla.mjs`). |
 
 ## How the kit uses them
 
@@ -30,5 +30,6 @@ If a new vanilla version adds a property:
 If a new vanilla preset becomes useful:
 
 1. Add an entry to the appropriate `*_refs` array in `data/presets-catalog.json`.
-2. List the `$variables` it consumes under `common_variables`.
+2. List the `$variables` it consumes under `common_variables`; confirm each one with `node tools/vanilla-name-check.mjs '$name'` and by reading the template's inheritance chain in `references/official/bedrock-samples-ui`.
 3. Add a row to the table in `skills/mcbe-json-ui-vanilla-presets/SKILL.md`.
+4. Run `node tests/presets-catalog-vanilla.mjs`; it fails when a ref is not defined in the pinned sample files or a listed variable is not consumed anywhere in that ref's vanilla chain (this is how `common.cancel_button` and `$button1_panel`/`$button2_panel` were found to be non-vanilla in 2026-10).

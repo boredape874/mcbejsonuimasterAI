@@ -43,11 +43,12 @@ In the IR, set `extends:` on the element. Layout (`anchor`, `pos`, `size`) is st
 
 | User intent | Preset to extend | Notes |
 |---|---|---|
-| Plain centered modal frame | `common_dialogs.main_panel_no_buttons` | Pair with `$title_panel`, `$child_control` |
-| Confirm dialog (OK/Cancel) | `common_dialogs.main_panel_two_buttons` | Provide `$button1_panel`, `$button2_panel` |
-| Form-style scrolling list | `server_form.long_form` | The body grid binds to `#form_buttons` collection |
+| Plain centered modal frame | `common_dialogs.main_panel_no_buttons` | Pair with `$child_control` and `$text_name` (`$title_panel` is still set by vanilla `server_form.long_form` but no 1.26.50 template consumes it) |
+| Confirm dialog (OK/Cancel) | `common_dialogs.main_panel_two_buttons` | Provide `$top_button_panel`, `$bottom_button_panel` (confirmed from official bedrock-samples v1.26.50.4; `$button1_panel`/`$button2_panel` were never vanilla names) |
+| Form-style scrolling list | `server_form.long_form` | The body buttons come from the `form_buttons` collection (`#form_button_contents` → `#collection_length`, items read `#form_button_text`) |
 | Light menu row | `common_buttons.light_content_button` | Set `$pressed_button_name` and `$button_content` |
-| Close 'X' icon | `common.cancel_button` | Set `$pressed_button_name` |
+| Text button like vanilla form buttons | `common_buttons.light_text_button` | Set `$button_text` and `$pressed_button_name`; `$button_text_max_size` bounds the label |
+| Close 'X' icon | `common.close_button` | Set `$close_button_to_button_id` (confirmed from official bedrock-samples v1.26.50.4; `common.cancel_button` does not exist in vanilla) |
 | Generic vertical scroll body | `common.scrolling_panel` | Set `$scrolling_content` to a child reference |
 
 ## Example

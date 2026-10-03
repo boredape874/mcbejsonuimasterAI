@@ -1,7 +1,7 @@
 {
   "schema": "mcbe-jsonui-ai-kit/bedrock-samples-ui-lock@1",
   "purpose": "Pinned upstream revision of the selected official bedrock-samples UI files committed under references/official/bedrock-samples-ui. Regenerate with node tools/sync-bedrock-samples-ui.mjs; verify with --check.",
-  "syncedAt": "2026-10-02T23:07:59.051Z",
+  "syncedAt": "2026-10-02T23:59:05.817Z",
   "upstream": {
     "url": "https://github.com/Mojang/bedrock-samples",
     "ref": "main",
@@ -102,6 +102,24 @@
       "upstreamPath": "resource_pack/ui/command_block_screen.json",
       "sha256": "096add8ce9ced4de5da048411a0fcce42f712da2973d53fe70d9e95dc2a77514",
       "bytes": 37370
+    },
+    {
+      "path": "ui_template_dialogs.json",
+      "upstreamPath": "resource_pack/ui/ui_template_dialogs.json",
+      "sha256": "de7b2ec43530715c797ab7ed2476965f9dc53962b88bc8c39a207582bee97264",
+      "bytes": 14238
+    },
+    {
+      "path": "ui_template_buttons.json",
+      "upstreamPath": "resource_pack/ui/ui_template_buttons.json",
+      "sha256": "3e250faef134965386ced074d73c998d2a363c79fed14ec928668cb7ff70ea96",
+      "bytes": 76484
+    },
+    {
+      "path": "npc_interact_screen.json",
+      "upstreamPath": "resource_pack/ui/npc_interact_screen.json",
+      "sha256": "70ade43c1ae88ef6a3ca779bc149c1e4c5f15fa995b526832247aa70ef8a4d58",
+      "bytes": 46878
     }
   ]
 }

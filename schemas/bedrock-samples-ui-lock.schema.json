@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/boredape874/mcbejsonuimasterAI/schemas/bedrock-samples-ui-lock.schema.json",
+  "title": "Official bedrock-samples UI mirror lock",
+  "description": "Pinned upstream revision and per-file hashes of the selected Mojang bedrock-samples UI files committed under references/official/bedrock-samples-ui. Written by tools/sync-bedrock-samples-ui.mjs and verified by its --check mode, tools/doctor.mjs and tests/official-samples-lock.mjs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "purpose", "syncedAt", "upstream", "previous", "outputDir", "files"],
+  "properties": {
+    "schema": { "const": "mcbe-jsonui-ai-kit/bedrock-samples-ui-lock@1" },
+    "purpose": { "type": "string", "minLength": 1 },
+    "syncedAt": { "type": "string", "format": "date-time" },
+    "upstream": { "$ref": "#/$defs/upstream" },
+    "previous": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["commit"],
+          "properties": {
+            "commit": { "$ref": "#/$defs/sha1" },
+            "tag": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/tag" }] },
+            "version": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/version" }] },
+            "syncedAt": { "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }] },
+            "note": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "outputDir": { "const": "references/official/bedrock-samples-ui" },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "upstreamPath", "sha256", "bytes"],
+        "properties": {
+          "path": { "type": "string", "pattern": "^[A-Za-z0-9_./-]+\\.json$" },
+          "upstreamPath": { "type": "string", "pattern": "^resource_pack/ui/[A-Za-z0-9_./-]+\\.json$" },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "bytes": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha1": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "tag": { "type": "string", "pattern": "^v\\d+\\.\\d+\\.\\d+\\.\\d+(-preview)?$" },
+    "version": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["version"],
+      "properties": {
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+\\.\\d+$" },
+        "date": { "type": "string" },
+        "type": { "type": "string" }
+      }
+    },
+    "upstream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "ref", "commit", "commitDate", "tag", "version", "minEngineVersion"],
+      "properties": {
+        "url": { "const": "https://github.com/Mojang/bedrock-samples" },
+        "ref": { "type": "string", "minLength": 1 },
+        "branch": { "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }] },
+        "tag": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/tag" }] },
+        "commit": { "$ref": "#/$defs/sha1" },
+        "commitDate": { "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }] },
+        "version": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/version" }] },
+        "minEngineVersion": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "integer", "minimum": 0 } }
+          ]
+        }
+      }
+    }
+  }
+}

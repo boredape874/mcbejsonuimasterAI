@@ -87,6 +87,7 @@ Check:
 - raw server form title/body/buttons
 - `server_form.json` factory controls
 - `#form_title`, `#form_text`, button collection bindings
+  - confirmed from official bedrock-samples v1.26.50.4: vanilla `server_form.json` binds the title through `$text_name: "#title_text"`, the body through `#form_text`, and buttons through the `form_buttons` collection (`#form_button_text`, `#form_button_texture`, `#form_button_contents`); `#form_title` is not a vanilla binding name, so verify any project binding with `node tools/vanilla-name-check.mjs <name>` before relying on it
 
 ## `[UI][error] Type not specified (or @-base not found)` inside a modification
 

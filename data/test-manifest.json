@@ -52,6 +52,8 @@
     { "id": "server-form-contract", "argv": ["tests/server-form-contract.mjs"] },
     { "id": "official-samples-lock", "argv": ["tests/official-samples-lock.mjs"] },
     { "id": "jsonui-spec-vanilla-coverage", "argv": ["tests/jsonui-spec-vanilla-coverage.mjs"] },
+    { "id": "vanilla-name-check", "argv": ["tests/vanilla-name-check.mjs"] },
+    { "id": "presets-catalog-vanilla", "argv": ["tests/presets-catalog-vanilla.mjs"] },
     { "id": "dialect-matrix", "argv": ["tests/dialect-matrix.mjs"] },
     { "id": "dialect-pack-registration", "argv": ["tests/dialect-pack-registration.mjs"] },
     { "id": "content-log-signatures", "argv": ["tests/content-log-signatures.mjs"] },

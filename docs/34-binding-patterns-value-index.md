@@ -6,7 +6,7 @@ This document maps useful binding patterns to real sample files.
 
 | Need | Source |
 | --- | --- |
-| vanilla binding names | `references/official/bedrock-samples-ui/` |
+| vanilla binding names | `references/official/bedrock-samples-ui/` (`node tools/vanilla-name-check.mjs '#name'` reports the files) |
 | discovered binding dump | `references/upstreams/minecraft-bedrock-json-ui-sample/binding/binding_dump.txt` |
 | HUD title/actionbar protocol parsing | `references/local-examples/rpg-hud/ui/rpg_hud.json` |
 | form title/button/texture collection binding | `references/local-examples/npc-dialogue/ui/server_form.json` |

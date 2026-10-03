@@ -67,4 +67,25 @@ assert.ok(spec.font_sizes.includes("medium"));
 assert.ok(Object.values(spec.properties).flat().includes("tts_skip_enumeration"));
 const globals = parseUiSource((await readFile(resolve(SAMPLES, "_global_variables.json"), "utf8")).replace(/^﻿/, ""), { kind: "runtime", dialect: DEFAULT_RUNTIME_DIALECT }).document;
 assert.deepEqual((await validateUiFile(globals, "_global_variables.json")).filter((issue) => issue.severity === "error"), [], "top-level $variable arrays must not be reported as unknown properties");
-console.log(`jsonui-spec covers ${files.length} pinned vanilla files`);
+// Optional: when the full sparse mirror is present locally, every vanilla ui file must pass too.
+const mirrorUi = resolve(ROOT, "references", "upstreams", "bedrock-samples", "resource_pack", "ui");
+let mirrorFiles = 0;
+try {
+  const { readdir: readDir } = await import("node:fs/promises");
+  async function walk(dir) { const out = []; for (const entry of await readDir(dir, { withFileTypes: true })) { const path = resolve(dir, entry.name); if (entry.isDirectory()) out.push(...await walk(path)); else if (entry.name.endsWith(".json")) out.push(path); } return out; }
+  const all = await walk(mirrorUi);
+  const mirrorUnknown = new Map();
+  for (const file of all) {
+    if (file.endsWith("_ui_defs.json")) continue;
+    const { document } = parseUiSource((await readFile(file, "utf8")).replace(/^\uFEFF/, ""), { kind: "runtime", dialect: DEFAULT_RUNTIME_DIALECT });
+    for (const issue of await validateUiFile(document, file)) {
+      const unknown = issue.severity === "error" && /^(Unknown property|Invalid type) "(.+)"$/.exec(issue.message);
+      if (unknown) mirrorUnknown.set(unknown[2], (mirrorUnknown.get(unknown[2]) || 0) + 1);
+    }
+    mirrorFiles++;
+  }
+  assert.deepEqual([...mirrorUnknown.entries()], [], "mirror vanilla files use vocabulary that data/jsonui-spec.json does not list");
+} catch (error) {
+  if (error?.code !== "ENOENT") throw error;
+}
+console.log(`jsonui-spec covers ${files.length} pinned vanilla files${mirrorFiles ? ` and ${mirrorFiles} mirror files` : " (no local mirror)"}`);

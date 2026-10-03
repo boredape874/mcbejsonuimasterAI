@@ -15,6 +15,7 @@ Current checked public state:
 - the repository is public
 - it contains `textures/`, `ui/`, `font/`, `blocks.json`, and other vanilla RP data
 - the latest visible release on GitHub search results was `v26.10.0` on March 24, 2026
+- update 2026-10-02: the newest Ztech tag is `v26.50.0` (`git ls-remote --tags`), matching the official sample pin `v1.26.50.4` in `references/official/bedrock-samples-ui.lock.json`; see `docs/83-vanilla-ui-1.26.50-diff.md` for what changed since the earlier pin
 
 Treat that as the current pack tree authority for file names and paths.
 

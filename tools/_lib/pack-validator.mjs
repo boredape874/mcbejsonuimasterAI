@@ -115,6 +115,9 @@ export async function validatePack(inputPath, options = {}) {
   if (!vanillaProfile) issues.push({ severity: "error", code: "VANILLA_OVERRIDE_PROFILE_UNVERIFIED", path: "data/vanilla-screen-profiles.json", message: `Vanilla screen profile is not verified: ${vanillaProfileId}` });
   else if (vanillaProfile.dialect !== dialect) issues.push({ severity: "error", code: "OUTPUT_DIALECT_MISMATCH", path: "data/vanilla-screen-profiles.json", message: `Profile ${vanillaProfileId} requires ${vanillaProfile.dialect}, received ${dialect}` });
   const vanillaOverrides = new Set(vanillaProfile?.dialect === dialect ? vanillaProfile.overrideFiles || [] : []);
+  // Screens that an earlier pinned revision registered but the current one does
+  // not: an unregistered pack file with that name silently stops loading.
+  const removedVanillaScreens = new Map((vanillaProfile?.removedScreens || []).map((entry) => [entry.path, entry]));
 
   if (files.length === 0) {
     issues.push({ severity: "error", path: portable(relative(packRoot, uiRoot)), message: "ui directory contains no JSON files" });
@@ -175,6 +178,9 @@ export async function validatePack(inputPath, options = {}) {
       const relativeFile = portable(relative(packRoot, file));
       if (vanillaOverrides.has(relativeFile)) {
         issues.push({ severity: "info", code: "VANILLA_OVERRIDE", path: relativeFile, message: "Vanilla screen override does not require custom _ui_defs registration" });
+      } else if (removedVanillaScreens.has(relativeFile)) {
+        const removed = removedVanillaScreens.get(relativeFile);
+        issues.push({ severity: "warning", code: "VANILLA_OVERRIDE_REMOVED", path: relativeFile, message: `Overrides a vanilla screen that the current pinned revision (${vanillaProfileId}) no longer registers (last seen ${removed.lastSeen}); the file is not loaded unless the pack registers it in _ui_defs.json`, suggestion: "See docs/83-vanilla-ui-1.26.50-diff.md for removed screens; keep the file only if older clients are still targeted." });
       } else {
         issues.push({ severity: "warning", code: "UI_DEFS_ORPHAN", path: relativeFile, message: "Custom JSON UI file is not registered in _ui_defs.json" });
       }

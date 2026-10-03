@@ -203,6 +203,11 @@ Primary files:
 - `furnace_screen.json`
 - `trade_2_screen.json`
 - `command_block_screen.json`
+- `ui_template_dialogs.json` (namespace `common_dialogs`, added 2026-10-03)
+- `ui_template_buttons.json` (namespace `common_buttons`, added 2026-10-03)
+- `npc_interact_screen.json` (namespace `npc_interact`, added 2026-10-03)
+
+`node tools/vanilla-name-check.mjs <name>` reports whether a control, binding, variable, button id, renderer, or screen file occurs in these files (and in the full local mirror when `references/upstreams/bedrock-samples` exists). The folder's `README.md` explains the provenance rules.
 
 ## External sources
 

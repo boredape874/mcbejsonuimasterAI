@@ -293,12 +293,14 @@
     {
       "id": "vanilla.samples-sync",
       "status": "implemented",
-      "purpose": "Copy the selected official Mojang bedrock-samples UI files from a local sparse mirror into references/official/bedrock-samples-ui and pin the upstream revision in a lock; verify drift offline with --check.",
-      "command": { "executable": "node", "script": "tools/sync-bedrock-samples-ui.mjs", "display": "node tools/sync-bedrock-samples-ui.mjs [--mirror <path>] [--ref <name>] [--check] [--report <path>] [--json]" },
+      "purpose": "Copy the selected official Mojang bedrock-samples UI files from a local sparse mirror into references/official/bedrock-samples-ui and pin the upstream revision in a lock; verify drift offline with --check; summarize upstream changes with --diff.",
+      "command": { "executable": "node", "script": "tools/sync-bedrock-samples-ui.mjs", "display": "node tools/sync-bedrock-samples-ui.mjs [--mirror <path>] [--ref <name>] [--check|--diff] [--report <path>] [--json]" },
       "arguments": [
         { "name": "mirror", "kind": "option", "flag": "--mirror", "required": false, "valueType": "path", "description": "Local sparse clone of Mojang/bedrock-samples (default references/upstreams/bedrock-samples). Never cloned or fetched by this tool." },
         { "name": "ref", "kind": "option", "flag": "--ref", "required": false, "valueType": "string", "description": "Upstream branch, tag, or commit the mirror must have checked out (default main)." },
         { "name": "check", "kind": "flag", "flag": "--check", "required": false, "valueType": "boolean", "description": "Verify committed files against the lock (and the mirror when present) without writing." },
+        { "name": "diff", "kind": "flag", "flag": "--diff", "required": false, "valueType": "boolean", "description": "Report per-file line delta plus top-level controls, bindings, button ids, $variables and _ui_defs screens added or removed between the committed files and the mirror, without writing." },
+        { "name": "no-profile", "kind": "flag", "flag": "--no-profile", "required": false, "valueType": "boolean", "description": "Sync mode: skip regenerating the matching profile in data/vanilla-screen-profiles.json (overrideFiles from the new _ui_defs.json, removedScreens from the previously committed one)." },
         { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Write the result envelope to a file." },
         { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print the result envelope as JSON." }
       ],
@@ -312,15 +314,45 @@
         { "name": "result", "kind": "stdout", "required": false, "format": "JSON", "description": "Result envelope with drift findings when --json is set." }
       ],
       "preconditions": ["Run from the repository root.", "For sync mode, create the mirror first with scripts/sync-bedrock-samples-ui.ps1 or git clone --depth 1 --filter=blob:none --sparse; the tool performs no network access."],
-      "mutates": { "mode": "repository", "paths": ["references/official/bedrock-samples-ui", "references/official/bedrock-samples-ui.lock.json"], "description": "Sync mode rewrites the selected sample files and the lock; --check writes nothing." },
+      "mutates": { "mode": "repository", "paths": ["references/official/bedrock-samples-ui", "references/official/bedrock-samples-ui.lock.json", "data/vanilla-screen-profiles.json"], "description": "Sync mode rewrites the selected sample files, the lock, and (unless --no-profile) the vanilla screen profile named after the synced version; --check and --diff write nothing." },
       "successExitCodes": [0],
       "failures": [
         { "exitCode": 2, "meaning": "Mirror missing, not a git checkout, or not at the requested ref.", "recovery": "Create or update the mirror with scripts/sync-bedrock-samples-ui.ps1 -Ref <ref>, then rerun." },
         { "exitCode": 9, "meaning": "Committed files, lock, or mirror disagree (--check).", "recovery": "Rerun without --check to resync from the mirror, then rebuild the vanilla index and run npm test." },
         { "exitCode": 64, "meaning": "Usage error.", "recovery": "Run with --help." }
       ],
-      "evidenceProduced": ["Pinned upstream revision and per-file sha256 for every committed official sample file."],
+      "evidenceProduced": ["Pinned upstream revision and per-file sha256 for every committed official sample file.", "Name-level change summary between the committed files and a mirror revision (--diff) for drafting the vanilla change log."],
       "unsupportedBehavior": ["Does not download upstream data, does not prove runtime behavior, and does not update docs or data/jsonui-spec.json; tests/jsonui-spec-vanilla-coverage.mjs reports vocabulary gaps after a sync."],
+      "supports": { "help": true, "json": true, "report": true }
+    },
+    {
+      "id": "vanilla.name-check",
+      "status": "implemented",
+      "purpose": "Answer whether a control, #binding, $variable, button id, renderer, texture path, or ui/screen.json exists in the pinned official bedrock-samples UI files (and the full local mirror when present), offline.",
+      "command": { "executable": "node", "script": "tools/vanilla-name-check.mjs", "display": "node tools/vanilla-name-check.mjs <name> [<name> ...] [--mirror <path>] [--no-mirror] [--json] [--report <path>]" },
+      "arguments": [
+        { "name": "<name>", "kind": "positional", "required": true, "repeatable": true, "valueType": "string", "description": "namespace.control, bare control name (any namespace), #binding, $variable, button.id, textures/... path, renderer name, or ui/screen.json." },
+        { "name": "mirror", "kind": "option", "flag": "--mirror", "required": false, "valueType": "path", "description": "Sparse Mojang/bedrock-samples mirror root to include when present (default references/upstreams/bedrock-samples)." },
+        { "name": "no-mirror", "kind": "flag", "flag": "--no-mirror", "required": false, "valueType": "boolean", "description": "Index only the 12 committed sample files." },
+        { "name": "json", "kind": "flag", "flag": "--json", "required": false, "valueType": "boolean", "description": "Print the result envelope as JSON." },
+        { "name": "report", "kind": "option", "flag": "--report", "required": false, "valueType": "path", "description": "Write the result envelope to a file." }
+      ],
+      "inputs": [
+        { "name": "pinned_samples", "kind": "directory", "required": true, "description": "references/official/bedrock-samples-ui and its lock." },
+        { "name": "mirror", "kind": "directory", "required": false, "description": "Optional local sparse mirror with resource_pack/ui for all vanilla screens." }
+      ],
+      "outputs": [
+        { "name": "result", "kind": "stdout", "required": true, "format": "JSON or text", "description": "Per-name kind and evidence files, missing names, indexed file count, pinned revision." }
+      ],
+      "preconditions": ["Run from the repository root.", "The pinned sample files must match their lock (node tools/sync-bedrock-samples-ui.mjs --check)."],
+      "mutates": { "mode": "none", "paths": [], "description": "Read-only except an explicitly requested --report path." },
+      "successExitCodes": [0],
+      "failures": [
+        { "exitCode": 3, "meaning": "At least one name was not found in the pinned samples or mirror.", "recovery": "Treat it as a pack or community name, check docs/83-vanilla-ui-1.26.50-diff.md for renames, or open the full mirror before citing it as vanilla." },
+        { "exitCode": 64, "meaning": "Usage error or no names given.", "recovery": "Run with --help." }
+      ],
+      "evidenceProduced": ["Name-level occurrence evidence (kind + files) in the pinned official sample revision."],
+      "unsupportedBehavior": ["Does not prove the property or binding works in the caller's screen context, does not verify runtime behavior, and does not search third-party reference packs."],
       "supports": { "help": true, "json": true, "report": true }
     },
     {

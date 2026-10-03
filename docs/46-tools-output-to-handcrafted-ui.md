@@ -27,7 +27,7 @@ Stage B — handcrafted finish (this doc)
 |---|---|
 | Scope | Preserve the target vanilla screen shell and use a verified inner-content change. Check file path, registration and target-array ownership before a modification. A local insertion failure does not establish a ban on cross-namespace inheritance; see `docs/26-common-failure-modes.md`. |
 | Routing | Use a stable hidden title prefix (e.g. `customUI_<PackName>_`). Gate every replacement child by a view-binding on `#title_text` that matches the reference pattern in `docs/26` and `docs/40`. |
-| Buttons | Provide `default_control` / `hover_control` / `pressed_control`. Set `sound_name: ui.click`. Reuse `common.button` / `common.cancel_button` via `@` extends when shape allows. |
+| Buttons | Provide `default_control` / `hover_control` / `pressed_control`. Set `sound_name: ui.click`. Reuse `common.button` / `common.close_button` via `@` extends when shape allows (confirmed from official bedrock-samples v1.26.50.4: the vanilla close button is `common.close_button`, driven by `$close_button_to_button_id`; `common.cancel_button` does not exist). |
 | Backgrounds | Prefer vanilla nineslice textures (`dialog_background_opaque_dark`, `panel_top_dark`, `Black`, `White`) with `alpha`. Do not invent texture paths. (`docs/14` "verified vanilla assets") |
 | Bindings | Only use names confirmed in `docs/19` / `docs/34`. Minimize binding count. |
 | Variables | Expose tunables as `$variable` so Script API, server payload adapters, or future themes can override without editing the screen file. |

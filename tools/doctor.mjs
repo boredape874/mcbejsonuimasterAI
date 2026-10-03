@@ -14,6 +14,7 @@ import { writeReportArtifact } from "./_lib/report-envelope.mjs";
 import { readJson } from "./_lib/fsx.mjs";
 import { resolve } from "node:path";
 import { packageLockSha256 } from "./_lib/dependency-revision.mjs";
+import { LOCK_PATH, SELECTED_FILES, readLock, checkCommittedFiles } from "./sync-bedrock-samples-ui.mjs";
 
 const args = new Set(process.argv.slice(2));
 const QUICK = args.has("--quick");
@@ -62,6 +63,18 @@ check("setup-state", true, async () => {
 check("workspace", true, async () => {
   const ok = await exists(PATHS.workspace);
   return ok ? { ok: true, msg: "present" } : { ok: false, msg: "missing", fix: "node tools/setup.mjs" };
+});
+
+// Advisory: the committed official sample files must match their pinned lock so
+// vanilla structure cited from them is traceable to one upstream revision.
+check("official-samples-lock", false, async () => {
+  if (!(await exists(LOCK_PATH))) return { ok: false, msg: "references/official/bedrock-samples-ui.lock.json missing", fix: "node tools/sync-bedrock-samples-ui.mjs (needs a local bedrock-samples mirror)" };
+  const lock = await readLock();
+  const findings = await checkCommittedFiles(lock);
+  const pin = `${lock.upstream?.tag || lock.upstream?.commit?.slice(0, 12) || "?"}`;
+  return findings.length
+    ? { ok: false, msg: `${findings.length} file(s) drift from lock ${pin}: ${findings.slice(0, 3).map((f) => `${f.path} ${f.code}`).join(", ")}`, fix: "node tools/sync-bedrock-samples-ui.mjs --check" }
+    : { ok: true, msg: `${SELECTED_FILES.length} official sample files match ${pin}` };
 });
 
 if (!QUICK) {

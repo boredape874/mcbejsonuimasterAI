@@ -112,11 +112,12 @@
       "purpose": "Look up exact JSON UI properties, bindings, recipes, and vanilla evidence without guessing.",
       "toolSelections": [
         { "id": "design.search", "phase": "lookup", "required": false, "reason": "Search measured recipes in the current catalog." },
+        { "id": "vanilla.name-check", "phase": "lookup", "required": false, "reason": "Confirm a vanilla control, binding, variable, button id, or screen name exists in the pinned official samples before citing or patching it." },
         { "id": "asset.search", "phase": "lookup", "required": false, "reason": "Search verified local UI asset metadata while keeping local paths hidden by default." },
         { "id": "vanilla.index", "phase": "lookup", "required": false, "reason": "Refresh local vanilla screen and texture evidence when stale." },
         { "id": "tools.describe", "phase": "tooling", "required": false, "reason": "Inspect the exact contract for a deterministic lookup tool." }
       ],
-      "workflow": ["vanilla.index", "design.search", "asset.search", "tools.describe"],
+      "workflow": ["vanilla.index", "design.search", "asset.search", "tools.describe", "vanilla.name-check"],
       "successCriteria": ["Exact names cite a local schema, sample, recipe, or vanilla index."],
       "boundaries": ["Do not invent unsupported properties, bindings, or texture paths."]
     },
@@ -159,12 +160,13 @@
       "purpose": "Implement and validate title routing, form collections, button order, states, and pack integration.",
       "toolSelections": [
         { "id": "design.search", "phase": "select", "required": false, "reason": "Select a measured server-form shell or button-grid recipe." },
+        { "id": "vanilla.name-check", "phase": "lookup", "required": false, "reason": "Confirm a vanilla control, binding, variable, button id, or screen name exists in the pinned official samples before citing or patching it." },
         { "id": "pipeline.run", "phase": "layout", "required": false, "reason": "Solve static shell and grid geometry." },
         { "id": "pack.validate", "phase": "integrate", "required": true, "reason": "Check _ui_defs, namespaces, textures, and modifications." },
         { "id": "prompt.lint", "phase": "handoff", "required": false, "reason": "Ensure button order and protocol acceptance criteria are explicit." },
         { "id": "chest.contract", "phase": "inspect", "required": false, "when": [ "chest-contract" ], "optIn": true, "reason": "Validate fixed-slot ActionForm response declarations." }
       ],
-      "workflow": [ "design.search", "pipeline.run", "pack.validate", "prompt.lint", "chest.contract" ],
+      "workflow": [ "design.search", "pipeline.run", "pack.validate", "prompt.lint", "chest.contract", "vanilla.name-check"],
       "successCriteria": [ "Title route, collection owner, button indexes, and cancel behavior are traced together.", "All static pack references validate." ],
       "boundaries": [ "Pack validation cannot prove a live form binding or click event." ],
       "contextByNeed": { "chest-contract": [ "chest.contract" ] }
@@ -191,6 +193,7 @@
       "purpose": "Localize JSON UI failures using the smallest deterministic validation surface first.",
       "toolSelections": [
         { "id": "content-log.audit", "phase": "runtime-log", "required": false, "reason": "Separate target UI signatures from external Sound and Script noise." },
+        { "id": "vanilla.name-check", "phase": "lookup", "required": false, "reason": "Confirm a vanilla control, binding, variable, button id, or screen name exists in the pinned official samples before citing or patching it." },
         { "id": "ui.route.trace", "phase": "route", "required": false, "reason": "Trace the failing control route." },
         { "id": "pack.installed.verify", "phase": "installed-pack", "required": false, "reason": "Confirm the inspected source matches the installed pack." },
         { "id": "ui.validate", "phase": "screen", "required": false, "reason": "Check one compiled or handcrafted screen." },
@@ -198,7 +201,7 @@
         { "id": "repository.audit", "phase": "repository", "required": false, "reason": "Check repository-level broken references and JSON." },
         { "id": "preview.diff", "phase": "geometry", "required": false, "reason": "Quantify a visual geometry regression." }
       ],
-      "workflow": ["content-log.audit", "ui.route.trace", "pack.installed.verify", "ui.validate", "pack.validate", "preview.diff", "repository.audit"],
+      "workflow": ["content-log.audit", "ui.route.trace", "pack.installed.verify", "ui.validate", "pack.validate", "preview.diff", "repository.audit", "vanilla.name-check"],
       "successCriteria": ["The failure is assigned to IR, JSON UI behavior, pack wiring, asset, or runtime ownership.", "Static and runtime evidence are not conflated."],
       "boundaries": ["Do not implement a fix when the request is diagnosis only."]
     },
@@ -208,10 +211,11 @@
       "purpose": "Verify vanilla screen and texture paths against local evidence.",
       "toolSelections": [
         { "id": "vanilla.index", "phase": "index", "required": false, "reason": "Refresh local evidence when sources or schema changed." },
+        { "id": "vanilla.name-check", "phase": "lookup", "required": false, "reason": "Confirm a vanilla control, binding, variable, button id, or screen name exists in the pinned official samples before citing or patching it." },
         { "id": "vanilla.samples-sync", "phase": "index", "required": false, "reason": "Verify the committed official sample files against their pinned lock before citing vanilla structure; resync only from an existing local mirror." },
         { "id": "pack.validate", "phase": "target", "required": false, "reason": "Confirm the selected target RP can resolve its references." }
       ],
-      "workflow": ["vanilla.index", "vanilla.samples-sync", "pack.validate"],
+      "workflow": ["vanilla.index", "vanilla.samples-sync", "pack.validate", "vanilla.name-check"],
       "successCriteria": ["Every vanilla path has a source and file evidence record."],
       "boundaries": ["Index presence does not mean the target RP owns a custom texture."]
     },
@@ -257,10 +261,11 @@
       "purpose": "Build and verify HUD/chat layouts and message-driven protocols.",
       "toolSelections": [
         { "id": "pipeline.run", "phase": "layout", "required": false, "reason": "Solve static overlay geometry." },
+        { "id": "vanilla.name-check", "phase": "lookup", "required": false, "reason": "Confirm a vanilla control, binding, variable, button id, or screen name exists in the pinned official samples before citing or patching it." },
         { "id": "pack.validate", "phase": "pack", "required": true, "reason": "Check HUD/chat registration and asset references." },
         { "id": "prompt.lint", "phase": "protocol", "required": false, "reason": "Keep payload and runtime acceptance criteria explicit." }
       ],
-      "workflow": ["pipeline.run", "pack.validate", "prompt.lint"],
+      "workflow": ["pipeline.run", "pack.validate", "prompt.lint", "vanilla.name-check"],
       "successCriteria": ["Static geometry and dynamic message protocol are validated separately."],
       "boundaries": ["Message parsing and click behavior require Bedrock runtime evidence."]
     },
@@ -270,9 +275,10 @@
       "purpose": "Implement binding, string, and visibility logic with explicit runtime assumptions.",
       "toolSelections": [
         { "id": "ui.validate", "phase": "static", "required": false, "reason": "Check the surrounding JSON UI structure." },
+        { "id": "vanilla.name-check", "phase": "lookup", "required": false, "reason": "Confirm a vanilla control, binding, variable, button id, or screen name exists in the pinned official samples before citing or patching it." },
         { "id": "prompt.lint", "phase": "contract", "required": false, "reason": "Ensure protocol inputs and unverified runtime behavior are named." }
       ],
-      "workflow": ["ui.validate", "prompt.lint"],
+      "workflow": ["ui.validate", "prompt.lint", "vanilla.name-check"],
       "successCriteria": ["Binding sources, preserved text, parsing rules, and fallbacks are explicit."],
       "boundaries": ["Static validators do not execute bindings or evaluate client data."]
     },

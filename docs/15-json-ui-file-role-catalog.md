@@ -186,6 +186,7 @@ Primary Bedrock Wiki note:
 Primary role:
 
 - additional organized template libraries
+- confirmed from official bedrock-samples v1.26.50.4: `ui_template_buttons.json` is namespace `common_buttons`, `ui_template_dialogs.json` is `common_dialogs`, `ui_template_tabs.json` is `common_tabs`, `ui_template_toggles.json` is `common_toggles`; the first two are committed under `references/official/bedrock-samples-ui/` because `server_form.json`, `npc_interact_screen.json`, and the preset catalog inherit from them
 
 What it usually contains:
 
@@ -219,6 +220,7 @@ When to inspect it:
 Important note:
 
 - this is a common pack convention, not a guaranteed vanilla special file
+- confirmed from official bedrock-samples v1.26.50.4: vanilla does register `ui/scoreboards.json` (namespace `scoreboard`, the sidebar/score list renderer) in `_ui_defs.json`, so a pack file with that name overrides the vanilla screen rather than adding a new one; project-specific board systems usually still live in their own file name
 
 ## `form.json`
 

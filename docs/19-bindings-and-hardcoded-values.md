@@ -17,7 +17,7 @@ Use this document as a practical map. Confirm exact names against:
 | `#visible` | target visibility property | most screens |
 | `#enabled` | target enabled/locked property | buttons, toggles, forms |
 | `#text` | target text property | labels, title, forms |
-| `#using_touch` | touch input mode state | HUD, chat, controls |
+| `#using_touch` | touch input mode state | HUD, chat, controls (in the 1.26.50 sample set it occurs in `ui_common.json`, `gameplay_common.json`, `trade_2_screen.json`, `loom_screen.json`, `stonecutter_screen.json`; `hud_screen.json` and `chat_screen.json` do not reference it directly) |
 | `#keyboard_button_visible` | keyboard UI visibility | chat and input screens |
 
 ## HUD-related values
@@ -107,7 +107,7 @@ Removed in 1.26.50: the HUD root no longer contains `curor_rend@cursor_renderer`
 When a binding is needed:
 
 1. search the target pack first
-2. search `references/official/bedrock-samples-ui/`
+2. search `references/official/bedrock-samples-ui/` (or run `node tools/vanilla-name-check.mjs '#name'`, which also covers the full local mirror when present and exits 3 for names that do not occur in vanilla)
 3. search `references/upstreams/minecraft-bedrock-json-ui-sample/binding/binding_dump.txt` if the optional mirror exists
 4. search Bedrock Wiki documentation
 5. label the result as confirmed or inferred

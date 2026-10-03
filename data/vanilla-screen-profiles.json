@@ -227,6 +227,58 @@
         "ui/xbl_console_signin_succeeded.json",
         "ui/xbl_immediate_signin.json",
         "ui/win10_trial_conversion_screen.json"
+      ],
+      "removedScreens": [
+        {
+          "path": "ui/gathering_info_screen.json",
+          "lastSeen": "v1.26.10.4",
+          "note": "registered by the previous pinned revision but absent from the current _ui_defs.json; a pack file with this name is never loaded unless the pack registers it"
+        },
+        {
+          "path": "ui/manage_feed_screen.json",
+          "lastSeen": "v1.26.10.4",
+          "note": "registered by the previous pinned revision but absent from the current _ui_defs.json; a pack file with this name is never loaded unless the pack registers it"
+        },
+        {
+          "path": "ui/realmsPlus_screen.json",
+          "lastSeen": "v1.26.10.4",
+          "note": "registered by the previous pinned revision but absent from the current _ui_defs.json; a pack file with this name is never loaded unless the pack registers it"
+        },
+        {
+          "path": "ui/realmsPlus_sections/content_section.json",
+          "lastSeen": "v1.26.10.4",
+          "note": "registered by the previous pinned revision but absent from the current _ui_defs.json; a pack file with this name is never loaded unless the pack registers it"
+        },
+        {
+          "path": "ui/realmsPlus_sections/faq_section.json",
+          "lastSeen": "v1.26.10.4",
+          "note": "registered by the previous pinned revision but absent from the current _ui_defs.json; a pack file with this name is never loaded unless the pack registers it"
+        },
+        {
+          "path": "ui/realmsPlus_sections/landing_section.json",
+          "lastSeen": "v1.26.10.4",
+          "note": "registered by the previous pinned revision but absent from the current _ui_defs.json; a pack file with this name is never loaded unless the pack registers it"
+        },
+        {
+          "path": "ui/realmsPlus_sections/realmsPlus_buy_now_screen.json",
+          "lastSeen": "v1.26.10.4",
+          "note": "registered by the previous pinned revision but absent from the current _ui_defs.json; a pack file with this name is never loaded unless the pack registers it"
+        },
+        {
+          "path": "ui/realmsPlus_sections/realmsPlus_view_packs_screen.json",
+          "lastSeen": "v1.26.10.4",
+          "note": "registered by the previous pinned revision but absent from the current _ui_defs.json; a pack file with this name is never loaded unless the pack registers it"
+        },
+        {
+          "path": "ui/skin_pack_purchase_screen.json",
+          "lastSeen": "v1.26.10.4",
+          "note": "registered by the previous pinned revision but absent from the current _ui_defs.json; a pack file with this name is never loaded unless the pack registers it"
+        },
+        {
+          "path": "ui/skin_picker_screen.json",
+          "lastSeen": "v1.26.10.4",
+          "note": "registered by the previous pinned revision but absent from the current _ui_defs.json; a pack file with this name is never loaded unless the pack registers it"
+        }
       ]
     }
   }

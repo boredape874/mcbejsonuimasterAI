@@ -36,7 +36,7 @@ Use this when the question is:
 | `ui/chest_screen.json` | Chest container screen | A pack customizes vanilla chest UI directly | Container layout study, chest-like UI reference |
 | `ui/command_block_screen.json` | Command block screen | You need dropdown or edit-box patterns from a complex screen | Advanced bindings, dropdowns, enabled-state logic |
 | `ui/death_screen.json` | Death and respawn screen | Death menu behavior or text matters | Respawn/quit visibility patterns |
-| `ui/enchanting_table_screen.json` | Enchanting table screen | Selection state, costs, or list behavior matter | Complex button state and progress references |
+| `ui/enchanting_screen.json` (not `enchanting_table_screen`; confirmed from official bedrock-samples v1.26.50.4, pocket variant `ui/enchanting_screen_pocket.json`) | Enchanting table screen | Selection state, costs, or list behavior matter | Complex button state and progress references |
 | `ui/furnace_screen.json` | Furnace screen with built-in recipe book (1.26.50+) | Furnace-like layouts, progress indicators, or tabbed recipe grids matter | Arrow and flame ratio references, tab entrance animation (`tab_offset_anim`), recipe grid and layout toggles |
 | `ui/data_driven_container_screen.json` | Data-driven container screen registered in 1.26.50 | A project targets DDUI-style container screens rather than `server_form.json` | Structure reference only; its Script API sender is not documented in this repository |
 | `ui/hud_crosshair_overlay.json` | Crosshair overlay split out of the HUD in 1.26.50 | Crosshair or center-screen overlays are customized | Separate file to override instead of patching `hud_screen.json` |
@@ -153,7 +153,7 @@ Examples:
 - `ui/cartography_screen.json`
 - `ui/loom_screen.json`
 - `ui/stonecutter_screen.json`
-- `ui/enchanting_table_screen.json`
+- `ui/enchanting_screen.json` (the vanilla file name; there is no `enchanting_table_screen.json`)
 
 Why they matter:
 

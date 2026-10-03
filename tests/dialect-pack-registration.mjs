@@ -12,7 +12,10 @@ try {
   await writeFile(resolve(root, "ui/server_form.json"), '{"namespace":"server_form","screen":{"type":"panel"}}');
   await writeFile(resolve(root, "ui/npc_interact_screen.json"), '{"namespace":"npc_interact","npc_screen":{"$screen_content":"custom.root"}}');
   await writeFile(resolve(root, "ui/orphan.json"), '{"namespace":"orphan","root":{"type":"panel"}}');
+  await writeFile(resolve(root, "ui/realmsPlus_screen.json"), '{"namespace":"realmsPlus","root":{"type":"panel"}}');
   let report = await validatePack(root, { allowMissingTextures: true });
+  assert(report.warnings.some((item) => item.code === "VANILLA_OVERRIDE_REMOVED" && item.path === "ui/realmsPlus_screen.json" && /v1\.26\.10\.4/.test(item.message)));
+  assert(!report.warnings.some((item) => item.code === "UI_DEFS_ORPHAN" && item.path === "ui/realmsPlus_screen.json"));
   assert(report.infos.some((item) => item.code === "VANILLA_OVERRIDE"));
   assert(report.infos.some((item) => item.code === "VANILLA_OVERRIDE" && item.path === "ui/npc_interact_screen.json"));
   assert(!report.warnings.some((item) => item.code === "UI_DEFS_ORPHAN" && item.path === "ui/npc_interact_screen.json"));

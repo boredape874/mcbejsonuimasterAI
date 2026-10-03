@@ -34,6 +34,14 @@ Do not chain remedies blindly. If two apply, pick the more specific one.
 - Diagnosis: Wrong source path or partial mirror.
 - Remedy: Re-run sync script. If still 0, check `references/upstreams/MCBVanillaResourcePack/ui/` exists.
 
+### Symptom: `doctor` reports `official-samples-lock` drift, or `node tools/sync-bedrock-samples-ui.mjs --check` exits 9
+- Diagnosis: A file under `references/official/bedrock-samples-ui/` was hand-edited, or the lock `references/official/bedrock-samples-ui.lock.json` was changed without resyncing.
+- Remedy: Never hand-edit those files. Restore them with `git checkout -- references/official/bedrock-samples-ui`, or resync from a local mirror with `scripts/sync-bedrock-samples-ui.ps1 -Ref main` (PowerShell) / `node tools/sync-bedrock-samples-ui.mjs --ref main` (needs `references/upstreams/bedrock-samples`). Then run `node tools/build-vanilla-index.mjs --force` and `node tests/official-samples-lock.mjs`. The previous pinned revision is recorded under `previous` in the lock and in `docs/83-vanilla-ui-1.26.50-diff.md`.
+
+### Symptom: `node tools/sync-bedrock-samples-ui.mjs` exits 2 (`MIRROR_UNAVAILABLE` / `MIRROR_REF_MISMATCH`)
+- Diagnosis: The sparse mirror is missing, is not a git checkout, or is checked out at a different ref than `--ref`.
+- Remedy: The tool never downloads. Create the mirror with `scripts/sync-bedrock-samples-ui.ps1 -Ref <ref>` or `git clone --depth 1 --filter=blob:none --sparse https://github.com/Mojang/bedrock-samples.git references/upstreams/bedrock-samples` followed by `git -C references/upstreams/bedrock-samples sparse-checkout set resource_pack/ui`, then pass the same `--ref`.
+
 ---
 
 ## IR / solver / compile failures
@@ -56,7 +64,7 @@ Do not chain remedies blindly. If two apply, pick the more specific one.
 
 ### Symptom: `validate.mjs` reports "unknown binding" / "hardcoded name violation"
 - Diagnosis: A binding/hardcoded name is not in `docs/19` / `docs/34` allowlist.
-- Remedy: Check `docs/19-bindings-and-hardcoded-values.md` and `docs/34-binding-patterns-value-index.md`. If the binding is genuinely valid but missing from the allowlist, add it (with a `confirmed from / inferred from / not verified` label per `docs/22`) before re-running.
+- Remedy: Check `docs/19-bindings-and-hardcoded-values.md` and `docs/34-binding-patterns-value-index.md`. Run `node tools/vanilla-name-check.mjs <name>` to see whether the name occurs in the pinned official samples (and the local mirror when present). If the binding is genuinely valid but missing from the allowlist, add it (with a `confirmed from / inferred from / not verified` label per `docs/22`) before re-running.
 
 ---
 

@@ -181,6 +181,7 @@ node tools/design-library.mjs method --method ui-kit-spec-first --style cozy16
 ```powershell
 .\scripts\validate-json-ui-pack.ps1 -PackPath references\official\bedrock-samples-ui -AllowPartialUiDefs -AllowMissingTextures
 node tools/sync-bedrock-samples-ui.mjs --check
+node tools/vanilla-name-check.mjs common.close_button '#title_text'   # 바닐라에 있는 이름인지 확인
 ```
 
 공식 샘플의 고정 리비전은 `references/official/bedrock-samples-ui.lock.json`(현재 `v1.26.50.4`)에 기록되며 위 `--check`가 네트워크 없이 커밋된 파일과 lock의 일치를 검사합니다. 이전 고정본과의 차이는 [바닐라 UI 변경 추적](docs/83-vanilla-ui-1.26.50-diff.md)을 참고하세요.
