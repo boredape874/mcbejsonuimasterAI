@@ -22,6 +22,7 @@ A name, offset, selector or rule found in steps 1–3 overrides this skill. Olde
 - Border, silhouette or glow-like outline: [Outlines](references/outlines.md).
 - Classic/Vibrant Visuals/RTX and texture maps: [Texture sets](references/texture-sets.md).
 - Render controller keys, the vanilla item/armor/bow controller shapes, armor slot query indices, texture-set validity rules and the Wiki material caveats with their evidence labels: [render controller and material evidence](references/render-controller-and-material-evidence.md).
+- Hair showing an entire color atlas, missing GeoUI materials or exposed background edges: [hybrid customizer rendering](../mcbe-geo-ui/references/player-form-customizer.md#hair-color-and-materials). Read its evidence limits before treating the latest material or background extension as a runtime fix.
 
 Record the intended client, graphics mode, asset graph, reference image and viewing conditions. Use one palette role and texel-density rule across an asset family; inspect transparency over both light and dark game backgrounds. Use the visual-design/texture-design specialist for UI composition or original pixel artwork.
 

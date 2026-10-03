@@ -1,6 +1,6 @@
 ---
 name: mcbe-geo-ui
-description: Design and inspect Bedrock geometry UI through live_player_renderer or NPC actor_portrait_renderer, including GeouiStudio projects, animated book interfaces, scene state and native input. Use for projected models in UI; held equipment belongs to attachables.
+description: Design and inspect Bedrock geometry UI through live_player_renderer or NPC actor_portrait_renderer, including GeouiStudio projects, hybrid server-form customizers, animated book interfaces, scene state and native input. Use for projected models in UI; held equipment belongs to attachables.
 ---
 
 # Geometry UI
@@ -23,6 +23,7 @@ A name, offset, selector or rule found in steps 1–3 overrides this skill. Olde
 - For `.geoui.json` save/load, missing media, IDs or export configuration, read [native project inspection](references/project-inspection.md) and run `node tools/geoui-inspect.mjs --input PROJECT.geoui.json --json`.
 - For generated geometry, atlas, materials or renderer ownership, read [GeouiStudio contract](references/geoui-contract.md).
 - For pack integration, coordinate calibration or verification, read [integration and acceptance](references/integration-and-acceptance.md).
+- For a persistent HUD Geo scene with transparent ActionForm hitboxes, native form captions, or a WASD/Jump/Sneak color picker, read [hybrid player-form customizer](references/player-form-customizer.md). It separates the implemented prototype from pending client checks, including aspect coverage, actorless previews and UV sampling.
 - For which vanilla screens project a model (renderer, control, `property_bag` and binding names at the pinned revision), the player rig bones, geometry `item_display_transforms` and the minimal MIT player-model form example, read [renderer and rig evidence](references/renderer-and-rig-evidence.md).
 - For state, multiplayer, closing or reconnect behavior, select `docs/81-geometry-ui-state-and-lifecycle.md` from the repository. Check the actual entity/viewer context before choosing ordinary properties or per-viewer overrides; the upstream generator is not evidence that it uses the newer override API.
 

@@ -35,6 +35,8 @@ If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-server-fo
 3. Trace `main_screen_content`/route -> qualified factory control -> collection owner -> per-item index -> verified button mapping.
 4. Validate sender/receiver order and marker cleanup, then test mouse, controller, touch, close/cancel, search, and typed submission in Bedrock.
 
+For transparent form buttons over a HUD Geo scene, read the GeoUI skill's [hybrid player-form customizer](../mcbe-geo-ui/references/player-form-customizer.md). Keep collection ownership and caption indices separate; a scene that remains visible while an ActionForm is reopened does not prove the form itself stayed open.
+
 ## Required boundaries
 
 - A search toggle cannot search categories whose data is absent from the active collection.
