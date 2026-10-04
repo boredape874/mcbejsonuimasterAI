@@ -33,7 +33,7 @@
 npm run studio
 ```
 
-`http://127.0.0.1:47832`에서 팩을 열고 화면·요소를 선택합니다. bridge. v2를 참고한 활동 메뉴·팩 탐색기·비주얼/JSON/게임 탭과 밝은/어두운 테마, 너비 조절 패널을 제공합니다. 기본 화면에는 자주 쓰는 기능을 두고 세부 기능은 ‘더 보기’와 ‘보기 설정’에서 엽니다. Ctrl+C/V/X로 요소를 복사·붙여넣기·잘라내기하며 Delete와 실행 취소를 지원합니다. [PC·태블릿·콘솔·모바일 미리보기](docs/90-studio-device-preview.md), 자동 정렬·다중 선택·간격과 크기 통일·그리드 배치·PNG 저장도 제공합니다. Codex 패널에는 Studio 대화의 제목·세션 ID와 연결·작업 상태를 표시합니다. 같은 선택과 미리보기를 Codex에 전달하고 Minecraft 창도 공유할 수 있습니다. [사용법과 한계](docs/86-json-ui-studio.md), [디자인 기준](docs/89-studio-editor-design.md)을 확인하세요. Studio는 Node.js 20 이상을 사용합니다.
+`http://127.0.0.1:47832`에서 팩을 열고 화면·요소를 선택합니다. bridge. v2를 참고한 활동 메뉴·팩 탐색기·비주얼/JSON/게임 탭과 밝은/어두운 테마, 너비 조절 패널을 제공합니다. 왼쪽은 요소/화면 탭, 중앙은 한 줄 도구 모음으로 정리했습니다. 세부 기능은 ‘더 보기’와 ‘보기 설정’에서 엽니다. Ctrl+C/V/X로 요소를 복사·붙여넣기·잘라내기하며 Delete와 실행 취소를 지원합니다. [PC·태블릿·콘솔·모바일 미리보기](docs/90-studio-device-preview.md), 자동 정렬·다중 선택·간격과 크기 통일·그리드 배치·PNG 저장도 제공합니다. 상단 Codex 버튼에서 기존 로컬 세션을 검색·선택해 대화를 이어갈 수 있습니다. 제목·최근 메시지·연결 및 작업 상태도 표시합니다. 같은 선택과 미리보기를 Codex에 전달하고 Minecraft 창도 공유할 수 있습니다. [사용법과 한계](docs/86-json-ui-studio.md), [디자인 기준](docs/89-studio-editor-design.md)을 확인하세요. Studio는 Node.js 20 이상을 사용합니다.
 
 ![JSON UI Studio의 화면 목록, 편집 미리보기, 속성 및 Codex 대화 패널](docs/assets/json-ui-studio.png)
 

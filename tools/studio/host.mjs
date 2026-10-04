@@ -34,6 +34,10 @@ export async function startHost(config) {
       case 'browser_frame': return session.acceptBrowserFrame(args);
       case 'codex_status': return codex.status();
       case 'codex_connect': return codex.connect();
+      case 'codex_sessions': return codex.listSessions(args);
+      case 'codex_session_read': return codex.readSession(args);
+      case 'codex_resume': return codex.resumeSession(args);
+      case 'codex_reset': return codex.reset();
       case 'codex_message': return codex.message(args);
       case 'codex_interrupt': return codex.interrupt();
       case 'codex_reply': return codex.reply(args);

@@ -234,3 +234,40 @@ test('Codex session display follows real thread/turn results and clears on reset
   await assert.rejects(bridge.reset(),/CODEX_BUSY/);bridge.busy=false;await bridge.reset();
   assert.equal(bridge.status().threadId,null);assert.equal(bridge.status().sessionTitle,null);assert.equal(bridge.status().sessionStartedAt,null);assert.equal(bridge.status().messageCount,0);assert.equal(bridge.status().state,'connected');
 });
+
+
+test('Codex session catalog includes every local source and keeps paging and search on the server',async()=>{
+  const bridge=new CodexBridge({config:{}});bridge.connect=async()=>{};
+  const calls=[];bridge.rpc=async(method,params)=>{calls.push({method,params});return method==='thread/read'?{thread:{id:'old',name:'Existing title',cwd:'C:/old',status:{type:'idle'}}}:{data:[{id:'old',name:'Existing title',preview:'p'.repeat(500),cwd:'C:/old'}],nextCursor:'page2'};};
+  const result=await bridge.listSessions({cursor:'page1',search:'  Existing  ',archived:true});
+  assert.equal(result.data[0].name,'Existing title');assert.equal(result.data[0].preview.length,300);assert.equal(result.nextCursor,'page2');
+  assert.equal(calls[0].params.searchTerm,'Existing');assert.equal(calls[0].params.cursor,'page1');assert.equal(calls[0].params.archived,true);assert.equal(calls[0].params.limit,40);
+  for(const source of ['cli','vscode','appServer','exec','unknown','subAgent'])assert.ok(calls[0].params.sourceKinds.includes(source));
+  assert.equal('cwd' in calls[0].params,false,'catalog must include other projects');
+  assert.equal((await bridge.readSession({threadId:'old'})).cwd,'C:/old');assert.equal(calls.at(-1).params.includeTurns,false);
+  await assert.rejects(bridge.listSessions({archived:'true'}),/잘못된/);await assert.rejects(bridge.readSession({threadId:''}),/잘못된/);
+});
+
+test('Codex resumes the chosen ID with Studio tools, bounded chronological history and no inference',async()=>{
+  const bridge=new CodexBridge({config:{engineRoot:root,runtime:root},project:{rpRoot:root},context:()=>({stale:false})});
+  bridge.connect=async()=>{bridge.state='connected';};const calls=[];
+  bridge.rpc=async(method,params)=>{
+    calls.push({method,params});
+    if(method==='thread/read')return {thread:{id:'chosen',name:'Original title',status:{type:'idle'}}};
+    if(method==='thread/turns/list')return {data:[{items:[{type:'agentMessage',id:'a2',text:'recent'}]},{items:[{type:'userMessage',id:'u1',content:[{type:'text',text:'first'}]},{type:'agentMessage',id:'a1',text:'reply'}]}],nextCursor:'older'};
+    if(method==='thread/resume')return {thread:{id:'chosen',name:'Original title',createdAt:1234,status:{type:'idle'}}};
+    if(method==='turn/start')return {turn:{id:'continued'}};
+    throw Error(method);
+  };
+  const result=await bridge.resumeSession({threadId:'chosen'});
+  assert.equal(result.threadId,'chosen');assert.equal(result.sessionTitle,'Original title');assert.equal(result.sessionStartedAt,1234000);
+  assert.deepEqual(result.messages.map(m=>m.text),['first','reply','recent']);assert.equal(result.historyLimited,true);assert.equal(result.busy,false);
+  assert.equal(calls.some(c=>c.method==='turn/start'),false);assert.equal(calls.some(c=>c.method==='thread/start'),false);
+  const resume=calls.find(c=>c.method==='thread/resume').params;assert.equal(resume.cwd,root);assert.equal(resume.excludeTurns,true);assert.ok(resume.config['mcp_servers.jsonui_studio']);assert.match(resume.developerInstructions,/IR owner/);
+  await bridge.message({text:'continue',includePreview:false});assert.equal(calls.at(-1).params.threadId,'chosen');assert.equal(calls.at(-1).method,'turn/start');
+  await assert.rejects(bridge.resumeSession({threadId:'another'}),/CODEX_BUSY/);
+  bridge.busy=false;const before=bridge.status();
+  bridge.rpc=async()=>({thread:{id:'running',status:{type:'active'}}});
+  await assert.rejects(bridge.resumeSession({threadId:'running'}),/실행 중/);assert.equal(bridge.threadId,before.threadId);assert.deepEqual(bridge.messages,before.messages);assert.equal(bridge.busy,false);
+  bridge.rpc=async()=>{throw Error('resume failed');};await assert.rejects(bridge.resumeSession({threadId:'missing'}),/resume failed/);assert.equal(bridge.threadId,'chosen');
+});

@@ -144,7 +144,7 @@ function renderScreens(){
   for(const s of matches){
     const row=el('button',undefined,'screen-row'+(s.control===state.project?.control?' active':''));row.title=s.path+(s.registered?'':' · _ui_defs.json 미등록 / 바닐라 override 여부 확인');
     row.append(el('span',s.control),el('small',typeName(s.type),s.registered?'':'unregistered'));
-    row.onclick=()=>{try{guardSourceBuffer();api('open',{...state.project,control:s.control}).then(()=>refreshStudio(true)).catch(e=>toast(e.message));}catch(e){toast(e.message);}};list.append(row);
+    row.onclick=()=>{try{guardSourceBuffer();api('open',{...state.project,control:s.control}).then(async()=>{await refreshStudio(true);setExplorerTab('layers');}).catch(e=>toast(e.message));}catch(e){toast(e.message);}};list.append(row);
   }
   if(!matches.length)list.append(el('div','검색 결과가 없습니다.','empty small'));
 }
@@ -361,10 +361,11 @@ async function nativeHealth(){try{const r=await api('review',{limit:0});$('nativ
 function renderCodex(ai){
   if(!ai)return;lastAi=ai;const waiting=ai.requests?.length,status=waiting?'답변·승인 대기':ai.busy?'작업 중':ai.state==='connecting'?'연결 중':ai.error?'오류 확인':ai.state==='connected'?'연결됨':'연결 전';$('codexStatus').textContent=status;
   $('codexSessionChip').textContent='Codex · '+status;$('codexSessionButton').dataset.state=waiting?'waiting':ai.busy?'busy':ai.state;$('codexSessionButton').title=(ai.sessionTitle||'Studio 대화')+(ai.threadId?' · '+ai.threadId:' · 메시지를 보내면 새 세션을 시작합니다.');
-  $('codexSessionTitle').textContent=ai.sessionTitle||'Studio 대화 · 시작 전';$('codexSessionMeta').textContent=ai.threadId?`${status} · 메시지 ${ai.messageCount??ai.messages?.length??0}개${waiting?' · 확인 요청 '+waiting+'개':''}`:'메시지를 보내면 대화 세션이 만들어집니다.';
+  $('codexSessionTitle').textContent=ai.sessionTitle||'Studio 대화 · 시작 전';$('codexSessionMeta').textContent=ai.threadId?`${status} · 메시지 ${ai.messageCount??ai.messages?.length??0}개${waiting?' · 확인 요청 '+waiting+'개':''}`:'기존 세션을 선택하거나 새 대화를 시작하세요.';
+  if(ai.historyLimited)$('codexSessionMeta').textContent+=' · 최근 대화만 표시';
   $('codexThreadId').textContent=ai.threadId||'아직 없음';$('codexTurnId').textContent=ai.turnId||'대기';$('codexAccount').textContent=ai.account||'확인 전';$('copyCodexSession').disabled=!ai.threadId;
   $('codexStartedAt').textContent=ai.sessionStartedAt?new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(ai.sessionStartedAt):'아직 없음';
-  $('codexConnect').disabled=ai.state==='connecting';$('chatSend').disabled=ai.busy&&!ai.turnId;$('chatSend').textContent=ai.busy?'피드백 ↑':'보내기 ↑';$('codexStop').hidden=!ai.busy;
+  $('codexConnect').disabled=ai.state==='connecting'||ai.busy;$('chatSend').disabled=ai.busy&&!ai.turnId;$('chatSend').textContent=ai.busy?'피드백 ↑':'보내기 ↑';$('codexStop').hidden=!ai.busy;
   const list=$('chatMessages');if(ai.messages?.length){const atBottom=list.scrollHeight-list.scrollTop-list.clientHeight<80;list.replaceChildren();for(const m of ai.messages){const block=el('div',undefined,'message '+m.role);block.append(el('small',m.role==='user'?'YOU':'CODEX'),el('span',m.text));list.append(block);}if(atBottom)list.scrollTop=list.scrollHeight;}else list.replaceChildren(el('div','요소를 선택하고 “이 버튼 간격을 맞춰줘”처럼 요청하세요.','chat-placeholder'));
   const requests=$('codexRequests');requests.replaceChildren();
   for(const request of ai.requests||[]){
@@ -414,13 +415,63 @@ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLower
 on('fixtureButton','click',()=>{$('viewDialog').close();$('fixtureText').value=JSON.stringify(state.project?.fixture||{},null,2);$('fixtureDialog').showModal();});
 on('saveFixture','click',async()=>{const fixture=JSON.parse($('fixtureText').value);if(!fixture||Array.isArray(fixture)||typeof fixture!=='object')throw Error('fixture는 JSON object여야 합니다.');await api('render',{fixture});$('fixtureDialog').close();await refreshStudio(true);});
 function parentNode(){let node=selected;while(node&&!['panel','screen','stack_panel','grid'].includes(node.type))node=editor.nodes.find(n=>n.key===node.parent);return node||editor.nodes[0];}
-async function add(type,texture){const node=parentNode();if(!node?.source)throw Error('편집 가능한 부모 패널을 선택하세요.');await api('add',{key:node.key,expectedRevision:state.studioRevision,expectedHash:node.source.sha256,type,...(texture?{texture}:{})});await refreshStudio(true);}
+async function add(type,texture){document.querySelector('.add-menu').open=false;const node=parentNode();if(!node?.source)throw Error('편집 가능한 부모 패널을 선택하세요.');await api('add',{key:node.key,expectedRevision:state.studioRevision,expectedHash:node.source.sha256,type,...(texture?{texture}:{})});await refreshStudio(true);}
 on('addLabel','click',()=>add('label'));on('addPanel','click',()=>add('panel'));on('addImage','click',()=>{if(!state.project)throw Error('팩을 먼저 여세요.');$('imageFile').click();});
 on('imageFile','change',async()=>{const file=$('imageFile').files[0];if(!file)return;const data=await new Promise((accept,reject)=>{const r=new FileReader();r.onload=()=>accept(r.result);r.onerror=reject;r.readAsDataURL(file);});const result=await api('import_image',{name:file.name,data});await api('render');await refreshStudio(true);await add('image',result.texture);$('imageFile').value='';toast('RP에 이미지를 추가했습니다.');});
-on('codexConnect','click',async()=>{renderCodex(await api('codex_connect'));toast('Codex 연결을 확인했습니다.');});
+
+let sessionCursor=null,sessionQuery={},sessionLoading=false,sessionPick=null,sessionGeneration=0;
+const sessionDate=value=>value?new Intl.DateTimeFormat('ko-KR',{month:'short',day:'numeric'}).format(value*1000):'';
+function setExplorerTab(mode){
+  document.querySelector('.screens').hidden=mode!=='screens';document.querySelector('.layers').hidden=mode!=='layers';
+  for(const [id,m]of [['explorerScreens','screens'],['explorerLayers','layers']]){$(id).classList.toggle('active',m===mode);$(id).setAttribute('aria-selected',String(m===mode));}
+}
+on('explorerScreens','click',()=>setExplorerTab('screens'));on('explorerLayers','click',()=>setExplorerTab('layers'));
+async function openSessionPicker(){
+  if(!$('codexSessionsDialog').open)$('codexSessionsDialog').showModal();
+  $('sessionSearch').focus();await loadSessions(false);
+}
+async function loadSessions(more=false){
+  if(sessionLoading&&more)return;
+  const generation=++sessionGeneration;sessionLoading=true;$('sessionMore').disabled=true;$('sessionResume').disabled=true;
+  if(!more){sessionCursor=null;sessionQuery={search:$('sessionSearch').value,archived:$('sessionArchive').value==='true'};sessionPick=null;$('sessionSelection').hidden=true;$('sessionList').replaceChildren();}
+  $('sessionListStatus').textContent='세션을 불러오는 중…';
+  try{
+    const result=await api('codex_sessions',{...sessionQuery,cursor:more?sessionCursor:null});if(generation!==sessionGeneration)return;
+    sessionCursor=result.nextCursor;
+    for(const thread of result.data){
+      if([...$('sessionList').children].some(row=>row.dataset.threadId===thread.id))continue;
+      const row=el('button',undefined,'session-row');row.dataset.threadId=thread.id;
+      row.append(el('strong',thread.name||thread.preview||'제목 없는 대화'),el('span',thread.cwd||'작업 폴더 없음'),el('small',sessionDate(thread.updatedAt)+(thread.status?.type==='active'?' · 실행 중':'')));
+      row.onclick=()=>pickSession(thread).catch(error=>{$('sessionListStatus').textContent=error.message;});
+      $('sessionList').append(row);
+    }
+    $('sessionListStatus').textContent=$('sessionList').childElementCount?$('sessionList').childElementCount+'개 표시 · 최근 수정 순':'일치하는 로컬 세션이 없습니다.';
+    $('sessionMore').hidden=!sessionCursor;const ai=await api('codex_status');if(generation===sessionGeneration)renderCodex(ai);
+  }catch(error){if(generation===sessionGeneration){$('sessionListStatus').textContent='목록을 불러오지 못했습니다: '+error.message;$('sessionMore').hidden=true;}}
+  finally{if(generation===sessionGeneration){sessionLoading=false;$('sessionMore').disabled=false;}}
+}
+async function pickSession(thread){
+  const generation=sessionGeneration;
+  sessionPick=thread.id;$('sessionSelection').hidden=false;$('sessionSelectionTitle').textContent=thread.name||thread.preview||'제목 없는 대화';$('sessionSelectionPath').textContent=thread.cwd||'작업 폴더 없음';$('sessionResume').disabled=true;
+  for(const row of $('sessionList').children)row.classList.toggle('active',row.dataset.threadId===thread.id);
+  const detail=await api('codex_session_read',{threadId:thread.id});if(generation!==sessionGeneration||sessionPick!==thread.id)return;
+  const blocked=sessionQuery.archived||detail.status?.type==='active'||lastAi?.busy||!state.project;
+  $('sessionResume').disabled=!!blocked;
+  $('sessionSelectionNote').textContent=sessionQuery.archived?'Codex 앱에서 보관을 해제한 뒤 최근 대화에서 연결하세요.':detail.status?.type==='active'?'실행 중인 세션입니다. 기존 작업을 마친 뒤 연결하세요.':!state.project?'연결할 리소스팩을 먼저 여세요.':'작업 폴더와 편집 규칙을 현재 열린 팩으로 설정합니다. 이전 메시지는 유지되며 연결만으로 AI 요청을 보내지 않습니다. 다른 창에서 이 대화를 실행 중이면 작업을 마친 뒤 연결하세요.';
+}
+on('sessionSearchForm','submit',async e=>{e.preventDefault();await loadSessions();});on('sessionArchive','change',()=>loadSessions());on('sessionMore','click',()=>loadSessions(true));
+on('sessionResume','click',async()=>{
+  if(!sessionPick)return;$('sessionResume').disabled=true;
+  try{renderCodex(await api('codex_resume',{threadId:sessionPick}));$('codexSessionsDialog').close();setSidebar('chat');$('chatInput').focus();toast('기존 대화에 연결했습니다. 요청을 입력해 이어가세요.');}
+  catch(error){$('sessionSelectionNote').textContent=error.message;throw error;}
+  finally{$('sessionResume').disabled=false;}
+});
+on('sessionNew','click',async()=>{renderCodex(await api('codex_reset'));$('codexSessionsDialog').close();setSidebar('chat');$('chatInput').focus();toast('새 요청을 보내면 대화가 시작됩니다.');});
+
+on('codexConnect','click',openSessionPicker);
 on('chatForm','submit',async e=>{e.preventDefault();const text=$('chatInput').value.trim();if(!text)return;if($('includePreview').checked)await shareBrowserPreview();renderCodex(await api('codex_message',{text,includePreview:$('includePreview').checked,includeGame:$('includeGame').checked}));$('chatInput').value='';});
 on('codexStop','click',async()=>renderCodex(await api('codex_interrupt')));
-on('codexSessionButton','click',()=>setSidebar('chat'));
+on('codexSessionButton','click',openSessionPicker);
 on('copyCodexSession','click',async()=>{if(!lastAi?.threadId)return;try{await navigator.clipboard.writeText(lastAi.threadId);toast('Codex 세션 ID를 복사했습니다.');}catch{toast('브라우저가 클립보드 쓰기를 막았습니다. 세션 ID를 직접 선택해 복사하세요.');}});
 on('viewOptions','click',()=>$('viewDialog').showModal());
 
@@ -490,7 +541,7 @@ on('propertiesTab','click',()=>setSidebar('properties'));on('codexTab','click',(
 on('activityCodex','click',()=>{setSidebar('chat');$('chatInput').focus();});
 function setExplorer(visible){setFocusMode(false);document.querySelector('.workspace').classList.toggle('explorer-hidden',!visible);$('activityExplorer').classList.toggle('active',visible);$('activityExplorer').setAttribute('aria-pressed',String(visible));fit();}
 on('activityExplorer','click',()=>setExplorer($('activityExplorer').getAttribute('aria-pressed')!=='true'));
-on('activitySearch','click',()=>{setExplorer(true);$('screenSearch').focus();});
+on('activitySearch','click',()=>{setExplorer(true);setExplorerTab('screens');$('screenSearch').focus();});
 on('activitySettings','click',()=>$('settingsDialog').showModal());
 on('activityProblems','click',()=>{document.querySelector('.workspace').classList.remove('diagnostics-collapsed');$('diagnostics').hidden=false;$('diagnosticToggle').textContent='접기';fit();});
 function updateWorkbench(){const current=editor.screens.find(s=>s.control===state.project?.control);$('packLabel').textContent=editor.packName||'리소스팩';$('projectName').textContent=editor.packName||'팩을 열어 시작하세요';$('fileTabName').textContent=current?.path?.split('/').at(-1)||'UI 화면';$('fileBreadcrumb').textContent=current?current.path+'  ›  '+state.project.control:'ui / 화면을 선택하세요';}
