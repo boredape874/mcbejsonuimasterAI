@@ -1,4 +1,4 @@
-import { materializeEnvironment } from "./expression.mjs";
+import { evaluateExpression, materializeEnvironment } from "./expression.mjs";
 import { applyModifications } from "./modifications.mjs";
 
 const clone = value => value == null ? value : structuredClone(value);
@@ -32,13 +32,26 @@ export function resolveControl(index, reference, options = {}) {
         for (const key of Object.keys(inherited.modificationArrayOrigins || {})) modificationArrayOrigins[key] ??= "inherited";
         const inheritedMerge = mergeWithEvidence(inherited.props, base, rebaseEvidence(inherited.provenance, inherited.pointer, path), resolvedEvidence(record.value, record, path), path);
         base = inheritedMerge.value; baseProvenance = inheritedMerge.provenance; inheritedControls = mergeResolvedChildren(inherited.controls, inheritedControls);
+        inheritedEnvironment = { ...inherited.variables, ...inheritedEnvironment };
       }
     }
-    const variables = collectVariables(base, inline, inheritedEnvironment);
+    let variables = collectVariables(base, inline, inheritedEnvironment);
     const merged = mergeWithEvidence(record || inheritedNode ? stripVariables(base) : {}, stripVariables(inline), baseProvenance, inlineEvidence, path);
-    const evaluated = materializeEnvironment(merged.value, variables, { control: record?.qualified || name });
+    const conditioned = applyConditionalVariables(merged.value, variables, { control: record?.qualified || name, pointer: path });
+    variables = conditioned.variables;
+    unresolved.push(...conditioned.unresolved);
+    // Child declarations have their own variable scopes. Evaluate them in resolveOne.
+    const { controls: childDeclarations, ...localProps } = conditioned.props;
+    const evaluated = materializeEnvironment(localProps, variables, { control: record?.qualified || name });
     unresolved.push(...evaluated.unresolved);
-    const props = applyConditionalVariables(evaluated.value), ownChildren = [];
+    const props = evaluated.value, ownChildren = [];
+    if (childDeclarations !== undefined) {
+      if (typeof childDeclarations === "string") {
+        const declarations = evaluateExpression(childDeclarations, variables, { control: record?.qualified || name, pointer: `${path}/controls` });
+        props.controls = declarations.value;
+        unresolved.push(...declarations.unresolved);
+      } else props.controls = childDeclarations;
+    }
     for (const key of ["controls", "bindings"]) if (Array.isArray(inline[key])) modificationArrayOrigins[key] = "own";
     const inheritedOnlyModifications = (Array.isArray(props.modifications) ? props.modifications : []).flatMap((entry, ordinal) => {
       const array = entry?.array_name || (entry?.control_name ? "controls" : null);
@@ -84,14 +97,20 @@ export function resolveControl(index, reference, options = {}) {
   assignFinalPointers(tree);
   return { tree, unresolved };
 }
-function applyConditionalVariables(props) {
-  if (!props || !Array.isArray(props.variables)) return props;
+function applyConditionalVariables(value, environment, context) {
+  const props = clone(value), unresolved = [];
+  let variables = environment;
+  if (!props || !Array.isArray(props.variables)) return { props, variables, unresolved };
   for (const entry of props.variables) {
-    if (!entry || entry.requires !== true) continue;
-    for (const [key, value] of Object.entries(entry)) if (key !== "requires") props[key] = clone(value);
+    if (!entry) continue;
+    const requirement = materializeEnvironment(entry.requires, variables, context);
+    unresolved.push(...requirement.unresolved);
+    if (requirement.value !== true) continue;
+    variables = collectVariables({}, entry, variables);
+    for (const [key, next] of Object.entries(entry)) if (key !== "requires" && !key.startsWith("$")) props[key] = clone(next);
   }
   delete props.variables;
-  return props;
+  return { props, variables, unresolved };
 }
 
 function splitReference(name, namespace) {

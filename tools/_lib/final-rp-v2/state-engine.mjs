@@ -13,6 +13,8 @@ export function projectInteractionState(tree, fixture = {}, options = {}) {
   const sourceStates = new Map();
   (function collect(node) {
     const props=node?.props||{}, toggle=fixture.toggleStates?.[props.toggle_name] ?? fixture.toggleStates?.[node.id] ?? props.toggle_default_state;
+    const snapshot={...props.property_bag,...fixture.controlBindings?.[node.qualified],...fixture.controlBindings?.[node.id]};
+    sourceStates.set(node.id,snapshot);if(node.qualified)sourceStates.set(node.qualified,snapshot);
     if(props.type==="toggle"||toggle!==undefined){const state={"#toggle_state":Boolean(toggle)};sourceStates.set(node.id,state);if(node.qualified)sourceStates.set(node.qualified,state);if(props.toggle_name)sourceStates.set(props.toggle_name,state);}
     if(props.type==="edit_box"||props.type==="input_panel"){const value=fixture.textInputs?.[node.id]??fixture.searchText??"",state={"#item_name":String(value)};sourceStates.set(node.id,state);if(node.qualified)sourceStates.set(node.qualified,state);}
     for(const child of node?.controls||[])collect(child);
@@ -39,16 +41,28 @@ export function projectInteractionState(tree, fixture = {}, options = {}) {
       "#form_text": fixture.body ?? "",
       "#item_name": fixture.searchText ?? "",
       "#query": fixture.searchText ?? "",
-      ...Object.fromEntries(Object.entries(props).map(([key, value]) => [`#${key}`, value]))
+      ...props.property_bag,
+      ...(fixture.bindings ?? {}),
+      ...Object.fromEntries(Object.entries(props).map(([key, value]) => [`#${key}`, value])),
+      ...fixture.controlBindings?.[node.qualified],...fixture.controlBindings?.[node.id]
     };
+    const captured={...fixture.controlBindings?.[node.qualified],...fixture.controlBindings?.[node.id]};
     for (const binding of props.bindings || []) {
       const explicitBindingType = binding?.binding_type;
       const bindingType = explicitBindingType || "view";
+      const capturedTarget=binding.binding_name_override||binding.target_property_name||binding.binding_name;
+      if(Object.hasOwn(captured,capturedTarget)){
+        props[capturedTarget.replace(/^#/, "")]=captured[capturedTarget];environment[capturedTarget]=captured[capturedTarget];continue;
+      }
       if (bindingType === "global" || (!explicitBindingType && binding?.binding_name)) {
         const sourceProperty = binding.binding_name || binding.source_property_name;
         const targetProperty = binding.binding_name_override || binding.target_property_name || sourceProperty;
         if (!sourceProperty || !targetProperty) continue;
-        if (Object.hasOwn(environment, sourceProperty)) props[targetProperty.replace(/^#/, "")] = environment[sourceProperty];
+        if (Object.hasOwn(environment, sourceProperty)) {
+          const value=environment[sourceProperty];
+          props[targetProperty.replace(/^#/, "")] = value;
+          environment[targetProperty] = value;
+        }
         else unresolved.push({kind:"unresolved_global_binding",control:node.qualified||node.id,sourceProperty,targetProperty});
         continue;
       }
@@ -57,6 +71,7 @@ export function projectInteractionState(tree, fixture = {}, options = {}) {
       const result = evaluateExpression(binding.source_property_name, sourceEnvironment, { control: node.qualified || node.id, property: binding.target_property_name });
       if (!result.ok) { unresolved.push(...result.unresolved); continue; }
       props[binding.target_property_name.replace(/^#/, "")] = result.value;
+      environment[binding.target_property_name] = result.value;
     }
     for (const key of ["text", "texture", "texture_file_system"]) {
       const source = props[key];
@@ -67,6 +82,8 @@ export function projectInteractionState(tree, fixture = {}, options = {}) {
       else unresolved.push({kind:"unresolved_expression",expression:source,reason:`unknown_symbol:${source}`,control:node.qualified||node.id,property:key});
     }
     sampleAnimations(node, props, options.index, unresolved, diagnostics);
+    const resolvedState={...environment,...Object.fromEntries(Object.entries(props).map(([key,value])=>['#'+key,value]))};
+    sourceStates.set(node.id,resolvedState);if(node.qualified)sourceStates.set(node.qualified,resolvedState);
     const childIds = new Set((node.controls || []).map(child => child.id));
     for (const [slot, target] of stateTargets) if (!childIds.has(target)) unresolved.push({ kind: "unresolved_state_control", control: node.qualified || node.id, state: slot, target });
     const activeTarget = chooseTarget(state, stateTargets);

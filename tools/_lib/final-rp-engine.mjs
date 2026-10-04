@@ -137,6 +137,7 @@ async function resolveBundle(args = {}) {
   }
   if (!control) throw new Error("control is required when the fixture does not resolve exactly one server-form route");
   const fixtureEnvironment = {
+    ...(fixture.bindings ?? {}),
     "#title_text": fixture.title ?? "",
     "#form_text": fixture.body ?? "",
     ...(args.variables ?? {}),
@@ -148,6 +149,10 @@ async function resolveBundle(args = {}) {
   const bindingGraph = buildBindingGraph(interaction.tree, { globals:{...index.globals,...fixtureEnvironment}, fixture });
   const fontLayoutUnresolved = materializeDefaultLabelSizes(interaction.tree, profile);
   const layout = layoutTree(interaction.tree, { viewport: args.viewport ?? [480, 270], defaults: args.defaults, content: args.content, contentMax: args.contentMax });
+  if(args.sourceScope==='target-hud'){
+    const targetRoots=layout.nodes.filter(node=>node.pointer&&(node.source?.layer==='target'||Object.entries(node.provenance||{}).some(([pointer,evidence])=>evidence.layer==='target'&&pointer.startsWith(node.pointer+'/')&&!pointer.slice(node.pointer.length+1).includes('/')))).map(node=>node.pointer);
+    for(const node of layout.nodes)if(node.pointer&&!targetRoots.some(pointer=>node.pointer===pointer||node.pointer.startsWith(pointer+'/controls/'))){node.visible=false;node.previewExcluded='outside-target-hud-scope';}
+  }
   const unresolved = [
     ...routeUnresolved.map((entry) => ({ ...entry, stage: "route" })),
     ...resolved.unresolved.map((entry) => ({ ...entry, stage: "resolver" })),

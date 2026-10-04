@@ -1,22 +1,43 @@
 import http from 'node:http';
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { configuration, root } from './config.mjs';
 import { StudioSession } from './editor.mjs';
 import { CodexBridge } from './codex.mjs';
+import { previewFonts } from './preview-fonts.mjs';
+import { ReferenceLibrary } from './library.mjs';
 
 export async function startHost(config) {
   config ??= await configuration();
   const session = new StudioSession(config), token = randomBytes(32).toString('hex'), clients = new Set();
   const codex = session.ai = new CodexBridge(session);
+  const library=new ReferenceLibrary(config.engineRoot);
+  let fonts,fontsRoot;
   const dispatch = async (name, args = {}) => {
     if (session.workspace.busy && !['status','studio','studio_context','workspace_status','codex_status','native_status'].includes(name)) throw Error('WORKSPACE_BUSY: 팩 동기화가 진행 중입니다.');
     switch (name) {
+      case 'set_hud_bindings': return session.setHudBindings(args);
+      case 'set_hud_scope': return session.setHudScope(args);
+      case 'library': return library.list(args);
+      case 'read_reference': return library.read(args.id);
+      case 'open_reference': {
+        const entry=await library.entry(args.id);
+        const input=entry.kind==='pack'?{rpRoot:await library.preparePack(args.id,config.runtime)}:await library.prepareFragment(args.id,config.runtime);
+        const vanillaRoot=join(config.engineRoot,'references/upstreams/MCBVanillaResourcePack');
+        return session.open({...input,useWorkspace:true,...((await stat(vanillaRoot).catch(()=>null))?.isDirectory()?{vanillaRoot}:{})});
+      }
       case 'workspace_status': return session.workspace.summary();
       case 'workspace_preview': return session.workspace.preview(args.direction);
       case 'workspace_apply': return session.syncWorkspace(args.id);
+      case 'import_fixtures': return session.importFixtures(args);
+      case 'use_fixture': return session.useFixture(args);
+      case 'preview_fonts': {
+        if(!session.project)throw Error('먼저 팩을 여세요.');
+        if(fontsRoot!==session.project.rpRoot){fonts=await previewFonts(session.project.rpRoot);fontsRoot=session.project.rpRoot;}
+        return fonts.summary;
+      }
       case 'catalog': return session.catalog(args.rpRoot || session.project?.rpRoot);
       case 'studio': return { ...session.status(), editor:session.editor, codex:codex.status() };
       case 'studio_context': return session.context();
@@ -70,7 +91,7 @@ export async function startHost(config) {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'" });
         return res.end((await readFile(join(root, 'studio/index.html'), 'utf8')).replace('__TOKEN__', token));
       }
-      if (['/app.js','/geometry.js','/devices.js','/style.css'].includes(url.pathname) && req.method === 'GET') {
+      if (['/app.js','/geometry.js','/devices.js','/text-preview.js','/style.css'].includes(url.pathname) && req.method === 'GET') {
         res.writeHead(200,{'Content-Type':url.pathname.endsWith('.js')?'text/javascript; charset=utf-8':'text/css; charset=utf-8','Cache-Control':'no-store'});
         return res.end(await readFile(join(root,'studio',url.pathname.slice(1))));
       }
@@ -78,6 +99,12 @@ export async function startHost(config) {
       if (url.pathname === '/events') {
         res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-store', Connection: 'keep-alive' });
         res.write(`data: ${JSON.stringify(session.status())}\n\n`); clients.add(res); req.on('close', () => clients.delete(res)); return;
+      }
+      if(['/preview-font','/preview-glyph'].includes(url.pathname)){
+        if(!fonts||fontsRoot!==session.project?.rpRoot)return fail(409,'Font preview changed');
+        const file=url.pathname==='/preview-font'?fonts.faces.get(url.searchParams.get('kind')):fonts.files.get(Number(url.searchParams.get('page')));
+        if(!file)return fail(404,'Font asset unavailable');
+        res.writeHead(200,{'Content-Type':url.pathname==='/preview-glyph'?'image/png':'font/otf','Cache-Control':'no-store'});return res.end(await readFile(file));
       }
       if (url.pathname === '/game-image') {
         if(!session.gameFrame) return fail(404,'No shared game window');

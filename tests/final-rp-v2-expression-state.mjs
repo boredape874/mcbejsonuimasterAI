@@ -118,3 +118,9 @@ if(hasLocalIntegration){
   const actualContent=find(projectInteractionState(actualMaterialized.tree,fixture,{index:actualIndex}).tree,"content");assert.equal(actualContent.props.alpha,1);
 }else console.log("SKIP local pd_casino_baccarat integration fixture unavailable");
 console.log("final-rp-v2-expression-state: ok");
+
+const hudFixture={bindings:{'#hud_title_text_string':'ready'}};
+const hudState=projectInteractionState({id:'hud',props:{type:'label',text:'#label',bindings:[{binding_type:'global',binding_name:'#hud_title_text_string',binding_name_override:'#payload'},{binding_type:'view',source_property_name:"('State: ' + #payload)",target_property_name:'#label'}]},controls:[]},hudFixture);
+assert.equal(hudState.tree.props.text,'State: ready');assert.equal(hudState.unresolved.length,0);
+const latched={id:'root',props:{},controls:[{id:'store',props:{type:'panel',bindings:[{binding_name:'#hud_title_text_string',binding_name_override:'#preserved',binding_condition:'visibility_changed'}]},controls:[]},{id:'reader',props:{type:'label',text:'#text',bindings:[{binding_type:'view',source_control_name:'store',source_property_name:"(#preserved - '$status.')",target_property_name:'#text'}]},controls:[]}]};
+const preserved=projectInteractionState(latched,{bindings:{'#hud_title_text_string':''},controlBindings:{store:{'#preserved':'$status.Scanning'}}});assert.equal(preserved.tree.controls[1].props.text,'Scanning');assert.equal(preserved.unresolved.length,0);

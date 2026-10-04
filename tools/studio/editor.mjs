@@ -7,6 +7,7 @@ import { editObject, jsonSpans, spanAt, removeArrayItems, appendControlBodies } 
 import { DEVICE_PRESETS, normalizeDevice, validateViewport } from '../../studio/devices.js';
 import { buildViewCatalog, matchesView, prepareViewFixture, titleTextureRules } from './views.mjs';
 import { PackWorkspace } from './workspace.mjs';
+import { importFormFixtures, loadFormFixtures, fixtureSummaries } from './fixtures.mjs';
 
 const parse = text => parseUiSource(text, { kind: 'runtime', dialect:DEFAULT_RUNTIME_DIALECT }).document;
 const esc = key => key.replaceAll('~', '~0').replaceAll('/', '~1');
@@ -70,16 +71,26 @@ export class StudioSession extends LiveSession {
   async open(input) {
     if (this.ai?.busy) throw Error('Codex 작업이 끝난 뒤 팩이나 화면을 바꿔 주세요.');
     if (input.useWorkspace || input.workspaceId) {
+      if(this.project?.workspaceId)await this.persistProject();
       this.publish({status:'preparing-workspace',workspaceProgress:null});
       let workspace;
       try { workspace = await this.workspace.open(input.rpRoot,input.workspaceId); }
       catch(error) { this.publish({status:'error',error:error.message,workspaceProgress:null}); throw error; }
       this.publish({workspaceProgress:null});
       input = {...input,rpRoot:workspace.workingRpRoot,workspaceId:workspace.id};
+      try{
+        const saved=JSON.parse(await readFile(join(this.config.runtime,'workspaces',workspace.id,'studio-project.json'),'utf8'));
+        if(saved.workspaceId===workspace.id&&saved.rpRoot===workspace.workingRpRoot){
+          const explicitControl=input.control&&!input.viewId;input={...saved,...input};if(explicitControl)delete input.viewId;
+        }
+      }catch(error){if(error.code!=='ENOENT')throw error;}
     }
     const catalog = await this.catalog(input.rpRoot);
     const samePack = this.project?.rpRoot === catalog.rpRoot;
+    const fixtureLibraryId=samePack?this.project.fixtureLibraryId:input.fixtureLibraryId;
+    this.fixtureRecords=fixtureLibraryId?await loadFormFixtures(fixtureLibraryId,this.config.runtime):[];
     let view = input.viewId ? catalog.views.find(view => view.id === input.viewId) : null;
+    if(!view&&input.control)view=catalog.hud.find(view=>view.control===input.control)??null;
     if (input.viewId && !view) throw Error('선택한 폼이나 화면이 더 이상 존재하지 않습니다.');
     if (!view && !input.control) view = catalog.forms[0] ?? catalog.hud[0] ?? catalog.views.find(view => view.kind === 'screen') ?? catalog.views[0];
     const control = view?.renderControl || input.control || catalog.screens[0]?.control;
@@ -92,16 +103,24 @@ export class StudioSession extends LiveSession {
     }
     const activeViewId = view?.id;
     let fixture = input.fixture ?? (activeViewId && fixtures[activeViewId]) ?? (samePack && view && matchesView(view, this.project.fixture) ? this.project.fixture : {});
+    let fixtureRecordId=input.fixtureRecordId??(samePack?this.project.fixtureRecordId:null);
+    if(view?.kind==='form'&&!Array.isArray(fixture.buttons)) {
+      const captured=this.fixtureRecords.find(record=>matchesView(view,record.fixture));
+      if(captured){fixture=structuredClone(captured.fixture);fixtureRecordId=captured.id;}
+    }
+    fixtureRecordId=this.fixtureRecords.find(record=>JSON.stringify(record.fixture)===JSON.stringify(fixture))?.id??null;
     if (view) fixture = prepareViewFixture(view, fixture).fixture;
     if (changed) { this.undoStack = []; this.redoStack = []; await this.ai?.reset(); }
     this.selection = null; this.selectionKeys=[]; this.selectionInitialized=false; this.catalogDirty = false; this.editor = {...catalog,nodes:[]};
-    const state = await super.open({...input,control,fixture,viewId:activeViewId,viewFixtures:fixtures});
+    const state = await super.open({...input,control,fixture,viewId:activeViewId,viewFixtures:fixtures,fixtureLibraryId,fixtureRecordId});
+    this.editor.fixtureRecords=fixtureSummaries(this.fixtureRecords);
     await mkdir(this.config.runtime,{recursive:true});
     await writeFile(join(this.config.runtime,'last-project.json'),JSON.stringify(this.project,null,2));
     this.publish({restoreError:null});
     return this.status();
   }
   async render(changes = {}) {
+    if(changes.fixture!==undefined&&this.project)this.project.fixtureRecordId=null;
     const state = await super.render(changes), revision = state.renderedRevision;
     if (state.status === 'ready' && !state.stale && revision === this.revision) {
       try {
@@ -131,6 +150,7 @@ export class StudioSession extends LiveSession {
         if (revision !== this.revision) return this.status();
         this.editor = {...this.editor,screens:catalog.screens,views:catalog.views,forms:catalog.forms,hud:catalog.hud,components:catalog.components,issues:catalog.issues,packName:catalog.packName,nodes,layers:this.previewLayers,unresolved:resolved.unresolved,viewport:resolved.layout.viewport,control:resolved.control};
         this.editorRevision = revision;
+        await this.persistProject();
         if (!this.selectionInitialized || (this.selection!==null&&!nodes.some(n => n.key === this.selection))) this.selection = nodes[0]?.key || null;
         this.selectionInitialized=true;
         this.selectionKeys=this.selectionKeys.filter(key=>nodes.some(n=>n.key===key));
@@ -139,6 +159,12 @@ export class StudioSession extends LiveSession {
       } catch(error) { this.publish({editorError:error.message}); }
     }
     return this.status();
+  }
+  async persistProject() {
+    if(!this.project)return;
+    await mkdir(this.config.runtime,{recursive:true});
+    const text=JSON.stringify(this.project,null,2);await writeFile(join(this.config.runtime,'last-project.json'),text);
+    if(this.project.workspaceId)await writeFile(join(this.config.runtime,'workspaces',this.project.workspaceId,'studio-project.json'),text);
   }
   async configureViewport({viewport,previewDevice}) {
     if(!this.project)throw Error('먼저 팩을 여세요.');
@@ -150,6 +176,23 @@ export class StudioSession extends LiveSession {
     await writeFile(join(this.config.runtime,'last-project.json'),JSON.stringify(this.project,null,2));
     return result;
   }
+  async setHudBindings({bindings,controlBindings={}}) {
+    if(this.ai?.busy)throw Error('Codex 작업이 끝난 뒤 HUD 데이터를 바꿔 주세요.');
+    if(!this.editor.hud?.some(view=>view.id===this.project?.viewId))throw Error('HUD 화면을 선택하세요.');
+    if(!bindings||Array.isArray(bindings)||typeof bindings!=='object'||Object.keys(bindings).length>256||JSON.stringify(bindings).length>65536||Object.entries(bindings).some(([name,value])=>!/^#[\w.-]+$/.test(name)||!['string','number','boolean'].includes(typeof value)||typeof value==='number'&&!Number.isFinite(value)))throw Error('HUD 값은 #바인딩 이름과 문자열·숫자·불리언으로 입력하세요.');
+    if(!controlBindings||Array.isArray(controlBindings)||typeof controlBindings!=='object'||Object.keys(controlBindings).length>64||JSON.stringify(controlBindings).length>65536||Object.values(controlBindings).some(values=>!values||Array.isArray(values)||typeof values!=='object'||Object.keys(values).length>64||Object.entries(values).some(([key,value])=>!/^#[\w.-]+$/.test(key)||!['string','number','boolean'].includes(typeof value)||typeof value==='number'&&!Number.isFinite(value))))throw Error('보존 상태는 컨트롤 이름별 #바인딩 값으로 입력하세요.');
+    const fixture={...this.project.fixture,bindings:structuredClone(bindings),controlBindings:structuredClone(controlBindings)};
+    const result=await this.render({fixture});
+    this.project.viewFixtures[this.project.viewId]=fixture;
+    await writeFile(join(this.config.runtime,'last-project.json'),JSON.stringify(this.project,null,2));
+    return result;
+  }
+  async setHudScope({scope}) {
+    if(!['pack','all'].includes(scope)||!this.editor.hud?.some(view=>view.id===this.project?.viewId))throw Error('HUD 보기 범위를 선택하세요.');
+    if(this.ai?.busy)throw Error('Codex 작업이 끝난 뒤 HUD 보기를 바꿔 주세요.');
+    this.project.hudScope=scope;const result=await this.render();
+    await writeFile(join(this.config.runtime,'last-project.json'),JSON.stringify(this.project,null,2));return result;
+  }
   async compareViewports({presetIds,expectedRevision}) {
     if(this.ai?.busy)throw Error('Codex 작업이 끝난 뒤 기기별로 비교하세요.');
     if(!this.project||this.state.stale||expectedRevision!==this.editorRevision)throw Error('PREVIEW_CONFLICT');
@@ -158,7 +201,7 @@ export class StudioSession extends LiveSession {
     if(presets.some(p=>!p)||new Set(presetIds).size!==presetIds.length)throw Error('Unknown or duplicate device preset');
     const revision=this.revision,project=structuredClone(this.project),result=[];
     for(const preset of presets){
-      const report=await this.engine('renderScreen',{...project,viewport:preset.viewport,outputDir:join(this.config.runtime,'comparisons',randomUUID()),includeEditor:true});
+      const report=await this.engine('renderScreen',{...project,viewport:preset.viewport,sourceScope:this.editor.hud?.some(view=>view.id===project.viewId)&&project.hudScope!=='all'?'target-hud':undefined,variables:{'$touch':['모바일','태블릿'].includes(preset.family)},outputDir:join(this.config.runtime,'comparisons',randomUUID()),includeEditor:true});
       if(this.revision!==revision||this.state.stale)throw Error('PREVIEW_CONFLICT: 비교 중 원본이나 화면 설정이 바뀌었습니다. 다시 비교하세요.');
       result.push({id:preset.id,viewport:preset.viewport,diagnostics:report.diagnostics??[],layers:report.previewLayers??[],nodes:report.editorLayout?.layout?.nodes.map((n,index)=>({key:n.pointer||'/',id:n.id,qualified:n.qualified,type:n.props.type,props:n.props,rect:n.rect,clip:n.clip,alpha:n.alpha,visible:n.visible!==false,layer:n.layer,index}))??[],runtimeVerified:false});
     }
@@ -173,7 +216,9 @@ export class StudioSession extends LiveSession {
     const selection = node && {...node,props:Object.fromEntries(Object.entries(node.props).filter(([k])=>editableProps.has(k)||k==='type'))};
     const fixture = this.project?.fixture;
     const group=this.editor.nodes.filter(n=>this.selectionKeys.includes(n.key));
-    return {sessionId:this.id,revision:this.revision,renderedRevision:this.state.renderedRevision,stale:this.state.stale,workspace:this.project?.workspaceId ? this.workspace.summary() : null,viewId:this.project?.viewId,rpRoot:this.project?.rpRoot,control:this.project?.control,viewport:this.project?.viewport,previewDevice:this.project?.previewDevice??null,fixtureSummary:fixture?Object.fromEntries(Object.entries(fixture).map(([k,v])=>[k,Array.isArray(v)?{count:v.length}:typeof v==='string'?v.slice(0,256):typeof v])):null,selection,selectionGroup:group.slice(0,16).map(({key,id,rect,source})=>({key,id,rect,source})),selectionCount:group.length,previewPath:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.path:this.state.report?.outputPath,previewFontMode:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.fontMode:'renderer',previewCaptureScale:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.captureScale:1,diagnostics:(this.state.report?.diagnostics||[]).slice(0,12),unresolved:(this.editor.unresolved||[]).slice(0,12),gameFrame:this.gameFrame ? {path:this.gameFrame.path,capturedAt:this.gameFrame.capturedAt,source:this.gameFrame.source} : null,runtimeVerified:false};
+    const captured=this.fixtureRecords?.find(record=>record.id===this.project?.fixtureRecordId);
+    const fixtureSource=captured?{kind:'captured-request',name:captured.name,sha256:captured.sourceHash}:{kind:'manual-preview'};
+    return {sessionId:this.id,revision:this.revision,renderedRevision:this.state.renderedRevision,stale:this.state.stale,workspace:this.project?.workspaceId ? this.workspace.summary() : null,viewId:this.project?.viewId,rpRoot:this.project?.rpRoot,control:this.project?.control,viewport:this.project?.viewport,previewDevice:this.project?.previewDevice??null,hudScope:this.project?.hudScope,fixtureSource,fixtureSummary:fixture?Object.fromEntries(Object.entries(fixture).map(([k,v])=>[k,Array.isArray(v)?{count:v.length}:typeof v==='string'?v.slice(0,256):typeof v])):null,selection,selectionGroup:group.slice(0,16).map(({key,id,rect,source})=>({key,id,rect,source})),selectionCount:group.length,previewPath:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.path:this.state.report?.outputPath,previewFontMode:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.fontMode:'renderer',previewCaptureScale:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.captureScale:1,diagnostics:(this.state.report?.diagnostics||[]).slice(0,12),unresolved:(this.editor.unresolved||[]).slice(0,12),gameFrame:this.gameFrame ? {path:this.gameFrame.path,capturedAt:this.gameFrame.capturedAt,source:this.gameFrame.source} : null,runtimeVerified:false};
   }
   requireNode(key, expectedRevision) {
     if (this.state.stale || this.editorRevision !== this.state.renderedRevision || expectedRevision !== this.editorRevision) throw Error('PREVIEW_CONFLICT: 미리보기를 갱신한 뒤 다시 수정하세요.');
@@ -383,6 +428,23 @@ export class StudioSession extends LiveSession {
     this.undoStack=[]; this.redoStack=[]; this.catalogDirty=true;
     await this.render();
     return result;
+  }
+  async importFixtures({directory}) {
+    if(!this.project)throw Error('먼저 팩을 여세요.');
+    if(this.ai?.busy)throw Error('Codex 작업이 끝난 뒤 폼 데이터를 바꾸세요.');
+    const library=await importFormFixtures(directory,this.config.runtime,this.editor.views??[]);
+    this.fixtureRecords=library.records;this.project.fixtureLibraryId=library.id;this.editor.fixtureRecords=fixtureSummaries(library.records);
+    const view=this.editor.forms.find(view=>view.id===this.project.viewId),record=library.records.find(record=>view&&matchesView(view,record.fixture));
+    if(record)await this.useFixture({id:record.id});else await writeFile(join(this.config.runtime,'last-project.json'),JSON.stringify(this.project,null,2));
+    this.publish({});return {imported:library.records.length,issues:library.issues,records:this.editor.fixtureRecords};
+  }
+  async useFixture({id}) {
+    if(this.ai?.busy)throw Error('Codex 작업이 끝난 뒤 폼 데이터를 바꾸세요.');
+    const record=this.fixtureRecords?.find(record=>record.id===id),view=this.editor.forms.find(view=>view.id===this.project?.viewId);
+    if(!record||!view||!matchesView(view,record.fixture))throw Error('현재 폼에 맞는 데이터가 아닙니다.');
+    await this.render({fixture:structuredClone(record.fixture)});this.project.fixtureRecordId=id;
+    this.project.viewFixtures[view.id]=structuredClone(record.fixture);
+    await writeFile(join(this.config.runtime,'last-project.json'),JSON.stringify(this.project,null,2));this.publish({});return this.status();
   }
   close() { this.workspace.close(); super.close(); }
   async newProject(useWorkspace = false) {

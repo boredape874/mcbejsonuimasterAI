@@ -14,8 +14,84 @@ import { indexResourcePack } from '../tools/_lib/final-rp-v2/rp-index.mjs';
 import { buildViewCatalog, matchesView } from '../tools/studio/views.mjs';
 import { PackWorkspace, snapshot } from '../tools/studio/workspace.mjs';
 import { compactStudioRender } from '../tools/studio/render-transfer.mjs';
+import { importFormFixtures, loadFormFixtures } from '../tools/studio/fixtures.mjs';
+import { textTokens, previewLines, drawPreviewText } from '../studio/text-preview.js';
+import { previewFonts } from '../tools/studio/preview-fonts.mjs';
+import { ReferenceLibrary } from '../tools/studio/library.mjs';
 import { selectionBounds, alignSelection, distributeSelection, gridSelection, matchSelectionSize, snapMove } from '../studio/geometry.js';
 import { DEVICE_PRESETS, normalizeDevice, safeRect, layoutIssues } from '../studio/devices.js';
+
+test('reference library searches every category, protects originals and previews standalone JSON UI',async()=>{
+  const dir=join(process.env.MCBEKIT_TEST_ROOT||join(root,'workspace/test-studio'),randomUUID());
+  await mkdir(join(dir,'references/sample/ui'),{recursive:true});await mkdir(join(dir,'skills/demo/references'),{recursive:true});
+  await writeFile(join(dir,'references/sample/ui/_ui_defs.json'),'{}');await writeFile(join(dir,'references/sample/ui/view.json'),'{"namespace":"demo","screen":{"type":"panel"}}');
+  await writeFile(join(dir,'skills/demo/SKILL.md'),'# Demo');await writeFile(join(dir,'skills/demo/references/utility.json'),'{"namespace":"utility","panel":{"type":"panel","size":[20,30]}}');
+  await mkdir(join(dir,'references/schemas/vendor/resource/ui'),{recursive:true});await writeFile(join(dir,'references/schemas/vendor/resource/ui/schema.json'),'{"type":"object"}');
+  const library=new ReferenceLibrary(dir),packs=await library.list();assert.equal(packs.total,1);assert.equal(packs.counts.skill,1);assert.equal(packs.counts.source,4);
+  const runtime=join(dir,'runtime'),prepared=await library.preparePack(packs.entries[0].id,runtime);assert.notEqual(prepared,packs.entries[0].path);assert.ok((JSON.parse(await readFile(join(prepared,'manifest.json'),'utf8'))).header.uuid);
+  assert.equal(await readFile(join(dir,'references/sample/ui/view.json'),'utf8'),'{"namespace":"demo","screen":{"type":"panel"}}');
+  const utility=(await library.list({kind:'source',query:'utility'})).entries[0],read=await library.read(utility.id);assert.equal(read.previewControl,'utility.panel');assert.equal(read.packId,null);
+  const fragment=await library.prepareFragment(utility.id,runtime);assert.equal(fragment.control,'utility.panel');assert.deepEqual(JSON.parse(await readFile(join(fragment.rpRoot,'ui/_ui_defs.json'),'utf8')).ui_defs,['ui/utility.json']);
+  const skill=(await library.list({kind:'skill'})).entries[0];assert.equal((await library.read(skill.id)).text,'# Demo');await assert.rejects(library.entry('../secret'),/다시 검색/);
+  await assert.rejects(library.list({offset:-1}),/검색 조건/);
+});
+
+test('HUD preview discovers actual bindings, accepts typed data and keeps it out of pack source',async t=>{
+  const config=await configuration(),dir=join(process.env.MCBEKIT_TEST_ROOT||join(root,'workspace/test-studio'),randomUUID()),rpRoot=join(dir,'rp');
+  await cp(join(root,'examples/studio-rp'),rpRoot,{recursive:true});
+  const doc={namespace:'hud',root_panel:{type:'panel',controls:[{status:{type:'label',text:'#label',size:[100,20],bindings:[{binding_name:'#hud_title_text_string',binding_name_override:'#payload',binding_type:'global'},{binding_type:'view',source_property_name:"('Ready: '+#payload)",target_property_name:'#label'},{binding_type:'view',source_property_name:"(#payload = 'GO')",target_property_name:'#visible'}]}}]}};
+  doc.root_panel.modifications=[{array_name:'controls',operation:'insert_front',value:doc.root_panel.controls}];delete doc.root_panel.controls;
+  const text=JSON.stringify(doc);await writeFile(join(rpRoot,'ui/hud_screen.json'),text);await writeFile(join(rpRoot,'ui/_ui_defs.json'),JSON.stringify({ui_defs:['ui/hud_screen.json']}));
+  const vanillaRoot=join(dir,'vanilla');await mkdir(join(vanillaRoot,'ui'),{recursive:true});await writeFile(join(vanillaRoot,'ui/_ui_defs.json'),JSON.stringify({ui_defs:['ui/hud_screen.json']}));
+  await writeFile(join(vanillaRoot,'ui/hud_screen.json'),JSON.stringify({namespace:'hud',root_panel:{type:'panel',controls:[{native_menu:{type:'panel',size:[100,100]}}]}}));
+  const host=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>host.close());const s=host.session;
+  await s.open({rpRoot,vanillaRoot,viewId:'control:hud.root_panel'});assert.equal(s.editor.hud[0].bindingInputs[0].name,'#hud_title_text_string');assert.ok(s.editor.hud[0].protocolHints.includes('GO'));
+  assert.equal(s.editor.nodes.find(n=>n.id==='native_menu').visible,false);
+  await s.setHudScope({scope:'all'});assert.equal(s.editor.nodes.find(n=>n.id==='native_menu').visible,true);
+  await s.setHudScope({scope:'pack'});assert.equal(s.editor.nodes.find(n=>n.id==='native_menu').visible,false);
+  const comparisons=await s.compareViewports({presetIds:['pc-fhd','mobile-iphone'],expectedRevision:s.editorRevision});assert.ok(comparisons.profiles.every(profile=>profile.nodes.find(n=>n.id==='native_menu').visible===false));
+  await s.setHudBindings({bindings:{'#hud_title_text_string':'GO','#hud_visible':true,'#health':7}});const label=s.editor.nodes.find(n=>n.id==='status');assert.equal(label.props.text,'Ready: GO');assert.equal(label.visible,true);
+  await s.setHudBindings({bindings:{'#hud_title_text_string':'STOP'}});assert.equal(s.editor.nodes.find(n=>n.id==='status').visible,false);
+  assert.equal((await s.readSource('ui/hud_screen.json')).text,text);assert.equal(s.undoStack.length,0);
+  await assert.rejects(s.setHudBindings({bindings:{'bad name':'x'}}),/HUD 값/);await assert.rejects(s.setHudBindings({bindings:{'#health':NaN}}),/HUD 값/);
+  assert.equal(JSON.parse(await readFile(join(dir,'runtime/last-project.json'),'utf8')).fixture.bindings['#hud_title_text_string'],'STOP');
+});
+
+test('captured form fixtures are scoped to routes, preserve real payloads and persist outside the RP',async t=>{
+  const config=await configuration(),dir=join(process.env.MCBEKIT_TEST_ROOT||join(root,'workspace/test-studio'),randomUUID()),rpRoot=join(dir,'rp'),captures=join(dir,'captures');
+  await cp(join(root,'examples/studio-rp'),rpRoot,{recursive:true});await mkdir(captures,{recursive:true});
+  const doc={namespace:'forms',a:{type:'panel'},b:{type:'panel'},router:{type:'panel',controls:[{'a@forms.a':{bindings:[{binding_type:'view',source_property_name:"(#title_text = 'A')",target_property_name:'#visible'}]}},{'b@forms.b':{bindings:[{binding_type:'view',source_property_name:"(#title_text = 'B')",target_property_name:'#visible'}]}}]},host:{type:'panel',factory:{control_ids:{long_form:'@forms.router'}}}};
+  await writeFile(join(rpRoot,'ui/forms.json'),JSON.stringify(doc));await writeFile(join(rpRoot,'ui/_ui_defs.json'),JSON.stringify({ui_defs:['ui/forms.json']}));
+  await writeFile(join(captures,'a.json'),JSON.stringify({title:'A',body:'actual A body',buttons:[{text:'actual A button'}]}));
+  await writeFile(join(captures,'b.json'),JSON.stringify({title:'B',body:'actual B body',buttons:[{text:'actual B button'},{text:'second B'}]}));
+  await writeFile(join(captures,'foreign.json'),JSON.stringify({title:'Other',buttons:[{text:'unrelated'}]}));await writeFile(join(captures,'report.json'),'{}');
+  const host=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>host.close());const s=host.session;
+  await s.open({rpRoot});const a=s.editor.forms.find(v=>v.control==='forms.a'),b=s.editor.forms.find(v=>v.control==='forms.b');
+  const result=await s.importFixtures({directory:captures});assert.equal(result.imported,2);assert.equal(s.project.fixture.body,'actual A body');assert.ok(s.project.fixtureRecordId);
+  assert.equal(s.editor.fixtureRecords[0].buttonCount,1);assert.deepEqual(s.editor.fixtureRecords[0].viewIds,[a.id]);
+  await s.open({rpRoot,viewId:b.id});assert.equal(s.project.fixture.buttons.length,2);assert.equal(s.project.fixture.body,'actual B body');
+  await assert.rejects(s.useFixture({id:s.fixtureRecords[0].id}),/현재 폼/);
+  const saved=await loadFormFixtures(s.project.fixtureLibraryId,join(dir,'runtime'));assert.equal(saved[0].fixture.buttons[0].text,'actual A button');
+  const restored=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>restored.close());assert.equal(restored.session.project.fixture.body,'actual B body');assert.equal(restored.session.editor.fixtureRecords.length,2);
+});
+
+test('browser text preview retains Minecraft formatting and draws available pack glyphs',()=>{
+  const tokens=textTokens('§aHP §l10§r 😀');assert.equal(tokens[0].color,'#55ff55');assert.equal(tokens.find(t=>t.char==='1').bold,true);assert.equal(tokens.at(-1).char,'😀');
+  const atlas=createCanvas(256,256);const ac=atlas.getContext('2d');ac.fillStyle='#ff0000';ac.fillRect(8*16,0,6,16);
+  const glyphs=Array.from({length:256},(_,i)=>({uv:[i%16*16,Math.floor(i/16)*16],width:i===8?6:0,left:0})),pages=new Map([[0xe1,{cell:[16,16],glyphs,image:atlas}]]);
+  const output=createCanvas(100,30),ctx=output.getContext('2d');const lines=previewLines(ctx,'\ue108 HP\n§a10',90,8,pages);assert.equal(lines.length,2);assert.equal(lines[0][0].glyph.width,6);
+  drawPreviewText(ctx,{props:{text:'\ue108 HP\n§a10',color:[1,1,1]},rect:{x:0,y:0,w:100,h:30},alpha:1},{x:0,y:0,w:100,h:30},pages);
+  const pixels=ctx.getImageData(0,0,100,30).data;assert.ok(pixels.some((v,i)=>i%4===3&&v>0));
+  const icon=ctx.getImageData(1,8,1,1).data;assert.ok(icon[0]>200&&icon[1]===0&&icon[3]>0,'target glyph pixels are drawn at the vertically centered position');
+  const hidden=createCanvas(100,30);drawPreviewText(hidden.getContext('2d'),{props:{text:'serp.sprite',font_scale_factor:0},rect:{x:0,y:0,w:100,h:30}},{x:0,y:0,w:100,h:30},pages);
+  assert.equal(hidden.getContext('2d').getImageData(0,0,100,30).data.some(v=>v!==0),false,'zero scale protocol labels stay hidden');
+});
+
+test('preview font assets include target glyph page metrics and retain diagnostic-only evidence',async t=>{
+  const dir=join(process.env.MCBEKIT_TEST_ROOT||join(root,'workspace/test-studio'),randomUUID());await mkdir(join(dir,'font'),{recursive:true});
+  const atlas=createCanvas(256,256),ctx=atlas.getContext('2d');ctx.fillStyle='white';ctx.fillRect(8*16+2,0,6,16);await writeFile(join(dir,'font/glyph_E1.png'),await atlas.encode('png'));
+  const fonts=await previewFonts(dir);assert.equal(fonts.pages[0].page,225);assert.equal(fonts.pages[0].glyphs[8].width,6);assert.equal(fonts.pages[0].glyphs[8].left,2);assert.equal(fonts.summary.evidence,'approximate-browser-preview');assert.equal(fonts.files.size,1);
+});
 
 async function workspaceFixture(t) {
   const dir=join(process.env.MCBEKIT_TEST_ROOT||join(root,'workspace/test-studio'),randomUUID()),a=join(dir,'a');

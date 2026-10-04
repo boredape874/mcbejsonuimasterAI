@@ -1,5 +1,6 @@
 import { selectionBounds, offsetPatch, alignSelection, distributeSelection, gridSelection, matchSelectionSize, snapMove } from './geometry.js';
 import { DEVICE_PRESETS, normalizeDevice, safeRect, layoutIssues } from './devices.js';
+import { previewLines, drawPreviewText } from './text-preview.js';
 const $=id=>document.getElementById(id), token=window.STUDIO_TOKEN;
 let state={}, editor={nodes:[],screens:[]}, selected=null, editingNode=null, source=null, dirty=false, scale=1, displayedRevision=null, view='preview', drag=null, stream=null, frameTimer=null;
 let toastTimer, imageLoadedRevision=null, sharingFrame=null, saving=false, optimistic=null;
@@ -7,6 +8,18 @@ let picked=new Set(),locked=new Set(),collapsed=new Set(),layerScope='';
 let pan=null,spaceHeld=false;
 let sourceDirty=false;
 let syncPlan=null, syncReading=false;
+let previewPages=new Map(),previewFontsRoot=null,previewFontsPending=null;
+async function loadPreviewFonts(){
+  const root=state.project?.rpRoot;if(!root||root===previewFontsRoot||previewFontsPending)return;
+  previewFontsPending=(async()=>{
+    const profile=await api('preview_fonts'),pages=new Map();
+    await Promise.all(profile.pages.map(async page=>{const image=new Image();image.src='/preview-glyph?page='+page.page+'&token='+encodeURIComponent(token);await image.decode();pages.set(page.page,{...page,image});}));
+    await Promise.all(profile.faces.map(async kind=>{const name=kind==='latin'?'StudioLatin':'StudioKorean',face=new FontFace(name,`url(/preview-font?kind=${kind}&token=${encodeURIComponent(token)})`);await face.load();document.fonts.add(face);}));
+    if(state.project?.rpRoot!==root)return;
+    previewPages=pages;previewFontsRoot=root;fit();
+  })();
+  try{await previewFontsPending;}catch(error){toast('미리보기 글꼴: '+error.message);}finally{previewFontsPending=null;}
+}
 let clipboard=null,clipboardSynced=null,copyScope=null,lastPasteParent=null,lastAi=null,pasteEventSerial=0;
 try{clipboard=JSON.parse(localStorage.getItem('studio-clipboard'));}catch{}
 const pickedNodes=()=>editor.nodes.filter(n=>picked.has(n.key));
@@ -35,9 +48,11 @@ function fit(){
   if($('zoom').value==='selection'&&selection)requestAnimationFrame(()=>{area.scrollLeft=$('artboard').offsetLeft+(selection.x+selection.w/2)*scale-area.clientWidth/2;area.scrollTop=$('artboard').offsetTop+(selection.y+selection.h/2)*scale-area.clientHeight/2;});
 }
 function drawApproximateFonts(){
+  if(state.project?.rpRoot!==previewFontsRoot)loadPreviewFonts();
   const layer=$('fontApproximation');layer.replaceChildren();
   const missing=(state.report?.diagnostics||[]).filter(d=>d.kind==='FONT_UNAVAILABLE');
-  $('previewKind').textContent=missing.length?'대체 글꼴 · 게임 글꼴 확인 필요':'정적 미리보기 · 게임 검증 전';
+  const current=editor.forms?.find(form=>form.id===state.project?.viewId),dataMissing=current&&!Array.isArray(state.project.fixture?.buttons);
+  $('previewKind').textContent=dataMissing?'폼 데이터 없음 · 배경만 표시 중':missing.length?'글꼴 미리보기 · 게임 검증 전':'정적 미리보기 · 게임 검증 전';
   const sprites=(editor.layers||[]).map((sprite,index)=>({...sprite,index,node:editor.nodes.find(n=>n.key===(sprite.pointer||'/'))}));
   const labels=(editor.nodes||[]).filter(n=>n.visible&&n.rect.w>0&&n.type==='label'&&missing.some(d=>d.pointer===n.key||d.control===n.id||d.control===n.qualified)).map(n=>({node:n,layer:n.layer,index:n.index,text:true}));
   const entries=[...sprites,...labels].sort((a,b)=>(a.layer-b.layer)||((a.node?.index??a.index)-(b.node?.index??b.index)));
@@ -58,20 +73,13 @@ function approximateTextRect(n){
   if(n.rect.h>0)return n.rect;
   // A display-only estimate keeps missing intrinsic font metrics visible.
   // The source rectangle and FONT_UNAVAILABLE diagnostic remain unchanged.
-  const ctx=document.createElement('canvas').getContext('2d'),font=8*Number(n.props.font_scale_factor||1);
-  ctx.font=`${font}px "Malgun Gothic", "Segoe UI", sans-serif`;
-  let lines=0;for(const paragraph of String(n.props.text||'').replace(/§./g,'').split('\n')){let text='';lines++;for(const char of paragraph){if(text&&ctx.measureText(text+char).width>n.rect.w){lines++;text='';}text+=char;}}
-  const h=Math.max(1,lines)*font*1.35,anchor=n.props.anchor_to||'center',fraction=anchor.startsWith('top_')?0:anchor.startsWith('bottom_')?1:.5;
+  const ctx=document.createElement('canvas').getContext('2d'),font=8*Number(n.props.font_scale_factor??1);
+  const lines=previewLines(ctx,n.props.text,n.rect.w,font,previewPages).length;
+  const h=Math.max(1,lines)*font*1.125,anchor=n.props.anchor_to||'center',fraction=anchor.startsWith('top_')?0:anchor.startsWith('bottom_')?1:.5;
   return {...n.rect,y:n.rect.y-h*fraction,h};
 }
 function paintText(ctx,n,r){
-  const font=8*Number(n.props.font_scale_factor||1),lineHeight=font*1.35;
-  ctx.save();ctx.beginPath();ctx.rect(r.x,r.y,r.w,r.h);ctx.clip();
-  if(n.clip){ctx.beginPath();ctx.rect(r.x+n.clip.x-n.rect.x,r.y+n.clip.y-n.rect.y,n.clip.w,n.clip.h);ctx.clip();}
-  ctx.font=`${font}px "Malgun Gothic", "Segoe UI", sans-serif`;ctx.fillStyle=toHex(n.props.color);ctx.globalAlpha=n.alpha??n.props.alpha??1;ctx.textBaseline='middle';ctx.textAlign=n.props.text_alignment||'left';
-  const lines=[];for(const paragraph of String(n.props.text||'').replace(/§./g,'').split('\n')){let current='';for(const char of paragraph){if(current&&ctx.measureText(current+char).width>r.w){lines.push(current);current='';}current+=char;}lines.push(current);}
-  const x=ctx.textAlign==='center'?r.x+r.w/2:ctx.textAlign==='right'?r.x+r.w:r.x;
-  lines.forEach((line,i)=>ctx.fillText(line,x,r.y+r.h/2+(i-(lines.length-1)/2)*lineHeight));ctx.restore();
+  drawPreviewText(ctx,n,r,previewPages);
 }
 function moveScene(d){
   const sx=d.resize?Math.max(1,d.node.rect.w+d.dx)/Math.max(1,d.node.rect.w):1,sy=d.resize?Math.max(1,d.node.rect.h+d.dy)/Math.max(1,d.node.rect.h):1;
@@ -82,6 +90,7 @@ function moveScene(d){
   }
 }
 async function capturePreview(){
+  await previewFontsPending?.catch(()=>{});
   if(imageLoadedRevision!==state.renderedRevision||state.stale||state.studioRevision!==state.renderedRevision||optimistic||drag)return;
   const [w,h]=state.project.viewport,captureScale=Math.min(2,Math.floor(4096/Math.max(w,h))),canvas=document.createElement('canvas');canvas.width=w*captureScale;canvas.height=h*captureScale;const ctx=canvas.getContext('2d');ctx.scale(captureScale,captureScale);ctx.imageSmoothingEnabled=false;
   if(!Array.isArray(editor.layers))ctx.drawImage($('preview'),0,0,w,h);
@@ -504,8 +513,57 @@ window.addEventListener('beforeunload',e=>{if(sourceDirty){e.preventDefault();e.
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'&&view==='json'){e.preventDefault();saveSource().catch(err=>toast(err.message));}});
 function openFixtureDialog(){$('viewDialog').close();$('fixtureText').value=JSON.stringify(state.project?.fixture||{},null,2);$('fixtureDialog').showModal();}
 on('fixtureButton','click',openFixtureDialog);on('formDataButton','click',openFixtureDialog);
+on('formCapture','change',async()=>{if(!$('formCapture').value)return;await api('use_fixture',{id:$('formCapture').value});await refreshStudio(true);});
+on('importFixtures','click',async()=>{
+  $('importFixtures').disabled=true;$('fixtureImportStatus').textContent='폼 데이터를 가져오고 있습니다…';
+  try{const result=await api('import_fixtures',{directory:$('fixtureDirectory').value.trim()});await refreshStudio(true);$('fixtureText').value=JSON.stringify(state.project.fixture,null,2);$('fixtureImportStatus').textContent=`${result.imported}개 가져옴`+(result.issues.length?' · '+result.issues.join(' / '):'');}
+  finally{$('importFixtures').disabled=false;}
+});
 on('formVariant','change',async()=>{await api('render',{fixture:{...state.project.fixture,title:$('formVariant').value,hoveredIndex:null,pressedIndex:null,focusedIndex:null}});await refreshStudio(true);});
 on('saveFixture','click',async()=>{const fixture=JSON.parse($('fixtureText').value);if(!fixture||Array.isArray(fixture)||typeof fixture!=='object')throw Error('fixture는 JSON object여야 합니다.');await api('render',{fixture});$('fixtureDialog').close();await refreshStudio(true);});
+
+function openHudData(){
+  const hud=editor.hud?.find(v=>v.id===state.project?.viewId);if(!hud)throw Error('HUD 화면을 선택하세요.');
+  const bindings=state.project.fixture?.bindings||{},controlBindings=state.project.fixture?.controlBindings||{},fields=$('hudFields');fields.replaceChildren();
+  const inputs=[...hud.bindingInputs,...(hud.controlInputs||[])].slice(0,48),extra={...bindings},extraControls=structuredClone(controlBindings);
+  for(const entry of inputs){
+    const row=el('div',undefined,'hud-row'),label=el('label',(entry.control?entry.control+' · ':'')+entry.name),value=entry.control?controlBindings[entry.control]?.[entry.name]:bindings[entry.name],type=el('select'),input=el('textarea');row.dataset.binding=entry.name;if(entry.control)row.dataset.control=entry.control;
+    for(const kind of ['string','number','boolean'])type.append(new Option({string:'문자열',number:'숫자',boolean:'불리언'}[kind],kind));
+    type.value=value===undefined?'string':typeof value;type.setAttribute('aria-label',entry.name+' 자료형');input.setAttribute('aria-label',entry.name+' 값');input.value=value===undefined?'':String(value);input.placeholder='입력하지 않으면 원본 데이터 없음';label.title=entry.path;
+    row.append(label,input,type);fields.append(row);if(entry.control){if(extraControls[entry.control]){delete extraControls[entry.control][entry.name];if(!Object.keys(extraControls[entry.control]).length)delete extraControls[entry.control];}}else delete extra[entry.name];
+  }
+  if(!inputs.length)fields.append(el('p','이 HUD에서 직접 읽을 외부 바인딩을 찾지 못했습니다. 정적 요소는 미리보기에 표시됩니다.'));
+  $('hudExtra').value=JSON.stringify({bindings:extra,controlBindings:extraControls},null,2);$('hudHints').textContent=(hud.protocolHints.length?'원본 조건식의 표식: '+hud.protocolHints.join(' · '):'조건에 맞는 값이 들어오면 숨겨진 HUD가 표시됩니다.')+' 컨트롤별 값은 보존 상태의 수동 스냅샷입니다.';
+  $('hudDialog').showModal();
+}
+on('hudDataButton','click',openHudData);
+on('hudScope','change',async()=>{await api('set_hud_scope',{scope:$('hudScope').value});await refreshStudio(true);});
+on('hudForm','submit',async e=>{
+  e.preventDefault();const extras=JSON.parse($('hudExtra').value),bindings=extras.bindings||{},controlBindings=extras.controlBindings||{};if(!extras||Array.isArray(extras)||typeof extras!=='object')throw Error('추가 바인딩은 JSON object여야 합니다.');
+  for(const row of $('hudFields').children){if(!row.dataset.binding)continue;const values=row.dataset.control?(controlBindings[row.dataset.control]??={}):bindings,value=row.querySelector('textarea').value,type=row.querySelector('select').value;if(!value){delete values[row.dataset.binding];continue;}
+    if(type==='boolean'&&!['true','false'].includes(value.trim()))throw Error(row.dataset.binding+': true 또는 false를 입력하세요.');
+    values[row.dataset.binding]=type==='number'?Number(value):type==='boolean'?value.trim()==='true':value;
+  }
+  await api('set_hud_bindings',{bindings,controlBindings});$('hudDialog').close();await refreshStudio(true);
+});
+let libraryOffset=null,librarySerial=0,referencePreviewId=null;
+async function loadLibrary({more=false,refresh=false}={}){
+  const serial=++librarySerial;$('libraryStatus').textContent='자료 목록을 읽고 있습니다…';
+  const result=await api('library',{query:$('libraryQuery').value.trim(),kind:$('libraryKind').value,offset:more?libraryOffset:0,refresh});if(serial!==librarySerial)return;
+  if(!more)$('libraryList').replaceChildren();
+  for(const entry of result.entries){
+    const row=el('div',undefined,'library-row'),info=el('div'),button=el('button',entry.kind==='pack'?'작업 사본 열기':'원문 보기');
+    info.append(el('strong',entry.name||entry.label),el('small',entry.kind+' · '+entry.label+(entry.license?' · '+entry.license:'')));row.append(info,button);
+    button.onclick=async()=>{button.disabled=true;try{
+      if(entry.kind==='pack'){guardSourceBuffer();await api('open_reference',{id:entry.id});source=null;view='preview';$('libraryDialog').close();await refreshStudio(true);setExplorerTab('screens');}
+      else{const data=await api('read_reference',{id:entry.id});$('referenceTitle').textContent=data.label;$('referenceEvidence').textContent='읽기 전용 · SHA-256 '+data.sha256.slice(0,16);$('referenceText').textContent=data.text;$('referenceViewer').hidden=false;referencePreviewId=data.previewControl?entry.id:null;$('referencePreview').hidden=!referencePreviewId;}
+    }catch(error){toast(error.message);}finally{button.disabled=false;}};$('libraryList').append(row);
+  }
+  libraryOffset=result.nextOffset;$('libraryMore').hidden=libraryOffset===null;$('libraryStatus').textContent=`${result.total}개 · UI 팩 ${result.counts.pack} / 스킬 ${result.counts.skill} / 문서 ${result.counts.document} / 원문 ${result.counts.source}`+(result.issues.length?' · '+result.issues.join(' / '):'');
+}
+on('activityLibrary','click',async()=>{$('libraryDialog').showModal();await loadLibrary();});
+on('referencePreview','click',async()=>{guardSourceBuffer();await api('open_reference',{id:referencePreviewId});source=null;view='preview';$('libraryDialog').close();await refreshStudio(true);setExplorerTab('screens');});
+on('librarySearchForm','submit',async e=>{e.preventDefault();await loadLibrary();});on('libraryKind','change',()=>loadLibrary());on('libraryRescan','click',()=>loadLibrary({refresh:true}));on('libraryMore','click',()=>loadLibrary({more:true}));
 function parentNode(){let node=selected;while(node&&!['panel','screen','stack_panel','grid'].includes(node.type))node=editor.nodes.find(n=>n.key===node.parent);return node||editor.nodes[0];}
 async function add(type,texture){document.querySelector('.add-menu').open=false;const node=parentNode();if(!node?.source)throw Error('편집 가능한 부모 패널을 선택하세요.');await api('add',{key:node.key,expectedRevision:state.studioRevision,expectedHash:node.source.sha256,type,...(texture?{texture}:{})});await refreshStudio(true);}
 on('addLabel','click',()=>add('label'));on('addPanel','click',()=>add('panel'));on('addImage','click',()=>{if(!state.project)throw Error('팩을 먼저 여세요.');$('imageFile').click();});
@@ -645,10 +703,15 @@ function updateWorkbench(){
   $('fileTabName').textContent=current?(current.kind==='form'?current.control+' · '+current.formType:current.path?.split('/').at(-1)):'UI 화면';
   $('fileBreadcrumb').textContent=current?current.path+'  ›  '+current.control:'ui / 화면을 선택하세요';
   const form=current?.kind==='form';$('formContext').hidden=!form;
+  const hud=current?.kind==='hud';$('hudContext').hidden=!hud;
+  if(hud){$('hudScope').value=state.project.hudScope??'pack';$('hudDataSummary').textContent='테스트 값 '+(Object.keys(state.project.fixture?.bindings||{}).length+Object.keys(state.project.fixture?.controlBindings||{}).length)+'개 · 게임 검증 전';}
   if(form){
     $('activeFormName').textContent=current.control+' · 전체 폼';
     const fixture=state.project.fixture||{},count=fixture.buttons?.length||0;
     $('formDataSummary').textContent=(fixture.title||'제목 데이터 필요')+' · '+(count?'버튼 '+count+'개':'버튼 데이터 없음');
+    $('formContext').classList.toggle('data-missing',!Array.isArray(fixture.buttons));
+    const captures=(editor.fixtureRecords||[]).filter(record=>record.viewIds?.includes(current.id)),capture=$('formCapture');capture.replaceChildren(new Option('저장된 폼 데이터 선택',''));capture.hidden=!captures.length;
+    for(const record of captures)capture.append(new Option(record.name+' · '+record.buttonCount+'개',record.id));capture.value=state.project.fixtureRecordId??'';
     const variants=$('formVariant');variants.replaceChildren();variants.hidden=!current.titleVariants?.length;
     if(!variants.hidden){if(!current.titleVariants.some(v=>v.title===fixture.title))variants.append(new Option(fixture.title||'디자인 선택',fixture.title||''));for(const v of current.titleVariants)variants.append(new Option(v.title,v.title));variants.value=fixture.title;}
   }

@@ -7,7 +7,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { nativeStatus, requestNativeReload, requestNativeAction } from './native.mjs';
 import { Reviewer, patchText } from './review.mjs';
-import { normalizeDevice } from '../../studio/devices.js';
+import { normalizeDevice, DEVICE_PRESETS } from '../../studio/devices.js';
 
 export const hash = text => createHash('sha256').update(text).digest('hex');
 export class LiveSession extends EventEmitter {
@@ -46,8 +46,9 @@ export class LiveSession extends EventEmitter {
     if (typeof input.control !== 'string' || !input.control.includes('.')) throw new Error('control must be namespace.control');
     const previewDevice=normalizeDevice(input.previewDevice,viewport);
     this.watcher?.close(); clearTimeout(this.debounce);
-    this.project = { rpRoot, control: input.control, ...(input.workspaceId ? {workspaceId:input.workspaceId} : {}), ...(input.viewId ? {viewId:input.viewId} : {}), viewFixtures:input.viewFixtures ?? {}, viewport, ...(previewDevice?{previewDevice}:{}), fixture: input.fixture ?? {}, interactionState: input.interactionState ?? 'default', ...(input.vanillaRoot ? { vanillaRoot: await realpath(input.vanillaRoot) } : {}) };
+    this.project = { rpRoot, control: input.control, ...(input.fixtureLibraryId?{fixtureLibraryId:input.fixtureLibraryId}:{}),fixtureRecordId:input.fixtureRecordId??null, ...(input.workspaceId ? {workspaceId:input.workspaceId} : {}), ...(input.viewId ? {viewId:input.viewId} : {}), viewFixtures:input.viewFixtures ?? {}, viewport, ...(previewDevice?{previewDevice}:{}), fixture: input.fixture ?? {}, interactionState: input.interactionState ?? 'default', ...(input.vanillaRoot ? { vanillaRoot: await realpath(input.vanillaRoot) } : {}) };
     this.ownWrites.clear();
+    this.project.hudScope=input.hudScope==='all'?'all':'pack';
     this.watcher = watch(rpRoot, { recursive: true }, async (_, name) => {
       if (!name || /\.(json|jsonc|png|tga|txt|lang)$/i.test(name)) {
         const file = name && resolve(rpRoot, name), ownHash = this.ownWrites.get(file);
@@ -80,7 +81,9 @@ export class LiveSession extends EventEmitter {
       if (revision !== this.revision) return this.status();
       try {
         const outputDir = join(this.config.runtime, 'renders', this.id, String(revision));
-        const { editorLayout, previewLayers, ...report } = await this.engine('renderScreen', { ...this.project, outputDir, includeEditor: this.editor !== undefined });
+        const family=DEVICE_PRESETS.find(p=>p.id===this.project.previewDevice?.presetId)?.family;
+        const hud=this.editor?.hud?.some(view=>view.id===this.project.viewId);
+        const { editorLayout, previewLayers, ...report } = await this.engine('renderScreen', { ...this.project, sourceScope:hud&&this.project.hudScope!=='all'?'target-hud':undefined,variables:{'$touch':['모바일','태블릿'].includes(family)}, outputDir, includeEditor: this.editor !== undefined });
         if (revision === this.revision) { this.resolved = editorLayout; this.previewLayers = previewLayers; }
         if (revision === this.revision) this.publish({ status: 'ready', stale: false, renderedRevision: revision, report, error: null });
       } catch (error) {
@@ -91,7 +94,7 @@ export class LiveSession extends EventEmitter {
     this.pending = task;
     return task;
   }
-  async inspect() { if (!this.project) throw new Error('Open a resource pack first'); return this.engine('resolveScreen', this.project); }
+  async inspect() { if (!this.project) throw new Error('Open a resource pack first'); const family=DEVICE_PRESETS.find(p=>p.id===this.project.previewDevice?.presetId)?.family;return this.engine('resolveScreen', {...this.project,sourceScope:this.editor?.hud?.some(view=>view.id===this.project.viewId)&&this.project.hudScope!=='all'?'target-hud':undefined,variables:{'$touch':['모바일','태블릿'].includes(family)}}); }
   async sourcePath(name) {
     if (!this.project || typeof name !== 'string' || isAbsolute(name) || !/\.(json|jsonc)$/i.test(name)) throw new Error('Use a relative JSON/JSONC file in the open RP');
     const file = await realpath(resolve(this.project.rpRoot, name));

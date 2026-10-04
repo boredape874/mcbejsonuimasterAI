@@ -68,7 +68,24 @@ export function buildViewCatalog(screens, documents) {
   const hud = [], other = [], components = [];
   for (const screen of screens) {
     const entry = { ...screen, id: `control:${screen.control}`, renderControl: screen.control };
-    if (screen.control === 'hud.root_panel' || screen.control === 'hud.hud_screen') hud.push({ ...entry, kind: 'hud' });
+    if (screen.control === 'hud.root_panel' || screen.control === 'hud.hud_screen') {
+      const inputs=new Map(),markers=new Set(),visited=new Set(),readers=new Map();
+      const inspect=control=>{
+        if(visited.has(control))return;visited.add(control);
+        const record=records.get(control);if(!record)return;
+        visit(record.value,node=>{
+          for(const binding of node.bindings||[]){
+            if(typeof binding.binding_name==='string'&&binding.binding_name.startsWith('#')&&!['collection','collection_details'].includes(binding.binding_type))inputs.set(binding.binding_name,{name:binding.binding_name,path:record.path});
+            if(binding.source_control_name&&typeof binding.source_property_name==='string'&&/^#[\w.-]+$/.test(binding.source_property_name))readers.set(binding.source_control_name+'|'+binding.source_property_name,{control:binding.source_control_name,name:binding.source_property_name,path:record.path});
+            if(typeof binding.source_property_name==='string')for(const match of binding.source_property_name.matchAll(/'([^'\\]{2,80})'/g))markers.add(match[1]);
+          }
+          for(const key of Object.keys(node))if(key.includes('@')){const ref=qualify(key.slice(key.indexOf('@')+1),record.control.split('.')[0]);if(ref)inspect(ref);}
+        });
+      };
+      inspect(screen.control);
+      const bindings=[...inputs.values()].sort((a,b)=>a.name.localeCompare(b.name));
+      hud.push({ ...entry, kind: 'hud',bindingInputs:bindings,controlInputs:[...readers.values()],protocolHints:[...markers].slice(0,24) });
+    }
     else if (screen.type === 'screen') other.push({ ...entry, kind: 'screen' });
     else if (!used.has(screen.control)) components.push({ ...entry, kind: 'component' });
   }

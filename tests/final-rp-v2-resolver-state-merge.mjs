@@ -17,4 +17,24 @@ const variableResult=resolveControl(variableIndex,"demo.screen");
 assert.equal(variableResult.tree.controls[0].id,"content");
 assert.equal(variableResult.tree.controls[0].controls[0].id,"body");
 assert.equal(variableResult.tree.controls[0].controls[0].props.texture,"textures/ui/body");
+const inheritedDefaults={unresolved:[],globals:{},controls:new Map([
+  ["demo.base",{qualified:"demo.base",namespace:"demo",id:"base",value:{type:"panel","$pane|default":[100,40],"$touch|default":false,controls:[{body:{type:"panel",size:"$pane",ignored:"$touch"}}]}}],
+  ["demo.derived",{qualified:"demo.derived",namespace:"demo",id:"derived",baseRef:"demo.base",value:{controls:[{extra:{type:"panel",size:"$pane",ignored:"$touch"}}]}}]
+])};
+for(const record of inheritedDefaults.controls.values())Object.assign(record,{declaration:record.id,file:'fixture',relative:'fixture',hash:'fixture',layer:'target',provenance:{}});
+const defaultsResult=resolveControl(inheritedDefaults,"demo.derived");
+assert.deepEqual(defaultsResult.tree.controls.find(n=>n.id==='extra').props.size,[100,40]);
+assert.equal(defaultsResult.tree.controls.find(n=>n.id==='extra').props.ignored,false);
+assert.equal(defaultsResult.unresolved.some(d=>d.kind==='unresolved_expression'),false);
+const overrideResult=resolveControl(inheritedDefaults,"demo.derived",{overrides:{'$pane':[80,20],'$touch':true}});
+assert.deepEqual(overrideResult.tree.controls.find(n=>n.id==='extra').props.size,[80,20]);
+assert.equal(overrideResult.tree.controls.find(n=>n.id==='extra').props.ignored,true);
 console.log("final-rp-v2-resolver-state-merge: ok");
+
+const conditionalIndex={unresolved:[],globals:{},controls:new Map()};
+for(const [id,value]of Object.entries({screen:{type:'panel','$touch':false,'$pane':[90,30],controls:[{mouse:{type:'panel',variables:[{requires:'(not $touch)','$selected_size':'$pane','$font':0}],size:'$selected_size',controls:[{label:{type:'label',font_scale_factor:'$font'}}]}},{local:{type:'panel','$pane':[22,11],size:'$pane'}}]}}))conditionalIndex.controls.set(`conditional.${id}`,{qualified:`conditional.${id}`,namespace:'conditional',id,declaration:id,value,file:'fixture',relative:'fixture',hash:'fixture',layer:'target'});
+const conditional=resolveControl(conditionalIndex,'conditional.screen');
+assert.deepEqual(conditional.tree.controls[0].props.size,[90,30]);
+assert.equal(conditional.tree.controls[0].controls[0].props.font_scale_factor,0);
+assert.deepEqual(conditional.tree.controls[1].props.size,[22,11]);
+assert.equal(conditional.unresolved.some(d=>d.kind==='unresolved_expression'),false);
