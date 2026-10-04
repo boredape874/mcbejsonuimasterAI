@@ -8,12 +8,14 @@ import { fileURLToPath } from 'node:url';
 import { nativeStatus, requestNativeReload, requestNativeAction } from './native.mjs';
 import { Reviewer, patchText } from './review.mjs';
 import { normalizeDevice, DEVICE_PRESETS } from '../../studio/devices.js';
+import { StudioStorage } from './storage.mjs';
 
 export const hash = text => createHash('sha256').update(text).digest('hex');
 export class LiveSession extends EventEmitter {
   constructor(config) {
     super(); this.config = config; this.id = randomUUID(); this.revision = 0; this.state = { status: 'idle', runtimeVerified: false }; this.reviewer = new Reviewer();
     this.engineRequests = new Map(); this.ownWrites = new Map();
+    this.storage=new StudioStorage(config.runtime,{cacheBytes:config.cacheBytes,cacheRoot:config.cacheRootRuntime===config.runtime?config.cacheRoot:config.runtime});
   }
   status() { return { sessionId: this.id, revision: this.revision, project: this.project, ...this.state, runtimeVerified: false }; }
   publish(patch) { this.state = { ...this.state, ...patch }; this.emit('state', this.status()); }
@@ -80,12 +82,15 @@ export class LiveSession extends EventEmitter {
       await previous?.catch(() => {});
       if (revision !== this.revision) return this.status();
       try {
-        const outputDir = join(this.config.runtime, 'renders', this.id, String(revision));
+        const outputDir = join(this.storage.cacheRoot, 'renders', this.id, String(revision));
+        this.storage.pins.add(outputDir);
         const family=DEVICE_PRESETS.find(p=>p.id===this.project.previewDevice?.presetId)?.family;
         const hud=this.editor?.hud?.some(view=>view.id===this.project.viewId);
-        const { editorLayout, previewLayers, ...report } = await this.engine('renderScreen', { ...this.project, sourceScope:hud&&this.project.hudScope!=='all'?'target-hud':undefined,variables:{'$touch':['모바일','태블릿'].includes(family)}, outputDir, includeEditor: this.editor !== undefined });
+        let result;try{result=await this.engine('renderScreen', { ...this.project, sourceScope:hud&&this.project.hudScope!=='all'?'target-hud':undefined,variables:{'$touch':['모바일','태블릿'].includes(family)}, outputDir, writeReport:false, includeEditor: this.editor !== undefined });}finally{this.storage.pins.delete(outputDir);}
+        const { editorLayout, previewLayers, render, ...report } = result;
         if (revision === this.revision) { this.resolved = editorLayout; this.previewLayers = previewLayers; }
         if (revision === this.revision) this.publish({ status: 'ready', stale: false, renderedRevision: revision, report, error: null });
+        await this.pruneCache();
       } catch (error) {
         if (revision === this.revision) this.publish({ status: 'error', stale: true, error: error.message });
       }
@@ -95,6 +100,11 @@ export class LiveSession extends EventEmitter {
     return task;
   }
   async inspect() { if (!this.project) throw new Error('Open a resource pack first'); const family=DEVICE_PRESETS.find(p=>p.id===this.project.previewDevice?.presetId)?.family;return this.engine('resolveScreen', {...this.project,sourceScope:this.editor?.hud?.some(view=>view.id===this.project.viewId)&&this.project.hudScope!=='all'?'target-hud':undefined,variables:{'$touch':['모바일','태블릿'].includes(family)}}); }
+  async pruneCache() {
+    if(this.ai?.busy)return {deferred:true};
+    try{return await this.storage.prune(()=>this.ai?.busy?[this.config.runtime,this.storage.cacheRoot]:[this.state.report?.outputPath,this.browserFrame?.path,this.gameFrame?.path]);}
+    catch(error){this.publish({storageWarning:error.message});return {warning:error.message};}
+  }
   async sourcePath(name) {
     if (!this.project || typeof name !== 'string' || isAbsolute(name) || !/\.(json|jsonc)$/i.test(name)) throw new Error('Use a relative JSON/JSONC file in the open RP');
     const file = await realpath(resolve(this.project.rpRoot, name));

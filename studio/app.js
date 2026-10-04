@@ -697,6 +697,17 @@ function setExplorer(visible){setFocusMode(false);document.querySelector('.works
 on('activityExplorer','click',()=>setExplorer($('activityExplorer').getAttribute('aria-pressed')!=='true'));
 on('activitySearch','click',()=>{setExplorer(true);setExplorerTab('screens');$('screenSearch').focus();});
 on('activitySettings','click',()=>$('settingsDialog').showModal());
+const storageButton=el('button','저장 공간 확인');storageButton.id='storageButton';storageButton.type='button';$('settingsDialog').querySelector('.dialog-actions').prepend(storageButton);
+const sizeText=bytes=>bytes>=1024**3?(bytes/1024**3).toFixed(2)+' GB':bytes>=1024**2?(bytes/1024**2).toFixed(1)+' MB':(bytes/1024).toFixed(1)+' KB';
+function showStorage(usage){
+  const list=$('storageUsage');list.replaceChildren();
+  for(const [label,bytes]of [['전체',usage.bytes],['미리보기 캐시',usage.groups.cache],['작업 사본 B',usage.groups.workspaces],['동기화 복구 백업',usage.groups.syncBackups],['원본 수정 백업',usage.groups.sourceBackups],['참조 준비 사본',usage.groups.references],['데이터·기타',usage.groups.other]])list.append(el('dt',label),el('dd',sizeText(bytes)));
+  $('storageLocation').textContent='캐시 한도 '+sizeText(usage.cacheLimitBytes)+' · '+usage.cacheLocation;
+}
+async function readStorage(){showStorage(await api('storage_status'));}
+on('storageButton','click',async()=>{$('settingsDialog').close();$('storageDialog').showModal();$('storageMessage').textContent='용량을 확인하고 있습니다…';await readStorage();$('storageMessage').textContent='현재 화면과 Codex가 사용하는 이미지는 보존합니다.';});
+on('refreshStorage','click',readStorage);
+on('cleanupStorage','click',async()=>{const button=$('cleanupStorage');button.disabled=true;try{const result=await api('storage_cleanup');showStorage(result.usage);$('storageMessage').textContent=result.deferred?'Codex 작업이 끝나면 자동 정리합니다.':result.warning?'정리 실패: '+result.warning:sizeText(result.freedBytes)+' 정리 · 편집 파일 보존';}finally{button.disabled=false;}});
 on('activityProblems','click',()=>{document.querySelector('.workspace').classList.remove('diagnostics-collapsed');$('diagnostics').hidden=false;$('diagnosticToggle').textContent='접기';fit();});
 function updateWorkbench(){
   const working=state.workspace;$('workspaceButton').hidden=!working;

@@ -18,6 +18,8 @@ export async function startHost(config) {
   const dispatch = async (name, args = {}) => {
     if (session.workspace.busy && !['status','studio','studio_context','workspace_status','codex_status','native_status'].includes(name)) throw Error('WORKSPACE_BUSY: 팩 동기화가 진행 중입니다.');
     switch (name) {
+      case 'storage_status': return session.storage.usage();
+      case 'storage_cleanup': return {...await session.pruneCache(),usage:await session.storage.usage()};
       case 'set_hud_bindings': return session.setHudBindings(args);
       case 'set_hud_scope': return session.setHudScope(args);
       case 'library': return library.list(args);
@@ -125,7 +127,7 @@ export async function startHost(config) {
     } catch (error) { fail(400, error.message); }
   });
   session.on('state', state => { for (const client of clients) client.write(`data: ${JSON.stringify(state)}\n\n`); });
-  codex.on('state', state => { for(const client of clients)client.write(`event: codex\ndata: ${JSON.stringify(state)}\n\n`); });
+  codex.on('state', state => { for(const client of clients)client.write(`event: codex\ndata: ${JSON.stringify(state)}\n\n`);if(!state.busy)session.pruneCache().catch(()=>{}); });
   session.on('game-frame', state => { for(const client of clients)client.write(`event: game\ndata: ${JSON.stringify(state)}\n\n`); });
   await new Promise((accept, reject) => { server.once('error', reject); server.listen(config.port, '127.0.0.1', accept); });
   const connection = { url: `http://127.0.0.1:${server.address().port}`, token, pid: process.pid, sessionId: session.id };
@@ -133,6 +135,7 @@ export async function startHost(config) {
   await writeFile(join(config.runtime, 'connection.json'), JSON.stringify(connection, null, 2));
   try { await session.open({...JSON.parse(await readFile(join(config.runtime,'last-project.json'),'utf8')),useWorkspace:true}); }
   catch(error) { if(error.code !== 'ENOENT') session.publish({restoreError:error.message}); }
+  await session.pruneCache();
   return { session, server, connection, codex, async close() { codex.close(); session.close(); for (const client of clients) client.end(); server.closeAllConnections(); await new Promise(r => server.close(r)); } };
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

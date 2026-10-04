@@ -98,17 +98,10 @@ export class PackWorkspace {
     }
     this.watcher?.close(); clearTimeout(this.timer); this.plans.clear();
     this.meta = meta; this.originChanged = !sameHashes(await snapshot(meta.originRpRoot),meta.baseline);
-    this.watcher = watch(meta.originRpRoot,{recursive:true},()=>{
-      if(this.busy)return;
-      clearTimeout(this.timer);
-      this.originChanged=true;this.onChange(this.summary());
-      this.timer = setTimeout(async()=>{
-        if(this.checkingOrigin)return;
-        this.checkingOrigin=true;
-        try { this.originChanged = !sameHashes(await snapshot(meta.originRpRoot),meta.baseline); } catch { this.originChanged=true; }
-        finally { this.checkingOrigin=false; }
-        if (this.meta === meta) this.onChange(this.summary());
-      },250);
+    this.watcher = watch(meta.originRpRoot,{recursive:true},(_,name)=>{
+      if(this.busy||this.meta!==meta||String(name||'').endsWith('.studio-tmp'))return;
+      // A change signal needs no full-pack hash scan; the sync preview verifies both packs.
+      if(!this.originChanged){this.originChanged=true;this.onChange(this.summary());}
     });
     this.watcher.on('error',()=>{this.originChanged = true; this.onChange(this.summary());});
     return this.summary();
@@ -163,6 +156,7 @@ export class PackWorkspace {
     const destinationRoot = plan.direction === 'pull' ? this.meta.workingRpRoot : this.meta.originRpRoot;
     const sourceRoot = plan.direction === 'pull' ? this.meta.originRpRoot : this.meta.workingRpRoot;
     const backupRoot = join(this.root,this.meta.id,'sync-backups',plan.id);
+    const transaction={id:plan.id,workspaceId:plan.workspaceId,direction:plan.direction,destinationRoot,changes:plan.changes.map(change=>({...change,baseline:this.meta.baseline[change.path]??null}))};
     const staged = [], applied = [];
     const previousBaseline = {...this.meta.baseline}, previousSync = this.meta.lastSync;
     try {
@@ -176,14 +170,14 @@ export class PackWorkspace {
         if (bytes !== null) { await mkdir(dirname(join(backupRoot,'after',change.path)),{recursive:true}); await writeFile(join(backupRoot,'after',change.path),bytes); }
         staged.push({...change,bytes,previous});
       }
-      await atomicJSON(join(backupRoot,'transaction.json'),{...plan,destinationRoot,createdAt:new Date().toISOString(),status:'prepared'});
+      await atomicJSON(join(backupRoot,'transaction.json'),{...transaction,createdAt:new Date().toISOString(),status:'prepared'});
       for (const change of staged) { await this.replace(destinationRoot,change.path,change.bytes,change.destination); applied.push(change); }
       for (const row of [...plan.converged,...plan.changes.map(change=>({path:change.path,hash:change.source}))]) {
         if (row.hash === null) delete this.meta.baseline[row.path]; else this.meta.baseline[row.path] = row.hash;
       }
       this.meta.lastSync = {direction:plan.direction,fileCount:applied.length,at:new Date().toISOString(),backupRoot};
       await this.save();
-      await atomicJSON(join(backupRoot,'transaction.json'),{...plan,destinationRoot,status:'applied',completedAt:new Date().toISOString()});
+      await atomicJSON(join(backupRoot,'transaction.json'),{...transaction,status:'applied',completedAt:new Date().toISOString()});
       const currentA = {...plan.a};
       if(plan.direction === 'push') {
         for(const change of plan.changes) { if(change.source===null)delete currentA[change.path];else currentA[change.path]=change.source; }
@@ -196,7 +190,7 @@ export class PackWorkspace {
       for (const change of applied.reverse()) try { await this.replace(destinationRoot,change.path,change.previous,change.source); } catch(failure) { rollbackErrors.push(`${change.path}: ${failure.message}`); }
       this.meta.baseline = previousBaseline; this.meta.lastSync = previousSync;
       await this.save().catch(failure=>rollbackErrors.push(failure.message));
-      if(staged.length)await atomicJSON(join(backupRoot,'transaction.json'),{...plan,destinationRoot,status:rollbackErrors.length?'recovery-needed':'rolled-back',error:error.message,rollbackErrors}).catch(failure=>rollbackErrors.push(failure.message));
+      if(staged.length)await atomicJSON(join(backupRoot,'transaction.json'),{...transaction,status:rollbackErrors.length?'recovery-needed':'rolled-back',error:error.message,rollbackErrors}).catch(failure=>rollbackErrors.push(failure.message));
       throw Error(error.message + (rollbackErrors.length ? `; 일부 복구 실패. 백업: ${backupRoot}; ${rollbackErrors.join('; ')}` : ''));
     } finally { this.busy = false; this.onChange(this.summary()); }
   }

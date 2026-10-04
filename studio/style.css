@@ -363,3 +363,4 @@ kbd { display:inline-block; padding:2px 6px; background:var(--input); border:1px
 .library-row>div{flex:1;min-width:0;overflow-wrap:anywhere}.library-row small{display:block;margin-top:4px;opacity:.7}
 #referenceText{max-height:38vh;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;padding:16px;background:var(--surface);font-size:13px;line-height:1.6}
 .hud-fields{max-height:45vh;overflow:auto;display:grid;gap:10px}.hud-row{display:grid;grid-template-columns:minmax(0,1fr) 90px;gap:8px}.hud-row label{grid-column:1/-1}.hud-row input,.hud-row textarea{width:100%;min-width:0}.hud-row textarea{min-height:54px;font:inherit}.hud-row select{align-self:start}
+#storageUsage{display:grid;grid-template-columns:minmax(150px,1fr) auto;gap:10px 24px;max-width:100%;margin:20px 0}#storageUsage dt{font-weight:500;white-space:nowrap}#storageUsage dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}#storageLocation{overflow-wrap:anywhere;font-size:12px}

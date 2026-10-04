@@ -201,9 +201,11 @@ export class StudioSession extends LiveSession {
     if(presets.some(p=>!p)||new Set(presetIds).size!==presetIds.length)throw Error('Unknown or duplicate device preset');
     const revision=this.revision,project=structuredClone(this.project),result=[];
     for(const preset of presets){
-      const report=await this.engine('renderScreen',{...project,viewport:preset.viewport,sourceScope:this.editor.hud?.some(view=>view.id===project.viewId)&&project.hudScope!=='all'?'target-hud':undefined,variables:{'$touch':['모바일','태블릿'].includes(preset.family)},outputDir:join(this.config.runtime,'comparisons',randomUUID()),includeEditor:true});
+      const outputDir=join(this.storage.cacheRoot,'comparisons',randomUUID());this.storage.pins.add(outputDir);
+      let report;try{report=await this.engine('renderScreen',{...project,viewport:preset.viewport,sourceScope:this.editor.hud?.some(view=>view.id===project.viewId)&&project.hudScope!=='all'?'target-hud':undefined,variables:{'$touch':['모바일','태블릿'].includes(preset.family)},outputDir,writeReport:false,includeEditor:true});}finally{this.storage.pins.delete(outputDir);}
       if(this.revision!==revision||this.state.stale)throw Error('PREVIEW_CONFLICT: 비교 중 원본이나 화면 설정이 바뀌었습니다. 다시 비교하세요.');
       result.push({id:preset.id,viewport:preset.viewport,diagnostics:report.diagnostics??[],layers:report.previewLayers??[],nodes:report.editorLayout?.layout?.nodes.map((n,index)=>({key:n.pointer||'/',id:n.id,qualified:n.qualified,type:n.props.type,props:n.props,rect:n.rect,clip:n.clip,alpha:n.alpha,visible:n.visible!==false,layer:n.layer,index}))??[],runtimeVerified:false});
+      await this.pruneCache();
     }
     return {revision,profiles:result,runtimeVerified:false};
   }
@@ -405,10 +407,10 @@ export class StudioSession extends LiveSession {
   async acceptFrame({data,source}) {
     if(typeof data!=='string' || data.length>6*1024*1024) throw Error('Invalid frame');
     const bytes = Buffer.from(data.replace(/^data:image\/png;base64,/,''),'base64'); await this.validatePng(bytes);
-    const dir = join(this.config.runtime,'game'); await mkdir(dir,{recursive:true});
+    const dir = join(this.storage.cacheRoot,'game'); await mkdir(dir,{recursive:true});
     const capturedAt = Date.now(), path = join(dir,`${this.id}.png`); await writeFile(path,bytes);
     this.gameFrame = {capturedAt,path,source:String(source||'사용자가 공유한 창').slice(0,160)};
-    this.emit('game-frame',{capturedAt,source:this.gameFrame.source}); return {capturedAt};
+    this.emit('game-frame',{capturedAt,source:this.gameFrame.source}); await this.pruneCache();return {capturedAt};
   }
   clearFrame() { this.gameFrame=null;this.emit('game-frame',null);return {shared:false}; }
   async acceptBrowserFrame({data,revision,fontMode,captureScale=1}) {
@@ -416,9 +418,10 @@ export class StudioSession extends LiveSession {
     if(typeof data!=='string'||data.length>6*1024*1024)throw Error('Invalid preview frame');
     const bytes=Buffer.from(data.replace(/^data:image\/png;base64,/,''),'base64');await this.validatePng(bytes);
     if(!Number.isInteger(captureScale)||captureScale<1||captureScale>4||bytes.readUInt32BE(16)!==this.project.viewport[0]*captureScale||bytes.readUInt32BE(20)!==this.project.viewport[1]*captureScale)throw Error('Preview frame dimensions must match the viewport and capture scale');
-    const dir=join(this.config.runtime,'browser-preview');await mkdir(dir,{recursive:true});
+    const dir=join(this.storage.cacheRoot,'browser-preview');await mkdir(dir,{recursive:true});
     const path=join(dir,`${this.id}-${revision}.png`);await writeFile(path,bytes);
     if(revision===this.state.renderedRevision)this.browserFrame={path,revision,captureScale,fontMode:fontMode==='approximate'?'approximate-system-font':'minecraft-renderer'};
+    await this.pruneCache();
     return {saved:true,revision};
   }
   async syncWorkspace(id) {

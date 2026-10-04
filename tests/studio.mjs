@@ -18,8 +18,39 @@ import { importFormFixtures, loadFormFixtures } from '../tools/studio/fixtures.m
 import { textTokens, previewLines, drawPreviewText } from '../studio/text-preview.js';
 import { previewFonts } from '../tools/studio/preview-fonts.mjs';
 import { ReferenceLibrary } from '../tools/studio/library.mjs';
+import { StudioStorage } from '../tools/studio/storage.mjs';
 import { selectionBounds, alignSelection, distributeSelection, gridSelection, matchSelectionSize, snapMove } from '../studio/geometry.js';
 import { DEVICE_PRESETS, normalizeDevice, safeRect, layoutIssues } from '../studio/devices.js';
+
+test('Studio cache is bounded, preserves active images and never removes workspaces or backups',async()=>{
+  const dir=join(process.env.MCBEKIT_TEST_ROOT||join(root,'workspace/test-studio'),randomUUID()),runtime=join(dir,'runtime'),cacheRoot=join(dir,'cache');
+  const put=async(path,bytes)=>{await mkdir(join(path,'..'),{recursive:true});await writeFile(path,bytes);};
+  await put(join(runtime,'renders/old/1/old.report.json'),Buffer.alloc(2*1024*1024));
+  await put(join(runtime,'renders/old/1/old.png'),Buffer.alloc(600*1024));
+  await put(join(cacheRoot,'renders/new/1/current.png'),Buffer.alloc(64*1024));
+  await put(join(cacheRoot,'browser-preview/old.png'),Buffer.alloc(600*1024));
+  await put(join(cacheRoot,'comparisons/old/compare.png'),Buffer.alloc(600*1024));
+  const staged=join(cacheRoot,'renders/new/2');await put(join(staged,'pending.png'),Buffer.alloc(64*1024));
+  const preserved=['workspaces/id/pack/ui/form.json','workspaces/id/sync-backups/id/before/ui/form.json','backups/original.json','fixture-libraries/forms.json','reference-sources/source/pack/ui/form.json','proof/user.png'];
+  for(const path of preserved)await put(join(runtime,path),'protected');
+  const storage=new StudioStorage(runtime,{cacheRoot,cacheBytes:1024*1024});storage.pins.add(staged);
+  const result=await storage.prune(()=>[join(cacheRoot,'renders/new/1/current.png')]);assert.ok(result.freedBytes>=2*1024*1024);assert.ok(result.remainingCacheBytes<=1024*1024);
+  for(const path of preserved)assert.equal(await readFile(join(runtime,path),'utf8'),'protected');
+  assert.equal((await readFile(join(staged,'pending.png'))).length,64*1024);assert.equal((await readFile(join(cacheRoot,'renders/new/1/current.png'))).length,64*1024);
+  await assert.rejects(readFile(join(runtime,'renders/old/1/old.report.json')),/ENOENT/);
+  assert.equal((await storage.usage()).cacheLocation,cacheRoot);
+  const foreign=join(dir,'foreign');await put(join(foreign,'valuable.report.json'),'untouched');
+  try{await symlink(foreign,join(runtime,'renders/junction'),process.platform==='win32'?'junction':'dir');await storage.prune();assert.equal(await readFile(join(foreign,'valuable.report.json'),'utf8'),'untouched');}catch(error){if(!['EPERM','EACCES','ENOTSUP'].includes(error.code))throw error;}
+});
+
+test('repeated Studio rendering retains previews without accumulating detailed reports',async t=>{
+  const config=await configuration(),dir=join(process.env.MCBEKIT_TEST_ROOT||join(root,'workspace/test-studio'),randomUUID()),rpRoot=join(dir,'rp');await cp(join(root,'examples/studio-rp'),rpRoot,{recursive:true});
+  const before=await snapshot(rpRoot),host=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>host.close());
+  const s=host.session;await s.open({rpRoot});for(let i=0;i<5;i++)await s.render({fixture:{title:'LIVE',body:String(i),buttons:[{text:'preview'}]}});
+  const cached=(await s.storage.inventory()).files.filter(f=>f.path.includes('renders'));
+  assert.equal(s.state.report.reportPath,null);assert.equal(s.state.report.render,undefined);assert.ok(cached.filter(f=>f.path.endsWith('.png')).length<=2);assert.ok(!cached.some(f=>f.path.endsWith('.report.json')));
+  assert.ok((await readFile(s.state.report.outputPath)).length>0);assert.deepEqual(await snapshot(rpRoot),before);
+});
 
 test('reference library searches every category, protects originals and previews standalone JSON UI',async()=>{
   const dir=join(process.env.MCBEKIT_TEST_ROOT||join(root,'workspace/test-studio'),randomUUID());
@@ -113,6 +144,7 @@ test('pack workspace copies A, preserves B across reopen, imports A and applies 
   const applied=await w.apply(push.id);assert.equal(await readFile(join(a,'ui.json'),'utf8'),'B change');
   assert.equal(await readFile(join(applied.backupRoot,'before/ui.json'),'utf8'),'base');
   assert.equal(await readFile(join(applied.backupRoot,'before/new.txt'),'utf8'),'A added');
+  const transaction=JSON.parse(await readFile(join(applied.backupRoot,'transaction.json'),'utf8'));assert.equal(transaction.status,'applied');assert.ok(transaction.changes.length);assert.equal(transaction.a,undefined);assert.equal(transaction.b,undefined);assert.equal(transaction.converged,undefined);
   assert.equal((await w.preview('pull')).changes.length,0);
 });
 
