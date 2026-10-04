@@ -1,0 +1,35 @@
+{
+  "namespace": "pagination_example",
+  "page_state_reader": {
+    "type": "panel",
+    "visible": true,
+    "size": [1, 1],
+    "property_bag": { "#page_key": "a01|", "#known_view": true },
+    "bindings": [
+      { "binding_type": "collection", "binding_collection_name": "custom_form", "binding_name": "#dropdown_option_text", "binding_condition": "always" },
+      { "binding_type": "view", "source_property_name": "('%.4s' * #dropdown_option_text)", "target_property_name": "#page_key", "binding_condition": "always" },
+      { "binding_type": "view", "source_property_name": "((#page_key = 'a01|') or (#page_key = 'a02|') or (#page_key = 'b01|'))", "target_property_name": "#known_view", "binding_condition": "always" }
+    ]
+  },
+  "page_gate": {
+    "type": "panel",
+    "visible": true,
+    "size": ["100%", "100%"],
+    "$view_key|default": "a01|",
+    "$fallback|default": false,
+    "property_bag": { "#page_visible": false },
+    "bindings": [
+      { "binding_type": "view", "source_control_name": "page_state_reader", "source_property_name": "((#page_key = $view_key) or ($fallback and (not #known_view)))", "target_property_name": "#page_visible", "binding_condition": "always" }
+    ],
+    "controls": [
+      { "page_payload": {
+        "type": "panel",
+        "size": ["100%", "100%"],
+        "bindings": [
+          { "binding_type": "view", "source_control_name": "page_gate", "source_property_name": "#page_visible", "target_property_name": "#visible", "binding_condition": "always" }
+        ],
+        "controls": []
+      } }
+    ]
+  }
+}

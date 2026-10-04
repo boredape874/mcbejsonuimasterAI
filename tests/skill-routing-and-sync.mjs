@@ -45,6 +45,7 @@ for (const [surface,kind,owner,reference] of [
   ["geo-ui","geoui-project","mcbe-geo-ui","references/project-inspection.md"],
   ["geo-ui","npc-portrait-ui","mcbe-geo-ui","references/npc-portrait-ui.md"],
   ["json-ui","chest-form","mcbe-json-ui-chest-gui","references/action-form.md"],
+  ["json-ui","dropdown-pagination","mcbe-json-ui-server-forms","references/dropdown-pagination.md"],
   ["resource-pack","local-asset-learning","mcbe-json-ui-samples","references/local-asset-learning.md"],
 ]) {
   const value = parse(await run(node,["tools/route-task.mjs","--intent",JSON.stringify({surface,taskKinds:[kind]})]));

@@ -1,0 +1,37 @@
+{
+  "kind": "dropdown-pagination-design-example",
+  "version": 1,
+  "runtimeVerified": false,
+  "stateFieldIndex": 0,
+  "defaultOptionIndex": 0,
+  "viewKeyLength": 4,
+  "views": [
+    { "id": "a01|", "tab": "catalog", "label": "도감 1" },
+    { "id": "a02|", "tab": "catalog", "label": "도감 2" },
+    { "id": "b01|", "tab": "settings", "label": "설정" }
+  ],
+  "options": [
+    { "id": "tab-catalog", "text": "a01|tab-catalog|도감", "targetView": "a01|", "kind": "tab", "tab": "catalog", "visibleFrom": [], "offset": [0, 0] },
+    { "id": "tab-settings", "text": "b01|tab-settings|설정", "targetView": "b01|", "kind": "tab", "tab": "settings", "visibleFrom": [], "offset": [80, 0] },
+    { "id": "catalog-next", "text": "a02|catalog-next|다음", "targetView": "a02|", "kind": "next", "visibleFrom": ["a01|"], "offset": [180, 120] },
+    { "id": "catalog-prev", "text": "a01|catalog-prev|이전", "targetView": "a01|", "kind": "previous", "visibleFrom": ["a02|"], "offset": [0, 120] }
+  ],
+  "fields": [
+    { "index": 0, "id": "page-state", "type": "dropdown", "view": null },
+    { "index": 1, "id": "discovered-only", "type": "toggle", "view": "a01|" },
+    { "index": 2, "id": "rare-only", "type": "toggle", "view": "a02|" },
+    { "index": 3, "id": "sound-enabled", "type": "toggle", "view": "b01|" }
+  ],
+  "persistentElements": ["header", "close", "help"],
+  "hybridContentButtons": {
+    "adapter": null,
+    "status": "requires-target-pack-adapter",
+    "callbackOrder": []
+  },
+  "transitions": [
+    { "from": "a01|", "optionIndex": 2, "to": "a02|" },
+    { "from": "a02|", "optionIndex": 3, "to": "a01|" },
+    { "from": "a01|", "optionIndex": 1, "to": "b01|" },
+    { "from": "b01|", "optionIndex": 0, "to": "a01|" }
+  ]
+}

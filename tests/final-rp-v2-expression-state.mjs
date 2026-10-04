@@ -24,6 +24,56 @@ assert.equal(aliasedBinding.binding_name,'#form_button_text');
 assert.equal(aliasedBinding.source_property_name,"((#form_button_text-'.locked')=#form_button_text)");
 assert.equal(materializeEnvironment({bindings:[{source_property_name:"('$la'+$suffix)"}]},{$la:'ignored',$suffix:'!'}).value.bindings[0].source_property_name,"('$la'+\"!\")");
 
+// This checks the portable skill example's expressions and payload, not Bedrock
+// dropdown input, hidden-control binding lifecycles, or hybrid button dispatch.
+const paginationRoot = new URL("../skills/mcbe-json-ui-server-forms/assets/", import.meta.url);
+const pagination = JSON.parse(await readFile(new URL("dropdown-pagination-contract.json", paginationRoot), "utf8"));
+const paginationUi = JSON.parse(await readFile(new URL("dropdown-pagination-bindings.json", paginationRoot), "utf8"));
+const viewIds = pagination.views.map(view => view.id);
+assert.equal(new Set(viewIds).size, viewIds.length);
+assert.equal(pagination.fields[pagination.stateFieldIndex].type, "dropdown");
+assert.equal(pagination.stateFieldIndex, 0);
+assert.ok(pagination.options[pagination.defaultOptionIndex]);
+assert.deepEqual(pagination.fields.map(field => field.index), pagination.fields.map((_, index) => index));
+for (const field of pagination.fields) assert.ok(field.view === null || viewIds.includes(field.view));
+for (const option of pagination.options) {
+  assert.ok(viewIds.includes(option.targetView));
+  assert.equal(option.text.slice(0, pagination.viewKeyLength), option.targetView);
+  assert.ok(option.visibleFrom.every(view => viewIds.includes(view)));
+}
+const stateFromOption = text => {
+  const environment = { "#dropdown_option_text": text };
+  for (const binding of paginationUi.page_state_reader.bindings.filter(binding => binding.binding_type === "view")) {
+    const result = evaluateExpression(binding.source_property_name, environment);
+    assert.equal(result.ok, true);
+    environment[binding.target_property_name] = result.value;
+  }
+  return environment;
+};
+const shownViews = text => {
+  const environment = stateFromOption(text);
+  return viewIds.filter((id, index) => {
+    const gate = materializeEnvironment(paginationUi.page_gate, { $view_key: id, $fallback: index === 0 }).value;
+    const result = evaluateExpression(gate.bindings[0].source_property_name, environment);
+    assert.equal(result.ok, true);
+    return result.value;
+  });
+};
+for (const transition of pagination.transitions) {
+  const option = pagination.options[transition.optionIndex];
+  assert.ok(option.visibleFrom.length === 0 || option.visibleFrom.includes(transition.from));
+  assert.equal(option.targetView, transition.to);
+  assert.deepEqual(shownViews(option.text), [transition.to]);
+}
+assert.deepEqual(shownViews("a010|prefix collision"), [viewIds[0]]);
+assert.equal(stateFromOption("a010|prefix collision")["#known_view"], false);
+assert.deepEqual(shownViews(""), [viewIds[0]]);
+assert.deepEqual(shownViews("xxxx|unknown view"), [viewIds[0]]);
+assert.deepEqual(shownViews(pagination.options[0].text), shownViews(pagination.options[3].text));
+const afterNext = stateFromOption(pagination.options[2].text)["#page_key"];
+assert.equal(pagination.views.find(view => view.id === afterNext).tab, pagination.options[0].tab);
+assert.equal(pagination.options.filter(option => option.kind !== "tab" && option.visibleFrom.includes("b01|")).length, 0);
+
 const fixture=JSON.parse(await readFile(join(import.meta.dirname,"fixtures","baccarat-form.json"),"utf8"));
 const bindingNode=(id,index,type="image")=>({id,props:{type,collection_index:index,bindings:[{binding_type:"collection",binding_collection_name:"form_buttons",binding_name:type==="label"?"#form_button_text":"#form_button_texture",binding_name_override:type==="label"?"#text":"#texture"},{binding_type:"collection",binding_collection_name:"form_buttons",binding_name:"#form_button_texture_file_system",binding_name_override:"#texture_file_system"}]},controls:[]});
 const materialized=materializeCollections({id:"root",props:{},controls:[bindingNode("card",0),bindingNode("history",6),bindingNode("data_label",33,"label")]},fixture);

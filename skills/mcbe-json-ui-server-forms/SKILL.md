@@ -1,6 +1,6 @@
 ---
 name: mcbe-json-ui-server-forms
-description: Analyze and implement Bedrock JSON UI server forms, including title/factory routing, collection-backed buttons, category and global search, hover states, close/search input, inline edit boxes, and typed BP response handling.
+description: Analyze and implement Bedrock JSON UI server forms, including title/factory routing, collection-backed buttons, client tabs and dropdown pagination, category and global search, hover states, close/search input, inline edit boxes, and typed BP response handling.
 ---
 
 # MCBE JSON UI Server Forms
@@ -36,6 +36,8 @@ If `data/skill-tool-profiles.json` exists, read only the `mcbe-json-ui-server-fo
 4. Validate sender/receiver order and marker cleanup, then test mouse, controller, touch, close/cancel, search, and typed submission in Bedrock.
 
 For transparent form buttons over a HUD Geo scene, read the GeoUI skill's [hybrid player-form customizer](../mcbe-geo-ui/references/player-form-customizer.md). Keep collection ownership and caption indices separate; a scene that remains visible while an ActionForm is reopened does not prove the form itself stayed open.
+
+For instant tabs/pages within one open ModalForm, read [dropdown pagination](references/dropdown-pagination.md) only when requested. Keep the state dropdown at `custom_form` index 0, preload all views, and keep its reader and page gates active. Resolve the author's `dropdown.radio_selected` in the actual source pack; it is not an established vanilla control. ActionForm-style content buttons inside a ModalForm need a separately verified hybrid adapter. The reference includes pinned similar implementations and original protocol/binding fragments; target-client interaction remains a required check.
 
 ## Required boundaries
 

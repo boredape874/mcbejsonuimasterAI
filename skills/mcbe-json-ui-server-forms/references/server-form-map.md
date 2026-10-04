@@ -108,6 +108,7 @@ This preserves native field behavior while allowing custom geometry. Validate th
 
 ## Category, detail, and scrolling behavior
 
+- For instant tabs/pages with a preloaded payload in one open ModalForm, read [dropdown pagination](dropdown-pagination.md). Its hidden dropdown owns client view state; navigation must retain the same form instance. Keep this lifecycle distinct from the BP reopening flow below.
 - Model category selection and detail-item selection as different response stages when their data owners or button indices differ. A BP may open a category route, receive a category index, then reopen a detail route with a new ordered payload.
 - A selected-detail panel on the right must consume a stable materialized index or semantic id. Clicking a left row should change that selected payload and reopen or refresh by a verified mechanism; static right-side text is not selection behavior.
 - Variable detail rows belong to a `form_buttons` collection/factory inside a vertical stack hosted by a verified scrolling panel. Test with more rows than fit, and confirm row positions change under wheel/drag/controller input.
