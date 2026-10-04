@@ -307,17 +307,51 @@ async function pasteElements(payload=clipboard){
     clipboard=payload;localStorage.setItem('studio-clipboard',JSON.stringify(payload));toast(result.ids.length+'개를 붙여넣었습니다. Ctrl+Z로 되돌릴 수 있습니다.');
   }finally{saving=false;closeEditMenu();updateArrange();}
 }
+
+let deleting=false;
 async function deleteElements(){
-  if(saving||state.stale||!picked.size)throw Error('편집 가능한 요소를 선택하세요.');if(pickedNodes().some(n=>isLocked(n.key)))throw Error('요소 잠금을 먼저 풀어 주세요.');
-  saving=true;try{await api('remove',{keys:[...picked],expectedRevision:state.studioRevision});await refreshStudio(true);toast('요소를 삭제했습니다. Ctrl+Z로 되돌릴 수 있습니다.');}finally{saving=false;closeEditMenu();updateArrange();}
+  if(deleting)return;
+  const targets=pickedNodes().map(n=>({key:n.key,id:n.id,path:n.source?.path}));
+  if(!targets.length)throw Error('삭제할 요소를 먼저 선택하세요.');
+  deleting=true;
+  try{
+    if(saving||state.stale){
+      toast('화면 갱신을 마친 뒤 선택한 요소를 삭제합니다…');
+      const deadline=Date.now()+5000;
+      while(saving||state.stale){
+        if(Date.now()>deadline)throw Error('화면 갱신이 끝나지 않았습니다. 갱신 후 다시 삭제하세요.');
+        await new Promise(resolve=>setTimeout(resolve,40));
+      }
+    }
+    if(view!=='preview'||picked.size!==targets.length||targets.some(t=>!picked.has(t.key)||!editor.nodes.some(n=>n.key===t.key&&n.id===t.id&&n.source?.path===t.path)))throw Error('선택이 바뀌어 삭제를 취소했습니다. 요소를 다시 선택하세요.');
+    if(pickedNodes().some(n=>isLocked(n.key)))throw Error('요소 잠금을 먼저 풀어 주세요.');
+    saving=true;
+    try{
+      await api('remove',{keys:targets.map(t=>t.key),expectedRevision:state.studioRevision});
+      // Removed array entries can shift the next sibling into the same key.
+      // Clear the old selection instead of silently selecting that sibling.
+      picked.clear();selected=null;editingNode=null;dirty=false;
+      await api('select',{key:null,keys:[]});await refreshStudio(true);
+      $('artboard').dataset.deleteStatus='deleted';toast('요소를 삭제했습니다. Ctrl+Z로 되돌릴 수 있습니다.');
+    }finally{saving=false;}
+  }finally{deleting=false;closeEditMenu();updateArrange();}
 }
 on('copyElements','click',()=>copyElements());on('cutElements','click',()=>copyElements(true));on('pasteElements','click',()=>pasteElements());on('deleteElements','click',deleteElements);
 window.addEventListener('keydown',e=>{
-  if(e.key!=='Delete'&&e.code!=='Delete')return;
+  const isDelete=e.key==='Delete'||e.code==='Delete'||e.keyCode===46;
+  const isBackspace=e.key==='Backspace'||e.code==='Backspace'||e.keyCode===8;
+  if(!isDelete&&!isBackspace)return;
   const target=e.composedPath()[0];
-  if(e.defaultPrevented||e.repeat||e.isComposing||e.ctrlKey||e.metaKey||e.altKey||view!=='preview'||document.querySelector('dialog[open]')||target?.isContentEditable||target?.closest?.('input,textarea,select,[role="textbox"],.panel-resize'))return;
-  e.preventDefault();e.stopPropagation();deleteElements().catch(err=>toast(err.message));
+  const editable=target?.isContentEditable||target?.closest?.('input,textarea,select,[role="textbox"],.panel-resize');
+  const blocked=e.repeat||e.ctrlKey||e.metaKey||e.altKey||view!=='preview'||document.querySelector('dialog[open]')||editable;
+  $('artboard').dataset.deleteKey=JSON.stringify({key:e.key,code:e.code,composing:e.isComposing,editable:!!editable,blocked:!!blocked});
+  if(blocked)return;
+  // Some IMEs keep isComposing/defaultPrevented on physical Delete after focus
+  // returns to the canvas. Native text editing is already excluded above.
+  e.preventDefault();e.stopPropagation();
+  deleteElements().catch(err=>{$('artboard').dataset.deleteStatus=err.message;toast(err.message);});
 },true);
+
 document.addEventListener('paste',e=>{if(!canvasClipboardTarget(e))return;pasteEventSerial++;e.preventDefault();let payload;try{payload=JSON.parse(e.clipboardData.getData('text/plain'));}catch{}pasteElements(payload||(clipboardSynced===false?clipboard:{})).catch(err=>toast(err.message));});
 on('layerSearch','input',renderLayers);
 on('helpButton','click',()=>$('helpDialog').showModal());on('editorSettings','click',()=>{$('viewDialog').close();$('settingsDialog').showModal();});

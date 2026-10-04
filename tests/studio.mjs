@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { runInNewContext } from 'node:vm';
 import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir, cp, unlink } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -270,4 +271,38 @@ test('Codex resumes the chosen ID with Studio tools, bounded chronological histo
   bridge.rpc=async()=>({thread:{id:'running',status:{type:'active'}}});
   await assert.rejects(bridge.resumeSession({threadId:'running'}),/실행 중/);assert.equal(bridge.threadId,before.threadId);assert.deepEqual(bridge.messages,before.messages);assert.equal(bridge.busy,false);
   bridge.rpc=async()=>{throw Error('resume failed');};await assert.rejects(bridge.resumeSession({threadId:'missing'}),/resume failed/);assert.equal(bridge.threadId,'chosen');
+});
+
+
+test('actual Studio keyboard handler accepts canvas Backspace/Delete and preserves native text editing',async()=>{
+  const app=await readFile(join(root,'studio/app.js'),'utf8');
+  const first=app.indexOf("window.addEventListener('keydown',e=>{");
+  const last=app.indexOf("\ndocument.addEventListener('paste'",first);
+  let handle,removed=0;const artboard={dataset:{}},target={isContentEditable:false,closest:()=>null},window={addEventListener:(name,fn,capture)=>{assert.equal(name,'keydown');assert.equal(capture,true);handle=fn;}};
+  const scope={window,view:'preview',document:{querySelector:()=>null},$:()=>artboard,deleteElements:async()=>{removed++;},toast:()=>{}};
+  runInNewContext(app.slice(first,last),scope);
+  const press=options=>{const event={key:'Backspace',code:'Backspace',keyCode:8,repeat:false,isComposing:false,ctrlKey:false,metaKey:false,altKey:false,composedPath:()=>[target],preventDefault(){this.prevented=true;},stopPropagation(){this.stopped=true;},...options};handle(event);return event;};
+  for(const options of [{},{key:'Delete',code:'Delete',keyCode:46},{isComposing:true,defaultPrevented:true},{key:'Unidentified',code:'',keyCode:8}]){
+    const before=removed,event=press(options);assert.equal(removed,before+1);assert.equal(event.prevented,true);
+  }
+  for(const options of [{repeat:true},{ctrlKey:true},{metaKey:true},{altKey:true},{key:'Process',code:'',keyCode:229}]){
+    const before=removed,event=press(options);assert.equal(removed,before);assert.equal(event.prevented,undefined);
+  }
+  for(const kind of ['input','textarea','select','textbox','contenteditable']){
+    target.isContentEditable=kind==='contenteditable';target.closest=()=>kind==='contenteditable'?null:{tagName:kind};
+    const before=removed,event=press({isComposing:true});assert.equal(removed,before);assert.equal(event.prevented,undefined);
+  }
+  target.isContentEditable=false;target.closest=()=>null;scope.document.querySelector=()=>({open:true});const before=removed;press({});assert.equal(removed,before);
+});
+
+test('Studio deletion waits for its pending refresh, cancels a changed selection and clears shifted siblings',async()=>{
+  const app=await readFile(join(root,'studio/app.js'),'utf8'),first=app.indexOf('let deleting=false;'),last=app.indexOf("\non('copyElements'",first);
+  const node={key:'/controls/0',id:'chosen',source:{path:'ui/test.json'}},artboard={dataset:{}},calls=[];
+  const scope={view:'preview',picked:new Set([node.key]),pickedNodes:()=>[node],editor:{nodes:[node]},selected:node,editingNode:node,dirty:true,state:{stale:true,studioRevision:5},saving:false,
+    $:()=>artboard,isLocked:()=>false,toast:()=>{},closeEditMenu:()=>{},updateArrange:()=>{},refreshStudio:async()=>{},api:async(method,args)=>{calls.push({method,args});},
+    setTimeout:(resolve)=>{scope.state.stale=false;scope.state.studioRevision=6;resolve();}};
+  runInNewContext(app.slice(first,last),scope);await scope.deleteElements();
+  assert.equal(calls[0].method,'remove');assert.equal(calls[0].args.expectedRevision,6);assert.equal(calls[1].method,'select');assert.equal(calls[1].args.key,null);assert.equal(scope.picked.size,0);assert.equal(scope.selected,null);
+  scope.picked=new Set([node.key]);scope.state.stale=true;scope.setTimeout=resolve=>{scope.state.stale=false;scope.picked=new Set(['/controls/1']);resolve();};
+  const before=calls.length;await assert.rejects(scope.deleteElements(),/선택이 바뀌어/);assert.equal(calls.length,before);assert.equal(scope.saving,false);
 });
