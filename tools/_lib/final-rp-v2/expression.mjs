@@ -1,6 +1,6 @@
 function tokenize(source) {
   const tokens = [];
-  const re = /\s*(?:(\d+(?:\.\d+)?)|(\$[A-Za-z_][\w.-]*|#[A-Za-z_][\w.-]*)|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")|\b(not|and|or|true|false)\b|(==|!=|<=|>=|&&|\|\||[=()+\-*/%<>!]))/iy;
+  const re = /\s*(?:(\d+(?:\.\d+)?)|([\$#][A-Za-z_][\w.]*(?:-[A-Za-z_][\w.]*)*)|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")|\b(not|and|or|true|false)\b|(==|!=|<=|>=|&&|\|\||[=()+\-*/%<>!]))/iy;
   let at = 0;
   while (at < source.length) {
     re.lastIndex = at;
@@ -73,7 +73,15 @@ export function materializeEnvironment(value, environment = {}, context = {}) {
   const unresolved = [];
   function visit(item, pointer, resolving = new Set()) {
     if (typeof item === "string" && item.startsWith("#")) return item;
-    if (typeof item === "string" && pointer.includes("/bindings/")) return item;
+    if (typeof item === "string" && pointer.includes("/bindings/")) {
+      // Expand template aliases while leaving live #bindings for the state pass.
+      if (Object.hasOwn(environment,item)) return structuredClone(environment[item]);
+      return item.replace(/'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|\$[A-Za-z_][\w.]*(?:-[A-Za-z_][\w.]*)*/g,token=>{
+        if(!token.startsWith('$')||!Object.hasOwn(environment,token))return token;
+        const value=environment[token];
+        return typeof value==='string'&&value.startsWith('#')?value:JSON.stringify(value);
+      });
+    }
     if (typeof item === "string" && (item.startsWith("$") || item.startsWith("#") || /^\s*\(.*\)\s*$/.test(item))) {
       const result = evaluateExpression(item, environment, { ...context, pointer });
       unresolved.push(...result.unresolved);

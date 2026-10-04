@@ -24,3 +24,10 @@ const baccarat=JSON.parse(await readFile(join(import.meta.dirname,"fixtures","ba
 if(index.controls.has("common_buttons.light_text_button")){const fortyTwo=resolveControl(index,"@v2.base",{overrides:{controls:baccarat.buttons.map(button=>({[`button_${button.index}@common_buttons.light_text_button`]:{collection_index:button.index,size:[10,10],text:"#form_button_text"}}))}});
 const fortyTwoMaterialized=materializeCollections(fortyTwo.tree,baccarat),buttonChildren=fortyTwoMaterialized.tree.controls.filter(child=>child.id.startsWith("button_"));assert.equal(buttonChildren.length,42);assert.equal(buttonChildren[21].props.text,"PLAYER|selected");assert.equal(buttonChildren[41].collectionIndex,41);}
 console.log("final-rp-v2-core: ok");
+const pxOffsets=layoutTree({id:'root',props:{type:'panel',size:[100,80],anchor_from:'top_left',anchor_to:'top_left'},controls:[{id:'pixel',props:{type:'image',size:[10,10],offset:['-24px','10%'],anchor_from:'top_left',anchor_to:'top_left'},controls:[]}]},{viewport:[100,80]});
+assert.deepEqual(pxOffsets.nodes.find(n=>n.id==='pixel').rect,{x:-24,y:8,w:10,h:10});
+assert.equal(pxOffsets.unresolved.some(n=>n.kind==='unresolved_dimension'),false);
+const factoryResolved=resolveControl(index,'v2.screen',{overrides:{controls:[],collection_name:'form_buttons',factory:{name:'buttons',control_name:'v2.base'}},fixture:{buttons:[{index:0,text:'A'},{index:2,text:'B'}]}});
+const factoryItems=factoryResolved.tree.controls.filter(n=>n.id.startsWith('collection_item_'));
+assert.equal(factoryItems.length,2);
+assert.deepEqual(factoryItems.map(n=>n.props.collection_index),[0,2]);

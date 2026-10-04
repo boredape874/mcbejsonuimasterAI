@@ -52,8 +52,9 @@ export function layoutTree(tree, options = {}) {
     const basisX = { parent: parent.w, content: intrinsic[0]||options.content?.[0], contentMax: childMax[0]||options.contentMax?.[0], siblingMax:siblingMax[0], default: options.defaults?.[0] }, basisY = { parent: parent.h, content: intrinsic[1]||options.content?.[1], contentMax: childMax[1]||options.contentMax?.[1], siblingMax:siblingMax[1], default: options.defaults?.[1] };
     const w = resolveDimension(size[0], basisX, { control: node.qualified || node.id }, unresolved, `${pointer}/size/0`), h = resolveDimension(size[1], basisY, { control: node.qualified || node.id }, unresolved, `${pointer}/size/1`);
     const from = ANCHORS[p.anchor_from] || ANCHORS.center, to = ANCHORS[p.anchor_to] || ANCHORS.center, offset = p.offset || [0,0];
-    let x = parent.x + parent.w*from[0] - w*to[0] + Number(offset[0]||0), y = parent.y + parent.h*from[1] - h*to[1] + Number(offset[1]||0);
-    if (flow) { x = flow.x + Number(offset[0]||0); y = flow.y + Number(offset[1]||0); }
+    const dx=resolveDimension(offset[0]??0,basisX,{control:node.qualified||node.id},unresolved,`${pointer}/offset/0`),dy=resolveDimension(offset[1]??0,basisY,{control:node.qualified||node.id},unresolved,`${pointer}/offset/1`);
+    let x = parent.x + parent.w*from[0] - w*to[0] + dx, y = parent.y + parent.h*from[1] - h*to[1] + dy;
+    if (flow) { x = flow.x + dx; y = flow.y + dy; }
     const clipsChildren = p.clips_children === true || p.clip_children === true;
     const rect={x,y,w,h}, clip = clipsChildren ? intersect(parent.clip || parent, rect) : parent.clip || null, alpha=(parent.alpha ?? 1)*Number(p.alpha ?? 1);
     const layer=(parent.layer ?? 0)+Number(p.layer??0);

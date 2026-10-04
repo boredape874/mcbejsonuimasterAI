@@ -118,7 +118,9 @@ function materializeFormButtonChildren(props, children, variables, namespace, an
     ? props.grid_item_template
     : typeof props.factory?.control_ids?.button === "string"
       ? props.factory.control_ids.button
-      : null;
+      : typeof props.factory?.control_name === "string"
+        ? props.factory.control_name
+        : null;
   if (!target) return;
   const maximum = Number.isInteger(props.maximum_grid_items) ? props.maximum_grid_items : fixture.buttons.length;
   for (const item of fixture.buttons.slice(0, maximum)) {

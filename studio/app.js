@@ -38,10 +38,10 @@ function drawApproximateFonts(){
   const missing=(state.report?.diagnostics||[]).filter(d=>d.kind==='FONT_UNAVAILABLE');
   $('previewKind').textContent=missing.length?'대체 글꼴 · 게임 글꼴 확인 필요':'정적 미리보기 · 게임 검증 전';
   const sprites=(editor.layers||[]).map((sprite,index)=>({...sprite,index,node:editor.nodes.find(n=>n.key===(sprite.pointer||'/'))}));
-  const labels=(editor.nodes||[]).filter(n=>n.visible&&n.rect.w>0&&n.rect.h>0&&n.type==='label'&&missing.some(d=>d.pointer===n.key||d.control===n.id||d.control===n.qualified)).map(n=>({node:n,layer:n.layer,index:n.index,text:true}));
+  const labels=(editor.nodes||[]).filter(n=>n.visible&&n.rect.w>0&&n.type==='label'&&missing.some(d=>d.pointer===n.key||d.control===n.id||d.control===n.qualified)).map(n=>({node:n,layer:n.layer,index:n.index,text:true}));
   const entries=[...sprites,...labels].sort((a,b)=>(a.layer-b.layer)||((a.node?.index??a.index)-(b.node?.index??b.index)));
   for(const entry of entries){
-    const n=entry.node,r=entry.text?n.rect:entry.bounds,item=document.createElement(entry.text?'canvas':'img');
+    const n=entry.node,r=entry.text?approximateTextRect(n):entry.bounds,item=document.createElement(entry.text?'canvas':'img');
     item.dataset.key=n?.key||entry.pointer;item.dataset.rect=JSON.stringify(r);
     Object.assign(item.style,{position:'absolute',left:r.x*scale+'px',top:r.y*scale+'px',width:r.w*scale+'px',height:r.h*scale+'px',pointerEvents:'none'});
     if(entry.text){
@@ -52,6 +52,16 @@ function drawApproximateFonts(){
   }
   $('preview').style.visibility=Array.isArray(editor.layers)?'hidden':'visible';
   if(optimistic)moveScene(optimistic);
+}
+function approximateTextRect(n){
+  if(n.rect.h>0)return n.rect;
+  // A display-only estimate keeps missing intrinsic font metrics visible.
+  // The source rectangle and FONT_UNAVAILABLE diagnostic remain unchanged.
+  const ctx=document.createElement('canvas').getContext('2d'),font=8*Number(n.props.font_scale_factor||1);
+  ctx.font=`${font}px "Malgun Gothic", "Segoe UI", sans-serif`;
+  let lines=0;for(const paragraph of String(n.props.text||'').replace(/§./g,'').split('\n')){let text='';lines++;for(const char of paragraph){if(text&&ctx.measureText(text+char).width>n.rect.w){lines++;text='';}text+=char;}}
+  const h=Math.max(1,lines)*font*1.35,anchor=n.props.anchor_to||'center',fraction=anchor.startsWith('top_')?0:anchor.startsWith('bottom_')?1:.5;
+  return {...n.rect,y:n.rect.y-h*fraction,h};
 }
 function paintText(ctx,n,r){
   const font=8*Number(n.props.font_scale_factor||1),lineHeight=font*1.35;
