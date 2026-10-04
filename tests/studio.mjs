@@ -1,7 +1,7 @@
 import test from 'node:test';
 import { runInNewContext } from 'node:vm';
 import assert from 'node:assert/strict';
-import { readFile, writeFile, mkdir, cp, unlink } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, cp, unlink, symlink } from 'node:fs/promises';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { createHash } from 'node:crypto';
@@ -10,8 +10,135 @@ import { configuration, root } from '../tools/studio/config.mjs';
 import { startHost } from '../tools/studio/host.mjs';
 import { editObject, jsonSpans, spanAt, removeArrayItems, appendControlBodies } from '../tools/studio/json-edit.mjs';
 import { CodexBridge } from '../tools/studio/codex.mjs';
+import { indexResourcePack } from '../tools/_lib/final-rp-v2/rp-index.mjs';
+import { buildViewCatalog, matchesView } from '../tools/studio/views.mjs';
+import { PackWorkspace, snapshot } from '../tools/studio/workspace.mjs';
+import { compactStudioRender } from '../tools/studio/render-transfer.mjs';
 import { selectionBounds, alignSelection, distributeSelection, gridSelection, matchSelectionSize, snapMove } from '../studio/geometry.js';
 import { DEVICE_PRESETS, normalizeDevice, safeRect, layoutIssues } from '../studio/devices.js';
+
+async function workspaceFixture(t) {
+  const dir=join(process.env.MCBEKIT_TEST_ROOT||join(root,'workspace/test-studio'),randomUUID()),a=join(dir,'a');
+  await mkdir(a,{recursive:true});await writeFile(join(a,'manifest.json'),'{}');await writeFile(join(a,'ui.json'),'base');
+  const w=new PackWorkspace(join(dir,'runtime'));t.after(()=>w.close());
+  const meta=await w.open(a);return {dir,a,b:meta.workingRpRoot,w};
+}
+
+test('pack workspace copies A, preserves B across reopen, imports A and applies B with backups',async t=>{
+  const {a,b,w,dir}=await workspaceFixture(t);
+  await writeFile(join(b,'ui.json'),'B change');assert.equal(await readFile(join(a,'ui.json'),'utf8'),'base');
+  const reopened=new PackWorkspace(join(dir,'runtime'));t.after(()=>reopened.close());
+  assert.equal((await reopened.open(a)).workingRpRoot,b);assert.equal(await readFile(join(b,'ui.json'),'utf8'),'B change');
+  await writeFile(join(a,'new.txt'),'A added');
+  const pull=await w.preview('pull');assert.equal(pull.retainedCount,1);assert.deepEqual(pull.changes.map(c=>c.path),['new.txt']);
+  await w.apply(pull.id);assert.equal(await readFile(join(b,'new.txt'),'utf8'),'A added');assert.equal(await readFile(join(b,'ui.json'),'utf8'),'B change');
+  await unlink(join(b,'new.txt'));
+  const push=await w.preview('push');assert.deepEqual(push.changes.map(c=>c.kind),['delete','update']);
+  const applied=await w.apply(push.id);assert.equal(await readFile(join(a,'ui.json'),'utf8'),'B change');
+  assert.equal(await readFile(join(applied.backupRoot,'before/ui.json'),'utf8'),'base');
+  assert.equal(await readFile(join(applied.backupRoot,'before/new.txt'),'utf8'),'A added');
+  assert.equal((await w.preview('pull')).changes.length,0);
+});
+
+test('pack workspace blocks conflicts and stale plans, tracks converged edits and opposite changes',async t=>{
+  const {a,b,w}=await workspaceFixture(t);
+  await writeFile(join(a,'ui.json'),'A');await writeFile(join(b,'ui.json'),'B');
+  const conflict=await w.preview('push');assert.equal(conflict.conflicts.length,1);
+  await assert.rejects(w.apply(conflict.id),/WORKSPACE_CONFLICT/);assert.equal(await readFile(join(a,'ui.json'),'utf8'),'A');
+  await writeFile(join(b,'ui.json'),'A');const converged=await w.preview('pull');await w.apply(converged.id);
+  await writeFile(join(b,'ui.json'),'B2');const valid=await w.preview('push');assert.equal(valid.changes.length,1);
+  await writeFile(join(a,'late.txt'),'late');await assert.rejects(w.apply(valid.id),/WORKSPACE_STALE/);
+  const next=await w.preview('push');assert.equal(next.retainedCount,1);await w.apply(next.id);
+  assert.equal(w.summary().originChanged,true,'A-only file still needs importing');
+  const pull=await w.preview('pull');await w.apply(pull.id);assert.equal(await readFile(join(b,'late.txt'),'utf8'),'late');
+});
+
+test('pack workspace rolls back completed files if a later write fails and rejects links',async t=>{
+  const {a,b,w,dir}=await workspaceFixture(t);await writeFile(join(b,'manifest.json'),'{"name":"new"}');await writeFile(join(b,'ui.json'),'new');
+  const plan=await w.preview('push'),original=w.replace.bind(w);let once=false;
+  w.replace=async(...args)=>{if(args[1]==='ui.json'&&!once){once=true;throw Error('simulated IO failure');}return original(...args);};
+  await assert.rejects(w.apply(plan.id),/simulated IO failure/);
+  assert.equal(await readFile(join(a,'manifest.json'),'utf8'),'{}');assert.equal(await readFile(join(a,'ui.json'),'utf8'),'base');
+  assert.equal((await w.preview('push')).changes.length,2);
+  const outside=join(dir,'outside');await mkdir(outside);await symlink(outside,join(a,'link'),process.platform==='win32'?'junction':'dir');
+  await assert.rejects(snapshot(a),/WORKSPACE_LINK/);
+});
+
+test('public Studio open always edits B, keeps selected form on restart and does not write A',{timeout:120000},async t=>{
+  const config=await configuration(),dir=join(process.env.MCBEKIT_TEST_ROOT||join(root,'workspace/test-studio'),randomUUID()),a=join(dir,'a');
+  await cp(join(root,'examples/studio-rp'),a,{recursive:true});const before=await snapshot(a);
+  const host=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>host.close());
+  const call=async(name,args)=>{const response=await fetch(host.connection.url+'/api/'+name,{method:'POST',headers:{Authorization:'Bearer '+host.connection.token,'Content-Type':'application/json'},body:JSON.stringify(args)});const result=await response.json();assert.equal(response.status,200,result.error);return result;};
+  const opened=await call('open',{rpRoot:a,useWorkspace:false});assert.equal(opened.status,'ready',opened.error);
+  assert.notEqual(opened.project.rpRoot,a);assert.equal(opened.workspace.originRpRoot,a);assert.equal(host.session.context().workspace.workingRpRoot,opened.project.rpRoot);
+  const source=await call('read_source',{path:'ui/live_demo.json'});
+  await call('write_source',{path:source.path,expectedHash:source.sha256,text:source.text+'\n// B edit\n'});
+  assert.deepEqual(await snapshot(a),before);assert.equal((await call('workspace_preview',{direction:'push'})).changes.length,1);
+  const restored=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>restored.close());
+  assert.equal(restored.session.project.rpRoot,opened.project.rpRoot);assert.equal(restored.session.project.workspaceId,opened.project.workspaceId);
+  assert.ok((await restored.session.readSource(source.path)).text.includes('// B edit'));assert.deepEqual(await snapshot(a),before);
+});
+
+test('Studio render transfer preserves geometry and immediate origins without recursive or graph duplication',()=>{
+  const result={reportPath:'report.json',bindingGraph:{schema:'g',nodes:[1,2],edges:[1],unresolved:[1]},controls:{root:{rect:{x:1},source:{relative:'ui/a.json',hash:'h',value:{huge:true}},provenance:{huge:true}}},render:{controls:{}},editorLayout:{layout:{viewport:[480,270],nodes:[{id:'root',pointer:'',rect:{x:1},controls:[{huge:true}],props:{type:'panel',controls:[{huge:true}]},provenance:{'':{relative:'ui/a.json'},'/offset':{hash:'h'},'/controls/0/text':{huge:true}}}]}}};
+  const small=compactStudioRender(result);assert.equal(small.bindingGraph,undefined);assert.equal(small.bindingGraphSummary.nodeCount,2);assert.equal(small.bindingGraphSummary.detailReport,'report.json');
+  assert.deepEqual(small.editorLayout.layout.nodes[0].rect,result.editorLayout.layout.nodes[0].rect);assert.ok(small.editorLayout.layout.nodes[0].provenance['/offset']);
+  assert.equal(small.editorLayout.layout.nodes[0].props.controls,undefined);assert.equal(small.editorLayout.layout.nodes[0].provenance['/controls/0/text'],undefined);
+  assert.equal(small.controls.root.source.value,undefined);assert.ok(result.bindingGraph);assert.ok(result.editorLayout.layout.nodes[0].props.controls);
+});
+
+test('form catalog uses title routes rather than template names',()=>{
+  const doc={namespace:'forms',button:{type:'button'},maybe_form:{type:'panel'},screen:{type:'screen'},a:{type:'panel'},b:{type:'panel'},router:{type:'panel',controls:[
+    {'a@forms.a':{bindings:[{binding_type:'view',source_property_name:"(#title_text = 'A')",target_property_name:'#visible'}]}},
+    {'b@forms.b':{bindings:[{binding_type:'view',source_property_name:"(#title_text = 'B')",target_property_name:'#visible'}]}},
+  ]},host:{type:'panel',factory:{name:'server_form_factory',control_ids:{long_form:'@forms.router'}}}};
+  const screens=Object.entries(doc).filter(([key])=>key!=='namespace').map(([declaration,value])=>({control:'forms.'+declaration,path:'ui/forms.json',declaration,type:value.type,registered:true}));
+  const catalog=buildViewCatalog(screens,new Map([['ui/forms.json',doc]]));
+  assert.deepEqual(catalog.forms.map(view=>view.control),['forms.a','forms.b']);
+  assert.ok(catalog.forms.every(view=>view.renderControl==='forms.router'));
+  assert.ok(catalog.components.some(view=>view.control==='forms.maybe_form'));
+  assert.equal(matchesView(catalog.forms[0],{title:'B'}),false);
+  assert.equal(matchesView(catalog.forms[0],{title:'A'}),true);
+});
+
+test('whole forms include shared shell, isolate routes, retain per-form fixtures and load matching vanilla overrides',{timeout:120000},async t=>{
+  const config=await configuration(),dir=join(process.env.MCBEKIT_TEST_ROOT||join(root,'workspace/test-studio'),randomUUID());
+  const rpRoot=join(dir,'rp'),vanillaRoot=join(dir,'vanilla');
+  await cp(join(root,'examples/studio-rp'),rpRoot,{recursive:true});await mkdir(join(vanillaRoot,'ui'),{recursive:true});
+  await writeFile(join(vanillaRoot,'ui/_ui_defs.json'),JSON.stringify({ui_defs:['ui/server_form.json']}));
+  await writeFile(join(vanillaRoot,'ui/server_form.json'),JSON.stringify({namespace:'server_form',main_screen_content:{type:'panel'}}));
+  await writeFile(join(rpRoot,'ui/_ui_defs.json'),JSON.stringify({ui_defs:['ui/forms.json']}));
+  const image={type:'image',texture:'textures/ui/live_pixel',size:[160,100]};
+  await writeFile(join(rpRoot,'ui/forms.json'),JSON.stringify({namespace:'forms',a:{type:'panel',controls:[{a_background:image}]},b:{type:'panel',controls:[{b_background:{...image,color:[0,1,0]}}]},button_part:{type:'label',text:'Internal'}}));
+  await writeFile(join(rpRoot,'ui/unregistered.json'),JSON.stringify({namespace:'loose',form:{type:'panel'}}));
+  await writeFile(join(rpRoot,'ui/server_form.json'),JSON.stringify({namespace:'server_form',main_screen_content:{type:'panel',factory:{name:'server_form_factory',control_ids:{long_form:'@server_form.router'}}},router:{type:'panel',controls:[
+    {'a@forms.a':{bindings:[{binding_type:'view',source_property_name:"(#title_text = 'A')",target_property_name:'#visible'}]}},
+    {'b@forms.b':{bindings:[{binding_type:'view',source_property_name:"(#title_text = 'B')",target_property_name:'#visible'}]}},
+    {shared_close:{type:'panel',size:[20,20]}}
+  ]}}));
+  const index=await indexResourcePack(rpRoot,{overlays:[vanillaRoot]});
+  assert.ok(index.controls.has('server_form.router'));
+  assert.equal(index.controls.has('loose.form'),false,'unregistered arbitrary files are not made runtime roots');
+  const host=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>host.close());
+  const s=host.session,catalog=await s.catalog(rpRoot),a=catalog.forms.find(view=>view.control==='forms.a'),b=catalog.forms.find(view=>view.control==='forms.b');
+  await s.open({rpRoot,vanillaRoot,viewId:a.id,fixture:{title:'A',body:'A body',buttons:[{text:'A action'}]}});
+  assert.equal(s.project.control,'server_form.router');
+  assert.ok(s.editor.nodes.find(node=>node.id==='a_background').visible);
+  assert.equal(s.editor.nodes.find(node=>node.id==='b_background').visible,false);
+  assert.ok(s.editor.nodes.find(node=>node.id==='shared_close').visible);
+  const hashA=s.state.report.hash;
+  await s.open({rpRoot,vanillaRoot,viewId:b.id});
+  assert.equal(s.project.fixture.title,'B');assert.equal(s.project.fixture.buttons,undefined,'A payload must not leak into B');
+  assert.equal(s.editor.nodes.find(node=>node.id==='a_background').visible,false);
+  assert.ok(s.editor.nodes.find(node=>node.id==='b_background').visible);
+  assert.notEqual(s.state.report.hash,hashA);
+  await s.render({fixture:{title:'B',body:'B body',buttons:[{text:'B action'}]}});
+  await s.open({rpRoot,vanillaRoot,viewId:a.id});assert.equal(s.project.fixture.body,'A body');assert.equal(s.state.report.hash,hashA);
+  await s.open({rpRoot,vanillaRoot,viewId:b.id});assert.equal(s.project.fixture.body,'B body');
+  await assert.rejects(s.open({rpRoot,viewId:'nonexistent'}),/더 이상/);
+  const restored=await startHost({...config,port:0,runtime:join(dir,'runtime'),bridgeRoot:join(dir,'native')});t.after(()=>restored.close());
+  assert.equal(restored.session.project.viewId,b.id);assert.equal(restored.session.project.fixture.body,'B body');
+});
 
 test('device profiles distinguish physical specs, editable logical coordinates and safe-area test margins',()=>{
   const consoleProfile=normalizeDevice({presetId:'console-fhd'},[480,270]);

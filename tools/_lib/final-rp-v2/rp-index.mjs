@@ -1,4 +1,4 @@
-import { readFile, readdir } from "node:fs/promises";
+import { readFile, readdir, access } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { join, resolve } from "node:path";
 import { parseUiSource, DEFAULT_RUNTIME_DIALECT } from "../json-dialect.mjs";
@@ -11,6 +11,7 @@ export async function indexResourcePack(targetRoot, options = {}) {
   const targetLayer = options.targetLayer ?? "target";
   const roots = [...(options.overlays || []).map(root => ({ root: resolve(root), layer: "overlay" })), { root: resolve(targetRoot), layer: targetLayer }];
   const controls = new Map(), controlCandidates = new Map(), files = [], unresolved = [], globals = {}, globalSources = [];
+  const overlayPaths = new Set((options.overridePaths || []).filter(path => typeof path === 'string' && path.startsWith('ui/') && !path.split('/').includes('..')));
   for (const source of roots) {
     const globalsFile = join(source.root, "ui", "_global_variables.json");
     try {
@@ -22,8 +23,22 @@ export async function indexResourcePack(targetRoot, options = {}) {
     }
     let defs;
     const defsFile = join(source.root, "ui", "_ui_defs.json");
-    try { defs = await parseFile(defsFile); } catch (error) { unresolved.push({ kind: "unreadable_ui_defs", file: defsFile, message: error.message }); continue; }
-    for (const relative of defs.document.ui_defs || []) {
+    try { defs = await parseFile(defsFile); } catch (error) {
+      if (source.layer === targetLayer && error.code === 'ENOENT' && overlayPaths.size) defs = { document: { ui_defs: [] } };
+      else { unresolved.push({ kind: "unreadable_ui_defs", file: defsFile, message: error.message }); continue; }
+    }
+    const registeredPaths = new Set(defs.document.ui_defs || []);
+    const sourcePaths = new Set(registeredPaths);
+    if (source.layer === 'overlay') for (const path of registeredPaths) overlayPaths.add(path);
+    else if (source.layer === targetLayer) {
+      // A matching vanilla resource path is an override even when the target
+      // _ui_defs lists only its custom files. Arbitrary unregistered files stay out.
+      for (const path of overlayPaths) {
+        try { await access(join(source.root, ...String(path).split('/'))); sourcePaths.add(path); }
+        catch (error) { if (error.code !== 'ENOENT') unresolved.push({ kind: 'unreadable_ui_file', file: join(source.root, path), relative: path, message: error.message }); }
+      }
+    }
+    for (const relative of sourcePaths) {
       const file = join(source.root, ...String(relative).split("/"));
       let parsed;
       try { parsed = await parseFile(file); } catch (error) { unresolved.push({ kind: "unreadable_ui_file", file, relative, message: error.message }); continue; }

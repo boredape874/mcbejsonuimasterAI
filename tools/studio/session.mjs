@@ -46,7 +46,7 @@ export class LiveSession extends EventEmitter {
     if (typeof input.control !== 'string' || !input.control.includes('.')) throw new Error('control must be namespace.control');
     const previewDevice=normalizeDevice(input.previewDevice,viewport);
     this.watcher?.close(); clearTimeout(this.debounce);
-    this.project = { rpRoot, control: input.control, viewport, ...(previewDevice?{previewDevice}:{}), fixture: input.fixture ?? {}, interactionState: input.interactionState ?? 'default', ...(input.vanillaRoot ? { vanillaRoot: await realpath(input.vanillaRoot) } : {}) };
+    this.project = { rpRoot, control: input.control, ...(input.workspaceId ? {workspaceId:input.workspaceId} : {}), ...(input.viewId ? {viewId:input.viewId} : {}), viewFixtures:input.viewFixtures ?? {}, viewport, ...(previewDevice?{previewDevice}:{}), fixture: input.fixture ?? {}, interactionState: input.interactionState ?? 'default', ...(input.vanillaRoot ? { vanillaRoot: await realpath(input.vanillaRoot) } : {}) };
     this.ownWrites.clear();
     this.watcher = watch(rpRoot, { recursive: true }, async (_, name) => {
       if (!name || /\.(json|jsonc|png|tga|txt|lang)$/i.test(name)) {
@@ -102,6 +102,7 @@ export class LiveSession extends EventEmitter {
   }
   async readSource(name) { const text = await readFile(await this.sourcePath(name), 'utf8'); return { path: name, text, sha256: hash(text) }; }
   async writeSource({ path, text, expectedHash }) {
+    if (this.workspace?.busy) throw Error('WORKSPACE_BUSY: 동기화가 끝난 뒤 저장하세요.');
     const previous = this.writeQueue;
     let unlock;
     this.writeQueue = new Promise(r => { unlock = r; });

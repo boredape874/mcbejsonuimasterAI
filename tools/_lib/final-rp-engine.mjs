@@ -38,7 +38,8 @@ function mergeIndexes(target,overlay){return mergeResourcePackIndexes(overlay,ta
 async function cachedIndex(rpRoot,vanillaRoot){
   const targetRoot=resolve(rpRoot),key=`${targetRoot}\0${vanillaRoot?resolve(vanillaRoot):""}`,overlay=await cachedOverlayIndex(vanillaRoot),cached=indexCache.get(key),now=Date.now();
   if(cached&&cached.overlayRevision===(overlay?.revision??0)&&await current(cached.stamps)){cached.checkedAt=now;cacheStats.indexHits++;return cached.index;}
-  cacheStats.indexMisses++;const target=await indexResourcePack(targetRoot,{includeControlProvenance:false}),paths=[join(targetRoot,"ui","_ui_defs.json"),join(targetRoot,"ui","_global_variables.json"),...target.files.map(file=>file.file)],index=mergeIndexes(target,overlay?.index);indexCache.set(key,{index,stamps:await snapshot(paths),checkedAt:now,overlayRevision:overlay?.revision??0});return index;
+  const overridePaths=overlay?.index.files.map(file=>file.relative)||[];
+  cacheStats.indexMisses++;const target=await indexResourcePack(targetRoot,{includeControlProvenance:false,overridePaths}),paths=[join(targetRoot,"ui","_ui_defs.json"),join(targetRoot,"ui","_global_variables.json"),...target.files.map(file=>file.file),...overridePaths.map(path=>join(targetRoot,...path.split('/')))],index=mergeIndexes(target,overlay?.index);indexCache.set(key,{index,stamps:await snapshot(paths),checkedAt:now,overlayRevision:overlay?.revision??0});return index;
 }
 export function finalRpCacheStats(){return{...cacheStats,indexEntries:indexCache.size,overlayIndexEntries:overlayIndexCache.size,profileEntries:profileCache.size};}
 export function clearFinalRpCaches(){indexCache.clear();overlayIndexCache.clear();profileCache.clear();discoveryCache=null;Object.assign(cacheStats,{indexHits:0,indexMisses:0,profileHits:0,profileMisses:0});clearRendererCaches();}

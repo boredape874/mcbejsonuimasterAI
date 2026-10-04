@@ -71,6 +71,13 @@ label>input:not([type=checkbox]),label>select { display:block; width:100%; margi
 #layerSearch { margin:0 12px 8px; }
 .left-note { padding:12px 15px; color:var(--muted); font-size:12px; border-top:1px solid var(--line); }
 .canvas-area { grid-row:1; grid-column:3; display:flex; flex-direction:column; min-height:0; min-width:0; }
+#screenKind { margin:0 12px 8px; width:calc(100% - 24px); font-size:13px; }
+.form-context { display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--surface); border-bottom:1px solid var(--line); flex-wrap:wrap; font-size:12px; }
+.form-context[hidden] { display:none; }
+.form-context strong { color:var(--selected-text); }
+#formDataSummary { color:var(--muted); flex:1; overflow-wrap:anywhere; }
+.form-context select { max-width:220px; padding:5px 8px; font-size:12px; }
+.form-context button { min-height:30px; padding:4px 9px; font-size:12px; }
 .canvas-toolbar { padding:10px 12px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; flex-wrap:wrap; background:var(--surface); }
 .canvas-toolbar button { font-size:13px; padding:6px 9px; }
 .toolbar-field { display:flex; align-items:center; gap:6px; white-space:nowrap; font-size:12px; }
@@ -345,3 +352,7 @@ kbd { display:inline-block; padding:2px 6px; background:var(--input); border:1px
   .left { display:flex; }.explorer-heading { flex-shrink:0; }.pack-heading { margin:0 10px 8px; }.explorer-tabs { margin-bottom:8px; }
   .canvas-toolbar { gap:6px; }.arrange-toolbar { padding-left:0; }.session-search { flex-wrap:wrap; }.session-search input { flex-basis:100%; width:100%; }.session-dialog footer { flex-wrap:wrap; }.session-dialog footer small { flex-basis:100%; }
 }
+.workspace-pill{font-size:12px;color:var(--accent);white-space:nowrap}.workspace-pill.has-update{border-color:var(--accent)}
+.workspace-pill[hidden]{display:none}.workspace-dialog{width:min(720px,90vw)}
+.workspace-paths{display:grid;grid-template-columns:65px 1fr;gap:8px;font-size:12px}.workspace-paths dt{font-weight:600}.workspace-paths dd{margin:0;overflow-wrap:anywhere;user-select:text}
+.sync-files{list-style:none;padding:0;max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:6px}.sync-files li{display:flex;gap:12px;padding:8px 12px;border-bottom:1px solid var(--line);font-size:12px}.sync-files code{overflow-wrap:anywhere}.sync-kind{min-width:32px}.sync-conflict{color:#e7a24c}.workspace-dialog .muted{overflow-wrap:anywhere;font-size:12px}

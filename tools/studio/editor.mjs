@@ -5,15 +5,17 @@ import { parseUiSource, DEFAULT_RUNTIME_DIALECT } from '../_lib/json-dialect.mjs
 import { LiveSession, hash } from './session.mjs';
 import { editObject, jsonSpans, spanAt, removeArrayItems, appendControlBodies } from './json-edit.mjs';
 import { DEVICE_PRESETS, normalizeDevice, validateViewport } from '../../studio/devices.js';
+import { buildViewCatalog, matchesView, prepareViewFixture, titleTextureRules } from './views.mjs';
+import { PackWorkspace } from './workspace.mjs';
 
 const parse = text => parseUiSource(text, { kind: 'runtime', dialect:DEFAULT_RUNTIME_DIALECT }).document;
 const esc = key => key.replaceAll('~', '~0').replaceAll('/', '~1');
 const editableProps = new Set(['offset','size','text','font_scale_factor','color','alpha','layer','anchor_from','anchor_to','visible','texture','keep_ratio']);
 export class StudioSession extends LiveSession {
-  constructor(config) { super(config); this.undoStack = []; this.redoStack = []; this.selection = null; this.selectionKeys=[]; this.selectionInitialized=false; this.editor = { nodes: [], screens: [] }; this.clips=new Map(); }
-  status() { return { ...super.status(), studio: true, selection: this.selection, selectionKeys:this.selectionKeys, history: {undo:this.undoStack.length,redo:this.redoStack.length}, studioRevision:this.editorRevision, gameFrame:this.gameFrame && {capturedAt:this.gameFrame.capturedAt,source:this.gameFrame.source} }; }
+  constructor(config) { super(config); this.undoStack = []; this.redoStack = []; this.selection = null; this.selectionKeys=[]; this.selectionInitialized=false; this.editor = { nodes: [], screens: [] }; this.clips=new Map(); this.workspace = new PackWorkspace(config.runtime,info=>this.publish(info?.progress ? {workspaceProgress:info.progress} : {})); }
+  status() { return { ...super.status(), workspace:this.project?.workspaceId ? this.workspace.summary() : null, studio: true, selection: this.selection, selectionKeys:this.selectionKeys, history: {undo:this.undoStack.length,redo:this.redoStack.length}, studioRevision:this.editorRevision, gameFrame:this.gameFrame && {capturedAt:this.gameFrame.capturedAt,source:this.gameFrame.source} }; }
   async catalog(rpRoot) {
-    const root = await realpath(rpRoot), screens = [], issues = [];
+    const root = await realpath(rpRoot), screens = [], issues = [], documents = new Map();
     const safeRead = async path => {
       const file = await realpath(join(root,path)), rel = relative(root,file);
       if (rel.startsWith('..') || isAbsolute(rel)) throw Error('Pack reference escapes RP');
@@ -34,6 +36,7 @@ export class StudioSession extends LiveSession {
     for (const path of paths) {
       try {
         const doc = await safeRead(path); if (!doc.namespace) continue;
+        documents.set(path, doc);
         for (const [declaration, value] of Object.entries(doc)) {
           if (declaration === 'namespace' || !value || typeof value !== 'object' || Array.isArray(value)) continue;
           screens.push({control:`${doc.namespace}.${declaration.split('@')[0]}`, declaration, path, type:value.type || 'inherited', base:declaration.split('@')[1], registered:defs.includes(path), pointer:`/${esc(declaration)}`});
@@ -42,17 +45,57 @@ export class StudioSession extends LiveSession {
     }
     let packName;
     try{packName=String((await safeRead('manifest.json')).header?.name??'').slice(0,100);}catch{}
-    return {rpRoot:root,screens,issues,packName};
+    const views = buildViewCatalog(screens, documents);
+    for (const form of views.forms) {
+      const source = screens.find(screen => screen.control === form.control);
+      form.titleVariants = [];
+      for (const rule of titleTextureRules(documents.get(source?.path)?.[source?.declaration])) {
+        if (rule.texturePrefix.includes('..') || isAbsolute(rule.texturePrefix)) continue;
+        const dir = rule.texturePrefix.endsWith('/') ? rule.texturePrefix.slice(0,-1) : dirname(rule.texturePrefix), prefix = rule.texturePrefix.slice(dir === '.' ? 0 : dir.length + 1);
+        let folder;
+        try { folder = await realpath(join(root, dir)); } catch { continue; }
+        const rel = relative(root, folder); if (rel.startsWith('..') || isAbsolute(rel)) continue;
+        for (const file of (await readdir(folder,{withFileTypes:true})).sort((a,b)=>a.name.localeCompare(b.name))) {
+          if (!file.isFile() || !/\.(png|tga)$/i.test(file.name) || !file.name.startsWith(prefix)) continue;
+          const suffix = file.name.slice(prefix.length).replace(/\.(png|tga)$/i,'');
+          const title = rule.titlePrefix + suffix;
+          if (matchesView(form,{title}) && !form.titleVariants.some(variant=>variant.title===title)) form.titleVariants.push({title,texture:rule.texturePrefix+suffix});
+          if (form.titleVariants.length >= 128) break;
+        }
+      }
+      if (form.titleVariants.length) form.titleHint = form.titleVariants[0].title;
+    }
+    return {rpRoot:root,screens,issues,packName,...views};
   }
   async open(input) {
     if (this.ai?.busy) throw Error('Codex 작업이 끝난 뒤 팩이나 화면을 바꿔 주세요.');
+    if (input.useWorkspace || input.workspaceId) {
+      this.publish({status:'preparing-workspace',workspaceProgress:null});
+      let workspace;
+      try { workspace = await this.workspace.open(input.rpRoot,input.workspaceId); }
+      catch(error) { this.publish({status:'error',error:error.message,workspaceProgress:null}); throw error; }
+      this.publish({workspaceProgress:null});
+      input = {...input,rpRoot:workspace.workingRpRoot,workspaceId:workspace.id};
+    }
     const catalog = await this.catalog(input.rpRoot);
-    const control = input.control || catalog.screens.find(s => /screen|main|root|form|hud/i.test(s.control))?.control || catalog.screens[0]?.control;
+    const samePack = this.project?.rpRoot === catalog.rpRoot;
+    let view = input.viewId ? catalog.views.find(view => view.id === input.viewId) : null;
+    if (input.viewId && !view) throw Error('선택한 폼이나 화면이 더 이상 존재하지 않습니다.');
+    if (!view && !input.control) view = catalog.forms[0] ?? catalog.hud[0] ?? catalog.views.find(view => view.kind === 'screen') ?? catalog.views[0];
+    const control = view?.renderControl || input.control || catalog.screens[0]?.control;
     if (!control) throw Error('이 폴더에서 namespace가 있는 JSON UI를 찾지 못했습니다.');
-    const changed = this.project?.rpRoot !== catalog.rpRoot;
+    const changed = !samePack;
+    const fixtures = samePack ? structuredClone(this.project.viewFixtures || {}) : structuredClone(input.viewFixtures || {});
+    if (samePack && this.project.viewId) fixtures[this.project.viewId] = structuredClone(this.project.fixture);
+    if (samePack && this.project.fixture?.title) for (const form of catalog.forms) {
+      if (form.titleConditions.length && matchesView(form,this.project.fixture) && !fixtures[form.id]) fixtures[form.id] = structuredClone(this.project.fixture);
+    }
+    const activeViewId = view?.id;
+    let fixture = input.fixture ?? (activeViewId && fixtures[activeViewId]) ?? (samePack && view && matchesView(view, this.project.fixture) ? this.project.fixture : {});
+    if (view) fixture = prepareViewFixture(view, fixture).fixture;
     if (changed) { this.undoStack = []; this.redoStack = []; await this.ai?.reset(); }
-    this.selection = null; this.selectionKeys=[]; this.selectionInitialized=false; this.catalogDirty = false; this.editor = {screens:catalog.screens,issues:catalog.issues,packName:catalog.packName,nodes:[]};
-    const state = await super.open({...input,control});
+    this.selection = null; this.selectionKeys=[]; this.selectionInitialized=false; this.catalogDirty = false; this.editor = {...catalog,nodes:[]};
+    const state = await super.open({...input,control,fixture,viewId:activeViewId,viewFixtures:fixtures});
     await mkdir(this.config.runtime,{recursive:true});
     await writeFile(join(this.config.runtime,'last-project.json'),JSON.stringify(this.project,null,2));
     this.publish({restoreError:null});
@@ -86,7 +129,7 @@ export class StudioSession extends LiveSession {
         const catalog = this.catalogDirty ? await this.catalog(this.project.rpRoot) : this.editor;
         this.catalogDirty = false;
         if (revision !== this.revision) return this.status();
-        this.editor = {...this.editor,screens:catalog.screens,issues:catalog.issues,packName:catalog.packName,nodes,layers:this.previewLayers,unresolved:resolved.unresolved,viewport:resolved.layout.viewport,control:resolved.control};
+        this.editor = {...this.editor,screens:catalog.screens,views:catalog.views,forms:catalog.forms,hud:catalog.hud,components:catalog.components,issues:catalog.issues,packName:catalog.packName,nodes,layers:this.previewLayers,unresolved:resolved.unresolved,viewport:resolved.layout.viewport,control:resolved.control};
         this.editorRevision = revision;
         if (!this.selectionInitialized || (this.selection!==null&&!nodes.some(n => n.key === this.selection))) this.selection = nodes[0]?.key || null;
         this.selectionInitialized=true;
@@ -130,7 +173,7 @@ export class StudioSession extends LiveSession {
     const selection = node && {...node,props:Object.fromEntries(Object.entries(node.props).filter(([k])=>editableProps.has(k)||k==='type'))};
     const fixture = this.project?.fixture;
     const group=this.editor.nodes.filter(n=>this.selectionKeys.includes(n.key));
-    return {sessionId:this.id,revision:this.revision,renderedRevision:this.state.renderedRevision,stale:this.state.stale,rpRoot:this.project?.rpRoot,control:this.project?.control,viewport:this.project?.viewport,previewDevice:this.project?.previewDevice??null,fixtureSummary:fixture?Object.fromEntries(Object.entries(fixture).map(([k,v])=>[k,Array.isArray(v)?{count:v.length}:typeof v==='string'?v.slice(0,256):typeof v])):null,selection,selectionGroup:group.slice(0,16).map(({key,id,rect,source})=>({key,id,rect,source})),selectionCount:group.length,previewPath:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.path:this.state.report?.outputPath,previewFontMode:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.fontMode:'renderer',previewCaptureScale:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.captureScale:1,diagnostics:(this.state.report?.diagnostics||[]).slice(0,12),unresolved:(this.editor.unresolved||[]).slice(0,12),gameFrame:this.gameFrame ? {path:this.gameFrame.path,capturedAt:this.gameFrame.capturedAt,source:this.gameFrame.source} : null,runtimeVerified:false};
+    return {sessionId:this.id,revision:this.revision,renderedRevision:this.state.renderedRevision,stale:this.state.stale,workspace:this.project?.workspaceId ? this.workspace.summary() : null,viewId:this.project?.viewId,rpRoot:this.project?.rpRoot,control:this.project?.control,viewport:this.project?.viewport,previewDevice:this.project?.previewDevice??null,fixtureSummary:fixture?Object.fromEntries(Object.entries(fixture).map(([k,v])=>[k,Array.isArray(v)?{count:v.length}:typeof v==='string'?v.slice(0,256):typeof v])):null,selection,selectionGroup:group.slice(0,16).map(({key,id,rect,source})=>({key,id,rect,source})),selectionCount:group.length,previewPath:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.path:this.state.report?.outputPath,previewFontMode:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.fontMode:'renderer',previewCaptureScale:this.browserFrame?.revision===this.state.renderedRevision?this.browserFrame.captureScale:1,diagnostics:(this.state.report?.diagnostics||[]).slice(0,12),unresolved:(this.editor.unresolved||[]).slice(0,12),gameFrame:this.gameFrame ? {path:this.gameFrame.path,capturedAt:this.gameFrame.capturedAt,source:this.gameFrame.source} : null,runtimeVerified:false};
   }
   requireNode(key, expectedRevision) {
     if (this.state.stale || this.editorRevision !== this.state.renderedRevision || expectedRevision !== this.editorRevision) throw Error('PREVIEW_CONFLICT: 미리보기를 갱신한 뒤 다시 수정하세요.');
@@ -333,12 +376,21 @@ export class StudioSession extends LiveSession {
     if(revision===this.state.renderedRevision)this.browserFrame={path,revision,captureScale,fontMode:fontMode==='approximate'?'approximate-system-font':'minecraft-renderer'};
     return {saved:true,revision};
   }
-  async newProject() {
+  async syncWorkspace(id) {
+    if (this.ai?.busy) throw Error('Codex 작업이 끝난 뒤 팩 변경을 적용하세요.');
+    if (this.writeQueue) await this.writeQueue;
+    const result = await this.workspace.apply(id);
+    this.undoStack=[]; this.redoStack=[]; this.catalogDirty=true;
+    await this.render();
+    return result;
+  }
+  close() { this.workspace.close(); super.close(); }
+  async newProject(useWorkspace = false) {
     const dir = join(this.config.engineRoot,'workspace/studio-projects',randomUUID());
     await cp(join(this.config.engineRoot,'examples/studio-rp'),dir,{recursive:true,errorOnExist:true,force:false});
     const manifest = JSON.parse(await readFile(join(dir,'manifest.json'),'utf8'));
     manifest.header.uuid = randomUUID(); for(const m of manifest.modules) m.uuid=randomUUID();
     await writeFile(join(dir,'manifest.json'),JSON.stringify(manifest,null,2));
-    return this.open({rpRoot:dir,control:'live_demo.screen',previewDevice:{presetId:'pc-fhd'}});
+    return this.open({rpRoot:dir,control:'live_demo.screen',previewDevice:{presetId:'pc-fhd'},useWorkspace});
   }
 }

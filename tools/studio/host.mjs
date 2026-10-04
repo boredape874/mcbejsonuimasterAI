@@ -12,7 +12,11 @@ export async function startHost(config) {
   const session = new StudioSession(config), token = randomBytes(32).toString('hex'), clients = new Set();
   const codex = session.ai = new CodexBridge(session);
   const dispatch = async (name, args = {}) => {
+    if (session.workspace.busy && !['status','studio','studio_context','workspace_status','codex_status','native_status'].includes(name)) throw Error('WORKSPACE_BUSY: 팩 동기화가 진행 중입니다.');
     switch (name) {
+      case 'workspace_status': return session.workspace.summary();
+      case 'workspace_preview': return session.workspace.preview(args.direction);
+      case 'workspace_apply': return session.syncWorkspace(args.id);
       case 'catalog': return session.catalog(args.rpRoot || session.project?.rpRoot);
       case 'studio': return { ...session.status(), editor:session.editor, codex:codex.status() };
       case 'studio_context': return session.context();
@@ -28,7 +32,7 @@ export async function startHost(config) {
       case 'add': return session.add(args);
       case 'history': return session.history(args);
       case 'import_image': return session.importImage(args);
-      case 'new_project': return session.newProject();
+      case 'new_project': return session.newProject(true);
       case 'game_frame': return session.acceptFrame(args);
       case 'game_stop': return session.clearFrame();
       case 'browser_frame': return session.acceptBrowserFrame(args);
@@ -41,7 +45,7 @@ export async function startHost(config) {
       case 'codex_message': return codex.message(args);
       case 'codex_interrupt': return codex.interrupt();
       case 'codex_reply': return codex.reply(args);
-      case 'open': return session.open(args);
+      case 'open': return session.open({...args,useWorkspace:true});
       case 'render': return session.render(args);
       case 'status': return session.status();
       case 'inspect': return session.inspect();
@@ -100,7 +104,7 @@ export async function startHost(config) {
   const connection = { url: `http://127.0.0.1:${server.address().port}`, token, pid: process.pid, sessionId: session.id };
   await mkdir(config.runtime, { recursive: true });
   await writeFile(join(config.runtime, 'connection.json'), JSON.stringify(connection, null, 2));
-  try { await session.open(JSON.parse(await readFile(join(config.runtime,'last-project.json'),'utf8'))); }
+  try { await session.open({...JSON.parse(await readFile(join(config.runtime,'last-project.json'),'utf8')),useWorkspace:true}); }
   catch(error) { if(error.code !== 'ENOENT') session.publish({restoreError:error.message}); }
   return { session, server, connection, codex, async close() { codex.close(); session.close(); for (const client of clients) client.end(); server.closeAllConnections(); await new Promise(r => server.close(r)); } };
 }
