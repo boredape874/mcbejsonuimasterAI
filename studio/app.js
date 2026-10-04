@@ -157,7 +157,7 @@ function renderLayers(){
     if(!query&&[...collapsed].some(k=>node.key!==k&&node.key.startsWith(k==='/'?'/controls/':k+'/controls/')))continue;
     const row=el('div',undefined,'layer-row'+(picked.has(node.key)?' active':''));row.style.paddingLeft=6+Math.min(node.depth,10)*12+'px';
     const hasChildren=nodes.some(n=>n.parent===node.key),fold=el('button',hasChildren?(collapsed.has(node.key)?'▸':'▾'):'·','layer-fold');fold.disabled=!hasChildren;fold.title='하위 요소 접기 / 펼치기';fold.onclick=()=>{collapsed.has(node.key)?collapsed.delete(node.key):collapsed.add(node.key);renderLayers();};
-    const select=el('button',undefined,'layer-select');select.append(el('i',node.type==='label'?'T':node.type==='image'?'▧':'▱','layer-icon'),el('span',node.id));select.setAttribute('aria-pressed',String(picked.has(node.key)));select.title=`${node.type} · ${node.source?.path||'상속/생성 요소'}`;select.onclick=e=>choose(node.key,e.ctrlKey||e.shiftKey||e.metaKey).catch(err=>toast(err.message));
+    const select=el('button',undefined,'layer-select');select.append(el('i',node.type==='label'?'T':node.type==='image'?'▧':'▱','layer-icon'),el('span',node.id));select.setAttribute('aria-pressed',String(picked.has(node.key)));select.title=`${node.type} · ${node.source?.path||'상속/생성 요소'}`;select.onclick=e=>{choose(node.key,e.ctrlKey||e.shiftKey||e.metaKey).catch(err=>toast(err.message));focusCanvas();};
     const lock=el('button',locked.has(node.key)?'●':'○','layer-lock');lock.title=locked.has(node.key)?'편집 잠금 해제':'실수 방지: 이 요소 편집 잠금';lock.setAttribute('aria-label',lock.title);lock.setAttribute('aria-pressed',String(locked.has(node.key)));lock.onclick=()=>{locked.has(node.key)?locked.delete(node.key):locked.add(node.key);renderLayers();renderProperties();updateArrange();};
     if(!node.visible)row.style.opacity='.5';row.append(fold,select,lock);list.append(row);
   }
@@ -216,8 +216,10 @@ on('propertiesForm','input',()=>{dirty=true;});
 on('propertiesForm','submit',async e=>{e.preventDefault();await applyPatch(editingNode,fieldPatch());toast('저장하고 미리보기를 갱신했습니다.');});
 
 function point(e){const rect=$('artboard').getBoundingClientRect();return{x:(e.clientX-rect.left)/scale,y:(e.clientY-rect.top)/scale};}
+function focusCanvas(){if(view==='preview')$('artboard').focus({preventScroll:true});}
 $('artboard').addEventListener('pointerdown',async e=>{
   if(e.button!==0||state.stale||saving)return;
+  focusCanvas();
   try{
     const start=point(e), resize=e.target.id==='resizeHandle';
     let node=selected;
@@ -310,6 +312,12 @@ async function deleteElements(){
   saving=true;try{await api('remove',{keys:[...picked],expectedRevision:state.studioRevision});await refreshStudio(true);toast('요소를 삭제했습니다. Ctrl+Z로 되돌릴 수 있습니다.');}finally{saving=false;closeEditMenu();updateArrange();}
 }
 on('copyElements','click',()=>copyElements());on('cutElements','click',()=>copyElements(true));on('pasteElements','click',()=>pasteElements());on('deleteElements','click',deleteElements);
+window.addEventListener('keydown',e=>{
+  if(e.key!=='Delete'&&e.code!=='Delete')return;
+  const target=e.composedPath()[0];
+  if(e.defaultPrevented||e.repeat||e.isComposing||e.ctrlKey||e.metaKey||e.altKey||view!=='preview'||document.querySelector('dialog[open]')||target?.isContentEditable||target?.closest?.('input,textarea,select,[role="textbox"],.panel-resize'))return;
+  e.preventDefault();e.stopPropagation();deleteElements().catch(err=>toast(err.message));
+},true);
 document.addEventListener('paste',e=>{if(!canvasClipboardTarget(e))return;pasteEventSerial++;e.preventDefault();let payload;try{payload=JSON.parse(e.clipboardData.getData('text/plain'));}catch{}pasteElements(payload||(clipboardSynced===false?clipboard:{})).catch(err=>toast(err.message));});
 on('layerSearch','input',renderLayers);
 on('helpButton','click',()=>$('helpDialog').showModal());on('editorSettings','click',()=>{$('viewDialog').close();$('settingsDialog').showModal();});
@@ -322,7 +330,6 @@ document.addEventListener('keydown',e=>{
   else if(ctrl&&['c','x'].includes(e.key.toLowerCase())){e.preventDefault();copyElements(e.key.toLowerCase()==='x').catch(err=>toast(err.message));}
   else if(ctrl&&e.key.toLowerCase()==='v'){const serial=pasteEventSerial;setTimeout(()=>{if(serial===pasteEventSerial&&canvasClipboardTarget(e))pasteElements().catch(err=>toast(err.message));},100);}
   else if(ctrl&&e.key.toLowerCase()==='a'){e.preventDefault();const parent=selected?.parent??selected?.key,nodes=editor.nodes.filter(n=>n.parent===parent&&n.source&&n.visible).slice(0,64);if(nodes.length){picked=new Set(nodes.map(n=>n.key));const key=nodes.at(-1).key;state.selection=key;selected=nodes.at(-1);lastPasteParent=null;renderLayers();renderProperties();drawSelection();api('select',{key,keys:[...picked]}).catch(err=>toast(err.message));}}
-  else if(e.key==='Delete'){e.preventDefault();deleteElements().catch(err=>toast(err.message));}
   else if(ctrl&&e.key.toLowerCase()==='d'){e.preventDefault();duplicateSelected().catch(err=>toast(err.message));}
   else if(e.key==='Escape'){e.preventDefault();if(drag)cancelDrag();else {picked.clear();selected=null;choose(null).catch(err=>toast(err.message));}}
   else if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)&&picked.size){
@@ -547,7 +554,11 @@ events.onmessage=async e=>{
   updateWorkbench();
   $('undo').disabled=!next.history?.undo;$('redo').disabled=!next.history?.redo;
   if(next.renderedRevision!==displayedRevision&&next.report?.outputPath&&!next.stale){displayedRevision=next.renderedRevision;$('preview').src='/image?token='+token+'&revision='+next.renderedRevision;}
-  if(next.studioRevision!==wantedRevision && next.studioRevision){wantedRevision=next.studioRevision;await queueRefresh();}
+  if(next.studioRevision!==wantedRevision && next.studioRevision){
+    wantedRevision=next.studioRevision;await queueRefresh();
+    // The refresh reads the latest selection. An older event must not restore it afterward.
+    drawSelection();updateView();return;
+  }
   if(!drag&&!saving&&next.studioRevision===state.studioRevision&&JSON.stringify([...picked])!==JSON.stringify(next.selectionKeys||[])){
     picked=new Set(next.selectionKeys||[]);selected=editor.nodes.find(n=>n.key===next.selection)||null;renderLayers();renderProperties();
   }

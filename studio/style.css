@@ -292,6 +292,7 @@ kbd { display:inline-block; padding:2px 6px; background:var(--input); border:1px
 .source-editor-note { padding:7px 12px; font-size:11px; color:var(--muted); border-top:1px solid var(--line); }
 .view-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0; }.view-options button { white-space:normal; }
 .edit-menu>div { width:230px; padding:8px; }.edit-menu button { margin:0; border:0; text-align:left; background:transparent; }.edit-menu kbd { float:right; }
+.artboard:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
 .session-pill { display:flex; align-items:center; gap:7px; max-width:190px; }.session-pill i { width:7px; height:7px; border-radius:50%; background:var(--muted); flex-shrink:0; }.session-pill span { overflow:hidden; text-overflow:ellipsis; }
 .session-pill[data-state=connected] i { background:var(--green); }.session-pill[data-state=busy] i,.session-pill[data-state=connecting] i { background:var(--blue); }.session-pill[data-state=waiting] i { background:var(--warning-text); }
 .codex-session { margin:0 12px 12px; padding:12px; background:var(--raised); border:1px solid var(--line); border-radius:6px; font-size:12px; }
