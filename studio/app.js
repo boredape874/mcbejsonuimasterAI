@@ -158,11 +158,15 @@ async function refreshStudio(force=false){
   updateWorkbench();
   if(!dirty||force)renderProperties();renderDiagnostics();renderCodex(value.codex);fit();updateView();shareBrowserPreview().catch(()=>{});
 }
+let lastScreenView=null;
 function renderScreens(){
   const list=$('screens'), query=$('screenSearch').value.toLowerCase();list.replaceChildren();
   const views=editor.views||editor.screens.map(s=>({...s,id:'control:'+s.control,kind:'component',renderControl:s.control}));
   const categories={form:'폼',hud:'HUD',screen:'기타 화면',component:'구성 요소'};
   for(const option of $('screenKind').options){const count=views.filter(s=>s.kind===option.value).length;option.textContent=categories[option.value]+' ('+count+')';option.disabled=!count;}
+  const currentView=state.project?.rpRoot+'|'+state.project?.viewId,active=views.find(s=>s.id===state.project?.viewId);
+  if(currentView!==lastScreenView&&active)$('screenKind').value=active.kind;
+  lastScreenView=currentView;
   if(!views.some(s=>s.kind===$('screenKind').value))$('screenKind').value=views[0]?.kind||'form';
   const entries=views.filter(s=>s.kind===$('screenKind').value);
   const matches=entries.filter(s=>(s.control+' '+s.path+' '+(s.titleHint||'')).toLowerCase().includes(query));$('screenCount').textContent=entries.length;
